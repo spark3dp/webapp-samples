@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Drivester</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right" role="tablist">
+            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation"><a href="#">About</a></li>
+            <li role="presentation" id="user-name"><a href="#">Hello <span>Guest</span></a></li>
+            <li role="presentation" class="hidden" id="user-image"><a href="#"><img
+                    src="http://alpha.squidplatform.com/Images/v23/Member/default_avatar.png"/></a></li>
+            <li role="presentation" id="logout"><a href="#">Logout</a></li>
+        </ul>
+        <h3 class="text-muted">Drivester</h3>
+    </div>
+
+    <div class="jumbotron hidden">
+        <h1>Drivester</h1>
+
+        <p class="lead">Experience managing printing models in the web - try <b>Drivestar</b> today! Drivestar will
+            always be free <br>
+        </p>
+
+        <p><a class="btn btn-lg btn-success" href="auth.html" role="button">Sign up today</a></p>
+    </div>
+
+    <div class="row marketing hidden">
+        <div class="col-lg-6">
+        </div>
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create an asset</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="asset-form">
+                            <div class="form-group">
+                                <label for="inputTitle">Title</label>
+                                <input type="text" class="form-control" id="inputTitle" placeholder="Title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDesc">Description</label>
+                                <textarea type="text" class="form-control" id="inputDesc" placeholder="Description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputTags">Tags</label>
+                                <input type="text" class="form-control" id="inputTags" placeholder="Tags" required>
+                            </div>
+                            <input type="hidden" id="assetId">
+                            <div class="modal-footer">
+                                <input class="btn btn-primary" type="submit" value="Send" id="submit">
+                                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="thanks">
+            <p><a data-toggle="modal" id="add-asset" class="btn btn-primary btn-large">Add Asset</a></p>
+        </div>
+    </div>
+
+
+    <div class="footer">
+        <p>&copy; Drivestar 2014</p>
+    </div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
+
+</body>
+</html>

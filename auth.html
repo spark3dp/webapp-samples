@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Sign Up to drivestar</title>
+</head>
+
+<body>
+    <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
+    <script>
+        //var CLIENT_ID = 'TYzVSri64bj0BVGibSkRGvMPza0T5tq3'; //Your Client id
+        var CLIENT_ID = '<CLIENT_ID>';
+        var AUTH_HASH = '<AUTH_HASH>'; // Base64 encrypted ClientID + : + ClientSecret
+        //var AUTH_HASH = '';
+        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '/drive-gallery/auth.html';// The redirect URI you've set for your application
+
+
+
+        sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL);
+
+    </script>
+    <script type="text/javascript" charset="utf-8" src="scripts/login.js"></script>
+</body>
+</html>
