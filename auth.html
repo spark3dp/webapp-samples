@@ -18,10 +18,10 @@
         var CLIENT_ID = '<CLIENT_ID>';
         var AUTH_HASH = '<AUTH_HASH>'; // Base64 encrypted ClientID + : + ClientSecret
         //var AUTH_HASH = '';
-        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '/drive-gallery/auth.html';// The redirect URI you've set for your application
+        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '/drivestar-folder/auth.html';// The redirect URI you've set for your application without the host address
 
 
-
+        // calls the init function in scripts/spark-drive.js
         sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL);
 
     </script>
