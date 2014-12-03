@@ -4,7 +4,7 @@ $(function ($) {
 
     //New page load and no token yet
     if (!code && !localStorage.getItem('spark-drive-token')) {
-        //Get the Auth Code which is a required when requesting an access token.
+        //Get the Auth Code which is required for requesting an access token.
         sparkDrive.redirectToAuthLoginURL();
     //Either returning from getting the Auth Code or there is an access token already in storage
     } else {
