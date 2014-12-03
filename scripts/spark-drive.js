@@ -42,7 +42,7 @@ var sparkDrive = function () {
         window.location = authUrl;
     }
 
-    /**
+    /**make API call
      * Standard AJAX requests
      * @param url
      * @param method
@@ -79,7 +79,7 @@ var sparkDrive = function () {
     }
 
     /**
-     * We do a get member as there is no end point for that :(
+     * Get current member as there is no end point for that :(
      */
     var checkTokenValidity = function (callback) {
 
@@ -96,7 +96,7 @@ var sparkDrive = function () {
      */
     return {
         /**
-         * Initiate stuff that matter
+         * Initialize the app key (client_ID), auth hash (Base64 [app key + : + app secret]) and rediorect URL
          */
         init: function (CLIENT_ID, AUTH_HASH, REDIRECT_URI) {
             clientId = CLIENT_ID;
