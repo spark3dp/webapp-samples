@@ -5,12 +5,12 @@ var sparkDrive = function () {
 
     /*** PRIVATE STUFF ***/
 
-    var apiHost = 'api-alpha.spark.autodesk.com/api/v1',
+    var apiHost = 'sandbox.spark.autodesk.com/api/v1',
         endUserAuthorizationEndpoint = apiHost + "/oauth/authorize", // The page of the authorize
         protocol = 'http', //The protocol of the server
-        clientId, //Customer/Client id
-        authHash, // Encrypted ClientID + ClientSecret
-        redirectURI; // The redirect URI you've set for your application
+        clientId, //App key
+        authHash, // Base64 encoded App key + ":" + app secret
+        redirectURI; // The redirect URL you set for your application (location of your auth.html file)
     ;
 
     /**
@@ -29,7 +29,7 @@ var sparkDrive = function () {
     }
 
     /**
-     * Redirects a user to the Drive login page
+     * Redirects the user to the Drive login page, where they will be requested to login
      */
     var redirectToAuthLoginURL = function () {
 
