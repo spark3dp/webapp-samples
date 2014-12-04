@@ -14,14 +14,14 @@
     <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
     <script>
-        //var CLIENT_ID = 'TYzVSri64bj0BVGibSkRGvMPza0T5tq3'; //Your Client id
-        var CLIENT_ID = '<CLIENT_ID>';
-        var AUTH_HASH = '<AUTH_HASH>'; // Base64 encrypted ClientID + : + ClientSecret
-        //var AUTH_HASH = '';
-        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '/drivestar-folder/auth.html';// The redirect URI you've set for your application without the host address
+        
+        var CLIENT_ID = '<enter your APP key here>';
+        var AUTH_HASH = '<Base64(app key + ":" + app secret)>'; // Base64 encrypted app key + : + app secret
+        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '<address of your auth.html file which is the same as your app''s redirect url>';// The redirect URI you've set for your application
 
 
         // calls the init function in scripts/spark-drive.js
+        //init function in scripts/spark-drive
         sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL);
 
     </script>
