@@ -1,6 +1,6 @@
 $(function ($) {
 
-    //Do we have a token?
+    //This section is only performed if there is an access token
     if (localStorage.getItem('spark-drive-token')) {
         $('.row.marketing').removeClass('hidden');
         sparkDrive.getMyProfile(function (profile) {
@@ -98,7 +98,7 @@ $(function ($) {
                 })
             }
         });
-
+      // This section is performed if there is no access token
     } else {
         $('.jumbotron').removeClass('hidden');
         $('#logout a').text('Login');
