@@ -5,7 +5,7 @@ var sparkDrive = function () {
 
     /*** PRIVATE STUFF ***/
 
-    var apiHost = 'sandbox.spark.autodesk.com/api/v1',
+    var apiHost = 'api-sandbox.spark.autodesk.com/api/v1',
         endUserAuthorizationEndpoint = apiHost + "/oauth/authorize", // The page of the authorize
         protocol = 'http', //The protocol of the server
         clientId, //App key
