@@ -12,7 +12,7 @@ $(function ($) {
             $('body').removeClass('hidden');
             if (token) {
                 console.log(token);
-    // replace "/drive-gallery" with the path of your web server folder whcih contains the sample code
+    // replace "/drive-gallery" with the path of your web server folder which contains the sample code
                 window.location = window.location.protocol + "//" + window.location.hostname + '/drive-gallery';
             } else {
                 console.log('Problem with fetching token');
