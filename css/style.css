@@ -17,6 +17,9 @@ body {
   border-bottom: 1px solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
+.jumbotron h1, .jumbotron .h1 {
+  font-size: 50px;
+}
 .header h3 {
   padding-bottom: 19px;
   margin-top: 0;
