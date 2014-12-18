@@ -1,5 +1,5 @@
 $(function ($) {
-
+    sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL,ENVIRONMENT);
     //This section is only performed if there is an access token
     if (localStorage.getItem('spark-drive-token')) {
         $('.row.marketing').removeClass('hidden');

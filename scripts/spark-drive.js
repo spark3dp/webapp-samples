@@ -5,8 +5,10 @@ var sparkDrive = function () {
 
     /*** PRIVATE STUFF ***/
 
-    var apiHost = 'api-sandbox.spark.autodesk.com/api/v1',
-        endUserAuthorizationEndpoint = apiHost + "/oauth/authorize", // The page of the authorize
+    var apiHostSandbox = 'sandbox.spark.autodesk.com/api/v1',
+        apiHostProduction = 'api.spark.autodesk.com/api/v1',
+        apiHost,
+        endUserAuthorizationEndpoint, // The page of the authorize
         protocol = 'http', //The protocol of the server
         clientId, //App key
         authHash, // Base64 encoded App key + ":" + app secret
@@ -98,10 +100,12 @@ var sparkDrive = function () {
         /**
          * Initialize the app key (client_ID), auth hash (Base64 [app key + : + app secret]) and rediorect URL
          */
-        init: function (CLIENT_ID, AUTH_HASH, REDIRECT_URI) {
+        init: function (CLIENT_ID, AUTH_HASH, REDIRECT_URI,ENVIRONMENT) {
             clientId = CLIENT_ID;
             authHash = AUTH_HASH;
             redirectURI = REDIRECT_URI;
+            apiHost = ENVIRONMENT === 'production' ? apiHostProduction : apiHostSandbox;
+            endUserAuthorizationEndpoint = apiHost + "/oauth/authorize";
 
         },
         /**

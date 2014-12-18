@@ -12,17 +12,12 @@
 
 <body>
     <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
     <script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
     <script>
-        
-        var CLIENT_ID = '<enter your APP key here>';
-        var AUTH_HASH = '<Base64(app key + ":" + app secret)>'; // Base64 encrypted app key + : + app secret
-        var REDIRECT_URL = window.location.protocol + "//" + window.location.hostname + '<address of your auth.html file which is the same as your app''s redirect url>';// The redirect URI you've set for your application
-
-
         // calls the init function in scripts/spark-drive.js
         //init function in scripts/spark-drive
-        sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL);
+        sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL,ENVIRONMENT);
 
     </script>
     <script type="text/javascript" charset="utf-8" src="scripts/login.js"></script>
