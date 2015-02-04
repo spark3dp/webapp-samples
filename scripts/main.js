@@ -2,6 +2,7 @@ $(function ($) {
     sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL,ENVIRONMENT);
     //This section is only performed if there is an access token
     if (localStorage.getItem('spark-drive-token')) {
+        $('.logged-in').removeClass('hidden');
         $('.row.marketing').removeClass('hidden');
         sparkDrive.getMyProfile(function (profile) {
             $('#user-name span').text(profile.name);
@@ -100,14 +101,7 @@ $(function ($) {
         });
       // This section is performed if there is no access token
     } else {
-        $('.jumbotron').removeClass('hidden');
-        $('#logout a').text('Login');
-        $('#logout a').attr('href', $('.btn-lg').attr('href'));
+        $('.logged-out').removeClass('hidden');
     }
-
-    $('#logout').on('click', function () {
-        localStorage.removeItem('spark-drive-token');
-        location.reload();
-    });
 
 }(jQuery));

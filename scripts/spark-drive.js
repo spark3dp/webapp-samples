@@ -109,6 +109,13 @@ var sparkDrive = function () {
 
         },
         /**
+         * Logout the user - clear the token in local storage
+         */
+        logout: function(){
+            localStorage.removeItem('spark-drive-token');
+            location.reload();
+        },
+        /**
          * Extract the auth code
          */
         extractSparkRedirectionCode: function () {
