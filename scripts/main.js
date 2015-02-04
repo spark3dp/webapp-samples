@@ -5,7 +5,8 @@ $(function ($) {
         $('.logged-in').removeClass('hidden');
         $('.row.marketing').removeClass('hidden');
         sparkDrive.getMyProfile(function (profile) {
-            $('#user-name span').text(profile.name);
+            console.log(profile);
+            $('#user-name a').text(profile.name);
             $('#user-image').removeClass('hidden');
             $('#user-image img').attr('src', profile.profile.avatar_path);
         });
