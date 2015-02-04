@@ -1,11 +1,9 @@
 $(function ($) {
-    sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL,ENVIRONMENT);
     //This section is only performed if there is an access token
     if (localStorage.getItem('spark-drive-token')) {
         $('.logged-in').removeClass('hidden');
         $('.row.marketing').removeClass('hidden');
-        sparkDrive.getMyProfile(function (profile) {
-            console.log(profile);
+        sparkAuth.getMyProfile(function (profile) {
             $('#user-name a').text(profile.name);
             $('#user-image').removeClass('hidden');
             $('#user-image img').attr('src', profile.profile.avatar_path);

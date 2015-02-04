@@ -16,16 +16,16 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/spark-config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/spark-auth.js"></script>
     <script>
-        sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL,ENVIRONMENT);
 
         function loginUser(){
-            sparkDrive.redirectToAuthLoginURL();
+            sparkAuth.redirectToAuthLoginURL();
         }
 
         function logoutUser(){
-            sparkDrive.logout();
+            sparkAuth.logout();
         }
 
     </script>
@@ -111,6 +111,8 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
 
 </body>
