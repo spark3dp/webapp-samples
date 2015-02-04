@@ -1,0 +1,38 @@
+/**
+ * Created by michael on 2/4/15.
+ */
+
+register printer:
+	http://print-alpha.spark.autodesk.com/api/v1/print/printers/register/PGPCNK
+header: X-Member-id: 1234567
+body: printer_name=mishaPrint
+response:{
+	registered: true
+	printer_id: 680
+}
+
+
+
+
+print:
+POST http://print-alpha.spark.autodesk.com/api/v1/print/printers/680/jobs
+headers:X-Member-id: 1234567
+body:{ "file_url": "http://cdn.spark.com/print/abcefg", "settings": { "FirstApproachRPM": 6, "FirstZLiftMicrons": 2000, "FirstSeparationMicronsPerSec": 5000, "FirstApproachMicronsPerSec": 5000, "FirstRotationMilliDegrees": 60000 } }
+response:
+{
+    printer_id: "680"
+    job_id: "2776f80f-dc90-458c-bc10-82e32dedb508"
+    status: "started"
+}
+
+
+check status:
+GET http://print-alpha.spark.autodesk.com/api/v1/print/printers/jobs/2776f80f-dc90-458c-bc10-82e32dedb508
+header:X-Member-id: 1234567
+response:
+{
+    message: "Job Id value is invalid"
+    code: -1
+    error_id: "da94e6f7-4076-4cda-adf6-f2417a10b353"
+    status: 400
+}
