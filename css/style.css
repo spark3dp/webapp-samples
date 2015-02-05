@@ -81,10 +81,10 @@ body {
   }
 }
 
-#user-name span{
+#user span{
     text-transform: capitalize;
 }
-#user-image img{
+#user img{
     max-height: 25px;
 }
 
@@ -105,4 +105,13 @@ body {
 .asset i.delete{
     top:auto;
     bottom:10px;
+}
+.nav .btn:hover{
+    color:#428bca;
+}
+
+.nav > li > span {
+    display: inline-block;
+    padding: 10px 15px;
+    position: relative;
 }

@@ -2,16 +2,14 @@ $(function ($) {
     //This section is only performed if there is an access token
     if (localStorage.getItem('spark-drive-token')) {
         $('.logged-in').removeClass('hidden');
-        $('.row.marketing').removeClass('hidden');
         sparkAuth.getMyProfile(function (profile) {
-            $('#user-name a').text(profile.name);
-            $('#user-image').removeClass('hidden');
-            $('#user-image img').attr('src', profile.profile.avatar_path);
+            $('#user span').text(profile.name);
+            $('#user img').attr('src', profile.profile.avatar_path);
         });
 
 
         var editMode = false;
-        sparkDrive.getMyAssets(function (response) {
+        sparkDrive.getMyAssets(12, 0, function (response) {
             var assetElem = '';
             for (var i in response.assets) {
                 //build the elements

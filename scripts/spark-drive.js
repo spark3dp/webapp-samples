@@ -12,7 +12,7 @@ var sparkDrive = function () {
          * Get my assets
          * @param callback
          */
-        getMyAssets: function (callback) {
+        getMyAssets: function (limit,offset, callback) {
             //Make sure token is still valid
             sparkAuth.checkTokenValidity(function (response) {
                 if (response) {
@@ -22,7 +22,10 @@ var sparkDrive = function () {
                         "Content-type": "application/x-www-form-urlencoded"
                     }
 
-                    var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id + '/assets';
+                    var assetsLimit = limit ? limit : 12;
+                    var assetsOffset = offset ? offset : 0;
+
+                    var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
                     Util.xhr(url, 'GET', '', headers, callback);
                 }else{
                     callback(false);
@@ -43,7 +46,7 @@ var sparkDrive = function () {
                         "Authorization": "Bearer " + localStorage.getItem('spark-drive-token'),
                         "Content-type": "application/x-www-form-urlencoded"
                     }
-                    xhr(protocol + '://' + apiHost + '/assets', 'POST', params, headers, callback);
+                    Util.xhr(protocol + '://' + apiHost + '/assets', 'POST', params, headers, callback);
                 }else{
                     callback(false);
                 }
