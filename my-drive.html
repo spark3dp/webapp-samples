@@ -16,8 +16,8 @@
 	<link href="css/style.css" rel="stylesheet">
 
 	<script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="scripts/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="scripts/spark-auth.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 	<script>
 		if (!sparkAuth.isLoggedIn()) {
 			location.href = 'index.html';
@@ -52,8 +52,11 @@
 	</div>
 
 	<div class="row marketing">
-		<div class="col-lg-6">
+		<div class="col-md-12 assets-placeholder">
 			<!-- all assets -->
+		</div>
+		<div class="col-md-12 load-more-button hidden">
+			<a class="btn btn-primary">Load more</a>
 		</div>
 		<div id="myModal" class="modal fade">
 			<div class="modal-dialog">
@@ -97,9 +100,10 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/my-drive.js"></script>
 
 </body>
 </html>

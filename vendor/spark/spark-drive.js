@@ -62,7 +62,7 @@ var sparkDrive = function () {
                 if (response) {
 
                     var params = "title=" + assetPost.title + "&description=" + assetPost.description +
-                        "&publish=true&tags=" + assetPost.tags;
+                        "&publish=true&tags=drivester";
                     var headers = {
                         "Authorization": "Bearer " + localStorage.getItem('spark-drive-token'),
                         "Content-type": "application/x-www-form-urlencoded"
