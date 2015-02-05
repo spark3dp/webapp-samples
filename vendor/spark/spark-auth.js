@@ -2,8 +2,6 @@
  * Our spark auth object
  */
 var sparkAuth = function () {
-
-
 	/**
 	 * Return the factory object
 	 */
@@ -19,7 +17,12 @@ var sparkAuth = function () {
 				"Content-type": "application/x-www-form-urlencoded"
 			}
 			var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id;
-			Util.xhr(url, 'GET', '', headers, callback);
+			Util.xhr(url, 'GET', '', headers, function(response){
+				if (!response){
+					sparkAuth.logout();
+				}
+				callback(response);
+			});
 		},
 
 		/**
@@ -88,6 +91,14 @@ var sparkAuth = function () {
 		getMember: function(){
 			var memberAsJsonStr = localStorage.getItem('spark-drive-member');
 			return JSON.parse(memberAsJsonStr);
+		},
+
+		/**
+		 * Is the user logged in?
+		 * @returns {*|any}
+		 */
+		isLoggedIn: function(){
+			return localStorage.getItem('spark-drive-token');
 		}
 	};
 

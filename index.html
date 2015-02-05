@@ -16,19 +16,8 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="scripts/spark-config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="scripts/spark-auth.js"></script>
-    <script>
-
-        function loginUser(){
-            sparkAuth.redirectToAuthLoginURL();
-        }
-
-        function logoutUser(){
-            sparkAuth.logout();
-        }
-
-    </script>
+    <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 
 </head>
 
@@ -38,74 +27,29 @@
     <div class="header">
     <!-- Navigation links at the top right of the screen -->
         <ul class="nav nav-pills pull-right" role="tablist">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-	        <li role="presentation" class=""><a href="simulator/print_simulator.html">Printer Simulator</a></li>
-
-	        <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation" id="user-name"><a>Hello Guest</a></li>
-            <li role="presentation" class="logged-in hidden" id="user-image">
-                <a>
-                    <img src="http://alpha.squidplatform.com/Images/v23/Member/default_avatar.png"/>
+            <li role="presentation" id="user">
+                <a href="my-drive.html" class="logged-in hidden">
+                    <span><!-- username --></span>
+                    <img src=""/>
                 </a>
+                <span class="logged-out hidden">Hello Guest</span>
             </li>
-            <li role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="loginUser()">Login</a></li>
-            <li role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="logoutUser()">Logout</a></li>
+            <li role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="sparkAuth.redirectToAuthLoginURL()">Login</a></li>
+            <li role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="sparkAuth.logout()">Logout</a></li>
         </ul>
-        <h3 class="text-muted">Spark Sample Application</h3>
+        <h3 class="text-muted"><a href="#">Spark Sample Application</a></h3>
     </div>
     <!-- this section is visible while the user is not logged in --> 
     <div class="jumbotron logged-out hidden">
         <h1>Spark Sample Application</h1>
-
         <p class="lead">Experience managing printing models in the web - try <b>Spark Sample Application</b> today! Spark will
             always be free <br>
         </p>
-
-        <p><a class="btn btn-lg btn-success" onclick="loginUser()" role="button">Sign up today</a></p>
+        <p><a class="btn btn-lg btn-success" onclick="sparkAuth.redirectToAuthLoginURL()" role="button">Sign up today</a></p>
     </div>
-     <!-- this section becomes visible when the user successfully logs in -->
-    <div class="row marketing logged-in hidden">
-        <div class="col-lg-6">
-        </div>
-        <div id="myModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Create an asset</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="asset-form">
-                            <div class="form-group">
-                                <label for="inputTitle">Title</label>
-                                <input type="text" class="form-control" id="inputTitle" placeholder="Title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputDesc">Description</label>
-                                <textarea type="text" class="form-control" id="inputDesc" placeholder="Description" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputTags">Tags</label>
-                                <input type="text" class="form-control" id="inputTags" placeholder="Tags" required>
-                            </div>
-                            <input type="hidden" id="assetId">
-                            <div class="modal-footer">
-                                <input class="btn btn-primary" type="submit" value="Send" id="submit">
-                                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="thanks">
-            <p><a data-toggle="modal" id="add-asset" class="btn btn-primary btn-large">Add Asset</a></p>
-        </div>
-    </div>
-
 
     <div class="footer">
-        <p>&copy; Spark Sample Application 2014</p>
+        <p>&copy; Spark Sample Application 2015</p>
     </div>
 
 </div>
@@ -113,9 +57,10 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/home.js"></script>
 
 </body>
 </html>

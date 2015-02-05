@@ -1,35 +1,47 @@
-$(function ($) {
-    //This section is only performed if there is an access token
-    if (localStorage.getItem('spark-drive-token')) {
-        $('.logged-in').removeClass('hidden');
-        $('.row.marketing').removeClass('hidden');
-        sparkAuth.getMyProfile(function (profile) {
-            $('#user-name a').text(profile.name);
-            $('#user-image').removeClass('hidden');
-            $('#user-image img').attr('src', profile.profile.avatar_path);
-        });
+/**
+ * Get assets from api and append them in the DOM
+ * @param limit
+ * @param offset
+ * @param callback
+ */
+function getAssetsAndAppend(limit, offset, callback){
+    sparkDrive.getMyAssets(limit, offset, function (response) {
+        var assetElem = '';
+        for (var i in response.assets) {
+            //build the elements
+            assetElem += '<div class="asset col-md-4">';
+            assetElem += '<h4>' + response.assets[i].asset_name + '</h4>';
+            assetElem += '<p>' + response.assets[i].description + '</p>';
+            assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
+            assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
+            assetElem += '<input type="hidden" class="asset-id" value="' + response.assets[i].asset_id + '">';
+            assetElem += '</div>'
+        }
 
+        $('.row.marketing .assets-placeholder').append(assetElem);
+
+        callback(response);
+
+    });
+}
+
+
+$(function ($) {
+        //Keep track for the assets pagination
+        var currentOffset = 0;
 
         var editMode = false;
-        sparkDrive.getMyAssets(function (response) {
-            var assetElem = '';
-            for (var i in response.assets) {
-                //build the elements
-                assetElem += '<div class="asset">';
-                assetElem += '<h4>' + response.assets[i].asset_name + '</h4>';
-                assetElem += '<p>' + response.assets[i].description + '</p>';
-                assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
-                assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
-                assetElem += '<input type="hidden" class="asset-id" value="' + response.assets[i].asset_id + '">';
-                assetElem += '</div>'
+        getAssetsAndAppend(12, currentOffset, function (response){
+            if (response._link_next){
+                $('.load-more-button').removeClass('hidden');
+                currentOffset = 12;
+            }else{
+                $('.load-more-button').addClass('hidden');
             }
-
-            $('.row.marketing .col-lg-6').html(assetElem);
-
         });
 
         //Edit asset
-        $('.row.marketing .col-lg-6').on('click','.asset i.edit', function(){
+        $('.row.marketing .assets-placeholder').on('click','.asset i.edit', function(){
             var assetElem = $(this).parent('.asset');
             $('#myModal').find('#inputTitle').val(assetElem.find('h4').text());
             $('#myModal').find('#inputDesc').val(assetElem.find('p').text());
@@ -39,7 +51,7 @@ $(function ($) {
         });
 
         //Delete asset
-        $('.row.marketing .col-lg-6').on('click','.asset i.delete', function(){
+        $('.row.marketing .assets-placeholder').on('click','.asset i.delete', function(){
             var c = confirm('Are you sure?');
 
             if (c) {
@@ -57,9 +69,20 @@ $(function ($) {
             $('#myModal').modal('show');
             $('#myModal').find('#inputTitle').val('');
             $('#myModal').find('#inputDesc').val('');
-            $('#myModal').find('#inputTags').val('');
             $('#myModal').find('#assetId').val('');
             editMode = false;
+        });
+
+        //load more assets
+        $('.load-more-button a').on('click',function(){
+            getAssetsAndAppend(12, currentOffset, function (response){
+                if (response._link_next){
+                    $('.load-more-button').removeClass('hidden');
+                    currentOffset += 12;
+                }else{
+                    $('.load-more-button').addClass('hidden');
+                }
+            });
         });
 
 
@@ -67,8 +90,7 @@ $(function ($) {
             e.preventDefault();
             var asset = {
                 title: $('#inputTitle').val(),
-                description: $('#inputDesc').val(),
-                tags: $('#inputTags').val()
+                description: $('#inputDesc').val()
             };
 
             //edit
@@ -78,6 +100,7 @@ $(function ($) {
                     var assetElem = $('input.asset-id[value=' + asset.assetId + ']').parent('.asset');
                     assetElem.find('h4').text(asset.title);
                     assetElem.find('p').text(asset.description);
+                    $('#myModal').modal('hide');
 
 
                 });
@@ -98,9 +121,5 @@ $(function ($) {
                 })
             }
         });
-      // This section is performed if there is no access token
-    } else {
-        $('.logged-out').removeClass('hidden');
-    }
 
 }(jQuery));
