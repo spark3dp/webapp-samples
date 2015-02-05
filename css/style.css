@@ -115,3 +115,11 @@ body {
     padding: 10px 15px;
     position: relative;
 }
+#add-printer{
+    background-color: #eb5528;
+    border-color: #eb5528;
+}
+#add-printer:hover{
+    background-color: #eee;
+    color:#eb5528;
+}
