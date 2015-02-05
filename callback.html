@@ -13,16 +13,14 @@
 <body>
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/spark-auth.js"></script>
 <script>
-	// calls the init function in scripts/spark-drive.js
-	//init function in scripts/spark-drive
-	sparkDrive.init(CLIENT_ID, AUTH_HASH, REDIRECT_URL, ENVIRONMENT);
 
-	var code = sparkDrive.extractSparkRedirectionCode();
+	var code = Util.extractRedirectionCode();
 
-	sparkDrive.getAccessToken(code, function (token) {
-		$('body').removeClass('hidden');
+	sparkAuth.getAccessToken(code, function (token) {
 		if (token) {
 			window.location = APP_HOME;
 		} else {
