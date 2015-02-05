@@ -91,6 +91,9 @@ body {
 .asset{
     border-bottom: 1px solid #428bca;
     position: relative;
+    padding-bottom: 10px;
+    height:200px;
+    overflow: hidden;
 }
 .asset i{
     position: absolute;
@@ -104,7 +107,7 @@ body {
 
 .asset i.delete{
     top:auto;
-    bottom:10px;
+    top:30px;
 }
 .nav .btn:hover{
     color:#428bca;
@@ -127,4 +130,17 @@ body {
 .load-more-button a{
     width:100%;
     margin-top: 10px;
+}
+#asset-form{
+    overflow: hidden;
+}
+#thumbnail{
+    margin-left: 2px;
+}
+#thumbnail_list{
+    margin-bottom: 5px;
+}
+#thumbnail_list img{
+    max-height:36px;
+    margin-right: 4px;
 }

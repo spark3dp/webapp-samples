@@ -57,6 +57,7 @@ var sparkAuth = function () {
 				"Authorization": "Basic " + AUTH_HASH,
 				"Content-type": "application/x-www-form-urlencoded"
 			}
+
 			Util.xhr(protocol + '://' + apiHost + '/oauth/accesstoken', 'POST', params, headers, function(response){
 
 				//If request was for access token, set it in localStorage
@@ -94,10 +95,10 @@ var sparkAuth = function () {
 		},
 
 		/**
-		 * Is the user logged in?
+		 * Get access token
 		 * @returns {*|any}
 		 */
-		isLoggedIn: function(){
+		accessToken: function(){
 			return localStorage.getItem('spark-drive-token');
 		}
 	};

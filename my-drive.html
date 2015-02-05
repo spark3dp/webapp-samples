@@ -17,9 +17,10 @@
 
 	<script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 	<script>
-		if (!sparkAuth.isLoggedIn()) {
+		if (!sparkAuth.accessToken()) {
 			location.href = 'index.html';
 		}
 	</script>
@@ -69,15 +70,21 @@
 						<form id="asset-form">
 							<div class="form-group">
 								<label for="inputTitle">Title</label>
-								<input type="text" class="form-control" id="inputTitle" placeholder="Title" required>
+								<input type="text" class="form-control field" id="inputTitle" placeholder="Title" required>
 							</div>
 							<div class="form-group">
 								<label for="inputDesc">Description</label>
-								<textarea type="text" class="form-control" id="inputDesc" placeholder="Description"
+								<textarea type="text" class="form-control field" id="inputDesc" placeholder="Description"
 								          required></textarea>
 							</div>
-							<input type="hidden" id="assetId">
 
+							<h4>Asset thumbnails</h4>
+							<div id="thumbnail_list"><!-- Thumbnails--></div>
+							<div class="form-group">
+								<label for="inputTitle">Add Thumbnail</label>
+								<input type="file" id="thumbnail" placeholder="Asset thumbnail" class="field" required>
+							</div>
+							<input type="hidden" id="assetId">
 							<div class="modal-footer">
 								<input class="btn btn-primary" type="submit" value="Send" id="submit">
 								<a href="#" class="btn" data-dismiss="modal">Cancel</a>
@@ -100,7 +107,6 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/my-drive.js"></script>

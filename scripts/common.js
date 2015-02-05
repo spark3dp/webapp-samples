@@ -13,4 +13,19 @@ $(function ($) {
         $('.logged-out').removeClass('hidden');
     }
 
+    /**
+     * Clear the modal content after closing it
+     */
+    $('body').on('hidden.bs.modal', '.modal', function () {
+        $(this)
+            .find("input.field,textarea.field,select.field")
+            .val('')
+            .end();
+
+        $(this)
+            .find("img")
+            .remove()
+            .end()
+    });
+
 }(jQuery));
