@@ -1,27 +1,4 @@
 var Printer= (function() {
-<<<<<<< Updated upstream
- 
-    // Private variables and functions
-    var env = "alpha";
-    var TOKEN_KEY = "com.autodesk.print.token"+env;
-    var REGISTRATION_STATE="com.autodesk.print.registered"+env;
-    var isOnline=false;
-    var healthCheckTimer;
-    //how often to send health check ping
-    var HEALTH_CHECK_INTERVAL=60000;
-    var PRINT_JOB_INTERVAL=1000;
-    
-    var BASE_URL="http://print-alpha.spark.autodesk.com/api/v1";
-    var FAYE_URL="http://print-alpha.spark.autodesk.com/faye";
-    
-    var BASE_URL_LOCAL="http://localhost:8080/api/v1";
-    var FAYE_URL_LOCAL="http://localhost:8080/faye"
-    //faye client
-    var client;
-   
-    
-    var registrationSub=null;
-    var commandSub=null;
 
 	// Private variables and functions
 	var env = "alpha";
