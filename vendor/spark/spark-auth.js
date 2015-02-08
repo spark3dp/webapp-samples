@@ -2,6 +2,32 @@
  * Our spark auth object
  */
 var sparkAuth = function () {
+
+
+
+	/**
+	 * Get guest token
+	 * @param code
+	 * @param callback
+	 */
+	var getGuestTokenFromServer = function (callback) {
+		var params = "grant_type=client_credentials";
+		var headers = {
+			"Authorization": "Basic " + AUTH_HASH,
+			"Content-type": "application/x-www-form-urlencoded"
+		}
+
+		Util.xhr(protocol + '://' + apiHost + '/oauth/accesstoken', 'POST', params, headers, function(response){
+
+			var date = new Date();
+			var now = date.getTime();
+			response.expires_at = now+parseInt(response.expires_in)*1000;
+			localStorage.setItem('spark-guest-token', JSON.stringify(response));
+			callback(response);
+		});
+
+	};
+
 	/**
 	 * Return the factory object
 	 */
@@ -13,7 +39,7 @@ var sparkAuth = function () {
 		checkTokenValidity:function (callback) {
 
 			var headers = {
-				"Authorization": "Bearer " + localStorage.getItem('spark-drive-token'),
+				"Authorization": "Bearer " + sparkAuth.accessToken(),
 				"Content-type": "application/x-www-form-urlencoded"
 			}
 			var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id;
@@ -29,7 +55,8 @@ var sparkAuth = function () {
 		 * Logout the user - clear the token in local storage
 		 */
 		logout: function(){
-			localStorage.removeItem('spark-drive-token');
+			localStorage.removeItem('spark-token');
+			localStorage.removeItem('spark-member');
 			location.reload();
 		},
 
@@ -62,14 +89,15 @@ var sparkAuth = function () {
 
 				//If request was for access token, set it in localStorage
 				if (response.access_token) {
-					localStorage.setItem('spark-drive-token', response.access_token);
-					localStorage.setItem('spark-drive-member', JSON.stringify(response));
+					localStorage.setItem('spark-token', response.access_token);
+					localStorage.setItem('spark-member', JSON.stringify(response));
 				}
 
 				callback(response);
 			});
 
 		},
+
 
 		/**
 		 * Gets user profile
@@ -90,7 +118,7 @@ var sparkAuth = function () {
 		 * @returns {*|any}
 		 */
 		getMember: function(){
-			var memberAsJsonStr = localStorage.getItem('spark-drive-member');
+			var memberAsJsonStr = localStorage.getItem('spark-member');
 			return JSON.parse(memberAsJsonStr);
 		},
 
@@ -99,7 +127,25 @@ var sparkAuth = function () {
 		 * @returns {*|any}
 		 */
 		accessToken: function(){
-			return localStorage.getItem('spark-drive-token');
+			return localStorage.getItem('spark-token');
+		},
+
+		/**
+		 * Get the guest token
+		 * @param callback
+		 */
+		getGuestToken: function(callback){
+			var guestToken = JSON.parse(localStorage.getItem('spark-guest-token'));
+			var date = new Date();
+			var now = date.getTime();
+			if (guestToken && guestToken.expires_at && guestToken.expires_at > now){
+				callback(guestToken.access_token);
+			}else{
+				getGuestTokenFromServer(function(response){
+					callback(response.access_token);
+				});
+			}
+
 		}
 	};
 

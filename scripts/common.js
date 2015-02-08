@@ -1,6 +1,6 @@
 $(function ($) {
     //This section is only performed if there is an access token
-    if (localStorage.getItem('spark-drive-token')) {
+    if (localStorage.getItem('spark-token')) {
 
         $('.logged-in').removeClass('hidden');
 

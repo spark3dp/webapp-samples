@@ -9,20 +9,19 @@ function getAssetsAndAppend(limit, offset, callback) {
 		var assetElem = '';
 		for (var i in response.assets) {
 			//build the elements
-			var assetId = response.assets[i].asset_id;
+			var imgUrl = response.assets[i].thumb_path_prefix;
+			if (imgUrl.indexOf('FullPreview/ThumbnailGradient')<0){
+				imgUrl += 'Petite.jpg';
+			}
 			assetElem += '<div class="asset col-md-4">';
+			assetElem += '<img src="' + imgUrl + '">';
 			assetElem += '<div class="asset-content"><h4>' + response.assets[i].asset_name + '</h4>';
 			assetElem += '<p>' + response.assets[i].description + '</p>';
 			assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
 			assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
 			assetElem += '<input type="hidden" class="asset-id" value="' + response.assets[i].asset_id + '">';
 			assetElem += '</div></div>';
-			sparkDrive.retrieveUserAssetThumbnails(assetId, function(thumbResp){
-				if (thumbResp.thumbnails.length) {
-					var thumb = '<img src="' + thumbResp.thumbnails[0].thumb_path_prefix + 'Petite.jpg' + '">';
-					$('.asset-id[value=' + thumbResp.assetId + ']').parent().before(thumb);
-				}
-			});
+
 		}
 
 		$('.row.marketing .assets-placeholder').append(assetElem);

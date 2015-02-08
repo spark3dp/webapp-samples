@@ -22,7 +22,7 @@ var sparkDrive = function () {
 				id: file_ids[i],
 				caption: "thumbnail",
 				description: "thumbnail",
-				is_primary: i == 0 ? true : false
+				is_primary: true
 			}
 
 			thumbnails.push(thumbnail);
@@ -48,6 +48,37 @@ var sparkDrive = function () {
 	 */
 	return {
 
+		/**
+		 * Get public assets - requires only a guest token
+		 * @param conditions - Various conditions for the query
+		 * @param callback
+		 */
+		getAssetsByConditions: function (conditions, callback) {
+			//Make sure token is still valid
+			sparkAuth.getGuestToken(function (guestToken) {
+				if (guestToken) {
+
+					var headers = {
+						"Authorization": "Bearer " + guestToken,
+						"Content-type": "application/x-www-form-urlencoded"
+					}
+
+					//default limit/offset
+					conditions.limit = conditions.limit ? conditions.limit : 12;
+					conditions.offset = conditions.offset ? conditions.offset : 0;
+
+					//Construct the full request
+					var params = Object.keys(conditions).map(function(k) {
+						return encodeURIComponent(k) + "=" + encodeURIComponent(conditions[k]);
+					}).join('&');
+
+					var url = protocol + '://' + apiHost + '/assets?' + params;
+					Util.xhr(url, 'GET', '', headers, callback);
+				} else {
+					callback(false);
+				}
+			});
+		},
 		/**
 		 * Get my assets
 		 * @param callback
