@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="css/style.css" rel="stylesheet">
+
+	<script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
+
+	<script>
+		if (!sparkAuth.accessToken()) {
+			location.href = 'index.html';
+		}
+	</script>
+
+</head>
+
+<body>
+
+<div class="container">
+	<div class="header">
+		<!-- Navigation links at the top right of the screen -->
+		<ul class="nav nav-pills pull-right" role="tablist">
+
+			<li role="presentation">
+				<a data-toggle="modal" id="add-printer" class="btn btn-primary btn-large">
+					Print API
+				</a>
+			</li>
+			<li role="presentation">
+				<a href="simulator/print_simulator.html" id="printer-simulator" class="btn btn-primary btn-large">
+					Printer Simulator
+				</a>
+			</li>
+			<li role="presentation" id="user">
+				<span><!-- user --></span>
+				<img src=""/>
+			</li>
+			<li role="presentation" id="logout"><a href="#" onclick="sparkAuth.logout()">Logout</a></li>
+		</ul>
+		<h3 class="text-muted"><a href="index.html">Spark Sample App</a></h3>
+	</div>
+
+
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active">
+			<a href="#register" role="tab" data-toggle="tab">
+				 Register Printer
+			</a>
+		</li>
+		<li><a href="#print" role="tab" data-toggle="tab">
+			Print Job
+		</a>
+		</li>
+		<li>
+			<a href="#status" role="tab" data-toggle="tab">
+				Check Status
+			</a>
+		</li>
+
+	</ul>
+
+
+	<div class="tab-content">
+		<div class="tab-pane fade active in" id="register">
+			<form id="register-printer-form">
+				<h1>Register Printer</h1>
+				<div class="form-group">
+					<label for="inputToken">Printer Token (should get this from the printer simulator)</label>
+					<input type="text" class="form-control" id="inputToken" placeholder="Printer Token" required>
+				</div>
+				<div class="form-group">
+					<label for="inputName">Printer name</label>
+					<input type="text" class="form-control" id="inputName" placeholder="Printer name"
+					       required>
+				</div>
+				<div class="form-group">
+					<label for="inputLog">Log</label>
+					<textArea type="text" class="form-control" rows="4" id="inputLog" placeholder=""
+							></textArea>
+				</div>
+
+				<div class="modal-footer">
+					<input class="btn btn-primary" type="submit" value="Send" id="submit">
+					<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+				</div>
+			</form>		</div>
+		<div class="tab-pane fade" id="print">
+			<div class="tab-pane fade active in" id="print2">
+				<form id="print-job-form">
+					<h1>Print Job</h1>
+					<div class="form-group">
+						<label for="fileURL">Printable File URL</label>
+						<input type="text" class="form-control" id="fileURL" placeholder="File URL" required>
+					</div>
+					<div class="form-group">
+						<label for="inputName">Printer name</label>
+
+						<select class="form-control" id="printers-select" required>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="printer-settings">Settings</label>
+						<textArea type="text" class="form-control" id="printer-settings" placeholder="">{ "FirstApproachRPM": 6, "FirstZLiftMicrons": 2000, "FirstSeparationMicronsPerSec": 5000, "FirstApproachMicronsPerSec": 5000, "FirstRotationMilliDegrees": 60000 }
+						</textArea>
+					</div>
+
+					<div class="form-group">
+						<label for="inputLog">Log</label>
+						<textArea type="text" class="form-control" id="inputLog" placeholder="" rows="4"
+								>
+
+								</textArea>
+					</div>
+
+					<input type="hidden" id="assetId">
+
+					<div class="modal-footer">
+						<input class="btn btn-primary" type="submit" value="Send" id="submit">
+						<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+					</div>
+				</form>		</div>
+		</div>
+		<div class="tab-pane fade" id="status">
+			<div class="tab-pane fade active in" id="print3">
+				<form id="print-status-form">
+					<h1>Check Status</h1>
+
+					<div class="form-group">
+						<label for="inputName">Printer name</label>
+						<select class="form-control" id="printers-select2" required>
+						</select>
+					</div>
+
+					<table class="table table-condensed" id="print-statuses">
+
+						<tr class="header">
+							<td>Job ID</td>
+							<td>Job Date</td>
+							<td>Status</td>
+							<td>Actions</td>
+						</tr>
+
+					</table>
+
+					<div class="form-group">
+						<label for="inputLog">Log</label>
+						<textArea type="text" rows="4" class="form-control" id="inputLogStatus" placeholder=""
+								>
+
+						</textArea>
+					</div>
+
+
+
+				</form>		</div>
+		</div>
+		<div class="tab-pane fade" id="settings">
+			<h2>Settings Content Goes Here</h2>
+		</div>
+	</div>
+
+
+
+
+
+
+	<div class="footer">
+		<p>&copy; Spark Sample Application 2015</p>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/my-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="scripts/my-printer.js"></script>
+
+
+</body>
+</html>

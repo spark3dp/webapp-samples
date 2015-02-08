@@ -16,7 +16,7 @@ var Util = function () {
 		 * @param headers
 		 * @param callback
 		 */
-		xhr:function (url, method, params, headers, callback) {
+		xhr:function (url, method, params, headers, callback, errorCallback) {
 			var xhr = new XMLHttpRequest();
 			xhr.open(method, url, true);
 
@@ -30,8 +30,13 @@ var Util = function () {
 						var response = JSON.parse(xhr.responseText);
 						callback(response);
 					}else{
-						//Server or auth error
-						callback(false);
+						if(errorCallback!==undefined){
+							errorCallback(xhr.responseText)
+						}
+						else {
+							//Server or auth error
+							callback(false);
+						}
 					}
 				}
 			}

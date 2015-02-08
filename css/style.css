@@ -166,3 +166,8 @@ body {
     max-height: 36px;
     margin-right: 4px;
 }
+
+tr.header {
+    background-color: black;
+    color: white;
+}
