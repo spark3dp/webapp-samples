@@ -135,12 +135,12 @@ body {
     position: relative;
 }
 
-#add-printer {
+#add-printer,#printer-simulator {
     background-color: #eb5528;
     border-color: #eb5528;
 }
 
-#add-printer:hover {
+#add-printer:hover,#printer-simulator:hover {
     background-color: #eee;
     color: #eb5528;
 }
