@@ -96,7 +96,7 @@ var sparkDrive = function () {
 					var assetsLimit = limit ? limit : 12;
 					var assetsOffset = offset ? offset : 0;
 
-					var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
+					var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).acs_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
 					Util.xhr(url, 'GET', '', headers, callback);
 				} else {
 					callback(false);

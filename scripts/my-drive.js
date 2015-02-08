@@ -154,7 +154,7 @@ $(function ($) {
 			sparkDrive.createAsset(asset, function (response) {
 				$('#myModal').modal('hide');
 				var assetElem = '';
-				assetElem += '<div class="asset">';
+				assetElem += '<div class="asset col-md-4">';
 				assetElem += '<div class="asset-content"><h4>' + asset.title + '</h4>';
 				assetElem += '<p>' + asset.description + '</p>';
 				assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';

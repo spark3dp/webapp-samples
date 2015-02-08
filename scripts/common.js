@@ -5,8 +5,8 @@ $(function ($) {
         $('.logged-in').removeClass('hidden');
 
         sparkAuth.getMyProfile(function (profile) {
-            $('#user span').text(profile.name);
-            $('#user img').attr('src', profile.profile.avatar_path);
+            $('#user span').text(profile.member.name);
+            $('#user img').attr('src', profile.member.profile.avatar_path);
         });
       // This section is performed if there is no access token
     } else {

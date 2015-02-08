@@ -29,6 +29,26 @@ var sparkAuth = function () {
 	};
 
 	/**
+	 * Fetch current member
+	 * @param callback
+	 */
+	var getMemberFromServer = function(callback) {
+		var headers = {
+			"Authorization": "Bearer " + sparkAuth.accessToken(),
+			"Content-type": "application/x-www-form-urlencoded"
+		}
+		var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).acs_member_id;
+		Util.xhr(url, 'GET', '', headers, function(response){
+			var date = new Date();
+			var now = date.getTime();
+			//expire in 2 hours
+			response.expires_at = now + 7200*1000;
+			localStorage.setItem('spark-member', JSON.stringify(response));
+			callback(response);
+		});
+	};
+
+	/**
 	 * Return the factory object
 	 */
 	return {
@@ -38,17 +58,16 @@ var sparkAuth = function () {
 		 */
 		checkTokenValidity:function (callback) {
 
-			var headers = {
-				"Authorization": "Bearer " + sparkAuth.accessToken(),
-				"Content-type": "application/x-www-form-urlencoded"
+			var token = JSON.parse(localStorage.getItem('spark-token'));
+			var date = new Date();
+			var now = date.getTime();
+			if (token && token.expires_at && token.expires_at > now){
+				callback(true);
+			}else{
+				sparkAuth.logout();
 			}
-			var url = protocol + '://' + apiHost + '/members/' + sparkAuth.getMember().acs_member_id;
-			Util.xhr(url, 'GET', '', headers, function(response){
-				if (!response){
-					sparkAuth.logout();
-				}
-				callback(response);
-			});
+
+
 		},
 
 		/**
@@ -89,8 +108,10 @@ var sparkAuth = function () {
 
 				//If request was for access token, set it in localStorage
 				if (response.access_token) {
-					localStorage.setItem('spark-token', response.access_token);
-					localStorage.setItem('spark-member', JSON.stringify(response));
+					var date = new Date();
+					var now = date.getTime();
+					response.expires_at = now+parseInt(response.expires_in)*1000;
+					localStorage.setItem('spark-token', JSON.stringify(response));
 				}
 
 				callback(response);
@@ -107,27 +128,32 @@ var sparkAuth = function () {
 			//Make sure token is still valid
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
-					callback(response.member);
+					var member = JSON.parse(localStorage.getItem('spark-member'));
+					var date = new Date();
+					var now = date.getTime();
+					if (member && member.expires_at && member.expires_at > now){
+						callback(member);
+					}else{
+						getMemberFromServer(function(member){
+							callback(member);
+						});
+					}
 				}else{
 					callback(false);
 				}
 			});
 		},
 		/**
-		 * Get the member object as JSON from localStorage
-		 * @returns {*|any}
-		 */
-		getMember: function(){
-			var memberAsJsonStr = localStorage.getItem('spark-member');
-			return JSON.parse(memberAsJsonStr);
-		},
-
-		/**
 		 * Get access token
 		 * @returns {*|any}
 		 */
-		accessToken: function(){
-			return localStorage.getItem('spark-token');
+		accessToken: function(returnFullObject){
+			var token = JSON.parse(localStorage.getItem('spark-token'));
+			if (token){
+				return (returnFullObject ? token : token.access_token);
+			}else{
+				return false;
+			}
 		},
 
 		/**
