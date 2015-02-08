@@ -21,7 +21,6 @@
 	var code = Util.extractRedirectionCode();
 
 	sparkAuth.getAccessToken(code, function (token) {
-		console.log(token);
 		if (token) {
 			window.location = APP_HOME + 'my-drive.html';
 		} else {

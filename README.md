@@ -12,3 +12,7 @@ Required setup before running the sample code
   *  Enter the Base64 value of (app key + ":" + app secret) as the value of the variable AUTH_HASH. Base64 encoding can be performed at https://www.base64encode.org/.
   *  Enter the path to the sample's callback.html file in the REDIRECT_URL variable. This must be the same as the redirect URL entered in the app definitions, without the "http://hostname" part of the URL which the variable automatically generates.
   *  Save your changes and run the sample.
+
+
+Project Structure
+=================
