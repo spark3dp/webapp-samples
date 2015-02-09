@@ -85,11 +85,18 @@ var sparkPrint = function () {
 			});
 		},
 
-		log : function (textArea_id, data) {
-			console.log(data);
-			var txt = $("#" + textArea_id);
-			txt.val(txt.val() + "\n" + data);
-			txt.scrollTop(txt[0].scrollHeight);
+		sendPrintCommand: function(memberID,printerID,command,callback,errorCallback){
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+					var headers = {
+						"X-Member-id":memberID,
+						"Content-type": "application/x-www-form-urlencoded"
+					}
+					Util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command, headers, callback);
+				}else{
+					callback(false);
+				}
+			});
 		}
 	}
 

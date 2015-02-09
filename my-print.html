@@ -156,6 +156,18 @@
 
 					</table>
 
+					<button type="button" class="btn btn-default resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job" onclick="sendPrinterCommand('resume')">
+						<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
+					</button>
+
+					<button type="button" class="btn btn-default pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job" onclick="sendPrinterCommand('pause')">
+						<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
+					</button>
+
+					<button type="button" class="btn btn-default cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job" onclick="sendPrinterCommand('cancel')">
+						<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
+					</button>
+
 					<div class="form-group">
 						<label for="inputLog">Log</label>
 						<textArea type="text" rows="4" class="form-control" id="inputLogStatus" placeholder=""
