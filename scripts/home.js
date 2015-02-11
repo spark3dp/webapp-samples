@@ -6,17 +6,25 @@
  */
 function loopGallery(test, index, item) {
 	if (test) {
+
+    var imgUrlRow = imgUrlThumb = imgUrlLarge = item.thumb_path_prefix;
+    if (imgUrlRow.indexOf('FullPreview/')<0){
+      imgUrlThumb += 'Medium.jpg';
+      imgUrlLarge += 'Large.jpg';
+    }
+
 		var box = $('<div class="col-md-4 box_animaux box-' + index + '"></div>');
 		var pola = $('<div class="pola"></div>');
 		var view = $('<div class="view thumb"></div>');
 		var mask = $('<div class="mask"><h2>' + item.asset_name + '</h2>' +
-		'<a href="' + item.thumb_path_prefix + '" class="info fancybox" rel="group" title="' + item.asset_id + '" >' +
+		'<a href="' + imgUrlLarge + '" class="info fancybox" rel="group" title="' + item.asset_id + '" >' +
 		'<div class="alt">Open</div></a></div>');
 
 		$('.gallery').append(box);
 		box.append(pola);
 		pola.append(view);
-		view.prepend('<img src="' + item.thumb_path_prefix + '">');
+
+		view.prepend('<img src="' + imgUrlThumb + '">');
 		view.append(mask);
 	}
 }
