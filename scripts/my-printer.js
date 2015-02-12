@@ -4,7 +4,7 @@
 
 
 /**
-var myPrint = function () {
+ var myPrint = function () {
 
 	var logger = function (textArea_id, data) {
 		console.log(data);
@@ -30,15 +30,28 @@ var myPrint = function () {
 }();
  */
 
-$(function ($) {
+
+
+var myPrinter = function () {
 
 	var memberID = "";
+
 
 	sparkAuth.getMyProfile(function(member){
 		if(member)
 			memberID = member.member.id;
 		//(JSON.parse(member)).member.id;
 	});
+
+	var sendPrinterCommand = function(command){
+		sparkPrint.sendPrintCommand(memberID,$("#printers-select2").val(),command,function(response){
+				logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select2").val());
+			}
+			,function(response){
+				logger("#inputLogStatus",response);
+				logger("#inputLogStatus","Error sending " + command + " command to printer "+$("#printers-select2").val());
+			});
+	}
 
 	var classMapper = {
 		"complete":"success",
@@ -47,11 +60,8 @@ $(function ($) {
 		"canceled":"danger"
 	};
 
-	var classMapper2 = {
-		"complete":{classMap:"success", buttons:[]},
-		"queued":{classMap:"warning", buttons:"<a href='cancel'>cancel</a>"},
-		"started":{classMap:"info", buttons:"<a href='cancel'>cancel</a>&nbsp;<a href='pause'>pause</a>"},
-		"canceled":{classMap:"danger", buttons:[]}
+	var buildCommand = function(memberID,printerID,command){
+		return "<a onclick='sendPrinterCommand("+memberID+","+printerID+","+"\""+command+"\""+")'>"+command+"</a>";
 	};
 
 	var logger = function (textArea_id, data) {
@@ -71,6 +81,8 @@ $(function ($) {
 			}
 
 			$("#printers-select2").find('option').remove()
+			$("<option value='0'>Choose Printer</option>").appendTo("#printers-select2")
+
 			$("#printers-select").children().clone().appendTo("#printers-select2");
 		});
 	};
@@ -89,7 +101,7 @@ $(function ($) {
 				//var printerId = response.printer_id;
 				var printerJobs = response.printer_jobs;
 				for(var i in printerJobs){
-					$("<tr class='"+ classMapper2[printerJobs[i].job_status.state].classMap+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.state+"</td><td>"+classMapper2[printerJobs[i].job_status.state].buttons+"</td></tr>").appendTo("#print-statuses");
+					$("<tr class='"+ classMapper[printerJobs[i].job_status.state]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.state+"</td><td>"+"</td></tr>").appendTo("#print-statuses");
 				}
 
 				logger("#inputLogStatus","Got "+ printerJobs.length +" jobs!");
@@ -107,13 +119,13 @@ $(function ($) {
 		var token = $('#inputToken').val();
 		var printerName = $('#inputName').val();
 		sparkPrint.registerPrinter(memberID,token,printerName,function(response){
-			var printerId = response.printer_id;
-			logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
-		},
-		function(response){
-			logger("#register-printer-form #inputLog",response);
+				var printerId = response.printer_id;
+				logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+			},
+			function(response){
+				logger("#register-printer-form #inputLog",response);
 
-		});
+			});
 	});
 
 	$("#print-job-form").on('submit', function (e) {
@@ -134,5 +146,7 @@ $(function ($) {
 	});
 
 
+	return {sendPrinterCommand:sendPrinterCommand};
+};
 
-	}(jQuery));
+var sendPrinterCommand = myPrinter().sendPrinterCommand;
