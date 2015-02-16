@@ -57,7 +57,8 @@ var myPrinter = function () {
 		"complete":"success",
 		"queued":"warning",
 		"started":"info",
-		"canceled":"danger"
+		"canceled":"danger",
+		"printing":"info"
 	};
 
 	var buildCommand = function(memberID,printerID,command){
