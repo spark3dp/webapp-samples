@@ -9,9 +9,9 @@ var Printer= (function() {
     //how often to send health check ping
     var HEALTH_CHECK_INTERVAL=60000;
     var PRINT_JOB_INTERVAL=1000;
-    
-    var BASE_URL="http://alpha.spark.autodesk.com/api/v1";
-    var FAYE_URL="http://alpha.spark.autodesk.com/faye";
+	//https://sandbox.spark.autodesk.com/api/v1/print
+    var BASE_URL="https://sandbox.spark.autodesk.com/api/v1";
+    var FAYE_URL="https://sandbox.spark.autodesk.com/api/v1";
     
     var BASE_URL_LOCAL="http://localhost:8080/api/v1";
     var FAYE_URL_LOCAL="http://localhost:8080/faye"
