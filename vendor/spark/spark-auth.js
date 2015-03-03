@@ -37,7 +37,8 @@ var sparkAuth = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).acs_member_id;
+    
+		var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).spark_member_id;
 		Util.xhr(url, 'GET', '', headers, function(response){
 			var date = new Date();
 			var now = date.getTime();
