@@ -30,7 +30,7 @@ var sparkDrive = function () {
 
 
 
-		var params = "thumbnails=" + JSON.stringify(thumbnails) + "&async=false";
+		var params = "thumbnails=" + JSON.stringify(thumbnails);
 
 		var headers = {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
