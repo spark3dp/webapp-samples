@@ -1,0 +1,31 @@
+<div class="container">
+	<div class="row" style="background: black">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="requestLog">Request Log</label>
+				<span class="pull-right" onClick="$('#requestLog').empty()">CLEAR</span>
+				<div id="requestLog"></div>
+
+				<!--<textArea type="text" rows="4" class="form-control" id="requestLog" placeholder=""></textArea>-->
+			</div>
+		</div>
+		<div class="col-md-6">
+
+			<div class="form-group">
+				<label for="responseLog">Response Log</label>
+				<span class="pull-right" onClick="$('#responseLog').empty('')">CLEAR</span>
+
+				<!--<textArea type="text" rows="4" class="form-control" id="responseLog1" placeholder=""></textArea>-->
+				<div id="responseLog"></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" charset="utf-8" src="vendor/renderjson.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="scripts/ajaxListenerAndLogger.js"></script>
+
+<script type="text/javascript">
+	ajaxListenerAndLogger("requestLog","responseLog");
+</script>
