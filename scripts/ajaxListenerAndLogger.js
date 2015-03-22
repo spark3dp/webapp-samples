@@ -3,6 +3,8 @@
  */
 var ajaxListenerAndLogger = function(requestLog, responseLog) {
 
+	var requestResponseMap = [];
+
 	var logger = function (textAreaId,data) {
 		console.log(data);
 		var txt = $("#"+textAreaId);
@@ -12,17 +14,37 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 
 	var jsonLogger = function(textAreaId,data) {
 		console.log(data);
+		renderjson.set_show_to_level(1);
 
-		//var txt = $(textAreaId);
-		console.log("txt",txt)
 		var rendered = renderjson(data);
 		console.log("rendered",rendered)
 		var txt = document.getElementById(textAreaId);
 		txt.appendChild(rendered);
 
-		//var txt = $(textAreaId);
-		//txt.val(txt.val() + "\n" + data);
-		//txt.scrollTop(txt[0].scrollHeight);
+	};
+
+	var jsonLogger2 = function(textAreaId,data) {
+		console.log(data);
+		renderjson.set_show_to_level(1);
+
+		var rendered = renderjson((data.res));
+		console.log("rendered",rendered)
+		var txt = $(document.getElementById(textAreaId));
+		var div = $("<pre></pre>");
+		var id = "response"+ txt.children().size();
+
+		var on = "$('#"+id+"').toggle()";
+		var onclick = "onclick="+on
+		div.append("<pre class='renderjson' "+onclick+"><div id='"+"req"+id+"'>"+data.req.METHOD + " " + data.req.URL+"</div></pre>");
+		var response = $("<div id='"+id + "' style='display:none'></div>");
+		var renderedReq = renderjson((data.req));
+
+		var request =$("<div>data"+data.req.data+"</div>");
+		response.append(renderedReq);
+		response.append(rendered);
+		div.append(response);
+		txt.append(div);
+
 	};
 
 	var open = window.XMLHttpRequest.prototype.open,
@@ -30,13 +52,20 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 		onReadyStateChange;
 
 	function openReplacement(method, url, async, user, password) {
-		var syncMode = async !== false ? 'async' : 'sync';
-		jsonLogger(requestLog,'Preparing ' +	syncMode +' HTTP request : ' +method +' ' +	url);
+
+		this.guid=requestResponseMap.length;
+		requestResponseMap.push({req : {METHOD:method, URL:url}});
+
 		return open.apply(this, arguments);
 	}
 
 	function sendReplacement(data) {
-		jsonLogger(requestLog,'Sending HTTP request data : '+ data);
+
+		requestResponseMap[this.guid].req.PARAMS = {};
+		if(data!="") {
+			requestResponseMap[this.guid].req.PARAMS = JSON.parse(data);
+		}
+
 
 		if(this.onreadystatechange) {
 			this._onreadystatechange = this.onreadystatechange;
@@ -48,10 +77,13 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 
 	function onReadyStateChangeReplacement() {
 		if(this.readyState ==4) {
-			jsonLogger(responseLog,'HTTP request ready state changed : ' + this.status);
-			jsonLogger(responseLog,  JSON.parse(this.responseText));
+			requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:JSON.parse(this.responseText)};
+			requestResponseMap[this.guid].res.HEADERS = this.getAllResponseHeaders();
+			jsonLogger2(requestLog,requestResponseMap[this.guid]);
 
 		}
+
+
 		if(this._onreadystatechange) {
 			return this._onreadystatechange.apply(this, arguments);
 		}
