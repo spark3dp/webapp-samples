@@ -60,10 +60,16 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 	}
 
 	function sendReplacement(data) {
-
+		debugger;
 		requestResponseMap[this.guid].req.PARAMS = {};
 		if(data!="") {
-			requestResponseMap[this.guid].req.PARAMS = JSON.parse(data);
+			try{
+				var a=JSON.parse(response);
+				requestResponseMap[this.guid].req.PARAMS = a;
+
+			}catch(e){
+				requestResponseMap[this.guid].req.PARAMS = data;
+			}
 		}
 
 

@@ -40,7 +40,17 @@ var sparkDrive = function () {
 
 		Util.xhr(url, 'POST', params, headers, callback);
 
-	}
+	};
+
+	var createAssetSource = function (asset_id, file_ids, callback) {
+		var headers = {
+			"Authorization": "Bearer " + sparkAuth.accessToken(),
+			"Content-type": "application/x-www-form-urlencoded"
+		}
+		var url = protocol + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids="+file_ids;
+
+		Util.xhr(url, 'POST', '', headers, callback);
+	};
 
 
 	/**
@@ -189,7 +199,7 @@ var sparkDrive = function () {
 
 							var files_ids_array = [filesResp.files[0].file_id];
 
-							createAssetThumbnail(assetId, files_ids_array, callback);
+							createAssetSource(assetId, files_ids_array, callback);
 						}
 						else {
 							callback(response);
@@ -223,6 +233,29 @@ var sparkDrive = function () {
 							thumbnails: response.thumbnails
 						}
 						callback(thumbnailsResp);
+					});
+				} else {
+					callback(false);
+				}
+			});
+		},
+
+		retrieveUserAssetSources: function(assetId, callback){
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/x-www-form-urlencoded"
+					}
+					var url = protocol + '://' + apiHost + '/assets/' + assetId + '/sources';
+					Util.xhr(url, 'GET', '', headers, function(response){
+						var sourcesResp = {
+							assetId: assetId,
+							sources: response.sources
+						}
+						callback(sourcesResp);
 					});
 				} else {
 					callback(false);
