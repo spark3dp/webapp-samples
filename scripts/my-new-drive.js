@@ -1,188 +1,133 @@
 /**
  * Created by michael on 3/22/15.
  */
-/**
-$("#drive-div").steps({
-	headerTag: "h3",
-	bodyTag: "section",
-	transitionEffect: "slideLeft",
-	autoFocus: true
-});
-*/
-	/**
-var form = $("#drive-form");
 
-form.validate({
-	errorPlacement: function errorPlacement(error, element) { element.before(error); },
-	rules: {
-		confirm: {
-			equalTo: "#password"
-		}
-	}
-});
 
-form.children("div").steps({
-	headerTag: "h3",
-	bodyTag: "section",
-	transitionEffect: "slideLeft",
-	onStepChanging: function (event, currentIndex, newIndex)
-	{
-		//form.validate().settings.ignore = ":disabled,:hidden";
-		//return form.valid();
-
-		if(currentIndex==1) {
-
-		}
-			return true;
-
-		//return true;
-	},
-	onFinishing: function (event, currentIndex)
-	{
-		form.validate().settings.ignore = ":disabled";
-		return form.valid();
-		//return true;
-	},
-	onFinished: function (event, currentIndex)
-	{
-		alert("Submitted!");
-	}
-});
-
-*/
-/**
- * Get assets from api and append them in the DOM
- * @param limit
- * @param offset
- * @param callback
- */
-function getAssetsAndAppend(limit, offset, callback) {
-	sparkDrive.getMyAssets(limit, offset, function (response) {
-		var assetElem = '';
-		for (var i in response.assets) {
-			//build the elements
-			var imgUrl = response.assets[i].thumb_path_prefix;
-			if (imgUrl.indexOf('FullPreview/ThumbnailGradient')<0){
-				imgUrl += 'Petite.jpg';
-			}
-			assetElem += '<div class="asset col-md-4">';
-			assetElem += '<img src="' + imgUrl + '">';
-			assetElem += '<div class="asset-content"><h4>' + response.assets[i].asset_name + '</h4>';
-			assetElem += '<p>' + response.assets[i].description + '</p>';
-			assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
-			assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
-			assetElem += '<input type="hidden" class="asset-id" value="' + response.assets[i].asset_id + '">';
-			assetElem += '</div></div>';
-
-		}
-
-		$('.row.marketing .assets-placeholder').append(assetElem);
-
-		callback(response);
-
-	});
-}
-
-var enabledTab = function(id,isEnable){
-
-	if(isEnable){
-		$('#myTabs a[href="#'+id+'"]').attr("data-toggle","tab");
-		$('#myTabs a[href="#'+id+'"]').parent().removeClass("disabled");
-	}
-	else{
-		$('#myTabs a[href="#'+id+'"]').attr("data-toggle","");
-		$('#myTabs a[href="#'+id+'"]').parent().addClass("disabled");
-	}
-
-};
 
 
 $(function ($) {
-	//Keep track for the assets pagination
-	var currentOffset = 0,
-	//Edit or create mode
-		editMode = false,
-	//All asset thumbnails
-		thumbnailList = [],
-	//Asset thumbnail for upload
-		thumbnail;
+
+
+	var editMode = false;
+
+	var currentAssetId = 0;
+
+	var currentAsset={};
+
+	var thumbnail;
+
+	var showScreen = function(selector){
+		hideAll();
+		$(selector).show();
+	};
+
+	var hideAll = function(){
+		$("#main-container").children().hide();
+	};
 
 
 
-	getAssetsAndAppend(12, currentOffset, function (response) {
-		if (response._link_next) {
-			$('.load-more-button').removeClass('hidden');
-			currentOffset = 12;
-		} else {
-			$('.load-more-button').addClass('hidden');
-		}
+	$("#firstScreen").on("click", function(){
+		showScreen("#secondScreen");
 	});
 
-
-	//Detect start of thumbnail upload
-	$('#thumbnail').on('change', function () {
-		thumbnail = this.files[0];
-	});
-
-	//load more assets
-	$('.load-more-button a').on('click', function () {
-		getAssetsAndAppend(12, currentOffset, function (response) {
-			if (response._link_next) {
-				$('.load-more-button').removeClass('hidden');
-				currentOffset += 12;
-			} else {
-				$('.load-more-button').addClass('hidden');
-			}
-		});
-	});
+	var onLoadManageFilesScreen = function(){
+		var currentAssetSources, currentAssetThumbnails ;
+		$("#manageFilesTitle").text(currentAsset.asset_name);
+		$("#filesTable").empty();
 
 
-	//Edit asset
-	/**
-	$('.row.marketing .assets-placeholder').on('click', '.asset i.edit', function () {
-		var assetElem = $(this).parents('.asset');
-		var assetId = assetElem.find('.asset-id').val();
-		$('#myModal #thumbnail_list').html('');
-		$('#myModal').find('#inputTitle').val(assetElem.find('h4').text());
-		$('#myModal').find('#inputDesc').val(assetElem.find('p').text());
-		$('#myModal').find('#assetId').val(assetId);
-		$('#myModal').modal('show');
-		$('#myModal .modal-title').text('Edit an asset');
-		editMode = true;
-		sparkDrive.retrieveUserAssetThumbnails(assetId, function(thumbResp){
-			thumbnailList = thumbResp.thumbnails;
-			var thumbnailsElems = '';
-			for (var i in thumbnailList){
-				thumbnailsElems += '<img src="' + thumbnailList[i].thumb_path_prefix + 'Small.jpg">'
-			}
-			$('#myModal #thumbnail_list').html(thumbnailsElems);
-		});
-	});
+		sparkDrive.retrieveUserAssetSources(currentAssetId,function(response){
+			currentAssetSources = response;
+			var tr = $("<tr class='asset-in-table'></tr>")
+			var nameTd=$("<td>" + "Sources" + "</td>");
+			tr.append(nameTd);
+			nameTd.on("click",function(){
+				currentAssetId=assetId;
 
-	//Delete asset
-	$('.row.marketing .assets-placeholder').on('click', '.asset i.delete', function () {
-		var c = confirm('Are you sure?');
+				showScreen("#uploadSources");
+				//onLoadManageFilesScreen();
 
-		if (c) {
-			var assetElem = $(this).parents('.asset');
-			var assetId = assetElem.find('.asset-id').val();
-			sparkDrive.removeAsset(assetId, function () {
-				assetElem.remove();
 			});
-		}
+			tr.append($("<td>" +  "</td>"));
+			tr.append($("<td>" + response.sources.length + " files</td>"));
+			$("#filesTable").append(tr);
 
-	});*/
 
-	//Add an asset
-	$('#add-asset').on('click', function () {
-		/**
-		$('#myModal').modal('show');
-		$('#myModal').find('#inputTitle').val('');
-		$('#myModal').find('#inputDesc').val('');
-		$('#myModal').find('#assetId').val('');
-		$('#myModal .modal-title').text('Create an asset');
-		editMode = false;*/
-	});
+		});
+		sparkDrive.retrieveUserAssetThumbnails(currentAssetId,function(response){
+			currentAssetThumbnails=response;
+			var tr = $("<tr class='asset-in-table'></tr>")
+			var nameTd=$("<td>" + "Thumbnails" + "</td>");
+			tr.append(nameTd);
+			/**nameTd.on("click",function(){
+				currentAssetId=assetId;
+				currentAsset = item;
+				showScreen("#manageFiles");
+				onLoadManageFilesScreen();
+
+			});*/
+			tr.append($("<td>" +  "</td>"));
+			tr.append($("<td>" + response.thumbnails.length + " files</td>"));
+			$("#filesTable").append(tr);
+		});
+	};
+
+	var onloadShowAssetsScreen = function(){
+		sparkDrive.getMyAssets(100, 0, function (response) {
+			//sparkDrive.getAssetsByConditions({},function(response){
+			console.log(response);
+			$("#assetsTbody").empty();
+			$.each(response.assets, function (index, item) {
+				var tr = $("<tr class='asset-in-table'></tr>")
+				var nameTd=$("<td>" + item.asset_name + "</td>");
+				tr.append(nameTd);
+				tr.append($("<td>" + item.date_submitted + "</td>"));
+				tr.append($("<td>" + item.date_modified + "</td>"));
+				tr.append($("<td>" + item.status + "</td>"));
+				tr.append($('<td><i class="glyphicon glyphicon-pencil edit"></i><i class="glyphicon glyphicon-remove delete"></i></td>'));
+				tr.append($('<input type="hidden" class="asset-id" value="' + item.asset_id + '">'));
+				//console.log(item);
+				var assetId = item.asset_id;
+				nameTd.on("click",function(){
+					currentAssetId=assetId;
+					currentAsset = item;
+					showScreen("#manageFiles");
+					onLoadManageFilesScreen();
+
+				});
+				$("#assetsTbody").append(tr);
+
+
+				//loopGallery(index <= conditions.limit, index, item);
+			});
+
+			$('tr.asset-in-table td i.delete').on('click', function () {
+				var c = confirm('Are you sure?');
+
+				if (c) {
+					var assetElem = $(this).parents('.asset-in-table');
+					var assetId = assetElem.find('.asset-id').val();
+					sparkDrive.removeAsset(assetId, function () {
+						assetElem.remove();
+					});
+				}
+
+			});
+
+			//Edit asset
+			$('tr.asset-in-table td i.edit').on('click', function () {
+				var assetElem = $(this).parents('.asset-in-table');
+				var assetId = assetElem.find('.asset-id').val();
+				editMode=true;
+				currentAssetId=assetId;
+				//$('#myTabs a[href="#create"]').click();
+				showScreen("#manageAssets");
+				onLoadManageAssetScreen();
+
+			});
+		});
+	};
 
 
 	$("#asset-form").on('submit', function (e) {
@@ -190,123 +135,86 @@ $(function ($) {
 
 		e.preventDefault();
 		var asset = {
-			title: $('#inputTitle').val(),
-			description: $('#inputDesc').val(),
-			tags: $('#inputTags').val()
+			title: $('#manage-assets-title').val(),
+			description: $('#manage-assets-description').val(),
+			tags: $('#manage-assets-tags').val()
 		};
 
-		var fileData = thumbnail;
 
-
+		if(!editMode) {
 			sparkDrive.createAsset(asset, function (response) {
 				console.log(response);
-				/**
-				$('#myModal').modal('hide');
-				var assetElem = '';
-				assetElem += '<div class="asset col-md-4">';
-				assetElem += '<div class="asset-content"><h4>' + asset.title + '</h4>';
-				assetElem += '<p>' + asset.description + '</p>';
-				assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
-				assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
-				assetElem += '<input type="hidden" class="asset-id" value="' + response.asset_id + '">';
-				assetElem += '</div></div>';
-				$('.row.marketing .assets-placeholder').append(assetElem);
-				*/
+				onloadShowAssetsScreen();
+				showScreen("#showAssets");
+			});
+		}
+		else{
+			asset.assetId = currentAssetId;
+			sparkDrive.updateAsset(asset, function (response) {
+				onloadShowAssetsScreen();
+				showScreen("#showAssets");
+			});
+		}
+	});
 
-
-				$("#assetId").val(response.asset_id);
-
-				enabledTab("token",false);
-				enabledTab("create",false);
-				enabledTab("manage",true);
-				enabledTab("upload",true);
-				//$('#myTabs a[href="#token"]').attr("data-toggle","");
-				//$('#myTabs a[href="#create"]').attr("data-toggle","");
-				//$('#myTabs a[href="#manage"]').attr("data-toggle","tab");
-				//$('#myTabs a[href="#upload"]').attr("data-toggle","tab");
-
-				$('#myTabs a[href="#upload"]').tab('show');
-/**
-				sparkDrive.uploadFileToAsset(response.asset_id, fileData, function(resp){
-					sparkDrive.retrieveUserAssetThumbnails(response.asset_id, function(thumbResp){
-						if (thumbResp.thumbnails.length) {
-							var thumb = '<img src="' + thumbResp.thumbnails[0].thumb_path_prefix + 'Petite.jpg' + '">';
-							$('.asset-id[value=' + response.asset_id + ']').parent().before(thumb);
-						}
-					});
-				});*/
-			})
+	$('#manage-assets-cancel').on("click",function(){
+		onloadShowAssetsScreen();
+		showScreen("#showAssets");
 
 	});
 
+	$("#manage-assets-create-asset").on("click",function(){
+		onLoadManageAssetScreen();
+		editMode=false;
+		showScreen("#manageAssets")
+	});
+	var onLoadManageAssetScreen = function(){
+		if(editMode){
+			$('#manageTitle').text("Edit Asset");
+			sparkDrive.getAsset(currentAssetId,function(response){
+				$("#manage-assets-title").val(response.asset_name);
+				$("#manage-assets-description").text(response.description);
+				var tags = response.keywords.replace(/ /g,",");
+				tags = (tags!="undefined")?tags:"";
+				$("#manage-assets-tags").val(tags);
+			});
+		}else{
+			$('#manageTitle').text("Create an Asset");
+
+		}
+	};
+
+	$('#thumbnail').on('change', function () {
+		thumbnail = this.files[0];
+	});
 
 	$("#upload-files-form").on('submit', function (e) {
 		e.preventDefault();
 
 		var fileData = thumbnail;
-		var assetId=$("#assetId").val();
-		sparkDrive.uploadFileToAsset(assetId, fileData, function(resp){
+		//var assetId=$("#assetId").val();
+		sparkDrive.uploadFileToAsset(currentAssetId, fileData, function(resp){
 			$('#myTabs a[href="#manage"]').click();
 		});
 
 	});
 
-
-	$('#myTabs a[href="#manage"]').bind('click', function (e) {
-		if($('#myTabs a[href="#manage"]').parent().hasClass("disabled")){
-			return;
-		}
-		sparkDrive.retrieveUserAssetSources($("#assetId").val(), function(response){
-
-			//console.log(thumbResp);
-
-			var assetElem = '';
-			for (var i in response.sources) {
-				//build the elements
-				var type = response.sources[i].file_type;
-				var name = response.sources[i].file_name;
-
-				assetElem += '<div class="asset asset-resource col-md-4">';
-				assetElem += '<div class="asset-content"><h4>' + type + '</h4>';
-				assetElem += '<p>' + name + '</p>';
-				assetElem += '<i class="glyphicon glyphicon-pencil edit"></i>';
-				assetElem += '<i class="glyphicon glyphicon-remove delete"></i>';
-				assetElem += '<input type="hidden" class="asset-id" value="' + type + '">';
-				assetElem += '</div></div>';
-
-			}
-			$('.row.marketing .assets-sources-placeholder').empty();
-			$('.row.marketing .assets-sources-placeholder').append(assetElem);
-
-			$('#myTabs a[href="#manage"]').tab('show');
-
-		});
+	$("#manage-files-back").on("click",function(){
+		onloadShowAssetsScreen();
+		showScreen("#showAssets");
 	});
 
-	$(document).ready(function() {
-		/**
-		$("div.tabbable ul.nav").on('show', "li.disabled a", function(event) {
-			event.stopImmediatePropagation();
-			return false;
-		});
-		$("div.tabbable ul.nav").off('show', "li:not(.disabled) a")*/
-	});
+	onloadShowAssetsScreen();
+	showScreen("#showAssets");
 
-	function progressHandler(event){
-		_("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total;
-		var percent = (event.loaded / event.total) * 100;
-		_("progressBar").value = Math.round(percent);
-		_("status").innerHTML = Math.round(percent)+"% uploaded... please wait";
-	}
-	function completeHandler(event){
-		_("status").innerHTML = event.target.responseText;
-		_("progressBar").value = 0;
-	}
-	function errorHandler(event){
-		_("status").innerHTML = "Upload Failed";
-	}
-	function abortHandler(event){
-		_("status").innerHTML = "Upload Aborted";
-	}
+});
 
-}(jQuery));
+
+
+
+
+
+
+
+
+

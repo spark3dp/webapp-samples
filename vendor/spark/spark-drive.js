@@ -114,6 +114,28 @@ var sparkDrive = function () {
 			});
 		},
 		/**
+		 * Get my asset
+		 * @param callback
+		 */
+		getAsset: function (assetId, callback) {
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/x-www-form-urlencoded"
+					};
+
+
+					var url = protocol + '://' + apiHost + '/assets/'+assetId;
+					Util.xhr(url, 'GET', '', headers, callback);
+				} else {
+					callback(false);
+				}
+			});
+		},
+		/**
 		 * Create a new asset
 		 * @param assetPost
 		 */
@@ -142,8 +164,8 @@ var sparkDrive = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 
-					var params = "title=" + assetPost.title + "&description=" + assetPost.description +
-						"&publish=true&tags=drivester";
+					var params = "title=" + assetPost.title + "&description=" + assetPost.description +  "&tags=" + assetPost.tags
+						"&publish=true";
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -176,11 +198,8 @@ var sparkDrive = function () {
 				}
 			});
 		},
-		/**
-		 * Remove an asset
-		 * @param assetId
-		 * @param callback
-		 */
+
+
 		uploadFileToAsset: function (assetId, fileData, callback) {
 
 			//Make sure token is still valid
@@ -212,8 +231,30 @@ var sparkDrive = function () {
 			});
 		},
 
+		uploadFile: function (fileData, callback) {
+
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken()
+					}
+					var url = protocol + '://' + apiHost + '/files/upload?unzip=false';
+
+					var fd = new FormData();
+					fd.append("file", fileData);
+
+					Util.xhr(url, 'POST', fd, headers, function (filesResp) {
+						callback(response);
+					});
+
+				} else {
+					callback(false);
+				}
+			});
+		},
 		/**
-		 * Retrive all thumbnails for an asset
+		 * Retrieve all thumbnails for an asset
 		 * @param assetId
 		 * @param callback
 		 */

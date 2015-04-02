@@ -116,6 +116,12 @@ body {
 
 }
 
+.asset-in-table i {
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .asset i.edit {
     top: 10px;
 }

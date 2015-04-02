@@ -12,7 +12,7 @@
 
 	<!-- Bootstrap core CSS -->
 	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" rel="stylesheet">
 	<!-- Custom styles -->
 	<link href="css/style.css" rel="stylesheet">
 
@@ -30,12 +30,15 @@
 
 <body>
 
+
+
 <div class="container">
 	<div class="header">
 		<!-- Navigation links at the top right of the screen -->
 
 		<h3 class="text-muted"><a href="index.html">Spark Sample App</a></h3>
 	</div>
+
 <!--
 	<form id="drive-form" name="driveForm">
 		<div id="drive-div">
@@ -105,25 +108,31 @@
 <ul class="nav nav-tabs" role="tablist" id="myTabs">
 		<li class="active">
 			<a href="#token" role="tab" data-toggle="tab" >
-				1.GET ACCESS TOKEN
+				1.LOGIN
 			</a>
 		</li>
+	<li >
+		<a href="#showAllAssets" role="tab" data-toggle="tab" >
+			2.SHOW ASSETS
+		</a>
+	</li>
+	<!--
 		<li >
 			<a href="#create" role="tab" data-toggle="tab" >
-				2.CREATE ASSET
-		</a>
+				3.MANAGE ASSET
+			</a>
 		</li>
 		<li class="disabled">
 			<a href="#upload" role="tab" >
-				3.UPLOAD FILES
+				4.UPLOAD FILES
 			</a>
 		</li>
 		<li class="disabled">
 			<a href="#manage" role="tab" >
-				4.MANAGE ASSET
+				5.MANAGE ASSET
 			</a>
 		</li>
-
+-->
 	</ul>
 </div>
 	<div class="tab-content">
@@ -145,11 +154,144 @@
 
 				</div>
 			</form>		</div>
+
+
+		<div class="tab-pane fade" id="showAllAssets">
+
+			<div class="tab-pane fade active in">
+
+				<div id="main-container">
+
+					<div id="showAssets" class="tab-pane fade active in">
+						<div class="">
+							<div class="modal-header">
+								<h4 class="modal-title">My Storage</h4>
+
+							</div>
+							<br/>
+							<input class="btn btn-primary pull-right" value="create asset" id="manage-assets-create-asset" >
+							<br/><br/>
+							<div id="tableContainer">
+
+								<table data-toggle="table">
+									<thead>
+									<tr>
+										<th>Name</th>
+										<th>Submitted</th>
+										<th>Modified</th>
+										<th>Status</th>
+										<th></th>
+									</tr>
+									</thead>
+									<tbody id="assetsTbody">
+
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+					</div>
+
+					<div id="manageAssets" class="tab-pane fade active in">
+						<div class="">
+							<div class="modal-header">
+								<h4 class="modal-title" id="manageTitle">Create an asset</h4>
+							</div>
+							<div class="modal-body">
+								<form id="asset-form">
+									<div class="form-group">
+										<label for="manage-assets-title">Title</label>
+										<input type="text" class="form-control field" placeholder="Title" id="manage-assets-title" required>
+									</div>
+									<div class="form-group">
+										<label for="manage-assets-description">Description</label>
+										<textarea type="text" class="form-control field" id="manage-assets-description" placeholder="Description"
+										          required></textarea>
+									</div>
+									<div class="form-group">
+										<label for="manage-assets-tags">Tags</label>
+										<input type="text" class="form-control field" id="manage-assets-tags" placeholder="Add a comma seperated list of tags" required>
+									</div>
+									<div class="modal-footer">
+										<input class="btn btn-primary" value="cancel" id="manage-assets-cancel">
+
+										<input class="btn btn-primary" type="submit" value="Send" id="submit1">
+
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+					<div id="manageFiles" class="tab-pane fade active in">
+						<div class="">
+							<div class="modal-header">
+								<h4 class="modal-title" id="manageFilesTitle" >Files</h4>
+
+							</div>
+							<div id="tableFilesContainer">
+
+								<table data-toggle="table">
+									<thead>
+									<tr>
+										<th>Reference</th>
+										<th>Contain</th>
+										<th>Modified</th>
+
+									</tr>
+									</thead>
+									<tbody id="filesTable">
+
+									</tbody>
+								</table>
+
+							</div>
+							<br/>
+							<input class="btn btn-primary" value="back" id="manage-files-back" class="pull-right">
+
+						</div>
+					</div>
+
+
+
+					<div id="uploadSources" class="tab-pane fade active in">
+						<div class="">
+							<div class="modal-header">
+								<h4 class="modal-title" id="manageFilesTitle2" >Files</h4>
+							</div>
+
+							<form id="upload-files-form">
+								<h4>Asset Sources</h4>
+								<div id="thumbnail_list"><!-- Thumbnails--></div>
+								<div class="form-group">
+									<label for="inputTitle">Add Source</label>
+									<input type="file" id="thumbnail" placeholder="Asset thumbnail" class="field" required>
+								</div>
+								<div id="progress"></div>
+								<div class="modal-footer">
+									<input class="btn btn-primary" type="submit" value="Send" id="submit">
+								</div>
+							</form>
+
+							<br/>
+							<input class="btn btn-primary" value="back" id="upload-files-back" class="pull-right">
+
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+
+
+<!--
 		<div class="tab-pane fade" id="create">
 			<div class="tab-pane fade active in" id="print2">
 					<div class="">
 						<div class="modal-header">
-							<h4 class="modal-title">Create an asset</h4>
+							<h4 class="modal-title" id="manageTitle">Create an asset</h4>
 						</div>
 						<div class="modal-body">
 							<form id="asset-form">
@@ -173,23 +315,8 @@
 						</div>
 					</div>
 			</div>
-		</div>
-		<div class="tab-pane fade" id="upload">
-			<div class="tab-pane fade active in" id="print3">
-				<form id="upload-files-form">
-					<h4>Asset Sources</h4>
-					<div id="thumbnail_list"><!-- Thumbnails--></div>
-					<div class="form-group">
-						<label for="inputTitle">Add Source</label>
-						<input type="file" id="thumbnail" placeholder="Asset thumbnail" class="field" required>
-					</div>
-					<div id="progress"></div>
-					<div class="modal-footer">
-						<input class="btn btn-primary" type="submit" value="Send" id="submit">
-					</div>
-				</form>
-			</div>
-		</div>
+		</div>-->
+
 
 		<div class="tab-pane fade" id="manage">
 			<div class="row marketing">
@@ -233,6 +360,8 @@
 <script type="text/javascript" charset="utf-8" src="scripts/my-new-drive.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
+
 <!--<script type="text/javascript" charset="utf-8" src="scripts/my-drive.js"></script>-->
 
 
