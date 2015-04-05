@@ -116,6 +116,12 @@ body {
 
 }
 
+.asset-in-table i {
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .asset i.edit {
     top: 10px;
 }
@@ -183,3 +189,22 @@ tr.header {
 .renderjson .keyword { color: blue; }
 .renderjson .object.syntax { color: lightseagreen; }
 .renderjson .array.syntax  { color: orange; }
+
+.tab-content{
+    min-height:400px;
+}
+
+.asset.asset-resource{
+    height: initial;
+}
+
+
+#progress p.success
+{
+    background: #0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed
+{
+    background: #c00 none 0 0 no-repeat;
+}

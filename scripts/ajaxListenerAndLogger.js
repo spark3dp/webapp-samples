@@ -1,10 +1,10 @@
 /**
  * Created by michael on 3/18/15.
  */
-var ajaxListenerAndLogger = function(requestLog, responseLog) {
+var ajaxListenerAndLogger = function(requestLog) {
 
 	var requestResponseMap = [];
-
+/**
 	var logger = function (textAreaId,data) {
 		console.log(data);
 		var txt = $("#"+textAreaId);
@@ -22,8 +22,8 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 		txt.appendChild(rendered);
 
 	};
-
-	var jsonLogger2 = function(textAreaId,data) {
+*/
+	var jsonLogger = function(textAreaId,data) {
 		console.log(data);
 		renderjson.set_show_to_level(1);
 
@@ -48,8 +48,7 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 	};
 
 	var open = window.XMLHttpRequest.prototype.open,
-		send = window.XMLHttpRequest.prototype.send,
-		onReadyStateChange;
+		send = window.XMLHttpRequest.prototype.send;
 
 	function openReplacement(method, url, async, user, password) {
 
@@ -63,29 +62,52 @@ var ajaxListenerAndLogger = function(requestLog, responseLog) {
 
 		requestResponseMap[this.guid].req.PARAMS = {};
 		if(data!="") {
-			requestResponseMap[this.guid].req.PARAMS = JSON.parse(data);
+			try{
+				var a = JSON.parse(response);
+				requestResponseMap[this.guid].req.PARAMS = a;
+
+			}catch(e){
+				requestResponseMap[this.guid].req.PARAMS = data;
+			}
 		}
 
-
+		/**
 		if(this.onreadystatechange) {
 			this._onreadystatechange = this.onreadystatechange;
 		}
 		this.onreadystatechange = onReadyStateChangeReplacement;
+		*/
+
+		if(this.onload){
+			this._onload = this.onload;
+		}
+
+		this.onload=onloadReplacement;
 
 		return send.apply(this, arguments);
 	}
 
+	/**
 	function onReadyStateChangeReplacement() {
 		if(this.readyState ==4) {
 			requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:JSON.parse(this.responseText)};
 			requestResponseMap[this.guid].res.HEADERS = this.getAllResponseHeaders();
-			jsonLogger2(requestLog,requestResponseMap[this.guid]);
-
+			jsonLogger(requestLog,requestResponseMap[this.guid]);
 		}
 
 
 		if(this._onreadystatechange) {
 			return this._onreadystatechange.apply(this, arguments);
+		}
+	}*/
+
+	function onloadReplacement(){
+		requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:JSON.parse(this.responseText)};
+		requestResponseMap[this.guid].res.HEADERS = this.getAllResponseHeaders();
+		jsonLogger(requestLog,requestResponseMap[this.guid]);
+
+		if(this._onload){
+			return this._onload.apply(this,arguments);
 		}
 	}
 
