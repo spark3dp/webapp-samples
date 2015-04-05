@@ -302,6 +302,38 @@ var sparkDrive = function () {
 					callback(false);
 				}
 			});
+		},
+		uploadFileToDrive: function(files,zipFile,callbcak){
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken()
+					};
+					if (zipFile == undefined){
+						zipFile = false;
+					}
+					var formData = new FormData();
+
+					// Add the file to the request.
+					formData.append(files[0].name, files[0]);
+					var url = protocol + '://' + apiHost + '/files/upload?unzip='+zipFile;
+
+
+
+					Util.xhr(url, 'POST', formData, headers, function (filesResp) {
+						if (filesResp.files != undefined && filesResp.files.length > 0) {
+
+							callback(filesResp)
+
+
+						}
+						else {
+							console.log('An upload error occurred!');
+						}
+
+					});
+				}
+			});
 		}
 	}
 

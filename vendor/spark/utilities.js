@@ -10,13 +10,16 @@ var Util = function () {
 
 		/**
 		 * Standard AJAX requests
-		 * @param url
-		 * @param method
-		 * @param params
-		 * @param headers
-		 * @param callback
+		 * @param url - the url to send the request to
+		 * @param method - http method type
+		 * @param params - http call parameters
+		 * @param headers - http call headers
+		 * @param callback - callback function in case of success or fail if no error callback exists.
+		 * @param errorCallback - error callback function.
+		 * @param isJsonResponse - indication if the response is json one, true or undefined are json response.
+		 * @param xhrEventMap - map of events with callback functions to perform when tje event listener fire the event.
 		 */
-		xhr:function (url, method, params, headers, callback, errorCallback) {
+		xhr:function (url, method, params, headers, callback, errorCallback,isJsonResponse,xhrEventMap) {
 			var xhr = new XMLHttpRequest();
 			xhr.open(method, url, true);
 
@@ -24,22 +27,31 @@ var Util = function () {
 				xhr.setRequestHeader(i, headers[i]);
 			}
 
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4) {
-					if (xhr.status == 200 || xhr.status == 201) {
-						var response = JSON.parse(xhr.responseText);
-						callback(response);
-					}else{
-						if(errorCallback!==undefined){
-							errorCallback(xhr.responseText)
-						}
-						else {
-							//Server or auth error
-							callback(false);
-						}
+
+			xhr.onload = function () {
+				if (xhr.status == 200 || xhr.status == 201 || xhr.status == 202) {
+					var response =xhr.responseText;
+					if (isJsonResponse == undefined || isJsonResponse == true) {
+						 response = JSON.parse(xhr.responseText);
+					}
+					callback(response);
+				} else {
+					if (errorCallback !== undefined) {
+						errorCallback(xhr.responseText)
+					}
+					else {
+						//Server or auth error
+						callback(false);
 					}
 				}
+
+			};
+			if (xhrEventMap != undefined){
+				for (var key in xhrEventMap) {
+					xhr.addEventListener(key,xhrEventMap[key],false);
+				}
 			}
+
 			xhr.send(params);
 		},
 
@@ -66,7 +78,7 @@ var Util = function () {
 			var getParams = prmstr != null && prmstr != "" ? Util.transformToAssocArray(prmstr) : [];
 
 			return getParams['code'] ? getParams['code'] : null;
-		},
+		}
 
 	}
 
