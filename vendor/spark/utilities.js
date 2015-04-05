@@ -17,7 +17,7 @@ var Util = function () {
 		 * @param callback - callback function in case of success or fail if no error callback exists.
 		 * @param errorCallback - error callback function.
 		 * @param isJsonResponse - indication if the response is json one, true or undefined are json response.
-		 * @param xhrEventMap - map of events with callback functions to perform when tje event listener fire the event.
+		 * @param xhrEventMap - map of events with callback functions to perform when the event listener fire the event.
 		 */
 		xhr:function (url, method, params, headers, callback, errorCallback,isJsonResponse,xhrEventMap) {
 			var xhr = new XMLHttpRequest();
