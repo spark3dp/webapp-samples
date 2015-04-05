@@ -172,6 +172,20 @@ var sparkAuth = function () {
 				});
 			}
 
+		},
+		/**
+		 * method checking validity of access token and return it if it is valid ,false otherwise.
+		 * @returns {*}
+		 */
+		getValidAccessToken:function(){
+			var token = JSON.parse(localStorage.getItem('spark-token'));
+			var date = new Date();
+			var now = date.getTime();
+			if (token && token.expires_at && token.expires_at > now){
+				return token.access_token;
+			}else{
+				return false;
+			}
 		}
 	};
 

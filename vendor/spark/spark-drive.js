@@ -40,7 +40,17 @@ var sparkDrive = function () {
 
 		Util.xhr(url, 'POST', params, headers, callback);
 
-	}
+	};
+
+	var createAssetSource = function (asset_id, file_ids, callback) {
+		var headers = {
+			"Authorization": "Bearer " + sparkAuth.accessToken(),
+			"Content-type": "application/x-www-form-urlencoded"
+		}
+		var url = protocol + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids="+file_ids;
+
+		Util.xhr(url, 'POST', '', headers, callback);
+	};
 
 
 	/**
@@ -104,6 +114,28 @@ var sparkDrive = function () {
 			});
 		},
 		/**
+		 * Get my asset
+		 * @param callback
+		 */
+		getAsset: function (assetId, callback) {
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/x-www-form-urlencoded"
+					};
+
+
+					var url = protocol + '://' + apiHost + '/assets/'+assetId;
+					Util.xhr(url, 'GET', '', headers, callback);
+				} else {
+					callback(false);
+				}
+			});
+		},
+		/**
 		 * Create a new asset
 		 * @param assetPost
 		 */
@@ -132,8 +164,8 @@ var sparkDrive = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 
-					var params = "title=" + assetPost.title + "&description=" + assetPost.description +
-						"&publish=true&tags=drivester";
+					var params = "title=" + assetPost.title + "&description=" + assetPost.description +  "&tags=" + assetPost.tags
+						"&publish=true";
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -166,11 +198,8 @@ var sparkDrive = function () {
 				}
 			});
 		},
-		/**
-		 * Remove an asset
-		 * @param assetId
-		 * @param callback
-		 */
+
+
 		uploadFileToAsset: function (assetId, fileData, callback) {
 
 			//Make sure token is still valid
@@ -189,7 +218,7 @@ var sparkDrive = function () {
 
 							var files_ids_array = [filesResp.files[0].file_id];
 
-							createAssetThumbnail(assetId, files_ids_array, callback);
+							createAssetSource(assetId, files_ids_array, callback);
 						}
 						else {
 							callback(response);
@@ -202,8 +231,30 @@ var sparkDrive = function () {
 			});
 		},
 
+		uploadFile: function (fileData, callback) {
+
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken()
+					}
+					var url = protocol + '://' + apiHost + '/files/upload?unzip=false';
+
+					var fd = new FormData();
+					fd.append("file", fileData);
+
+					Util.xhr(url, 'POST', fd, headers, function (filesResp) {
+						callback(response);
+					});
+
+				} else {
+					callback(false);
+				}
+			});
+		},
 		/**
-		 * Retrive all thumbnails for an asset
+		 * Retrieve all thumbnails for an asset
 		 * @param assetId
 		 * @param callback
 		 */
@@ -226,6 +277,61 @@ var sparkDrive = function () {
 					});
 				} else {
 					callback(false);
+				}
+			});
+		},
+
+		retrieveUserAssetSources: function(assetId, callback){
+			//Make sure token is still valid
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/x-www-form-urlencoded"
+					}
+					var url = protocol + '://' + apiHost + '/assets/' + assetId + '/sources';
+					Util.xhr(url, 'GET', '', headers, function(response){
+						var sourcesResp = {
+							assetId: assetId,
+							sources: response.sources
+						}
+						callback(sourcesResp);
+					});
+				} else {
+					callback(false);
+				}
+			});
+		},
+		uploadFileToDrive: function(files,zipFile,callbcak){
+			sparkAuth.checkTokenValidity(function (response) {
+				if (response) {
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken()
+					};
+					if (zipFile == undefined){
+						zipFile = false;
+					}
+					var formData = new FormData();
+
+					// Add the file to the request.
+					formData.append(files[0].name, files[0]);
+					var url = protocol + '://' + apiHost + '/files/upload?unzip='+zipFile;
+
+
+
+					Util.xhr(url, 'POST', formData, headers, function (filesResp) {
+						if (filesResp.files != undefined && filesResp.files.length > 0) {
+
+							callback(filesResp)
+
+
+						}
+						else {
+							console.log('An upload error occurred!');
+						}
+
+					});
 				}
 			});
 		}

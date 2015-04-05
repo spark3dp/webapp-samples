@@ -116,6 +116,12 @@ body {
 
 }
 
+.asset-in-table i {
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .asset i.edit {
     top: 10px;
 }
@@ -183,3 +189,58 @@ tr.header {
 .renderjson .keyword { color: blue; }
 .renderjson .object.syntax { color: lightseagreen; }
 .renderjson .array.syntax  { color: orange; }
+
+.tab-content{
+    min-height:400px;
+}
+
+.asset.asset-resource{
+    height: initial;
+}
+
+
+#progress p.success
+{
+    background: #0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed
+{
+    background: #c00 none 0 0 no-repeat;
+}.renderjson .array.syntax  { color: orange; }
+
+/****  Print prep  - begin****/
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#btn-div {
+    margin:10px;
+}
+#meshProblems {
+    vertical-align: top;
+}
+
+.loader-print {
+    background: url('../img/ajax-loader.gif')
+    20% 50%
+    no-repeat;
+}
+
+/****  Print prep  - end****/
