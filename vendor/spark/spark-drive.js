@@ -303,7 +303,7 @@ var sparkDrive = function () {
 				}
 			});
 		},
-		uploadFileToDrive: function(files,zipFile,callbcak){
+		uploadFileToDrive: function(files,zipFile,callback){
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 					var headers = {
