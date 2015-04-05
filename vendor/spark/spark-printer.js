@@ -6,7 +6,8 @@
 
 var sparkPrint = function () {
 
-	var serverUrl = "http://alpha.spark.autodesk.com/api/v1/"
+	var serverUrl = "https://api-alpha.spark.autodesk.com/api/v1/"
+
 	/**
 	 * Return the factory object
 	 */
@@ -17,14 +18,19 @@ var sparkPrint = function () {
 			//Make sure token is still valid
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
-
+/**
 					var headers = {
 						"X-Member-id":memberID,
 						"Content-type": "application/x-www-form-urlencoded"
 					}
+ */
+					var headers = {
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/x-www-form-urlencoded"
+					};
 
-					var url = serverUrl + "print/printers/register/" + token
-					Util.xhr(url, 'POST', "printer_name="+printerName, headers, callback,errorCallback);
+					var url = serverUrl + "print/printers/register"
+					Util.xhr(url, 'POST', "registration_code="+token+"&printer_name="+printerName, headers, callback,errorCallback);
 				}else{
 					callback(false);
 				}
@@ -37,9 +43,9 @@ var sparkPrint = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 					var headers = {
-						"X-Member-id":memberID,
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
-					}
+					};
 					Util.xhr(serverUrl + 'print/printers', 'GET', '', headers, callback);
 				}else{
 					callback(false);
@@ -52,12 +58,13 @@ var sparkPrint = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 
-					var params =JSON.stringify( {file_url:fileUrl,settings:settings});
+					var params =JSON.stringify( {printable_id:fileUrl,settings:settings});
+					//var params = {printable_id:fileUrl,settings:settings};
 					console.log(params);
 					var headers = {
-						"X-Member-id":memberID,
-						"Content-type": "application/json"
-					}
+						"Authorization": "Bearer " + sparkAuth.accessToken()/**,
+						"Content-type": "application/json"*/
+					};
 					var url = serverUrl + 'print/printers/'+printerId+"/jobs";
 					Util.xhr(url, 'POST', params, headers, callback,errorCallback);
 				}else{
@@ -75,9 +82,9 @@ var sparkPrint = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 					var headers = {
-						"X-Member-id":memberID,
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
-					}
+					};
 					Util.xhr(serverUrl + 'print/printers/' + printerId + "/jobs", 'GET', '', headers, callback);
 				}else{
 					callback(false);
@@ -89,9 +96,9 @@ var sparkPrint = function () {
 			sparkAuth.checkTokenValidity(function (response) {
 				if (response) {
 					var headers = {
-						"X-Member-id":memberID,
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
-					}
+					};
 					Util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command, headers, callback);
 				}else{
 					callback(false);
