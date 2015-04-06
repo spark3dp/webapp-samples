@@ -25,8 +25,12 @@
 				<button id="import" type="button" class="btn btn-primary">Import Mesh</button>
 				<button id="analyze" type="button" class="btn btn-primary">Analyze Mesh</button>
 				<button id="repair" type="button" class="btn btn-primary">Repair Mesh</button>
+				<button id="createTray" type="button" class="btn btn-primary">Create Tray</button>
+				<button id="prepareTray" type="button" class="btn btn-primary">Prepare Tray</button>
+				<button id="generatePrintable" type="button" class="btn btn-primary">Generate Printable From Tray</button>
 				<button id="export" type="button" class="btn btn-primary">Export Mesh</button>
 				<button id="load" type="button" class="btn btn-primary">Load File</button>
+
 
 			</div>
 			<div class="text-center">
@@ -34,9 +38,12 @@
 				<input id="meshId" type="text"  readonly>
 				<label for="meshProblems">Problems:</label>
 				<textarea id="meshProblems" rows="4" cols="50" readonly></textarea>
+				<label for="downloadFileId">Download File ID:</label>
+				<input id="downloadFileId" type="text"  readonly>
 
 			</div>
 
+			<div id="logger"></div>
 
 			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-print-prep.js"></script>
 			<script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
@@ -52,7 +59,12 @@
 
 			<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 
+			<script type="">
+				$(document).ready(function(){
+					$("#logger").load("loggers.html");
+				});
 
+			</script>
 
 
 		</div>

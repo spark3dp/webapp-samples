@@ -96,18 +96,15 @@ function render() {
 
 }
 
-function showObjOnScene(){
-	var objText = sparkPrintPrep.getDownlaodFileData();
-	var object = loader.parse(objText);
+function showObjOnScene(downloadData){
+	var object = loader.parse(downloadData);
 	object.position.y =  -20;
 	scene.add( object );
 	render();
 
 }
 
-function updateFieldAndEnable(){
-	document.getElementById('meshId').value = sparkPrintPrep.getMeshId();
-	document.getElementById('meshProblems').value = sparkPrintPrep.getProblems();
+function EnableButtons(){
 	$("#btn-div").prop("disabled",false);
 	$("#btn-div").children().prop("disabled",false);
 	$("#btn-div").removeClass("loader-print");
@@ -119,32 +116,59 @@ function disableButtons(){
 	$("#btn-div").children().prop("disabled",true);
 	$("#btn-div").addClass("loader-print");
 }
-var events = {};
-events['load'] = updateFieldAndEnable;
 
 $( "#import" ).click(function() {
 	disableButtons();
 	var fileSelect = document.getElementById('file-select');
 	var files = fileSelect.files;
-	sparkPrintPrep.uploadFileAndImport(files,events);
+	sparkPrintPrep.uploadFileAndImport(files,function(response){
+		console.log(response);
+		document.getElementById('meshId').value = response.id;
+		EnableButtons();
+	});
 });
+
+var analyzeAndRepairCallback = function(response){
+	document.getElementById('meshId').value = response.id;
+
+	var problems ='';
+	if (response.problems.length ==0){
+		problems = 'No Problems!';
+	}
+	else{
+		problems = JSON.stringify(response.problems);
+	}
+	document.getElementById('meshProblems').value = problems;
+	EnableButtons();
+};
+
 $( "#analyze" ).click(function() {
 	disableButtons();
-	sparkPrintPrep.analyzeMesh(events);
-
+	sparkPrintPrep.analyzeMesh(document.getElementById('meshId').value, analyzeAndRepairCallback);
 });
+
 $( "#repair" ).click(function() {
 	disableButtons();
-	sparkPrintPrep.repairMesh(events);
-
+	sparkPrintPrep.repairMesh(document.getElementById('meshId').value,analyzeAndRepairCallback);
 });
+
 $( "#export" ).click(function() {
 	disableButtons();
-	sparkPrintPrep.exportMesh(events);
+	sparkPrintPrep.exportMesh(document.getElementById('meshId').value,function(response){
 
+		document.getElementById('downloadFileId').value = response.file_id;
+		EnableButtons();
+	});
 });
+
 $( "#load" ).click(function() {
-	showObjOnScene();
+	disableButtons();
+	var downloadFileId = document.getElementById('downloadFileId').value;
+	sparkPrintPrep.downloadFile(downloadFileId, function(response){
+		showObjOnScene(response);
+		EnableButtons();
+	});
+
 });
 
 $("#file-select").on('change',  function() {

@@ -1,8 +1,8 @@
 //Various Spark config parameters
 var CONST = function () {
 
-	var apiHostSandbox = 'sandbox.spark.autodesk.com/api/v1',
-		//apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',
+	var //apiHostSandbox = 'sandbox.spark.autodesk.com/api/v1',
+		apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',
 		apiHostProduction = 'api.spark.autodesk.com/api/v1';
 
 	return {
