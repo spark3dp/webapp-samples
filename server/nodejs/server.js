@@ -59,7 +59,7 @@ app.get('/callback', function (req, res) {
 
 		//get the access token, set up the cookie and redirect back to app
 		var tokenObj = oauth2.accessToken.create(result);
-		res.cookie('spark-token', JSON.stringify(tokenObj.token));
+		res.cookie('spark-token', JSON.stringify(tokenObj.token), { expires: new Date(Date.now() + tokenObj.token.expires_in)});
 		res.redirect(config.HOME_URI);
 	}
 });

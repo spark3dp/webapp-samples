@@ -16,8 +16,7 @@ var sparkPrint = function () {
 
 		registerPrinter: function (memberID,token,printerName,callback,errorCallback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 /**
 					var headers = {
 						"X-Member-id":memberID,
@@ -34,14 +33,13 @@ var sparkPrint = function () {
 				}else{
 					callback(false);
 				}
-			});
+
 		},
 
 
 		getAllPrinters: function (memberID,callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -50,13 +48,12 @@ var sparkPrint = function () {
 				}else{
 					callback(false);
 				}
-			});
+
 		},
 
 		printJob: function (memberID,fileUrl, printerId,settings,callback,errorCallback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 
 					var params =JSON.stringify( {printable_id:fileUrl,settings:settings});
 					//var params = {printable_id:fileUrl,settings:settings};
@@ -70,7 +67,7 @@ var sparkPrint = function () {
 				}else{
 					callback(false);
 				}
-			});
+
 		},
 
 		/**
@@ -79,8 +76,7 @@ var sparkPrint = function () {
 		 */
 		getJobsStatusByPrinter: function (memberID,printerId,callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -89,12 +85,11 @@ var sparkPrint = function () {
 				}else{
 					callback(false);
 				}
-			});
+
 		},
 
 		sendPrintCommand: function(memberID,printerID,command,callback,errorCallback){
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -103,7 +98,7 @@ var sparkPrint = function () {
 				}else{
 					callback(false);
 				}
-			});
+
 		}
 	}
 

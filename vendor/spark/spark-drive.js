@@ -8,7 +8,7 @@ var sparkDrive = function () {
 
 	/**
 	 * Create asset thumbnail
- 	 * @param asset_id
+	 * @param asset_id
 	 * @param file_ids
 	 * @param callback
 	 */
@@ -29,7 +29,6 @@ var sparkDrive = function () {
 		}
 
 
-
 		var params = "thumbnails=" + JSON.stringify(thumbnails);
 
 		var headers = {
@@ -47,7 +46,7 @@ var sparkDrive = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = CONST.API_PROTOCOL + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids="+file_ids;
+		var url = CONST.API_PROTOCOL + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids=" + file_ids;
 
 		Util.xhr(url, 'POST', '', headers, callback);
 	};
@@ -78,7 +77,7 @@ var sparkDrive = function () {
 					conditions.offset = conditions.offset ? conditions.offset : 0;
 
 					//Construct the full request
-					var params = Object.keys(conditions).map(function(k) {
+					var params = Object.keys(conditions).map(function (k) {
 						return encodeURIComponent(k) + "=" + encodeURIComponent(conditions[k]);
 					}).join('&');
 
@@ -95,23 +94,22 @@ var sparkDrive = function () {
 		 */
 		getMyAssets: function (limit, offset, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-
-					var assetsLimit = limit ? limit : 12;
-					var assetsOffset = offset ? offset : 0;
-
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
-					Util.xhr(url, 'GET', '', headers, callback);
-				} else {
-					callback(false);
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
+
+				var assetsLimit = limit ? limit : 12;
+				var assetsOffset = offset ? offset : 0;
+
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
+				Util.xhr(url, 'GET', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
 		},
 		/**
 		 * Get my asset
@@ -119,21 +117,20 @@ var sparkDrive = function () {
 		 */
 		getAsset: function (assetId, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					};
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
 
 
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/'+assetId;
-					Util.xhr(url, 'GET', '', headers, callback);
-				} else {
-					callback(false);
-				}
-			});
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
+				Util.xhr(url, 'GET', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
 		},
 		/**
 		 * Create a new asset
@@ -141,42 +138,42 @@ var sparkDrive = function () {
 		 */
 		createAsset: function (assetPost, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-					var params = "title=" + assetPost.title + "&description=" + assetPost.description +
-						"&media_type=file&tags=" + assetPost.tags;
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-					Util.xhr(CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets', 'POST', params, headers, callback);
-				} else {
-					callback(false);
+			if (sparkAuth.isTokenValid()) {
+				var params = "title=" + assetPost.title + "&description=" + assetPost.description +
+					"&media_type=file&tags=" + assetPost.tags;
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
-		},
+				Util.xhr(CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets', 'POST', params, headers, callback);
+			} else {
+				callback(false);
+			}
+
+		}
+		,
 		/**
 		 * Create a new asset
 		 * @param assetPost
 		 */
 		updateAsset: function (assetPost, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 
-					var params = "title=" + assetPost.title + "&description=" + assetPost.description +  "&tags=" + assetPost.tags
-						"&publish=true";
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetPost.assetId + '?' + params;
-					Util.xhr(url, 'PUT', '', headers, callback);
-				} else {
-					callback(false);
+				var params = "title=" + assetPost.title + "&description=" + assetPost.description + "&tags=" + assetPost.tags
+				"&publish=true";
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
-		},
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetPost.assetId + '?' + params;
+				Util.xhr(url, 'PUT', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
+		}
+		,
 		/**
 		 * Remove an asset
 		 * @param assetId
@@ -185,155 +182,149 @@ var sparkDrive = function () {
 		removeAsset: function (assetId, callback) {
 
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
-					Util.xhr(url, 'DELETE', '', headers, callback);
-				} else {
-					callback(false);
+			if (sparkAuth.isTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
-		},
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
+				Util.xhr(url, 'DELETE', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
+		}
+		,
 
 
 		uploadFileToAsset: function (assetId, fileData, callback) {
 
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken()
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
-
-					var fd = new FormData();
-					fd.append("file", fileData);
-
-					Util.xhr(url, 'POST', fd, headers, function (filesResp) {
-						if (filesResp.files != undefined && filesResp.files.length > 0) {
-
-							var files_ids_array = [filesResp.files[0].file_id];
-
-							createAssetSource(assetId, files_ids_array, callback);
-						}
-						else {
-							callback(response);
-						}
-
-					});
-				} else {
-					callback(false);
+			if (sparkAuth.isTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken()
 				}
-			});
-		},
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
+
+				var fd = new FormData();
+				fd.append("file", fileData);
+
+				Util.xhr(url, 'POST', fd, headers, function (filesResp) {
+					if (filesResp.files != undefined && filesResp.files.length > 0) {
+
+						var files_ids_array = [filesResp.files[0].file_id];
+
+						createAssetSource(assetId, files_ids_array, callback);
+					}
+					else {
+						callback(response);
+					}
+
+				});
+			} else {
+				callback(false);
+			}
+		}
+		,
 
 		uploadFile: function (fileData, callback) {
 
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken()
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
-
-					var fd = new FormData();
-					fd.append("file", fileData);
-
-					Util.xhr(url, 'POST', fd, headers, function (filesResp) {
-						callback(response);
-					});
-
-				} else {
-					callback(false);
+			if (sparkAuth.isTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken()
 				}
-			});
-		},
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
+
+				var fd = new FormData();
+				fd.append("file", fileData);
+
+				Util.xhr(url, 'POST', fd, headers, function (filesResp) {
+					callback(response);
+				});
+
+			} else {
+				callback(false);
+			}
+
+		}
+		,
 		/**
 		 * Retrieve all thumbnails for an asset
 		 * @param assetId
 		 * @param callback
 		 */
-		retrieveUserAssetThumbnails: function(assetId, callback){
+		retrieveUserAssetThumbnails: function (assetId, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/thumbnails';
-					Util.xhr(url, 'GET', '', headers, function(response){
-						var thumbnailsResp = {
-							assetId: assetId,
-							thumbnails: response.thumbnails
-						}
-						callback(thumbnailsResp);
-					});
-				} else {
-					callback(false);
+			if (sparkAuth.isTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
-		},
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/thumbnails';
+				Util.xhr(url, 'GET', '', headers, function (response) {
+					var thumbnailsResp = {
+						assetId: assetId,
+						thumbnails: response.thumbnails
+					}
+					callback(thumbnailsResp);
+				});
+			} else {
+				callback(false);
+			}
+		}
+		,
 
-		retrieveUserAssetSources: function(assetId, callback){
+		retrieveUserAssetSources: function (assetId, callback) {
 			//Make sure token is still valid
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
+			if (sparkAuth.isTokenValid()) {
 
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
-						"Content-type": "application/x-www-form-urlencoded"
-					}
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/sources';
-					Util.xhr(url, 'GET', '', headers, function(response){
-						var sourcesResp = {
-							assetId: assetId,
-							sources: response.sources
-						}
-						callback(sourcesResp);
-					});
-				} else {
-					callback(false);
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
 				}
-			});
-		},
-		uploadFileToDrive: function(files,zipFile,callbcak){
-			sparkAuth.checkTokenValidity(function (response) {
-				if (response) {
-					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken()
-					};
-					if (zipFile == undefined){
-						zipFile = false;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/sources';
+				Util.xhr(url, 'GET', '', headers, function (response) {
+					var sourcesResp = {
+						assetId: assetId,
+						sources: response.sources
 					}
-					var formData = new FormData();
+					callback(sourcesResp);
+				});
+			} else {
+				callback(false);
+			}
 
-					// Add the file to the request.
-					formData.append(files[0].name, files[0]);
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip='+zipFile;
-
-
-
-					Util.xhr(url, 'POST', formData, headers, function (filesResp) {
-						if (filesResp.files != undefined && filesResp.files.length > 0) {
-
-							callback(filesResp)
-
-
-						}
-						else {
-							console.log('An upload error occurred!');
-						}
-
-					});
+		}
+		,
+		uploadFileToDrive: function (files, zipFile, callbcak) {
+			if (sparkAuth.isTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken()
+				};
+				if (zipFile == undefined) {
+					zipFile = false;
 				}
-			});
+				var formData = new FormData();
+
+				// Add the file to the request.
+				formData.append(files[0].name, files[0]);
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=' + zipFile;
+
+
+				Util.xhr(url, 'POST', formData, headers, function (filesResp) {
+					if (filesResp.files != undefined && filesResp.files.length > 0) {
+
+						callback(filesResp)
+
+
+					}
+					else {
+						console.log('An upload error occurred!');
+					}
+
+				});
+			}
 		}
 	}
 
