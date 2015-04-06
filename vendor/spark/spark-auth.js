@@ -5,6 +5,17 @@ var sparkAuth = function () {
 
 
 	/**
+	 * Get and parse token obj
+	 * @returns {*|any}
+	 */
+	var getTokenObj = function () {
+		var rawToken = localStorage.getItem('spark-token');
+
+		return rawToken ? JSON.parse(rawToken) : {};
+
+	}
+
+	/**
 	 * Get guest token
 	 * @param code
 	 * @param callback
@@ -51,7 +62,7 @@ var sparkAuth = function () {
 		 * Check token validaty
 		 */
 		isTokenValid: function () {
-			var token = Util.getCookie('spark-token');
+			var token = getTokenObj();
 			var date = new Date();
 			var now = date.getTime();
 			return (token && token.expires_at && new Date(token.expires_at).getTime() > now);
@@ -63,7 +74,7 @@ var sparkAuth = function () {
 		 * Logout the user - clear the token in local storage
 		 */
 		logout: function () {
-			Util.expireCookie('spark-token');
+			localStorage.removeItem('spark-token');
 			localStorage.removeItem('spark-member');
 			location.reload();
 		},
@@ -72,8 +83,37 @@ var sparkAuth = function () {
 		 * Redirect user to Drive login page
 		 */
 		redirectToAuthLoginURL: function () {
-			window.location = AUTH_URL;
+			var authUrl = CONST.API_PROTOCOL + "://" + CONST.API_HOST + '/oauth/authorize' +
+					"?response_type=code" +
+					"&client_id=" + CLIENT_ID
+			//"&redirect_uri=" + REDIRECT_URL
+				;
+
+			window.location = authUrl;
 		},
+
+		/**
+		 * Get the access token
+		 * @param code - The code from the previous step
+		 * @param callback - Callback to run after getting the access token
+		 */
+		getAccessToken: function (code, callback) {
+			var params = "code=" + code + "&redirect_uri=" + REDIRECT_URL;
+
+			Util.xhr(ACCESS_TOKEN_URL + '?' + params, 'GET', {}, {}, function (response) {
+
+				//If request was for access token, set it in localStorage
+				if (response.access_token) {
+					var date = new Date();
+					var now = date.getTime();
+					response.expires_at = now + parseInt(response.expires_in) * 1000;
+					localStorage.setItem('spark-token', JSON.stringify(response));
+				}
+				callback(response);
+			});
+
+		},
+
 
 		/**
 		 * Gets user profile
@@ -101,7 +141,7 @@ var sparkAuth = function () {
 		 * @returns {*|any}
 		 */
 		accessToken: function (returnFullObject) {
-			var token = Util.getCookie('spark-token');
+			var token = getTokenObj();
 			if (token) {
 				return (returnFullObject ? token : token.access_token);
 			} else {
@@ -131,7 +171,7 @@ var sparkAuth = function () {
 		 * @returns {*}
 		 */
 		getValidAccessToken: function () {
-			var token = Util.getCookie('spark-token');
+			var token = getTokenObj();
 			var date = new Date();
 			var now = date.getTime();
 			if (token && token.expires_at && token.expires_at > now) {

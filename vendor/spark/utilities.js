@@ -97,7 +97,34 @@ var Util = function () {
 			var expires = "; expires=" + date.toUTCString();
 
 			document.cookie = cname + "=" + expires + "; path=/";
+		},
+
+		/**
+		 * Transform parameter strings to array of params
+		 * @param prmstr
+		 * @returns {{}}
+		 */
+		transformToAssocArray:function (prmstr) {
+			var params = {};
+			var prmarr = prmstr.split("&");
+			for (var i = 0; i < prmarr.length; i++) {
+				var tmparr = prmarr[i].split("=");
+				params[tmparr[0]] = tmparr[1];
+			}
+			return params;
+		},
+
+
+		/**
+		 * Extract the auth code
+		 */
+		extractRedirectionCode: function () {
+			var prmstr = window.location.search.substr(1);
+			var getParams = prmstr != null && prmstr != "" ? Util.transformToAssocArray(prmstr) : [];
+
+			return getParams['code'] ? getParams['code'] : null;
 		}
+
 
 	}
 
