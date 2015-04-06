@@ -78,7 +78,7 @@ app.get('/guest_token', function(req, res){
 		method: 'POST'
 	}, function (err, result, body) {
 
-		//return the guest token object (json)
+		//return the access token object (json)
 		res.send(body);
 	});
 
