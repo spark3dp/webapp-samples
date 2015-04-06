@@ -50,6 +50,17 @@ var ajaxListenerAndLogger = function(requestLog) {
 	var open = window.XMLHttpRequest.prototype.open,
 		send = window.XMLHttpRequest.prototype.send;
 
+	var tryJsonParse = function(data){
+
+		try{
+			var a = JSON.parse(data);
+			return a;
+
+		}catch(e){
+			return data;
+		}
+	};
+
 	function openReplacement(method, url, async, user, password) {
 
 		this.guid=requestResponseMap.length;
@@ -61,14 +72,9 @@ var ajaxListenerAndLogger = function(requestLog) {
 	function sendReplacement(data) {
 
 		requestResponseMap[this.guid].req.PARAMS = {};
-		if(data!="") {
-			try{
-				var a = JSON.parse(response);
-				requestResponseMap[this.guid].req.PARAMS = a;
 
-			}catch(e){
-				requestResponseMap[this.guid].req.PARAMS = data;
-			}
+		if(data!="") {
+			requestResponseMap[this.guid].req.PARAMS = tryJsonParse(data);
 		}
 
 		/**
@@ -102,7 +108,7 @@ var ajaxListenerAndLogger = function(requestLog) {
 	}*/
 
 	function onloadReplacement(){
-		requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:JSON.parse(this.responseText)};
+		requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:tryJsonParse(this.responseText)};
 		requestResponseMap[this.guid].res.HEADERS = this.getAllResponseHeaders();
 		jsonLogger(requestLog,requestResponseMap[this.guid]);
 
