@@ -1,5 +1,6 @@
 //Various Spark config parameters
 var CONST = function () {
+	'use strict';
 
 	var apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',
 		//apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',

@@ -2,6 +2,7 @@
  * Created by roiyarden on 3/26/15.
  */
 var sparkPrintPrep = function() {
+	'use strict';
 
 	return {
 		/**

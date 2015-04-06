@@ -2,7 +2,7 @@
  * Our spark auth object
  */
 var sparkAuth = function () {
-
+	'use strict';
 
 	/**
 	 * Get and parse token obj
@@ -80,16 +80,20 @@ var sparkAuth = function () {
 		},
 
 		/**
-		 * Redirect user to Drive login page
+		 * Redirect user to Drive login page or return the redirect url
 		 */
-		redirectToAuthLoginURL: function () {
+		redirectToAuthLoginURL: function (returnRedirectUrl) {
 			var authUrl = CONST.API_PROTOCOL + "://" + CONST.API_HOST + '/oauth/authorize' +
 					"?response_type=code" +
 					"&client_id=" + CLIENT_ID
 			//"&redirect_uri=" + REDIRECT_URL
 				;
 
-			window.location = authUrl;
+			if (returnRedirectUrl){
+				return authUrl;
+			}else {
+				window.location = authUrl;
+			}
 		},
 
 		/**

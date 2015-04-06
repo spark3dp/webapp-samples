@@ -2,9 +2,8 @@
  * Created by michael on 2/5/15.
  */
 
-
-
 var sparkPrint = function () {
+	'use strict';
 
 	var serverUrl = "https://api-alpha.spark.autodesk.com/api/v1/"
 

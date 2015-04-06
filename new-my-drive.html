@@ -10,9 +10,10 @@
 
 	<title>Spark Sample Application - My Drive</title>
 
-	<!-- Bootstrap core CSS -->
+	<!-- Bootstrap CSS -->
 	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" rel="stylesheet">
+	<link href="//rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" rel="stylesheet">
+
 	<!-- Custom styles -->
 	<link href="css/style.css" rel="stylesheet">
 
@@ -20,16 +21,14 @@
 	<link href="css/prettify.css" rel="stylesheet">-->
 
 
-	<script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="modules/common/config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
-
 
 
 </head>
 
 <body>
-
 
 
 <div class="container">
@@ -39,102 +38,21 @@
 		<h3 class="text-muted"><a href="index.html">Spark Sample App</a></h3>
 	</div>
 
-<!--
-	<form id="drive-form" name="driveForm">
-		<div id="drive-div">
-		<h3>GET ACCESS TOKEN</h3>
-		<section>
-			<div class="" >
-					<span role="presentation" id="user">
-						<img src=""/>
-					</span>
-				<span role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="sparkAuth.redirectToAuthLoginURL()">Login</a></span>
-				<span role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="sparkAuth.logout()">Logout</a></span>
 
-
-			</div>
-		</section>
-		<h3>CREATE ASSET</h3>
-		<section>
-			<div class="">
-				<div class="modal-header">
-					<h4 class="modal-title">Create an asset</h4>
-				</div>
-				<div class="modal-body">
-						<div class="form-group">
-							<label for="inputTitle">Title</label>
-							<input type="text" class="form-control field required" id="inputTitle" placeholder="Title" required>
-						</div>
-						<div class="form-group">
-							<label for="inputDesc">Description</label>
-							<textarea type="text" class="form-control field required" id="inputDesc" placeholder="Description"
-							          required ></textarea>
-						</div>
-						<div class="form-group">
-							<label for="inputDesc">Tags</label>
-							<input type="text" class="form-control field" id="tags" placeholder="Add a comma seperated list of tags"
-							          >
-						</div>
-
-						<input type="hidden" id="assetId">
-
-					<div class="modal-footer">
-						<input class="btn btn-primary" type="submit" value="Send" id="submit1">
-					</div>
-						<div class="modal-footer">
-							<input class="btn btn-primary" type="submit" value="Send" id="submit">
-						</div>
-					</div>
-
-				</div>
-		</section>
-		<h3>UPLOAD FILES</h3>
-		<section>
-			<p>The next and previous buttons help you to navigate through your content.</p>
-		</section>
-
-		<h3>MANAGE ASSETS</h3>
-		<section>
-			<p>The next and previous buttons help you to navigate through your content.</p>
-		</section>
-			</div>
-	</form>
-						-->
-
-
-
-
-<div class="tabbable">
-<ul class="nav nav-tabs" role="tablist" id="myTabs">
-		<li class="active">
-			<a href="#token" role="tab" data-toggle="tab" >
-				1.LOGIN
-			</a>
-		</li>
-	<li >
-		<a href="#showAllAssets" role="tab" data-toggle="tab" >
-			2.SHOW ASSETS
-		</a>
-	</li>
-	<!--
-		<li >
-			<a href="#create" role="tab" data-toggle="tab" >
-				3.MANAGE ASSET
-			</a>
-		</li>
-		<li class="disabled">
-			<a href="#upload" role="tab" >
-				4.UPLOAD FILES
-			</a>
-		</li>
-		<li class="disabled">
-			<a href="#manage" role="tab" >
-				5.MANAGE ASSET
-			</a>
-		</li>
--->
-	</ul>
-</div>
+	<div class="tabbable">
+		<ul class="nav nav-tabs" role="tablist" id="myTabs">
+			<li class="active">
+				<a href="#token" role="tab" data-toggle="tab">
+					1.LOGIN
+				</a>
+			</li>
+			<li>
+				<a href="#showAllAssets" role="tab" data-toggle="tab">
+					2.SHOW ASSETS
+				</a>
+			</li>
+		</ul>
+	</div>
 	<div class="tab-content">
 		<input type="hidden" id="assetId">
 
@@ -142,18 +60,21 @@
 			<form id="register-printer-form">
 				<h1>GET ACCESS TOKEN</h1>
 
-				<div class="" >
+				<div class="">
 
 
 					<span role="presentation" id="user">
 						<img src=""/>
 					</span>
-					<span role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="sparkAuth.redirectToAuthLoginURL()">Login</a></span>
-					<span role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="sparkAuth.logout()">Logout</a></span>
+					<span role="presentation" id="login" class="logged-out hidden"><a href="#"
+					                                                                  onclick="sparkAuth.redirectToAuthLoginURL()">Login</a></span>
+					<span role="presentation" id="logout" class="logged-in hidden"><a href="#"
+					                                                                  onclick="sparkAuth.logout()">Logout</a></span>
 
 
 				</div>
-			</form>		</div>
+			</form>
+		</div>
 
 
 		<div class="tab-pane fade" id="showAllAssets">
@@ -169,8 +90,10 @@
 
 							</div>
 							<br/>
-							<input class="btn btn-primary pull-right" value="create asset" id="manage-assets-create-asset" >
+							<input class="btn btn-primary pull-right" value="create asset"
+							       id="manage-assets-create-asset">
 							<br/><br/>
+
 							<div id="tableContainer">
 
 								<table data-toggle="table">
@@ -201,16 +124,19 @@
 								<form id="asset-form">
 									<div class="form-group">
 										<label for="manage-assets-title">Title</label>
-										<input type="text" class="form-control field" placeholder="Title" id="manage-assets-title" required>
+										<input type="text" class="form-control field" placeholder="Title"
+										       id="manage-assets-title" required>
 									</div>
 									<div class="form-group">
 										<label for="manage-assets-description">Description</label>
-										<textarea type="text" class="form-control field" id="manage-assets-description" placeholder="Description"
+										<textarea type="text" class="form-control field" id="manage-assets-description"
+										          placeholder="Description"
 										          required></textarea>
 									</div>
 									<div class="form-group">
 										<label for="manage-assets-tags">Tags</label>
-										<input type="text" class="form-control field" id="manage-assets-tags" placeholder="Add a comma seperated list of tags" required>
+										<input type="text" class="form-control field" id="manage-assets-tags"
+										       placeholder="Add a comma seperated list of tags" required>
 									</div>
 									<div class="modal-footer">
 										<input class="btn btn-primary" value="cancel" id="manage-assets-cancel">
@@ -226,7 +152,7 @@
 					<div id="manageFiles" class="tab-pane fade active in">
 						<div class="">
 							<div class="modal-header">
-								<h4 class="modal-title" id="manageFilesTitle" >Files</h4>
+								<h4 class="modal-title" id="manageFilesTitle">Files</h4>
 
 							</div>
 							<div id="tableFilesContainer">
@@ -253,19 +179,20 @@
 					</div>
 
 
-
 					<div id="uploadSources" class="tab-pane fade active in">
 						<div class="">
 							<div class="modal-header">
-								<h4 class="modal-title" id="manageFilesTitle2" >Files</h4>
+								<h4 class="modal-title" id="manageFilesTitle2">Files</h4>
 							</div>
 
 							<form id="upload-files-form">
 								<h4>Asset Sources</h4>
+
 								<div id="thumbnail_list"><!-- Thumbnails--></div>
 								<div class="form-group">
-									<label for="inputTitle">Add Source</label>
-									<input type="file" id="thumbnail" placeholder="Asset thumbnail" class="field" required>
+									<label for="thumbnail">Add Source</label>
+									<input type="file" id="thumbnail" placeholder="Asset thumbnail" class="field"
+									       required>
 								</div>
 								<div id="progress"></div>
 								<div class="modal-footer">
@@ -286,38 +213,6 @@
 		</div>
 
 
-<!--
-		<div class="tab-pane fade" id="create">
-			<div class="tab-pane fade active in" id="print2">
-					<div class="">
-						<div class="modal-header">
-							<h4 class="modal-title" id="manageTitle">Create an asset</h4>
-						</div>
-						<div class="modal-body">
-							<form id="asset-form">
-								<div class="form-group">
-									<label for="inputTitle">Title</label>
-									<input type="text" class="form-control field" id="inputTitle" placeholder="Title" required>
-								</div>
-								<div class="form-group">
-									<label for="inputDesc">Description</label>
-									<textarea type="text" class="form-control field" id="inputDesc" placeholder="Description"
-									          required></textarea>
-								</div>
-								<div class="form-group">
-									<label for="inputTags">Tags</label>
-									<input type="text" class="form-control field" id="inputTags" placeholder="Add a comma seperated list of tags" required>
-								</div>
-								<div class="modal-footer">
-									<input class="btn btn-primary" type="submit" value="Send" id="submit1">
-								</div>
-							</form>
-						</div>
-					</div>
-			</div>
-		</div>-->
-
-
 		<div class="tab-pane fade" id="manage">
 			<div class="row marketing">
 				<div class="col-md-12 assets-sources-placeholder">
@@ -328,11 +223,7 @@
 	</div>
 
 
-
-
-
-
-	<div class="footer">
+	<div id="footer">
 		<p>&copy; Spark Sample Application 2015</p>
 	</div>
 
@@ -341,29 +232,18 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="">
-	$(document).ready(function(){
-		$(".footer").load("loggers.html");
+	jQuery(document).ready(function ($) {
+		$("#footer").load("plugins/ajaxlogger/loggers.html");
 	});
-
 </script>
-<!--<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js"></script>-->
 
 <script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--
-<script type="text/javascript" charset="utf-8" src="vendor/jquery.steps.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="vendor/jquery.bootstrap.wizard.min.js"></script>
--->
-<!--<script type="text/javascript" charset="utf-8" src="vendor/prettify.js"></script>-->
+<script type="text/javascript" charset="utf-8" src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/my-new-drive.js"></script>
-
-<script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
-<script type="text/javascript" charset="utf-8" src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
-
-<!--<script type="text/javascript" charset="utf-8" src="scripts/my-drive.js"></script>-->
-
+<script type="text/javascript" charset="utf-8" src="modules/common/scripts.js"></script>
+<script type="text/javascript" charset="utf-8" src="modules/drive/storage.js"></script>
 
 </body>
 </html>

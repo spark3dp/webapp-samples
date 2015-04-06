@@ -2,7 +2,7 @@
  * Our spark drive object
  */
 var sparkDrive = function () {
-
+	'use strict';
 
 	/***** PRIVATE METHODS *****/
 

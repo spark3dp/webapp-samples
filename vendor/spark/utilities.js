@@ -2,6 +2,7 @@
  * Our utilities object
  */
 var Util = function () {
+	'use strict';
 
 	/**
 	 * Return the factory object
