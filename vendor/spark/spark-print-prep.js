@@ -47,7 +47,7 @@ var sparkPrintPrep = function() {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = protocol + '://' + apiHost + '/geom/meshes/import';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/geom/meshes/import';
 
 					var params = "file_id=" + fileId + "&name=" + fileName + "&generate_visual=true";
 
@@ -76,7 +76,7 @@ var sparkPrintPrep = function() {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = protocol + '://' + apiHost + '/print/tasks/' + taskId;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/tasks/' + taskId;
 
 
 					var callback = function (response) {
@@ -134,7 +134,7 @@ var sparkPrintPrep = function() {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = protocol + '://' + apiHost + '/geom/meshes/analyze';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/geom/meshes/analyze';
 
 					var params = "id=" + mesh_id;
 
@@ -162,7 +162,7 @@ var sparkPrintPrep = function() {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = protocol + '://' + apiHost + '/geom/meshes/repair';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/geom/meshes/repair';
 
 					var params = "id=" + mesh_id + "&all=true";
 
@@ -190,7 +190,7 @@ var sparkPrintPrep = function() {
 					"Authorization": "Bearer " + token,
 					"Content-type": "application/x-www-form-urlencoded"
 				};
-				var url = protocol + '://' + apiHost + '/geom/meshes/export';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/geom/meshes/export';
 
 				var params = "id=" + mesh_id + "&file_type=obj";
 
@@ -217,7 +217,7 @@ var sparkPrintPrep = function() {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = protocol + '://' + apiHost + '/files/download?file_ids='+fileId;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/download?file_ids='+fileId;
 
 
 					var callback = function (response) {
