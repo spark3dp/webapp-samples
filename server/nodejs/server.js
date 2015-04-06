@@ -3,9 +3,12 @@ var env = process.env.ENV || 'local',
 	config = require('./config.js'),
 	API_HOST = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://sandbox.spark.autodesk.com/api/v1');
 
+//setup express + request
 var express = require('express'),
-	app = express();
+	app = express(),
+	request = require('request');
 
+//setup oauth2 client
 var oauth2 = require('simple-oauth2')({
 	clientID: config.CLIENT_ID,
 	clientSecret: config.CLIENT_SECRET,
@@ -14,7 +17,7 @@ var oauth2 = require('simple-oauth2')({
 });
 
 // Authorization uri definition
-var authorization_uri = oauth2.authCode.authorizeURL({
+var authorizationUri = oauth2.authCode.authorizeURL({
 	redirect_uri: config.CALLBACK_URI
 });
 
@@ -38,7 +41,7 @@ app.use(function(req, res, next) {
 
 // Initial page redirecting to Github
 app.get('/auth', function (req, res) {
-	res.redirect(authorization_uri);
+	res.redirect(authorizationUri);
 });
 
 // Callback service parsing the authorization token and asking for the access token
@@ -51,33 +54,36 @@ app.get('/callback', function (req, res) {
 
 	function saveToken(error, result) {
 		if (error) {
-			//console.log('Access Token Error', error.message);
+			console.log('Access Token Error', error);
 		}
+
+		//get the access token, set up the cookie and redirect back to app
 		var tokenObj = oauth2.accessToken.create(result);
 		res.cookie('spark-token', JSON.stringify(tokenObj.token));
 		res.redirect(config.HOME_URI);
 	}
 });
 
-
-app.get('/access_token', function(req, res){
+// Guest token service
+app.get('/guest_token', function(req, res){
 	var url = API_HOST + '/oauth/accesstoken',
 		params = "grant_type=client_credentials",
 		contentLength = params.length,
-		request = require('request'),
 	 	headers = {
 			'Authorization': 'Basic ' + toBase64(config.CLIENT_ID + ':' + config.CLIENT_SECRET),
 			'Content-Type' : 'application/x-www-form-urlencoded',
 			'Content-Length': contentLength
 		};
 
-
+	//call the accesstoken endpoint
 	request({
 		headers: headers,
 		uri: url,
 		body: params,
 		method: 'POST'
 	}, function (err, result, body) {
+
+		//return the guest token object (json)
 		res.send(body);
 	});
 
