@@ -297,7 +297,7 @@ var sparkDrive = function () {
 
 		}
 		,
-		uploadFileToDrive: function (files, zipFile, callbcak) {
+		uploadFileToDrive: function (files, zipFile, callback) {
 			if (sparkAuth.isTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken()
