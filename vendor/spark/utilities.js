@@ -68,16 +68,6 @@ var Util = function () {
 				params[tmparr[0]] = tmparr[1];
 			}
 			return params;
-		},
-
-		/**
-		 * Extract the auth code
-		 */
-		extractRedirectionCode: function () {
-			var prmstr = window.location.search.substr(1);
-			var getParams = prmstr != null && prmstr != "" ? Util.transformToAssocArray(prmstr) : [];
-
-			return getParams['code'] ? getParams['code'] : null;
 		}
 
 	}

@@ -11,13 +11,8 @@ var sparkAuth = function () {
 	 * @param callback
 	 */
 	var getGuestTokenFromServer = function (callback) {
-		var params = "grant_type=client_credentials";
-		var headers = {
-			"Authorization": "Basic " + AUTH_HASH,
-			"Content-type": "application/x-www-form-urlencoded"
-		}
 
-		Util.xhr(protocol + '://' + apiHost + '/oauth/accesstoken', 'POST', params, headers, function(response){
+		Util.xhr(GUEST_TOKEN_URL, 'GET', {}, {}, function(response){
 
 			var date = new Date();
 			var now = date.getTime();
@@ -37,7 +32,7 @@ var sparkAuth = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).spark_member_id;
+		var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id;
 		Util.xhr(url, 'GET', '', headers, function(response){
 			var date = new Date();
 			var now = date.getTime();
@@ -83,42 +78,8 @@ var sparkAuth = function () {
 		 * Redirect user to Drive login page
 		 */
 		redirectToAuthLoginURL: function(){
-			var authUrl = "https://" + endUserAuthorizationEndpoint +
-					"?response_type=code" +
-					"&client_id=" + CLIENT_ID +
-					"&redirect_uri=" + REDIRECT_URL
-				;
-
-			window.location = authUrl;
+			window.location = AUTH_URL;
 		},
-
-		/**
-		 * Get the access token
-		 * @param code - The code from the previous step
-		 * @param callback - Callback to run after getting the access token
-		 */
-		getAccessToken: function (code, callback) {
-			var params = "code=" + code + "&grant_type=authorization_code&response_type=code&redirect_uri=" + REDIRECT_URL;
-			var headers = {
-				"Authorization": "Basic " + AUTH_HASH,
-				"Content-type": "application/x-www-form-urlencoded"
-			}
-
-			Util.xhr(protocol + '://' + apiHost + '/oauth/accesstoken', 'POST', params, headers, function(response){
-
-				//If request was for access token, set it in localStorage
-				if (response.access_token) {
-					var date = new Date();
-					var now = date.getTime();
-					response.expires_at = now+parseInt(response.expires_in)*1000;
-					localStorage.setItem('spark-token', JSON.stringify(response));
-				}
-
-				callback(response);
-			});
-
-		},
-
 
 		/**
 		 * Gets user profile

@@ -36,7 +36,7 @@ var sparkDrive = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = protocol + '://' + apiHost + '/assets/' + asset_id + "/thumbnails";
+		var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + asset_id + "/thumbnails";
 
 		Util.xhr(url, 'POST', params, headers, callback);
 
@@ -47,7 +47,7 @@ var sparkDrive = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = protocol + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids="+file_ids;
+		var url = CONST.API_PROTOCOL + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids="+file_ids;
 
 		Util.xhr(url, 'POST', '', headers, callback);
 	};
@@ -82,7 +82,7 @@ var sparkDrive = function () {
 						return encodeURIComponent(k) + "=" + encodeURIComponent(conditions[k]);
 					}).join('&');
 
-					var url = protocol + '://' + apiHost + '/assets?' + params;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets?' + params;
 					Util.xhr(url, 'GET', '', headers, callback);
 				} else {
 					callback(false);
@@ -106,7 +106,7 @@ var sparkDrive = function () {
 					var assetsLimit = limit ? limit : 12;
 					var assetsOffset = offset ? offset : 0;
 
-					var url = protocol + '://' + apiHost + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
 					Util.xhr(url, 'GET', '', headers, callback);
 				} else {
 					callback(false);
@@ -128,7 +128,7 @@ var sparkDrive = function () {
 					};
 
 
-					var url = protocol + '://' + apiHost + '/assets/'+assetId;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/'+assetId;
 					Util.xhr(url, 'GET', '', headers, callback);
 				} else {
 					callback(false);
@@ -149,7 +149,7 @@ var sparkDrive = function () {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					}
-					Util.xhr(protocol + '://' + apiHost + '/assets', 'POST', params, headers, callback);
+					Util.xhr(CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets', 'POST', params, headers, callback);
 				} else {
 					callback(false);
 				}
@@ -170,7 +170,7 @@ var sparkDrive = function () {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					}
-					var url = protocol + '://' + apiHost + '/assets/' + assetPost.assetId + '?' + params;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetPost.assetId + '?' + params;
 					Util.xhr(url, 'PUT', '', headers, callback);
 				} else {
 					callback(false);
@@ -191,7 +191,7 @@ var sparkDrive = function () {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					}
-					var url = protocol + '://' + apiHost + '/assets/' + assetId;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
 					Util.xhr(url, 'DELETE', '', headers, callback);
 				} else {
 					callback(false);
@@ -208,7 +208,7 @@ var sparkDrive = function () {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken()
 					}
-					var url = protocol + '://' + apiHost + '/files/upload?unzip=false';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
 
 					var fd = new FormData();
 					fd.append("file", fileData);
@@ -239,7 +239,7 @@ var sparkDrive = function () {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken()
 					}
-					var url = protocol + '://' + apiHost + '/files/upload?unzip=false';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
 
 					var fd = new FormData();
 					fd.append("file", fileData);
@@ -267,7 +267,7 @@ var sparkDrive = function () {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					}
-					var url = protocol + '://' + apiHost + '/assets/' + assetId + '/thumbnails';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/thumbnails';
 					Util.xhr(url, 'GET', '', headers, function(response){
 						var thumbnailsResp = {
 							assetId: assetId,
@@ -290,7 +290,7 @@ var sparkDrive = function () {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					}
-					var url = protocol + '://' + apiHost + '/assets/' + assetId + '/sources';
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/sources';
 					Util.xhr(url, 'GET', '', headers, function(response){
 						var sourcesResp = {
 							assetId: assetId,
@@ -316,7 +316,7 @@ var sparkDrive = function () {
 
 					// Add the file to the request.
 					formData.append(files[0].name, files[0]);
-					var url = protocol + '://' + apiHost + '/files/upload?unzip='+zipFile;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip='+zipFile;
 
 
 
