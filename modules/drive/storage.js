@@ -7,7 +7,14 @@ var storage = function($){
 		 * Run onload
 		 */
 		init: function(){
-			auth.loadAuthScreen('#app-screen');
+
+			//if the user is not logged in show him the login page
+			//otherwise show him the first assets screen
+			if (!sparkAuth.isTokenValid()) {
+				auth.loadAuthScreen('#app-screen');
+			}else{
+
+			}
 		}
 	}
 
