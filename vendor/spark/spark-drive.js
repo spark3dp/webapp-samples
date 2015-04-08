@@ -60,7 +60,7 @@ var sparkDrive = function () {
 		/**
 		 * Get public assets - requires only a guest token
 		 * @param conditions - Various conditions for the query
-		 * @param callback
+		 * @param callback - optional
 		 */
 		getAssetsByConditions: function (conditions, callback) {
 			//Make sure token is still valid
