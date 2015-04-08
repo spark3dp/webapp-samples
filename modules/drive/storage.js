@@ -1,6 +1,14 @@
 var storage = function($){
 	'use strict';
 
+
+	var loadAssetsTable = function(elem){
+		$(elem).load('modules/drive/views/show-assets.html', function(){
+
+		});
+	}
+
+
 	return {
 
 		/**
@@ -13,7 +21,7 @@ var storage = function($){
 			if (!sparkAuth.isTokenValid()) {
 				auth.loadAuthScreen('#app-screen');
 			}else{
-
+				loadAssetsTable('#app-screen');
 			}
 		}
 	}
