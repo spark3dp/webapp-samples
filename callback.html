@@ -11,7 +11,6 @@
 </head>
 
 <body>
-<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
@@ -22,7 +21,11 @@
 
 	sparkAuth.getAccessToken(code, function (token) {
 		if (token) {
-			window.location = APP_HOME + 'my-drive.html';
+			console.log(token);
+			//You can redirect now to some page in your app or to homepage
+			// or to reload the top window
+			window.location.href = '/';
+
 		} else {
 			console.log('Problem with fetching token');
 		}

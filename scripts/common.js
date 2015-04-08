@@ -1,6 +1,6 @@
 $(function ($) {
     //This section is only performed if there is an access token
-    if (sparkAuth.isTokenValid()) {
+    if (sparkAuth.isAccessTokenValid()) {
 
         $('.logged-in').removeClass('hidden');
 
