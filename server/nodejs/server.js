@@ -1,7 +1,7 @@
 //provide environment through console i.e. ENV=beta node server.js
 var env = process.env.ENV || 'local',
 	config = require('./config.js'),
-	API_HOST = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://api-alpha.spark.autodesk.com/api/v1');
+	API_SERVER = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://api-alpha.spark.autodesk.com/api/v1');
 
 //setup express + request
 var express = require('express'),
@@ -29,13 +29,12 @@ app.use(function(req, res, next) {
 
 
 // Access token service
+// See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/access-token
 app.get('/access_token', function(req, res){
 
-	console.log(req.query);
-	console.log(req.params);
 	var code = req.query.code;
 
-	var url = API_HOST + '/oauth/accesstoken',
+	var url = API_SERVER + '/oauth/accesstoken',
 		params = "code=" + code + "&grant_type=authorization_code&response_type=code",
 		contentLength = params.length,
 		headers = {
@@ -60,8 +59,9 @@ app.get('/access_token', function(req, res){
 });
 
 // Guest token service
+// See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/guest-token
 app.get('/guest_token', function(req, res){
-	var url = API_HOST + '/oauth/accesstoken',
+	var url = API_SERVER + '/oauth/accesstoken',
 		params = "grant_type=client_credentials",
 		contentLength = params.length,
 	 	headers = {
@@ -85,6 +85,8 @@ app.get('/guest_token', function(req, res){
 
 });
 
+
+//@todo: Add a refresh token endpoint
 
 app.listen(3000);
 

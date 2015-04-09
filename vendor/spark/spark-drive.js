@@ -1,5 +1,6 @@
 /**
  * Our spark drive object
+ * See API reference - http://docs.sparkdriveapi.apiary.io/
  */
 var sparkDrive = function () {
 	'use strict';
@@ -7,10 +8,11 @@ var sparkDrive = function () {
 	/***** PRIVATE METHODS *****/
 
 	/**
-	 * Create asset thumbnail
-	 * @param asset_id
-	 * @param file_ids
-	 * @param callback
+	 * Create asset thumbnail(s)
+	 * @param asset_id - The asset id for which the thumbnails are created
+	 * @param file_ids - The file ids that are attached to this asset
+	 * @param callback - Callback function
+	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/create-a-new-thumbnail-within-the-asset
 	 */
 	var createAssetThumbnail = function (asset_id, file_ids, callback) {
 
@@ -35,18 +37,25 @@ var sparkDrive = function () {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + asset_id + "/thumbnails";
+		var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + asset_id + "/thumbnails";
 
 		Util.xhr(url, 'POST', params, headers, callback);
 
 	};
 
+	/**
+	 * Create asset source
+	 * @param asset_id - The asset id for which the thumbnails are created
+	 * @param file_ids - The file ids that are attached to this asset
+	 * @param callback - Callback function
+	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/create-a-new-source-within-the-asset
+	 */
 	var createAssetSource = function (asset_id, file_ids, callback) {
 		var headers = {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = CONST.API_PROTOCOL + '://' + apiHost + '/assets/' + asset_id + "/sources?file_ids=" + file_ids;
+		var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + asset_id + "/sources?file_ids=" + file_ids;
 
 		Util.xhr(url, 'POST', '', headers, callback);
 	};
@@ -60,10 +69,12 @@ var sparkDrive = function () {
 		/**
 		 * Get public assets - requires only a guest token
 		 * @param conditions - Various conditions for the query
-		 * @param callback - optional
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/list/get-a-list-of-assets
 		 */
 		getAssetsByConditions: function (conditions, callback) {
-			//Make sure token is still valid
+
+			//Make sure guest token is still valid, if not create a new one
 			sparkAuth.getGuestToken(function (guestToken) {
 				if (guestToken) {
 
@@ -81,7 +92,7 @@ var sparkDrive = function () {
 						return encodeURIComponent(k) + "=" + encodeURIComponent(conditions[k]);
 					}).join('&');
 
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets?' + params;
+					var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets?' + params;
 					Util.xhr(url, 'GET', '', headers, callback);
 				} else {
 					callback(false);
@@ -89,12 +100,13 @@ var sparkDrive = function () {
 			});
 		},
 		/**
-		 * Get my assets
+		 * Get logged in user assets
 		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/members/assets/list-a-member's-assets
 		 */
 		getMyAssets: function (limit, offset, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
@@ -104,7 +116,7 @@ var sparkDrive = function () {
 				var assetsLimit = limit ? limit : 12;
 				var assetsOffset = offset ? offset : 0;
 
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/members/' + sparkAuth.accessToken(true).spark_member_id + '/assets?limit=' + assetsLimit + '&offset=' + assetsOffset;
 				Util.xhr(url, 'GET', '', headers, callback);
 			} else {
 				callback(false);
@@ -112,12 +124,13 @@ var sparkDrive = function () {
 
 		},
 		/**
-		 * Get my asset
+		 * Get a specific asset
 		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/readupdatedelete/retrieve-an-asset
 		 */
 		getAsset: function (assetId, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
@@ -125,7 +138,7 @@ var sparkDrive = function () {
 				};
 
 
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + assetId;
 				Util.xhr(url, 'GET', '', headers, callback);
 			} else {
 				callback(false);
@@ -133,19 +146,20 @@ var sparkDrive = function () {
 
 		},
 		/**
-		 * Create a new asset
+		 * Create a new asset for a logged in user
 		 * @param assetPost
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/create/create-a-new-asset
 		 */
 		createAsset: function (assetPost, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var params = "title=" + assetPost.title + "&description=" + assetPost.description +
 					"&media_type=file&tags=" + assetPost.tags;
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				Util.xhr(CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets', 'POST', params, headers, callback);
+				Util.xhr(CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets', 'POST', params, headers, callback);
 			} else {
 				callback(false);
 			}
@@ -153,12 +167,13 @@ var sparkDrive = function () {
 		}
 		,
 		/**
-		 * Create a new asset
+		 * Update an asset for a logged in user
 		 * @param assetPost
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/readupdatedelete/update-an-asset
 		 */
 		updateAsset: function (assetPost, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 
 				var params = "title=" + assetPost.title + "&description=" + assetPost.description + "&tags=" + assetPost.tags
 				"&publish=true";
@@ -166,7 +181,7 @@ var sparkDrive = function () {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetPost.assetId + '?' + params;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + assetPost.assetId + '?' + params;
 				Util.xhr(url, 'PUT', '', headers, callback);
 			} else {
 				callback(false);
@@ -175,19 +190,20 @@ var sparkDrive = function () {
 		}
 		,
 		/**
-		 * Remove an asset
-		 * @param assetId
+		 * Remove an asset for a logged in user
+		 * @param assetId - The id of the asset
 		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/readupdatedelete/delete-an-asset
 		 */
 		removeAsset: function (assetId, callback) {
 
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + assetId;
 				Util.xhr(url, 'DELETE', '', headers, callback);
 			} else {
 				callback(false);
@@ -196,15 +212,22 @@ var sparkDrive = function () {
 		}
 		,
 
-
+		/**
+		 * Upload a file to an asset
+		 * @param assetId - The id of the asset
+		 * @param fileData - The file to upload
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/files/upload/upload-file-in-body
+		 * @todo - Consolidate with uploadFile
+		 */
 		uploadFileToAsset: function (assetId, fileData, callback) {
 
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken()
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/files/upload?unzip=false';
 
 				var fd = new FormData();
 				fd.append("file", fileData);
@@ -227,20 +250,26 @@ var sparkDrive = function () {
 		}
 		,
 
+		/**
+		 * Upload a file to Spark Drive
+		 * @param fileData - The file to upload
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/files/upload/upload-file-in-body
+		 */
 		uploadFile: function (fileData, callback) {
 
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken()
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=false';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/files/upload?unzip=false';
 
 				var fd = new FormData();
 				fd.append("file", fileData);
 
 				Util.xhr(url, 'POST', fd, headers, function (filesResp) {
-					callback(response);
+					callback(filesResp);
 				});
 
 			} else {
@@ -251,17 +280,18 @@ var sparkDrive = function () {
 		,
 		/**
 		 * Retrieve all thumbnails for an asset
-		 * @param assetId
+		 * @param assetId - The id of the asset
 		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/retrieve-asset-thumbnails
 		 */
 		retrieveUserAssetThumbnails: function (assetId, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/thumbnails';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + assetId + '/thumbnails';
 				Util.xhr(url, 'GET', '', headers, function (response) {
 					var thumbnailsResp = {
 						assetId: assetId,
@@ -275,15 +305,21 @@ var sparkDrive = function () {
 		}
 		,
 
+		/**
+		 * Retrieve all sources (3d model files) for an asset
+		 * @param assetId - The id of the asset
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/retrieve-asset-sources
+		 */
 		retrieveUserAssetSources: function (assetId, callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/assets/' + assetId + '/sources';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/assets/' + assetId + '/sources';
 				Util.xhr(url, 'GET', '', headers, function (response) {
 					var sourcesResp = {
 						assetId: assetId,
@@ -297,8 +333,15 @@ var sparkDrive = function () {
 
 		}
 		,
+
+		/**
+		 * @todo: Consolidate with uploadFile
+		 * @param files
+		 * @param zipFile
+		 * @param callback
+		 */
 		uploadFileToDrive: function (files, zipFile, callback) {
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var headers = {
 					"Authorization": "Bearer " + sparkAuth.accessToken()
 				};
@@ -309,7 +352,7 @@ var sparkDrive = function () {
 
 				// Add the file to the request.
 				formData.append(files[0].name, files[0]);
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/files/upload?unzip=' + zipFile;
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/files/upload?unzip=' + zipFile;
 
 
 				Util.xhr(url, 'POST', formData, headers, function (filesResp) {

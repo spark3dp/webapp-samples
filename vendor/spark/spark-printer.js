@@ -1,7 +1,9 @@
 /**
+ * Our spark printer object
+ * See API reference - http://docs.sparkprint1.apiary.io/
  * Created by michael on 2/5/15.
  */
-
+	
 var sparkPrint = function () {
 	'use strict';
 
@@ -15,7 +17,7 @@ var sparkPrint = function () {
 
 		registerPrinter: function (memberID,token,printerName,callback,errorCallback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 /**
 					var headers = {
 						"X-Member-id":memberID,
@@ -38,7 +40,7 @@ var sparkPrint = function () {
 
 		getAllPrinters: function (memberID,callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -52,7 +54,7 @@ var sparkPrint = function () {
 
 		printJob: function (memberID,fileUrl, printerId,settings,callback,errorCallback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 
 					var params =JSON.stringify( {printable_id:fileUrl,settings:settings});
 					//var params = {printable_id:fileUrl,settings:settings};
@@ -75,7 +77,7 @@ var sparkPrint = function () {
 		 */
 		getJobsStatusByPrinter: function (memberID,printerId,callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
@@ -88,7 +90,7 @@ var sparkPrint = function () {
 		},
 
 		sendPrintCommand: function(memberID,printerID,command,callback,errorCallback){
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"

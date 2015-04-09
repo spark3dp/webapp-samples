@@ -21,6 +21,9 @@
 
 	sparkAuth.getAccessToken(code, function (token) {
 		if (token) {
+			console.log(token);
+			//You can redirect now to some page in your app or to homepage
+			// or to reload the top window
 			parent.window.location.reload();
 		} else {
 			console.log('Problem with fetching token');

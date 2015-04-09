@@ -1,11 +1,12 @@
 /**
  * Our spark auth object
+ * See API reference - http://docs.sparkauthentication.apiary.io/
  */
 var sparkAuth = function () {
 	'use strict';
 
 	/**
-	 * Get and parse token obj
+	 * Get from local storage the token obj, and return it parsed
 	 * @returns {*|any}
 	 */
 	var getTokenObj = function () {
@@ -16,7 +17,7 @@ var sparkAuth = function () {
 	}
 
 	/**
-	 * Get guest token
+	 * Get guest token from your local server
 	 * @param code
 	 * @param callback
 	 */
@@ -34,15 +35,16 @@ var sparkAuth = function () {
 	};
 
 	/**
-	 * Fetch current member
+	 * Fetch current logged in member
 	 * @param callback
+	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/members/members-without-id/retrieve-the-current-member
 	 */
 	var getMemberFromServer = function (callback) {
 		var headers = {
 			"Authorization": "Bearer " + sparkAuth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/members/' + sparkAuth.accessToken(true).spark_member_id;
+		var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/members/' + sparkAuth.accessToken(true).spark_member_id;
 		Util.xhr(url, 'GET', '', headers, function (response) {
 			var date = new Date();
 			var now = date.getTime();
@@ -54,14 +56,27 @@ var sparkAuth = function () {
 	};
 
 	/**
+	 * Return the Auth2.0 provider login screen URL
+	 * @returns {string}
+	 * See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/access-token
+	 */
+	var getAuthLoginUrl = function(){
+		return CONST.API_PROTOCOL + "://" + CONST.API_SERVER + '/oauth/authorize' +
+			"?response_type=code" +
+			"&client_id=" + CLIENT_ID
+			//"&redirect_uri=" + REDIRECT_URL
+			;
+	};
+
+	/**
 	 * Return the factory object
 	 */
 	return {
 
 		/**
-		 * Check token validaty
+		 * Check if access token validaty
 		 */
-		isTokenValid: function () {
+		isAccessTokenValid: function () {
 			var token = getTokenObj();
 			var date = new Date();
 			var now = date.getTime();
@@ -71,7 +86,7 @@ var sparkAuth = function () {
 		},
 
 		/**
-		 * Logout the user - clear the token in local storage
+		 * Logout the user - clear the token and the member in local storage
 		 */
 		logout: function () {
 			localStorage.removeItem('spark-token');
@@ -79,21 +94,13 @@ var sparkAuth = function () {
 			location.reload();
 		},
 
-		/**
-		 * Redirect user to Drive login page or return the redirect url
-		 */
-		redirectToAuthLoginURL: function (returnRedirectUrl) {
-			var authUrl = CONST.API_PROTOCOL + "://" + CONST.API_HOST + '/oauth/authorize' +
-					"?response_type=code" +
-					"&client_id=" + CLIENT_ID
-			//"&redirect_uri=" + REDIRECT_URL
-				;
+		getAuthLoginUrl: getAuthLoginUrl,
 
-			if (returnRedirectUrl){
-				return authUrl;
-			}else {
-				window.location = authUrl;
-			}
+		/**
+		 * Redirect user to Auth login page
+		 */
+		redirectToAuthLoginURL: function () {
+			window.location = getAuthLoginUrl();
 		},
 
 		/**
@@ -120,12 +127,12 @@ var sparkAuth = function () {
 
 
 		/**
-		 * Gets user profile
+		 * Gets logged in user profile
 		 * @param callback
 		 */
 		getMyProfile: function (callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isTokenValid()) {
+			if (sparkAuth.isAccessTokenValid()) {
 				var member = JSON.parse(localStorage.getItem('spark-member'));
 				var date = new Date();
 				var now = date.getTime();
@@ -154,7 +161,8 @@ var sparkAuth = function () {
 		},
 
 		/**
-		 * Get the guest token
+		 * Get the guest token from localStorage. If missing - make a server
+		 * call to acquire a new guest token
 		 * @param callback
 		 */
 		getGuestToken: function (callback) {
