@@ -59,8 +59,8 @@ var sparkPrint = function () {
 					//var params = {printable_id:fileUrl,settings:settings};
 					console.log(params);
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken()/**,
-						"Content-type": "application/json"*/
+						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Content-type": "application/json"
 					};
 					var url = serverUrl + 'print/printers/'+printerId+"/jobs";
 					Util.xhr(url, 'POST', params, headers, callback,errorCallback);
@@ -88,13 +88,13 @@ var sparkPrint = function () {
 
 		},
 
-		sendPrintCommand: function(memberID,printerID,command,callback,errorCallback){
+		sendPrintCommand: function(memberID,printerID,jobId,command,callback,errorCallback){
 			if (sparkAuth.isTokenValid()) {
 					var headers = {
 						"Authorization": "Bearer " + sparkAuth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					Util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command, headers, callback);
+					Util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command+"&job_id="+jobId, headers, callback);
 				}else{
 					callback(false);
 				}

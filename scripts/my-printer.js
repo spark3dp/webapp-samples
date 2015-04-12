@@ -43,8 +43,8 @@ var myPrinter = function () {
 		//(JSON.parse(member)).member.id;
 	});
 
-	var sendPrinterCommand = function(command){
-		sparkPrint.sendPrintCommand(memberID,$("#printers-select2").val(),command,function(response){
+	var sendPrinterCommand = function(jobId, command){
+		sparkPrint.sendPrintCommand(memberID,$("#printers-select2").val(),jobId,command,function(response){
 				logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select2").val());
 			}
 			,function(response){
@@ -102,7 +102,11 @@ var myPrinter = function () {
 				//var printerId = response.printer_id;
 				var printerJobs = response.printer_jobs;
 				for(var i in printerJobs){
-					$("<tr class='"+ classMapper[printerJobs[i].job_status.state]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.state+"</td><td>"+"</td></tr>").appendTo("#print-statuses");
+					$("<tr class='"+ classMapper[printerJobs[i].job_status.state]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
+						'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
+					'<button type="button" class="btn btn-default pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>'+
+					'<button type="button" class="btn btn-default cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>' +
+					"</td></tr>").appendTo("#print-statuses");
 				}
 
 				logger("#inputLogStatus","Got "+ printerJobs.length +" jobs!");

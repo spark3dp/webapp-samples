@@ -12,11 +12,11 @@ var Printer= (function() {
 
  
    /**switch to these url's when Jayant enables passthrough in apigee for both /faye and printer hardware end points**/   
-    var BASE_URL="https://api-alpha.spark.autodesk.com/api/v1";
-    var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
+   //var BASE_URL="https://api-alpha.spark.autodesk.com/api/v1";
+   //var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
 
-    //var BASE_URL="https://alpha.spark.autodesk.com/api/v1";
-    //var FAYE_URL="https://alpha.spark.autodesk.com/faye";
+    var BASE_URL="http://alpha.spark.autodesk.com/api/v1";
+    var FAYE_URL="http://alpha.spark.autodesk.com/faye";
     
     var BASE_URL_LOCAL="http://localhost:8080/api/v1";
     var FAYE_URL_LOCAL="http://localhost:8080/faye"
@@ -57,7 +57,7 @@ var Printer= (function() {
         }
 
         //first set up faye client 
-        client = new Faye.Client(FAYE_URL);
+        client = new Faye.Client(FAYE_URL,{timeout: 120});
         client.disable('websocket');
 
         Logger = {
