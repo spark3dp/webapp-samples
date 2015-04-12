@@ -34,17 +34,9 @@
 
 var myPrinter = function () {
 
-	var memberID = "";
-
-
-	sparkAuth.getMyProfile(function(member){
-		if(member)
-			memberID = member.member.id;
-		//(JSON.parse(member)).member.id;
-	});
 
 	var sendPrinterCommand = function(jobId, command){
-		sparkPrint.sendPrintCommand(memberID,$("#printers-select2").val(),jobId,command,function(response){
+		sparkPrint.sendPrintCommand($("#printers-select2").val(),jobId,command,function(response){
 				logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select2").val());
 			}
 			,function(response){
@@ -61,9 +53,7 @@ var myPrinter = function () {
 		"printing":"info"
 	};
 
-	var buildCommand = function(memberID,printerID,command){
-		return "<a onclick='sendPrinterCommand("+memberID+","+printerID+","+"\""+command+"\""+")'>"+command+"</a>";
-	};
+
 
 	var logger = function (textArea_id, data) {
 		console.log(data);
@@ -73,7 +63,7 @@ var myPrinter = function () {
 	};
 
 	var getAllPrinters = function(){
-		sparkPrint.getAllPrinters(memberID,function(response){
+		sparkPrint.getAllPrinters(function(response){
 			var printers = response.printers;
 			$("#printers-select").find('option').remove()
 
@@ -97,7 +87,7 @@ var myPrinter = function () {
 
 		var printerId = $('#printers-select2').val();
 
-		sparkPrint.getJobsStatusByPrinter(memberID,printerId,function(response){
+		sparkPrint.getJobsStatusByPrinter(printerId,function(response){
 				$("#print-statuses").find("tr:not(.header)").remove();
 				//var printerId = response.printer_id;
 				var printerJobs = response.printer_jobs;
@@ -123,7 +113,7 @@ var myPrinter = function () {
 
 		var token = $('#inputToken').val();
 		var printerName = $('#inputName').val();
-		sparkPrint.registerPrinter(memberID,token,printerName,function(response){
+		sparkPrint.registerPrinter(token,printerName,function(response){
 				var printerId = response.printer_id;
 				logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
 			},
@@ -140,7 +130,7 @@ var myPrinter = function () {
 		var printerId = $('#printers-select').val();
 		var settings = JSON.parse($('#printer-settings').val());
 
-		sparkPrint.printJob(memberID,fileUrl,printerId,settings,function(response){
+		sparkPrint.printJob(fileUrl,printerId,settings,function(response){
 				var printerId = response.printer_id;
 				logger("#print-job-form #inputLog","Job sent successfully. "+JSON.stringify(response));
 			},
