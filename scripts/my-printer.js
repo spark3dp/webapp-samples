@@ -46,7 +46,7 @@ var myPrinter = function () {
 	}
 
 	var classMapper = {
-		"complete":"success",
+		"completed":"success",
 		"queued":"warning",
 		"started":"info",
 		"canceled":"danger",
@@ -92,7 +92,7 @@ var myPrinter = function () {
 				//var printerId = response.printer_id;
 				var printerJobs = response.printer_jobs;
 				for(var i in printerJobs){
-					$("<tr class='"+ classMapper[printerJobs[i].job_status.state]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
+					$("<tr class='"+ classMapper[printerJobs[i].job_status.job_status]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
 						'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
 					'<button type="button" class="btn btn-default pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>'+
 					'<button type="button" class="btn btn-default cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>' +
