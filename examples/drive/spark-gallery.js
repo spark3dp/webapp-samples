@@ -64,7 +64,7 @@ $(function ($) {
 		sort_by: 'favorite_count'
 	};
 
-	sparkDrive.getAssetsByConditions(conditions, function (response) {
+	spark.drive.getAssetsByConditions(conditions, function (response) {
 		conditions.offset = conditions.limit;
 		if (!response._link_next) {
 			$('.gallery-load-more').remove();
@@ -79,7 +79,7 @@ $(function ($) {
 
 		$('.next').hide();
 		$('.spinner').fadeIn();
-		sparkDrive.getAssetsByConditions(conditions, function (response) {
+		spark.drive.getAssetsByConditions(conditions, function (response) {
 			if (!response._link_next) {
 				$('.gallery-load-more').remove();
 			}

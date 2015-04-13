@@ -123,11 +123,10 @@ should be cloudfront!
 					if (token) {
 						//You can redirect now to some page in your app or to homepage
 						// or to reload the top window or any other action
-						//parent.window.location.reload();
-						getMyProfileAndAddtoDOM();
+						parent.window.location.reload();
 
 					} else {
-						console.log('Problem with fetching token');
+						console.error('Problem with fetching token');
 					}
 				});
 			} else {

@@ -12,14 +12,10 @@
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Fancybox -->
-    <link rel="stylesheet" href="vendor/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
-
     <!-- Custom styles -->
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/photo-gallery.css" rel="stylesheet">
+    <link href="assets/css/styleOld.css" rel="stylesheet">
 
-    <script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
     <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
     <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 
@@ -38,8 +34,8 @@
                 </a>
                 <span class="logged-out hidden">Hello Guest</span>
             </li>
-            <li role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="sparkAuth.redirectToAuthLoginURL()">Login</a></li>
-            <li role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="sparkAuth.logout()">Logout</a></li>
+            <li role="presentation" id="login" class="logged-out hidden"><a href="#" onclick="spark.auth.redirectToAuthLoginURL()">Login</a></li>
+            <li role="presentation" id="logout" class="logged-in hidden"><a href="#" onclick="spark.auth.logout()">Logout</a></li>
         </ul>
         <h3 class="text-muted"><a href="#">Spark Sample App</a></h3>
     </div>
@@ -49,13 +45,13 @@
         <p class="lead">Experience managing 3D print models on the web. <br/>
             Try the <b>Spark Sample Application</b> today!
         </p>
-        <p><a class="btn btn-lg btn-success" onclick="sparkAuth.redirectToAuthLoginURL()" role="button">Sign up today</a></p>
+        <p><a class="btn btn-lg btn-success" onclick="spark.auth.redirectToAuthLoginURL()" role="button">Sign up today</a></p>
     </div>
 
     <h2>Featured assets</h2>
     <div class="gallery"></div>
     <div class="gallery-load-more">
-        <img style="display:none;" class="spinner" src="img/loader.gif" alt="loader"/>
+        <img style="display:none;" class="spinner" src="assets/img/loader.gif" alt="loader"/>
         <a class="next btn btn-default" href="#">Load more</a>
     </div>
 
@@ -74,8 +70,9 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
 
 
-<script type="text/javascript" charset="utf-8" src="scripts/common.js"></script>
-<script type="text/javascript" charset="utf-8" src="scripts/home.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script>
+<script type="text/javascript" charset="utf-8" src="examples/drive/spark-gallery.js"></script>
 
 </body>
 </html>
