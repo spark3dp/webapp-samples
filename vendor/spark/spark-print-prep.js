@@ -230,7 +230,7 @@ var sparkPrintPrep = function() {
 
 				};
 
-				Util.xhr(url, 'POST', params, headers, callback);
+				spark.util.xhr(url, 'POST', params, headers, callback);
 			}
 
 
@@ -238,13 +238,14 @@ var sparkPrintPrep = function() {
 
 		prepareTray: function (trayId,mainCallback) {
 
-			var token = sparkAuth.isTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 			if (token) {
 				var headers = {
-					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				};
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/prepare';
+
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/print/trays/prepare';
 
 				var params="id="+trayId;
 
@@ -261,13 +262,14 @@ var sparkPrintPrep = function() {
 
 		generatePrintable: function(trayId,mainCallback) {
 
-		var token = sparkAuth.isTokenValid();
+		var token = spark.auth.isAccessTokenValid();
 		if (token) {
 			var headers = {
-				"Authorization": "Bearer " + sparkAuth.accessToken(),
+				"Authorization": "Bearer " + spark.auth.accessToken(),
 				"Content-type": "application/x-www-form-urlencoded"
 			};
-			var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/generatePrintable';
+
+			var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/print/trays/generatePrintable';
 
 			var params="id="+trayId;
 
@@ -277,7 +279,7 @@ var sparkPrintPrep = function() {
 
 			};
 
-			Util.xhr(url, 'POST', params, headers, callback);
+			spark.util.xhr(url, 'POST', params, headers, callback);
 		}
 
 	}
