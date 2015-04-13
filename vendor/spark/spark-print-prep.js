@@ -13,7 +13,7 @@ var sparkPrintPrep = function() {
 		 * @param events - map of events to support the ajax async call
 		 */
 			uploadFileAndImport: function (files,mainCallback) {
-				var token = sparkAuth.isAccessTokenValid();
+				var token = spark.auth.isAccessTokenValid();
 				if (token) {
 					var callback = function(filesResp){
 						if (filesResp.files != undefined && filesResp.files.length > 0) {
@@ -26,7 +26,7 @@ var sparkPrintPrep = function() {
 						}
 
 					};
-					sparkDrive.uploadFileToDrive(files,false,callback);
+					spark.drive.uploadFileToDrive(files,false,callback);
 				}
 
 
@@ -39,18 +39,18 @@ var sparkPrintPrep = function() {
 		 */
 		importMesh: function (fileId, fileName,mainCallback) {
 
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 				if (token) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/geom/meshes/import';
+					var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/geom/meshes/import';
 
 					var params = "file_id=" + fileId + "&name=" + fileName + "&generate_visual=true";
 
 
-					Util.xhr(url, 'POST', params, headers, function (response) {
+					spark.util.xhr(url, 'POST', params, headers, function (response) {
 
 							sparkPrintPrep.getTask(response.id,mainCallback);
 
@@ -68,24 +68,24 @@ var sparkPrintPrep = function() {
 		 * @param events - map of events to support the ajax async call
 		 */
 		getTask: function (taskId,mainCallback) {
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 				if (token) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/print/tasks/' + taskId;
+					var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/print/tasks/' + taskId;
 
 
 					var callback = function (response) {
-						if (response.status === CONST.RUNNING_TASK_STATUS ){
+						if (response.status === spark.const.RUNNING_TASK_STATUS ){
 							setTimeout(function() {
 								sparkPrintPrep.getTask(taskId, mainCallback);
 								return;
 							}, 500);
 
 						}
-						else if (response.status === CONST.ERROR_TASK_STATUS){
+						else if (response.status === spark.const.ERROR_TASK_STATUS){
 							console.log('Operation Failed: Error code:'+response.error.code);
 							return;
 
@@ -95,7 +95,7 @@ var sparkPrintPrep = function() {
 						}
 					};
 
-					Util.xhr(url, 'GET', '', headers, callback,undefined,undefined,undefined);
+					spark.util.xhr(url, 'GET', '', headers, callback,undefined,undefined,undefined);
 				}
 
 
@@ -106,13 +106,13 @@ var sparkPrintPrep = function() {
 		 */
 		analyzeMesh: function (meshId,mainCallback) {
 
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 				if (token) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/geom/meshes/analyze';
+					var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/geom/meshes/analyze';
 
 					var params = "id=" + meshId;
 
@@ -122,7 +122,7 @@ var sparkPrintPrep = function() {
 
 					};
 
-					Util.xhr(url, 'POST', params, headers, callback,undefined,undefined,undefined);
+					spark.util.xhr(url, 'POST', params, headers, callback,undefined,undefined,undefined);
 				}
 
 
@@ -134,13 +134,13 @@ var sparkPrintPrep = function() {
 		 */
 		repairMesh: function (meshId,mainCallback) {
 
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 				if (token) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/geom/meshes/repair';
+					var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/geom/meshes/repair';
 
 					var params = "id=" + meshId + "&all=true";
 
@@ -150,7 +150,7 @@ var sparkPrintPrep = function() {
 
 					};
 
-					Util.xhr(url, 'POST', params, headers, callback,undefined,undefined,undefined);
+					spark.util.xhr(url, 'POST', params, headers, callback,undefined,undefined,undefined);
 				}
 
 
@@ -162,13 +162,13 @@ var sparkPrintPrep = function() {
 		 */
 		exportMesh: function (meshId,mainCallback) {
 
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 			if (token) {
 				var headers = {
-					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				};
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/geom/meshes/export';
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/geom/meshes/export';
 
 				var params = "id=" + meshId + "&file_type=obj";
 
@@ -178,7 +178,7 @@ var sparkPrintPrep = function() {
 
 				};
 
-				Util.xhr(url, 'POST', params, headers, callback);
+				spark.util.xhr(url, 'POST', params, headers, callback);
 			}
 
 
@@ -189,13 +189,13 @@ var sparkPrintPrep = function() {
 		 * @param fileId
 		 */
 		downloadFile: function(fileId, mainCallback){
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 			if (token) {
 				var headers = {
-					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				};
-				var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/files/download?file_ids='+fileId;
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/download?file_ids='+fileId;
 
 
 				var callback = function (response) {
@@ -203,14 +203,14 @@ var sparkPrintPrep = function() {
 
 				};
 
-				Util.xhr(url, 'GET', '', headers, callback,undefined,false);
+				spark.util.xhr(url, 'GET', '', headers, callback,undefined,false);
 			}
 
 		},
 
 		createTray: function (meshIds, printerTypeId, profileId,mainCallback) {
 
-			var token = sparkAuth.isAccessTokenValid();
+			var token = spark.auth.isAccessTokenValid();
 			if (token) {
 				var headers = {
 					"Authorization": "Bearer " + token,
@@ -226,11 +226,11 @@ var sparkPrintPrep = function() {
 				};
 				var callback = function (response) {
 
-					sparkPrintPrep.getTask(response.id, CONST.EXPORT_TASK_TYPE, events);
+					sparkPrintPrep.getTask(response.id, spark.const.EXPORT_TASK_TYPE, events);
 
 				};
 
-				Util.xhr(url, 'POST', params, headers, callback);
+				spark.util.xhr(url, 'POST', params, headers, callback);
 			}
 
 

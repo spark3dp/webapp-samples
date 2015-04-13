@@ -1,8 +1,8 @@
 /**
  * Our spark auth object
- * See API reference - http://docs.sparkauthentication.apiary.io/
+ * See API reference - http://docs.spark.authentication.apiary.io/
  */
-var sparkAuth = function () {
+spark.auth = function () {
 	'use strict';
 
 	/**
@@ -23,7 +23,7 @@ var sparkAuth = function () {
 	 */
 	var getGuestTokenFromServer = function (callback) {
 
-		Util.xhr(GUEST_TOKEN_URL, 'GET', {}, {}, function (response) {
+		spark.util.xhr(GUEST_TOKEN_URL, 'GET', {}, {}, function (response) {
 
 			var date = new Date();
 			var now = date.getTime();
@@ -41,11 +41,11 @@ var sparkAuth = function () {
 	 */
 	var getMemberFromServer = function (callback) {
 		var headers = {
-			"Authorization": "Bearer " + sparkAuth.accessToken(),
+			"Authorization": "Bearer " + spark.auth.accessToken(),
 			"Content-type": "application/x-www-form-urlencoded"
 		}
-		var url = CONST.API_PROTOCOL + '://' + CONST.API_SERVER + '/members/' + sparkAuth.accessToken(true).spark_member_id;
-		Util.xhr(url, 'GET', '', headers, function (response) {
+		var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/members/' + spark.auth.accessToken(true).spark_member_id;
+		spark.util.xhr(url, 'GET', '', headers, function (response) {
 			var date = new Date();
 			var now = date.getTime();
 			//expire in 2 hours
@@ -58,10 +58,10 @@ var sparkAuth = function () {
 	/**
 	 * Return the Auth2.0 provider login screen URL
 	 * @returns {string}
-	 * See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/access-token
+	 * See API reference - http://docs.spark.authentication.apiary.io/#reference/oauth-2.0/access-token
 	 */
 	var getAuthLoginUrl = function(){
-		return CONST.API_PROTOCOL + "://" + CONST.API_SERVER + '/oauth/authorize' +
+		return spark.const.API_PROTOCOL + "://" + spark.const.API_SERVER + '/oauth/authorize' +
 			"?response_type=code" +
 			"&client_id=" + CLIENT_ID
 			//"&redirect_uri=" + REDIRECT_URL
@@ -109,9 +109,9 @@ var sparkAuth = function () {
 		 * @param callback - Callback to run after getting the access token
 		 */
 		getAccessToken: function (code, callback) {
-			var params = "code=" + code + "&redirect_uri=" + REDIRECT_URL;
+			var params = "code=" + code;
 
-			Util.xhr(ACCESS_TOKEN_URL + '?' + params, 'GET', {}, {}, function (response) {
+			spark.util.xhr(ACCESS_TOKEN_URL + '?' + params, 'GET', {}, {}, function (response) {
 
 				//If request was for access token, set it in localStorage
 				if (response.access_token) {
@@ -132,7 +132,7 @@ var sparkAuth = function () {
 		 */
 		getMyProfile: function (callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 				var member = JSON.parse(localStorage.getItem('spark-member'));
 				var date = new Date();
 				var now = date.getTime();

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application</title>
+	<meta charset="utf-8">
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles, also cloudfront-->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+	<div id="manageAsset">
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">Update an asset</h4>
+		</div>
+		<div class="modal-body">
+			<form id="asset-form" onsubmit="return updateAsset()">
+				<div class="form-group">
+					<label for="manage-assets-title">Title</label>
+					<input type="text"
+					       class="form-control field"
+					       placeholder="Title"
+					       id="manage-assets-title"
+					       required>
+				</div>
+				<div class="form-group">
+					<label for="manage-assets-description">Description</label>
+					<textarea type="text" class="form-control field" id="manage-assets-description"
+					          placeholder="Description"
+					          required></textarea>
+				</div>
+				<div class="form-group">
+					<label for="manage-assets-tags">Tags</label>
+					<input type="text" class="form-control field" id="manage-assets-tags"
+					       placeholder="Add a comma seperated list of tags" required>
+				</div>
+				<div class="modal-footer">
+					<a href="../show-my-assets">
+						<input class="btn btn-primary" value="cancel" id="manage-assets-cancel">
+					</a>
+
+					<input class="btn btn-primary" type="submit" value="Send" id="submit1">
+
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<!-- your config file -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
+
+<!-- end spark sdk -->
+<!--<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/spark-sdk-latest.min.js"></script>
+should be cloudfront!
+-->
+
+
+<script>
+
+	var currentAssetId = 0;
+
+	/**
+	 * Creates a new asset
+	 */
+	function updateAsset() {
+
+		var asset = {
+			title: $('#manage-assets-title').val(),
+			description: $('#manage-assets-description').val(),
+			tags: $('#manage-assets-tags').val()
+		};
+
+		asset.assetId = currentAssetId;
+		spark.drive.updateAsset(asset, function (response) {
+			console.info('update asset response:', response);
+			alert('Asset has updated successfully')
+		});
+
+		return false;
+	}
+
+	/**
+	 * Calls get asset and sets the retreived data inside the form
+	 */
+	function getAssetAndSetDataIntoForm() {
+
+		spark.drive.getAsset(currentAssetId, function (response) {
+			if (response) {
+				$("#manage-assets-title").val(response.asset_name);
+				$("#manage-assets-description").text(response.description);
+				var tags = response.keywords.replace(/ /g, ",");
+				tags = (tags != "undefined") ? tags : "";
+				$("#manage-assets-tags").val(tags);
+			} else {
+				$('#manageAsset').html('The requested asset is not available');
+			}
+		});
+	}
+
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (!spark.auth.isAccessTokenValid()) {
+			window.location.href = '../../auth/';
+		} else {
+
+			//Assume we provided assetId in URL
+			var urlParams = spark.util.extractParamsFromURL();
+			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+			if (!currentAssetId) {
+				$('#manageAsset').html('This example requires a valid asset ID that is passed as a parameter "assetId" through the URL');
+			} else {
+				getAssetAndSetDataIntoForm();
+			}
+		}
+
+	});
+
+</script>
+
+</body>
+</html>

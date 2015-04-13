@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application</title>
+	<meta charset="utf-8">
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles, also cloudfront-->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.table th, .table td{
+			text-align: center;
+			vertical-align: top!important;
+		}
+		.table th span {
+			font-size: 12px;
+			font-weight: normal;
+		}
+
+		#manage-assets-create-asset {
+			margin-top: -30px;
+		}
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+	<div class="panel panel-default" id="assets">
+		<div class="modal-header">
+			<h4 class="modal-title">My Storage</h4>
+			<a href="../create-asset/">
+				<input class="btn btn-primary pull-right"
+				       value="create asset"
+				       id="manage-assets-create-asset">
+			</a>
+		</div>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>Name<br/><span>asset_name</span></th>
+				<th>Submitted<br/><span>date_submitted</span></th>
+				<th>Modified<br/><span>date_modified</span></th>
+				<th>Status<br/><span>status</span></th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody id="assetsTbody">
+
+			</tbody>
+		</table>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<!-- your config file -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
+
+<!-- end spark sdk -->
+<!--<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/spark-sdk-latest.min.js"></script>
+should be cloudfront!
+-->
+
+
+<script>
+
+	/**
+	 * Deletes an asset
+	 */
+	function deleteAsset(assetId,assetElem){
+		var c = confirm('Are you sure you want to delete?');
+
+		if (c){
+			spark.drive.removeAsset(assetId, function () {
+				assetElem.remove();
+			});
+		}
+	}
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (spark.auth.isAccessTokenValid()) {
+
+			//Get my assets and append to table in DOM
+			spark.drive.getMyAssets(100, 0, function (response) {
+				console.info('my assets:',response);
+				$('#assetsTbody').empty();
+
+
+				if (response.count) {
+					$.each(response.assets, function (index, item) {
+						var tr = $('<tr class="asset-in-table"></tr>')
+						var nameTd = $('<td>' + item.asset_name + '</td>');
+						tr.append(nameTd);
+						tr.append($('<td>' + item.date_submitted + '</td>'));
+						tr.append($('<td>' + item.date_modified + '</td>'));
+						tr.append($('<td>' + item.status + '</td>'));
+						tr.append($('<td><a href="../update-asset/?assetId=' + item.asset_id +'">' +
+						'<i class="glyphicon glyphicon-pencil edit"></i></a>' +
+						'<a onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'tr\'))"><i class="glyphicon glyphicon-remove delete"></i></a></td>'));
+						$('#assetsTbody').append(tr);
+
+					});
+				} else {
+					var tr = $("<tr class='asset-in-table'></tr>")
+					var nameTd = $('<td colspan="4">You don\'t have any assets yet. <a href="../create-asset/">Create now</a></td>');
+					tr.append(nameTd);
+					$("#assetsTbody").append(tr);
+				}
+			});
+
+
+		} else {//user needs to login
+			window.location.href = '../../auth/';
+		}
+
+	});
+
+</script>
+
+</body>
+</html>

@@ -1,5 +1,7 @@
+var spark = {};
+
 //Various Spark constants
-var CONST = function () {
+spark.const = function () {
 	'use strict';
 
 	var apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',

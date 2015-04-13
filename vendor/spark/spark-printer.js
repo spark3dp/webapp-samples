@@ -17,7 +17,7 @@ var sparkPrint = function () {
 
 		registerPrinter: function (memberID,token,printerName,callback,errorCallback) {
 			//Make sure token is still valid
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 /**
 					var headers = {
 						"X-Member-id":memberID,
@@ -25,12 +25,12 @@ var sparkPrint = function () {
 					}
  */
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
 
 					var url = serverUrl + "print/printers/register"
-					Util.xhr(url, 'POST', "registration_code="+token+"&printer_name="+printerName, headers, callback,errorCallback);
+					spark.util.xhr(url, 'POST', "registration_code="+token+"&printer_name="+printerName, headers, callback,errorCallback);
 				}else{
 					callback(false);
 				}
@@ -40,12 +40,12 @@ var sparkPrint = function () {
 
 		getAllPrinters: function (memberID,callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					Util.xhr(serverUrl + 'print/printers', 'GET', '', headers, callback);
+					spark.util.xhr(serverUrl + 'print/printers', 'GET', '', headers, callback);
 				}else{
 					callback(false);
 				}
@@ -54,17 +54,17 @@ var sparkPrint = function () {
 
 		printJob: function (memberID,fileUrl, printerId,settings,callback,errorCallback) {
 			//Make sure token is still valid
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 
 					var params =JSON.stringify( {printable_id:fileUrl,settings:settings});
 					//var params = {printable_id:fileUrl,settings:settings};
 					console.log(params);
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken()/**,
+						"Authorization": "Bearer " + spark.auth.accessToken()/**,
 						"Content-type": "application/json"*/
 					};
 					var url = serverUrl + 'print/printers/'+printerId+"/jobs";
-					Util.xhr(url, 'POST', params, headers, callback,errorCallback);
+					spark.util.xhr(url, 'POST', params, headers, callback,errorCallback);
 				}else{
 					callback(false);
 				}
@@ -77,12 +77,12 @@ var sparkPrint = function () {
 		 */
 		getJobsStatusByPrinter: function (memberID,printerId,callback) {
 			//Make sure token is still valid
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					Util.xhr(serverUrl + 'print/printers/' + printerId + "/jobs", 'GET', '', headers, callback);
+					spark.util.xhr(serverUrl + 'print/printers/' + printerId + "/jobs", 'GET', '', headers, callback);
 				}else{
 					callback(false);
 				}
@@ -90,12 +90,12 @@ var sparkPrint = function () {
 		},
 
 		sendPrintCommand: function(memberID,printerID,command,callback,errorCallback){
-			if (sparkAuth.isAccessTokenValid()) {
+			if (spark.auth.isAccessTokenValid()) {
 					var headers = {
-						"Authorization": "Bearer " + sparkAuth.accessToken(),
+						"Authorization": "Bearer " + spark.auth.accessToken(),
 						"Content-type": "application/x-www-form-urlencoded"
 					};
-					Util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command, headers, callback);
+					spark.util.xhr(serverUrl + 'print/printers/' + printerID + "/command", 'POST', 'command='+command, headers, callback);
 				}else{
 					callback(false);
 				}

@@ -1,7 +1,7 @@
 /**
  * Our utilities object
  */
-var Util = function () {
+spark.util = function () {
 	'use strict';
 
 	/**
@@ -115,13 +115,22 @@ var Util = function () {
 			return params;
 		},
 
+		/**
+		 * Extract params from URL
+		 * @returns {{}}
+		 */
+		extractParamsFromURL: function(){
+			var prmstr = window.location.search.substr(1);
+			var getParams = prmstr != null && prmstr != "" ? spark.util.transformToAssocArray(prmstr) : [];
+
+			return getParams;
+		},
 
 		/**
 		 * Extract the auth code
 		 */
 		extractRedirectionCode: function () {
-			var prmstr = window.location.search.substr(1);
-			var getParams = prmstr != null && prmstr != "" ? Util.transformToAssocArray(prmstr) : [];
+			var getParams = spark.util.extractParamsFromURL();
 
 			return getParams['code'] ? getParams['code'] : null;
 		}
