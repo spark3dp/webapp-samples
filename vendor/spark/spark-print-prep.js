@@ -1,10 +1,7 @@
 /**
- * Our spark print prepare object
- * See API reference - http://docs.sparkprint1.apiary.io/
  * Created by roiyarden on 3/26/15.
  */
 var sparkPrintPrep = function() {
-	'use strict';
 
 	return {
 		/**
@@ -213,28 +210,77 @@ var sparkPrintPrep = function() {
 			var token = spark.auth.isAccessTokenValid();
 			if (token) {
 				var headers = {
-					"Authorization": "Bearer " + token,
+					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/json"
 				};
-				var url = protocol + '://' + apiHost + 'print/trays';
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/print/trays';
 
 				//var params = "id=" + mesh_id + "&file_type=obj";
-				var params = {
-					"printer_type_id": "7FAF097F-DB2E-45DC-9395-A30210E789AA",
-					"profile_id": "34F0E39A-9389-42BA-AB5A-4F2CD59C98E4",
-					"mesh_ids":["cc9c967e-79dc-4b08-aefa-1f583c397a30"]
-				};
+				var params =  JSON.stringify({
+					"printer_type_id": printerTypeId,
+					"profile_id": profileId,
+					"mesh_ids":[meshIds]
+				});
+
+				//var params="printer_type_id="+printerTypeId+"&profile_id="+profileId+"&meshIds=["+meshIds+"]";
+
 				var callback = function (response) {
 
-					sparkPrintPrep.getTask(response.id, spark.const.EXPORT_TASK_TYPE, events);
+					sparkPrintPrep.getTask(response.id, mainCallback);
+
+				};
+
+				Util.xhr(url, 'POST', params, headers, callback);
+			}
+
+
+		},
+
+		prepareTray: function (trayId,mainCallback) {
+
+			var token = sparkAuth.isTokenValid();
+			if (token) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/prepare';
+
+				var params="id="+trayId;
+
+				var callback = function (response) {
+
+					sparkPrintPrep.getTask(response.id, mainCallback);
 
 				};
 
 				spark.util.xhr(url, 'POST', params, headers, callback);
 			}
 
+		},
 
+		generatePrintable: function(trayId,mainCallback) {
+
+		var token = sparkAuth.isTokenValid();
+		if (token) {
+			var headers = {
+				"Authorization": "Bearer " + sparkAuth.accessToken(),
+				"Content-type": "application/x-www-form-urlencoded"
+			};
+			var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/generatePrintable';
+
+			var params="id="+trayId;
+
+			var callback = function (response) {
+
+				sparkPrintPrep.getTask(response.id, mainCallback);
+
+			};
+
+			Util.xhr(url, 'POST', params, headers, callback);
 		}
+
+	}
 	}
 
 

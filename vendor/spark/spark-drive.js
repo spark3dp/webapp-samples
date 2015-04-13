@@ -241,7 +241,7 @@ spark.drive = function () {
 						createAssetSource(assetId, files_ids_array, callback);
 					}
 					else {
-						callback(response);
+						callback(filesResp);
 					}
 
 				});
