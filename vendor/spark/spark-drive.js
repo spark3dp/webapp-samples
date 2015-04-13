@@ -217,7 +217,7 @@ var sparkDrive = function () {
 						createAssetSource(assetId, files_ids_array, callback);
 					}
 					else {
-						callback(response);
+						callback(filesResp);
 					}
 
 				});

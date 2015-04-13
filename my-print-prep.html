@@ -35,20 +35,28 @@
 			</div>
 			<div class="text-center">
 				<label for="meshId">Mesh ID:</label>
-				<input id="meshId" type="text"  readonly>
+				<!--input id="meshId" type="text" value="cc9c967e-79dc-4b08-aefa-1f583c397a30" readonly-->
+				<input id="meshId" type="text" readonly>
+
 				<label for="meshProblems">Problems:</label>
 				<textarea id="meshProblems" rows="4" cols="50" readonly></textarea>
 				<label for="downloadFileId">Download File ID:</label>
 				<input id="downloadFileId" type="text"  readonly>
+				<label for="trayId">Tray ID:</label>
+				<input id="trayId" type="text" value="71016dfc-7d45-492a-95d1-8a57ea1c362b" readonly>
 
+				<label for="printableId">Printable ID:</label>
+				<input id="printableId" type="text" readonly>
 			</div>
 
-			<div id="logger"></div>
+
 
 			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-print-prep.js"></script>
 			<script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
 			<script type="text/javascript" charset="utf-8" src="vendor/STLLoader.js"></script>
 			<script type="text/javascript" charset="utf-8" src="vendor/OBJLoader.js"></script>
+
+			<script type="text/javascript" charset="utf-8" src="vendor/threejs.OrbitControls.js"></script>
 
 			<script type="text/javascript" charset="utf-8" src="scripts/my-print-prep.js"></script>
 
@@ -69,6 +77,9 @@
 
 		</div>
 	</div>
+
 </form>
+<br/>
+<div id="logger"></div>
 </body>
 </html>

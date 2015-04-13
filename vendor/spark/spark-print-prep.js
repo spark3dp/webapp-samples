@@ -48,9 +48,7 @@ var sparkPrintPrep = function() {
 
 
 					Util.xhr(url, 'POST', params, headers, function (response) {
-
-							sparkPrintPrep.getTask(response.id,mainCallback);
-
+						sparkPrintPrep.getTask(response.id,mainCallback);
 					});
 				}
 
@@ -75,7 +73,7 @@ var sparkPrintPrep = function() {
 
 
 					var callback = function (response) {
-						if (response.status === RUNNING_TASK_STATUS ){
+						 if (response.status === RUNNING_TASK_STATUS ){
 							setTimeout(function() {
 								sparkPrintPrep.getTask(taskId, mainCallback);
 								return;
@@ -210,20 +208,23 @@ var sparkPrintPrep = function() {
 			var token = sparkAuth.isTokenValid();
 			if (token) {
 				var headers = {
-					"Authorization": "Bearer " + token,
-					"Content-type": "application/json"
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-Type": "application/json"
 				};
-				var url = protocol + '://' + apiHost + 'print/trays';
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays';
 
 				//var params = "id=" + mesh_id + "&file_type=obj";
-				var params = {
-					"printer_type_id": "7FAF097F-DB2E-45DC-9395-A30210E789AA",
-					"profile_id": "34F0E39A-9389-42BA-AB5A-4F2CD59C98E4",
-					"mesh_ids":["cc9c967e-79dc-4b08-aefa-1f583c397a30"]
-				};
+				var params =  JSON.stringify({
+					"printer_type_id": printerTypeId,
+					"profile_id": profileId,
+					"mesh_ids":[meshIds]
+				});
+
+				//var params="printer_type_id="+printerTypeId+"&profile_id="+profileId+"&meshIds=["+meshIds+"]";
+
 				var callback = function (response) {
 
-					sparkPrintPrep.getTask(response.id, EXPORT_TASK_TYPE, events);
+					sparkPrintPrep.getTask(response.id, mainCallback);
 
 				};
 
@@ -231,7 +232,53 @@ var sparkPrintPrep = function() {
 			}
 
 
+		},
+
+		prepareTray: function (trayId,mainCallback) {
+
+			var token = sparkAuth.isTokenValid();
+			if (token) {
+				var headers = {
+					"Authorization": "Bearer " + sparkAuth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+				var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/prepare';
+
+				var params="id="+trayId;
+
+				var callback = function (response) {
+
+					sparkPrintPrep.getTask(response.id, mainCallback);
+
+				};
+
+				Util.xhr(url, 'POST', params, headers, callback);
+			}
+
+		},
+
+		generatePrintable: function(trayId,mainCallback) {
+
+		var token = sparkAuth.isTokenValid();
+		if (token) {
+			var headers = {
+				"Authorization": "Bearer " + sparkAuth.accessToken(),
+				"Content-type": "application/x-www-form-urlencoded"
+			};
+			var url = CONST.API_PROTOCOL + '://' + CONST.API_HOST + '/print/trays/generatePrintable';
+
+			var params="id="+trayId;
+
+			var callback = function (response) {
+
+				sparkPrintPrep.getTask(response.id, mainCallback);
+
+			};
+
+			Util.xhr(url, 'POST', params, headers, callback);
 		}
+
+	}
 	}
 
 
