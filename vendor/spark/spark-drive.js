@@ -306,12 +306,12 @@ spark.drive = function () {
 				}
 				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload?unzip=false';
 
-				if (file.fileName){
-					url += '&filename=' + file.fileName;
-				}
-
 				var fd = new FormData();
 				fd.append("file", file.fileData);
+
+				if (file.filePublicStatus) {
+					fd.append("public", file.filePublicStatus);
+				}
 
 				spark.util.xhr(url, 'POST', fd, headers, function (filesResp) {
 					callback(filesResp);
