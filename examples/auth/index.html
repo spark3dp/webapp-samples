@@ -4,6 +4,9 @@
 	<title>Spark Sample Application</title>
 	<meta charset="utf-8">
 
+	<!-- fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
@@ -26,19 +29,12 @@
 
 <body>
 <div class="container">
-	<div id="auth-iframe-wrapper">
-		<iframe></iframe>
+	<div class="col-md-6">
+		<h2>Welcome to Spark Storage</h2>
+		<p>To try the demo, you need to login with a test environment account.</p>
 	</div>
-
-	<div id="user-wrapper">
-		<div id="user-profile"></div>
-		<div id="user-actions">
-			<a href="../drive/create-asset">Create asset</a>
-			&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="../drive/show-my-assets">Show my assets</a>
-			&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="#" onclick="logout()">Logout</a>
-		</div>
+	<div class="col-md-6" id="auth-iframe-wrapper">
+		<iframe></iframe>
 	</div>
 
 </div>
