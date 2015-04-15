@@ -2,7 +2,7 @@
  * Created by michael on 3/18/15.
  */
 
-var ajaxListener = function(callbackPushData) {
+var ajaxCallListener = function(callbackPushData) {
 
 	var requestResponseMap = [];
 
@@ -12,8 +12,8 @@ var ajaxListener = function(callbackPushData) {
 	var tryJsonParse = function(data){
 
 		try{
-			var a = JSON.parse(data);
-			return a;
+			var parsedData = JSON.parse(data);
+			return parsedData;
 
 		}catch(e){
 			return data;
@@ -27,6 +27,12 @@ var ajaxListener = function(callbackPushData) {
 
 		return open.apply(this, arguments);
 	}
+
+	/**
+	 *
+	 * @param data
+	 * @returns {*}
+	 */
 
 	function sendReplacement(data) {
 

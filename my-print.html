@@ -193,9 +193,9 @@
 
 <script type="">
 	$(document).ready(function(){
-		ajaxLogger().createLoggerElement(".footer");
-		ajaxListener(function(data){
-			ajaxLogger().log(data);
+		ajaxCallLogger().createLoggerElement(".footer");
+		ajaxCallListener(function(data){
+			ajaxCallLogger().log(data);
 		});
 	});
 
@@ -213,8 +213,8 @@
 
 
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxListener.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxLogger.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
 
 
 

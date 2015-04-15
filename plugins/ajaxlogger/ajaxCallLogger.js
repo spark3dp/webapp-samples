@@ -1,7 +1,7 @@
 /**
  * Created by michael on 4/15/15.
  */
-var ajaxLogger = function(){
+var ajaxCallLogger = function(){
 
 	var loggerId = "requestLog";
 	
