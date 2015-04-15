@@ -20,17 +20,15 @@
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 
-	<script>
-		if (!spark.auth.accessToken()) {
-			location.href = 'index.html';
-		}
-	</script>
-
+	<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<div class="container">
+<div class="logged-in-container">
+	<div class="container">
+
 	<div class="header">
 		<!-- Navigation links at the top right of the screen -->
 		<ul class="nav nav-pills pull-right" role="tablist">
@@ -40,11 +38,11 @@
 					Printer Simulator
 				</a>
 			</li>
-			<li role="presentation">
+			<!--li role="presentation">
 				<a href="my-drive.html" class="btn btn-primary btn-large">
 					Drive API
 				</a>
-			</li>
+			</li-->
 			<li role="presentation" id="user">
 				<span><!-- user --></span>
 				<img src=""/>
@@ -189,23 +187,33 @@
 		<p>&copy; Spark Sample Application 2015</p>
 	</div>
 
-</div>
+</div></div>
 <!-- /container -->
 
-<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+
 <script type="">
 	$(document).ready(function(){
-		$(".footer").load("plugins/ajaxlogger/loggers.html");
+		ajaxCallLogger().createLoggerElement(".footer");
+		ajaxCallLogger().startRegularListener();
 	});
 
 </script>
 
-<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
 
+<script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script>
 <script type="text/javascript" charset="utf-8" src="examples/print/my-printer.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/login/login.js"></script>
+
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
 
 
 </body>
