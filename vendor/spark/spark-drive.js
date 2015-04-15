@@ -10,21 +10,21 @@ spark.drive = function () {
 	/**
 	 * Create asset thumbnail(s)
 	 * @param asset_id - The asset id for which the thumbnails are created
-	 * @param file_ids - The file ids that are attached to this asset
+	 * @param files_array - The files that are attached to this asset, they come in the form of [{id:"id",caption:"caption",description,"description",isPrimary:true/false}]
 	 * @param callback - Callback function
 	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/create-a-new-thumbnail-within-the-asset
 	 */
-	var createAssetThumbnail = function (asset_id, file_ids, callback) {
+	var createAssetThumbnail = function (asset_id, files_array, callback) {
 
 
 		var thumbnails = [];
 
-		for (var i = 0; i < file_ids.length; i++) {
+		for (var i = 0; i < files_array.length; i++) {
 			var thumbnail = {
-				id: file_ids[i],
-				caption: "thumbnail",
-				description: "thumbnail",
-				is_primary: true
+				id: files_array[i].id,
+				caption: files_array[i].caption?files_array[i].caption:'',
+				description: files_array[i].description?files_array[i].description:'',
+				is_primary: files_array[i].isPrimary?files_array[i].isPrimary:false
 			}
 
 			thumbnails.push(thumbnail);
@@ -46,7 +46,7 @@ spark.drive = function () {
 	/**
 	 * Create asset source
 	 * @param asset_id - The asset id for which the thumbnails are created
-	 * @param file_ids - The file ids that are attached to this asset
+	 * @param file_ids - The file ids that are attached to this asset, separated by comma i.e. 123456,258242
 	 * @param callback - Callback function
 	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/create-a-new-source-within-the-asset
 	 */
@@ -249,7 +249,8 @@ spark.drive = function () {
 				callback(false);
 			}
 		},
-
+		createAssetSource:createAssetSource,
+		createAssetThumbnail:createAssetThumbnail,
 		/**
 		 * Upload 3d model file and attach it as a source to asset
 		 * @param assetId
@@ -281,8 +282,15 @@ spark.drive = function () {
 			driveObj.uploadFile(fileData, function(filesResp){
 				if (filesResp.files != undefined && filesResp.files.length > 0) {
 
-					var files_ids_array = [filesResp.files[0].file_id];
-					createAssetThumbnail(assetId,files_ids_array,callback);
+					var thumbnail = {
+						id:filesResp.files[0].file_id,
+						caption: fileData.caption,
+						description: fileData.description,
+						isPrimary:fileData.isPrimary
+					}
+
+					var file_array = [thumbnail];
+					createAssetThumbnail(assetId,file_array,callback);
 				}
 				else {
 					callback(response);
@@ -329,7 +337,7 @@ spark.drive = function () {
 		 * @param callback
 		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/retrieve-asset-thumbnails
 		 */
-		retrieveUserAssetThumbnails: function (assetId, callback) {
+		retrieveAssetThumbnails: function (assetId, callback) {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 				var headers = {
@@ -356,7 +364,7 @@ spark.drive = function () {
 		 * @param callback
 		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/retrieve-asset-sources
 		 */
-		retrieveUserAssetSources: function (assetId, callback) {
+		retrieveAssetSources: function (assetId, callback) {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
@@ -372,6 +380,53 @@ spark.drive = function () {
 					}
 					callback(sourcesResp);
 				});
+			} else {
+				callback(false);
+			}
+
+		}
+		,
+		/**
+		 * Remove sources from an asset for a logged in user
+		 * @param assetId - The id of the asset
+		 * @param fileIds - Array of file ids to delete from asset
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/delete-an-asset-source
+		 */
+		deleteAssetSources: function (assetId, fileIds,callback) {
+
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				}
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/sources?file_ids=' + fileIds;
+				spark.util.xhr(url, 'DELETE', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
+		}
+		,
+
+		/**
+		 * Remove thumbnails from an asset for a logged in user
+		 * @param assetId - The id of the asset
+		 * @param fileIds - Array of file ids to delete from asset
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/delete-asset-thumbnails
+		 */
+		deleteAssetThumbnails: function (assetId, fileIds,callback) {
+
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				}
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/sources?file_ids=' + fileIds;
+				spark.util.xhr(url, 'DELETE', '', headers, callback);
 			} else {
 				callback(false);
 			}

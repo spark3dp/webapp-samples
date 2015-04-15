@@ -18,31 +18,48 @@
 
 <body>
 <div class="container">
-	<div id="manageFile">
+	<div id="manageAsset">
 		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">Upload file</h4>
+			<h4 class="modal-title" id="manageTitle">Upload file and add to asset</h4>
 		</div>
 		<div class="modal-body">
 			<form id="file-form">
 				<div class="form-group">
-					<label for="fileData">Add File</label>
+					<label for="fileData">File to upload</label>
 					<input type="file" id="fileData" placeholder="file data" class="field" required>
 				</div>
+
+				<div class="form-group">
+					<label>Caption</label>
+					<input type="text"
+					       class="form-control field"
+					       placeholder="Title"
+					       name="caption"
+					       required>
+				</div>
+				<div class="form-group">
+					<label>Description</label>
+					<textarea class="form-control field"
+					          name="description"
+					          placeholder="Description"
+					          required></textarea>
+				</div>
+
 				<div class="form-group">
 
-					<label>Make file public</label>
+					<label>Is primary?</label>
 					<br/>
 					<div class="col-md-1">
 						false<input type="radio"
 						            class="form-control field"
-						            name="file-public-status"
+						            name="is_primary"
 						            checked
 						            value="false">
 					</div>
 					<div class="col-md-1">
 						true<input type="radio"
 						           class="form-control field"
-						           name="file-public-status"
+						           name="is_primary"
 						           value="true">
 					</div>
 				</div>
@@ -80,8 +97,9 @@ should be cloudfront!
 
 <script>
 
-	//the file data
-	var fileData;
+	var currentAssetId, //the asset id we are referring to
+			fileData //the file data
+			;
 
 	/**
 	 * Get the file data and set listener on form submit
@@ -103,18 +121,44 @@ should be cloudfront!
 				fileData: fileData
 			};
 
+			var thumbnail = {
+				caption: $('input[name=caption]').val(),
+				description: $('textarea[name=description]').val(),
+				is_primary: $('input[name=is_primary]:checked').val(),
+			}
+
+
 			//upload the file to spark drive
 			spark.drive.uploadFile(sourceFile, function (response) {
 				console.info('upload file response:', response);
 				if (response.files && response.files.length > 0) {
-					var successText = 'File <b>' + response.files[0].name + ' </b>uploaded successfully';
+					var successTextWrapper = $('<div id="success-text"></div>');
+					var fileName = response.files[0].name;
+					var successText = 'File <b>' + fileName + ' </b>uploaded successfully';
 					successText += '<br>File id is <b>' + response.files[0].file_id + '</b>';
 
 					if (response.files[0].public_url.length) {
 						successText += '<br>File public url is <b>' + response.files[0].public_url + '</b>';
 					}
 
-					$('#file-form').html(successText);
+					successText += '<br/></br/><span id="loading">Adding thumbnail to asset...</span>';
+
+					successTextWrapper.html(successText);
+
+					$('#file-form').html(successTextWrapper);
+
+					thumbnail.id = response.files[0].file_id;
+
+					console.log(thumbnail);
+
+
+					spark.drive.createAssetThumbnail(currentAssetId,[thumbnail], function(response){
+						console.info('response from add thumbnail to file:', response);
+						$('#loading').remove();
+						var successText = 'the thumbnail <b>' + fileName + '</b> has been added to asset <b>' + currentAssetId + '</b>';
+						$('#success-text').append(successText);
+					});
+
 				}
 
 
@@ -133,8 +177,16 @@ should be cloudfront!
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
 			window.location.href = '../../auth/';
-		}else{
-			setUpUploadFileFlow();
+		}else {
+			//Assume we provided assetId in URL
+			var urlParams = spark.util.extractParamsFromURL();
+			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+			if (!currentAssetId) {
+				$('#manageAsset').html('This example requires a valid asset ID that is passed as a parameter "assetId" through the URL');
+			} else {
+				setUpUploadFileFlow();
+			}
 		}
 
 	});

@@ -18,14 +18,14 @@
 
 <body>
 <div class="container">
-	<div id="manageFile">
+	<div id="manageAsset">
 		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">Upload file</h4>
+			<h4 class="modal-title" id="manageTitle">Upload file and add to asset</h4>
 		</div>
 		<div class="modal-body">
 			<form id="file-form">
 				<div class="form-group">
-					<label for="fileData">Add File</label>
+					<label for="fileData">File to upload</label>
 					<input type="file" id="fileData" placeholder="file data" class="field" required>
 				</div>
 				<div class="form-group">
@@ -80,8 +80,9 @@ should be cloudfront!
 
 <script>
 
-	//the file data
-	var fileData;
+	var currentAssetId, //the asset id we are referring to
+	    fileData //the file data
+	    ;
 
 	/**
 	 * Get the file data and set listener on form submit
@@ -107,14 +108,27 @@ should be cloudfront!
 			spark.drive.uploadFile(sourceFile, function (response) {
 				console.info('upload file response:', response);
 				if (response.files && response.files.length > 0) {
-					var successText = 'File <b>' + response.files[0].name + ' </b>uploaded successfully';
+					var successTextWrapper = $('<div id="success-text"></div>');
+					var fileName = response.files[0].name;
+					var successText = 'File <b>' + fileName + ' </b>uploaded successfully';
 					successText += '<br>File id is <b>' + response.files[0].file_id + '</b>';
 
 					if (response.files[0].public_url.length) {
 						successText += '<br>File public url is <b>' + response.files[0].public_url + '</b>';
 					}
 
-					$('#file-form').html(successText);
+					successText += '<br/></br/><span id="loading">Adding file to asset...</span>';
+
+					successTextWrapper.html(successText);
+
+					$('#file-form').html(successTextWrapper);
+
+					spark.drive.createAssetSource(currentAssetId,response.files[0].file_id, function(response){
+						console.info('response from add source to file:', response);
+						$('#loading').remove();
+						var successText = 'the file <b>' + fileName + '</b> has been added to asset <b>' + currentAssetId + '</b>';
+						$('#success-text').append(successText);
+					});
 				}
 
 
@@ -133,8 +147,16 @@ should be cloudfront!
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
 			window.location.href = '../../auth/';
-		}else{
-			setUpUploadFileFlow();
+		}else {
+			//Assume we provided assetId in URL
+			var urlParams = spark.util.extractParamsFromURL();
+			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+			if (!currentAssetId) {
+				$('#manageAsset').html('This example requires a valid asset ID that is passed as a parameter "assetId" through the URL');
+			} else {
+				setUpUploadFileFlow();
+			}
 		}
 
 	});
