@@ -20,6 +20,7 @@
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 
+	<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
@@ -189,11 +190,13 @@
 </div></div>
 <!-- /container -->
 
-<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
 
 <script type="">
 	$(document).ready(function(){
-		$(".footer").load("plugins/ajaxlogger/loggers.html");
+		ajaxLogger().createLoggerElement(".footer");
+		ajaxListener(function(data){
+			ajaxLogger().log(data);
+		});
 	});
 
 </script>
@@ -207,6 +210,11 @@
 <script type="text/javascript" charset="utf-8" src="examples/print/my-printer.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="plugins/login/login.js"></script>
+
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxLogger.js"></script>
 
 
 
