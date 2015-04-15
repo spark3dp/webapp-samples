@@ -1,10 +1,21 @@
 /**
  * Created by michael on 4/15/15.
  */
+
+/**
+ * this class is used together with ajaxCallListener. it creates logger element, and logs every call caught with ajaxCallListener.
+ *
+ *
+ * @returns {{log: log, createLoggerElement: createLoggerElement, startIframeListener: startIframeListener, startRegularListener: startRegularListener}}
+ */
 var ajaxCallLogger = function(){
 
 	var loggerId = "requestLog";
-	
+
+	/**
+	 * adds another row in the logger
+	 * @param data - the data to log
+	 */
 	var log = function (data) {
 		console.log(data);
 		renderjson.set_show_to_level(1);
@@ -31,6 +42,11 @@ var ajaxCallLogger = function(){
 
 	return{
 		log: log,
+
+		/**
+		 * creates a logger HTML element and appends it to the parentSelector Element
+		 * @param parentSelector - css selector of the parent element of the logger
+		 */
 		createLoggerElement: function (parentSelector) {
 			var div = $('<div class="container">' +
 				'<div class="row" style="background: black">' +
@@ -44,9 +60,12 @@ var ajaxCallLogger = function(){
 
 		},
 
+		/**
+		 * Starts a listener to events that come from the iframe. when event is caught - log the data.
+		 * Should call this method from the parent HTML, when using ajaxListener in Iframe
+		 */
 		startIframeListener: function () {
 			var iframeLoggerListener = function(event) {
-
 				if (event.origin === window.location.origin) {
 					log(event.data);
 				}
@@ -57,6 +76,15 @@ var ajaxCallLogger = function(){
 			} else {
 				attachEvent("onmessage", iframeLoggerListener)
 			}
+		},
+
+		/**
+		 * starts listener to events from ajaxCallsListener. when event is caught - log the data.
+		 */
+		startRegularListener: function(){
+			ajaxCallListener(function(data){
+				ajaxCallLogger().log(data);
+			});
 		}
 	};
 };

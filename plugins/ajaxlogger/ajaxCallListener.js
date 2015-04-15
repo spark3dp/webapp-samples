@@ -2,6 +2,10 @@
  * Created by michael on 3/18/15.
  */
 
+/**
+ * This class catches all XMLHttpRequest calls, and calls callbackPushData with the data
+ * @param callbackPushData - callback function this class calls when request is caught
+ */
 var ajaxCallListener = function(callbackPushData) {
 
 	var requestResponseMap = [];
@@ -27,12 +31,6 @@ var ajaxCallListener = function(callbackPushData) {
 
 		return open.apply(this, arguments);
 	}
-
-	/**
-	 *
-	 * @param data
-	 * @returns {*}
-	 */
 
 	function sendReplacement(data) {
 

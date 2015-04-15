@@ -194,9 +194,7 @@
 <script type="">
 	$(document).ready(function(){
 		ajaxCallLogger().createLoggerElement(".footer");
-		ajaxCallListener(function(data){
-			ajaxCallLogger().log(data);
-		});
+		ajaxCallLogger().startRegularListener();
 	});
 
 </script>
