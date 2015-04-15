@@ -23,32 +23,35 @@
 			<h4 class="modal-title" id="manageTitle">Upload file</h4>
 		</div>
 		<div class="modal-body">
-			<form id="file-form" onsubmit="return createAsset()">
+			<form id="file-form">
 				<div class="form-group">
-					<label for="manage-file-name">Title</label>
-					<input type="text"
-					       class="form-control field"
-					       placeholder="Filename"
-					       id="manage-file-name"
-					       required>
+					<label for="fileData">Add File</label>
+					<input type="file" id="fileData" placeholder="file data" class="field" required>
 				</div>
 				<div class="form-group">
-					<label for="manage-assets-description">Description</label>
-					<textarea type="text" class="form-control field" id="manage-assets-description"
-					          placeholder="Description"
-					          required></textarea>
-				</div>
-				<div class="form-group">
-					<label for="manage-assets-tags">Tags</label>
-					<input type="text" class="form-control field" id="manage-assets-tags"
-					       placeholder="Add a comma seperated list of tags" required>
+
+					<label>Make file public</label>
+					<br/>
+					<div class="col-md-1">
+						false<input type="radio"
+						            class="form-control field"
+						            name="file-public-status"
+						            checked
+						            value="false">
+					</div>
+					<div class="col-md-1">
+						true<input type="radio"
+						           class="form-control field"
+						           name="file-public-status"
+						           value="true">
+					</div>
 				</div>
 				<div class="modal-footer">
 					<a href="../show-my-assets">
 						<input class="btn btn-primary" value="cancel" id="manage-assets-cancel">
 					</a>
 
-					<input class="btn btn-primary" type="submit" value="Send" id="submit1">
+					<input class="btn btn-primary" type="submit" value="Send">
 
 				</div>
 			</form>
@@ -77,23 +80,47 @@ should be cloudfront!
 
 <script>
 
+	//the file data
+	var fileData;
+
 	/**
-	 * Creates a new asset
+	 * Get the file data and set listener on form submit
+	 * to upload the file
 	 */
-	function uploadSourceToAsset() {
 
-		var sourceFile = {
-			title: $('#manage-assets-title').val(),
-			description: $('#manage-assets-description').val(),
-			tags: $('#manage-assets-tags').val()
-		};
-
-		spark.drive.createAsset(asset, function (response) {
-			console.info('upload source to asset response:',response);
-			window.location.href = '../show-my-assets/';
+	function setUpUploadFileFlow(){
+		//get the file data
+		$('#fileData').on('change', function () {
+			fileData = this.files[0];
 		});
 
-		return false;
+		//catch the form submit
+		$('#file-form').on('submit', function (e) {
+			e.preventDefault();
+
+			var sourceFile = {
+				filePublicStatus: $('input[name=file-public-status]:checked').val(),
+				fileData: fileData
+			};
+
+			//upload the file to spark drive
+			spark.drive.uploadFile(sourceFile, function (response) {
+				console.info('upload file response:', response);
+				if (response.files && response.files.length > 0) {
+					var successText = 'File <b>' + response.files[0].name + ' </b>uploaded successfully';
+					successText += '<br>File id is <b>' + response.files[0].file_id + '</b>';
+
+					if (response.files[0].public_url.length) {
+						successText += '<br>File public url is <b>' + response.files[0].public_url + '</b>';
+					}
+
+					$('#file-form').html(successText);
+				}
+
+
+			});
+
+		});
 	}
 
 
@@ -106,6 +133,8 @@ should be cloudfront!
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
 			window.location.href = '../../auth/';
+		}else{
+			setUpUploadFileFlow();
 		}
 
 	});
