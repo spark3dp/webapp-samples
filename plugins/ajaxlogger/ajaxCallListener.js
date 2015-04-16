@@ -64,3 +64,11 @@ var ajaxCallListener = function(callbackPushData) {
 	window.XMLHttpRequest.prototype.send = sendReplacement;
 };
 
+var ajaxCallListenerFromIframe = function(){
+	ajaxCallListener(function(data){
+		parent.postMessage({
+			type:"ajaxLogger",
+			data:data
+		},"*");
+	});
+};

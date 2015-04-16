@@ -22,6 +22,9 @@
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
+
 </head>
 
 <body>
@@ -50,6 +53,8 @@
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="submit" value="Send" id="submit">
 						<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+						<input class="btn btn-primary" onclick="statePlugin.changeStateFromIframe('print','param=test')" value="Next State">
+
 					</div>
 				</form>
 			</div>
@@ -75,9 +80,7 @@
 
 <script>
 	$(document).ready(function(){
-		ajaxCallListener(function(data){
-			parent.postMessage(data,"*");
-		});
+		ajaxCallListenerFromIframe();
 	});
 
 	$("#register-printer-form").on('submit', function (e) {

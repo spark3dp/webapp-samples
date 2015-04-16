@@ -10,3 +10,9 @@ a{
     font-size: 12px;
     font-weight: normal;
 }
+
+
+a.disabled{
+    pointer-events:none;
+    color: darkgrey;
+}

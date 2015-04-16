@@ -53,6 +53,7 @@
 				<div class="modal-footer">
 					<input class="btn btn-primary" type="submit" value="Send" id="submit2">
 					<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+					<input class="btn btn-primary" onclick="statePlugin.changeStateFromIframe('status','param=aa')" value="Next State">
 				</div>
 			</form>
 
@@ -78,9 +79,12 @@
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
 	$(document).ready(function(){
+		ajaxCallListenerFromIframe();
 		//$(".footer").load("../../plugins/ajaxlogger/loggers.html");
 	});
 
