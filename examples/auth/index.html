@@ -83,9 +83,7 @@ should be cloudfront!
 
 			console.info('profile:', response);
 			var loggedInText = 'Hi <b>' + response.member.screen_name + '</b>';
-			$('#user-wrapper')  .show()
-					.find('#user-profile')
-					.html(loggedInText);
+			$('body').prepend(loggedInText);
 			$('#auth-iframe-wrapper').remove();
 		});
 	}
@@ -107,7 +105,8 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (spark.auth.isAccessTokenValid()) {
-			getMyProfileAndAddtoDOM();
+			//getMyProfileAndAddtoDOM();
+			window.location.href = '../drive/show-my-assets/';
 
 		} else {//user needs to login
 
@@ -120,7 +119,7 @@ should be cloudfront!
 						//You can redirect now to some page in your app or to homepage
 						// or to reload the top window or any other action
 						parent.window.location.reload();
-						//getMyProfileAndAddtoDOM();
+
 
 					} else {
 						console.error('Problem with fetching token');
