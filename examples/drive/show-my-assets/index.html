@@ -4,6 +4,9 @@
 	<title>Spark Sample Application</title>
 	<meta charset="utf-8">
 
+	<!-- fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
@@ -14,13 +17,31 @@
 		#create-button {
 			margin-top: -30px;
 		}
+
+		#empty-assets {
+			background-color: #F8F8F8;
+			text-align: center;
+		}
+		#empty-assets p{
+			padding: 20px 0;
+			color:darkgray;
+		}
+		#empty-assets a{
+			margin: 20px 0;
+		}
+		.img{
+			width: 100%;
+		}
 	</style>
 
 </head>
 
 <body>
 <div class="container">
-	<div class="panel panel-default" id="assets">
+
+	<div class="spinner"></div>
+
+	<div class="panel panel-default hidden" id="assets">
 		<div class="modal-header">
 			<h4 class="modal-title">My Storage</h4>
 			<a href="../create-asset/">
@@ -43,6 +64,17 @@
 
 			</tbody>
 		</table>
+	</div>
+
+	<div class="hidden" id="empty-assets">
+		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+			They are equivelent to a project or a folder with metadata.
+		</p>
+
+		<div class="img">
+			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
+		</div>
+		<a class="spark_btn">Create your first Asset</a>
 	</div>
 
 </div>
@@ -70,10 +102,10 @@ should be cloudfront!
 	/**
 	 * Deletes an asset
 	 */
-	function deleteAsset(assetId,assetElem){
+	function deleteAsset(assetId, assetElem) {
 		var c = confirm('Are you sure you want to delete?');
 
-		if (c){
+		if (c) {
 			spark.drive.removeAsset(assetId, function () {
 				assetElem.remove();
 			});
@@ -91,7 +123,8 @@ should be cloudfront!
 
 			//Get my assets and append to table in DOM
 			spark.drive.getMyAssets(100, 0, function (response) {
-				console.info('my assets:',response);
+				$('.spinner').hide();
+				console.info('my assets:', response);
 				$('#assetsTbody').empty();
 
 
@@ -103,17 +136,14 @@ should be cloudfront!
 						tr.append($('<td>' + item.date_submitted + '</td>'));
 						tr.append($('<td>' + item.date_modified + '</td>'));
 						tr.append($('<td>' + item.status + '</td>'));
-						tr.append($('<td><a href="../update-asset/?assetId=' + item.asset_id +'">' +
+						tr.append($('<td><a href="../update-asset/?assetId=' + item.asset_id + '">' +
 						'<i class="glyphicon glyphicon-pencil edit"></i></a>' +
 						'<a onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'tr\'))"><i class="glyphicon glyphicon-remove delete"></i></a></td>'));
 						$('#assetsTbody').append(tr);
 
 					});
 				} else {
-					var tr = $("<tr class='asset-in-table'></tr>")
-					var nameTd = $('<td colspan="4">You don\'t have any assets yet. <a href="../create-asset/">Create now</a></td>');
-					tr.append(nameTd);
-					$("#assetsTbody").append(tr);
+					$('#empty-assets').removeClass('hidden');
 				}
 			});
 
