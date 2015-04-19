@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container">
+
+
+
+		<form id="print-status-form">
+			<h1>Manage Printers</h1>
+
+			<input class="btn btn-primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')" value="Add Printer"><br/><br/>
+
+			<table class="table table-condensed" id="printers">
+
+				<tr class="header">
+					<td>Printer ID</td>
+					<td>Printer Name</td>
+					<td>Registration Date</td>
+					<td>firmware</td>
+				</tr>
+
+			</table>
+
+			<br/> <br/>
+
+		</form>
+		<div class="modal-footer">
+			<input class="btn btn-primary" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')" value="Contintue">
+		</div>
+
+
+
+
+
+	</div></div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="">
+	$(document).ready(function(){
+		ajaxCallListenerFromIframe();
+		getAllPrinters();
+	});
+
+	var getAllPrinters = function(){
+		sparkPrint.getAllPrinters(function(response){
+			var printers = response.printers;
+			//$("#printers-select").find('option').remove()
+
+			for(var i in printers){
+				var printer = $("<tr class='"+"'><td>"+printers[i].printer_id+"</td><td>"+printers[i].printer_name+"</td><td>"+printers[i].printer_registered_date+"</td><td>"+printers[i].firmware+"</td></tr>")
+				printer.appendTo("#printers");
+			}
+		});
+	};
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

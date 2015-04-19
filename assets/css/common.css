@@ -37,6 +37,11 @@ a:hover {
     text-decoration: initial;
 }
 
+a.disabled{
+    pointer-events:none;
+    color: darkgrey;
+}
+
 label {
     font-weight: normal;
 }

@@ -76,9 +76,7 @@
 
 <script type="">
 	$(document).ready(function(){
-			ajaxCallListener(function(data){
-				parent.postMessage(data,"*");
-			});
+		ajaxCallListenerFromIframe();
 	});
 
 	var getAllPrinters = function(){

@@ -67,7 +67,8 @@ var ajaxCallLogger = function(){
 		startIframeListener: function () {
 			var iframeLoggerListener = function(event) {
 				if (event.origin === window.location.origin) {
-					log(event.data);
+					if(event.data!=undefined && event.data.type=="ajaxLogger")
+					log(event.data.data);
 				}
 			};
 
@@ -83,10 +84,10 @@ var ajaxCallLogger = function(){
 		 */
 		startRegularListener: function(){
 			ajaxCallListener(function(data){
-				ajaxCallLogger().log(data);
+				ajaxCallLogger.log(data);
 			});
 		}
 	};
-};
+}();
 
 

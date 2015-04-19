@@ -22,6 +22,9 @@
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
 </head>
 
 <body>
@@ -48,8 +51,8 @@
 
 
 					<div class="modal-footer">
-						<input class="btn btn-primary" type="submit" value="Send" id="submit">
-						<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+						<a href="#" class="btn" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+						<input class="btn btn-primary" type="submit" value="Add Printer" id="submit">
 					</div>
 				</form>
 			</div>
@@ -59,10 +62,6 @@
 				<h2>Settings Content Goes Here</h2>
 			</div>
 		</div>
-
-
-
-
 
 
 		<div class="footer">
@@ -75,9 +74,7 @@
 
 <script>
 	$(document).ready(function(){
-		ajaxCallListener(function(data){
-			parent.postMessage(data,"*");
-		});
+		ajaxCallListenerFromIframe();
 	});
 
 	$("#register-printer-form").on('submit', function (e) {
@@ -88,6 +85,7 @@
 		sparkPrint.registerPrinter(token,printerName,function(response){
 					var printerId = response.printer_id;
 					//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+					eventBroadCaster.broadcastEvent("registerIframe.add")
 				},
 				function(response){
 					//logger("#register-printer-form #inputLog",response);
