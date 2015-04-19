@@ -14,20 +14,22 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-		.modal-header{
+		.modal-header {
 			position: relative;
-			padding:8px 20px;
+			padding: 8px 20px;
 		}
-		.modal-header .layouts{
+
+		.modal-header .layouts {
 			position: absolute;
-			right:0;
+			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
 		}
-		.modal-header .layouts a{
-			border-right: 1px solid lightgrey;
-			margin-right: 6px;
-			padding: 4px 10px 0 0;
+
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
 		}
 
 		#empty-assets {
@@ -46,6 +48,8 @@
 
 		.img {
 			width: 100%;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
 		}
 
 		.dropdown i {
@@ -56,7 +60,37 @@
 
 		.si-asset-icon {
 			margin-bottom: -3px;
+			margin-right: 8px;
 		}
+		#assets-gallery{
+			padding-top: 20px;
+		}
+		.box{
+			margin-bottom: 20px;
+		}
+		.thumb{
+			position: relative;
+		}
+		.thumb .actions{
+			display: none;
+			position: absolute;
+			top:3px;
+			right:20px;
+		}
+		.thumb:hover .actions{
+			display: block;
+		}
+		.text{
+			background-color: #f8f8f8;
+			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: 5px;
+			border: 1px solid #ccc;
+			padding: 8px;
+		}
+		.text .si-asset-icon{
+			margin-right:10px;
+		}
+
 	</style>
 
 </head>
@@ -69,24 +103,13 @@
 	<div class="hidden" id="assets">
 		<div class="modal-header">
 			<div class="layouts">
-				<a href="gallery-view.html"><i class="spark_icon si-mosaic-layout"></i></a>
-				<i class="spark_icon si-list-layout-active"></i>
+				<i class="spark_icon si-mosaic-layout-active"></i>
+				<a href="index.html"><i class="spark_icon si-list-layout"></i></a>
 			</div>
 		</div>
-		<table class="table">
-			<thead>
-			<tr>
-				<th>Name<br/><span>asset_name</span></th>
-				<th>Submitted<br/><span>date_submitted</span></th>
-				<th>Modified<br/><span>date_modified</span></th>
-				<th>Status<br/><span>status</span></th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody id="assetsTbody">
+		<div id="assets-gallery">
 
-			</tbody>
-		</table>
+		</div>
 	</div>
 
 	<div class="hidden" id="empty-assets">
@@ -109,7 +132,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4>WARNING</h4>
 			</div>
 			<div class="modal-body">
@@ -122,8 +146,6 @@
 		</div>
 	</div>
 </div>
-
-
 
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -156,26 +178,56 @@ should be cloudfront!
 
 		//cancel events
 		$('.cancel').off();
-		$('.cancel').on('click', function(){
+		$('.cancel').on('click', function () {
 			$('#myModal').modal('hide');
 		})
 
 		//delete events
 		$('.delete').off();
-		$('.delete').on('click',function(){
+		$('.delete').on('click', function () {
 			spark.drive.removeAsset(assetId, function () {
 				$('#myModal').modal('hide');
 				assetElem.remove();
 
 				//make sure aseets still left
-				if (!$('.asset-in-table td').length){
+				if (!$('#assets-gallery div').length) {
 					window.location.reload();
 				}
 			});
 		});
 
+	}
 
+	/**
+	 * Loop through the gallery
+	 * @param index
+	 * @param item
+	 */
+	function loopGallery(index, item) {
+		var imgUrlRow, imgUrlThumb;
+		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
+		if (imgUrlRow.indexOf('FullPreview/') < 0) {
+			imgUrlThumb += 'Medium.jpg';
+		}
 
+		var box = $('<div class="col-md-3 box box-' + index + '"></div>');
+		var view = $('<div class="view thumb"></div>');
+		var text = $('<div class="text"><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</div>');
+
+		$('#assets-gallery').append(box);
+		box.append(view);
+
+		var actionsElem = '<div class="dropdown actions">' +
+				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
+				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+				'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
+				'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
+				'</ul></div>';
+
+		view.append(actionsElem);
+
+		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
+		box.append(text);
 	}
 
 	/**
@@ -198,23 +250,8 @@ should be cloudfront!
 					$('#assets').removeClass('hidden');
 
 					$.each(response.assets, function (index, item) {
-						var tr = $('<tr class="asset-in-table"></tr>')
-						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
-						tr.append(nameTd);
-						tr.append($('<td>' + item.date_submitted + '</td>'));
-						tr.append($('<td>' + item.date_modified + '</td>'));
-						tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
 
-						var actionsElem = '<div class="dropdown actions">' +
-								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-								'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-								'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
-								'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'tr\'))">DELETE</a></li>' +
-								'</ul></div>';
-
-
-						tr.append($('<td>' + actionsElem + '</td>'));
-						$('#assetsTbody').append(tr);
+						loopGallery(index, item);
 
 					});
 				} else {

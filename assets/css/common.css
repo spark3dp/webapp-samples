@@ -1,6 +1,6 @@
 body {
     font-family: 'Open Sans';
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     color: #333333;
 }
@@ -12,9 +12,8 @@ h1, h2, h3 {
 
 a {
     cursor: pointer;
-    /*color: #eb5528;*/
-    color: #008C8C;
-    font-weight: 600;
+    color: #eb5528;
+    font-weight: 400;
     text-decoration: none;
     outline: 0;
 }
@@ -42,7 +41,6 @@ label {
     font-weight: normal;
 }
 
-
 small {
     font-size: 14px;
     font-weight: 300;
@@ -61,8 +59,8 @@ textarea {
     resize: vertical;
 }
 
-.container{
-    width:760px;
+.container {
+    width: 760px;
 }
 
 .form_control {
@@ -70,13 +68,40 @@ textarea {
 }
 
 .table th, .table td {
-    text-align: center;
     vertical-align: top !important;
+}
+
+.table th{
+    text-transform: uppercase;
 }
 
 .table th span {
     font-size: 12px;
     font-weight: normal;
+    text-transform: none;
+    color: lightgrey;
+}
+
+.table td{
+    padding: 16px!important;
+}
+
+.table tr.asset-in-table:hover {
+    background-color: #F7F7F7;
+    cursor: pointer;
+}
+
+.table tr.asset-in-table .actions{
+    display:none;
+    position: absolute;
+}
+
+.table tr.asset-in-table:hover .actions{
+    display:block;
+}
+
+.table td i{
+    margin-right:10px;
 }
 
 .required:after {
@@ -108,7 +133,7 @@ input[type="checkbox"] + label {
 }
 
 input[type="checkbox"] + label span.chk {
-    background: url("../img/sprite.png") no-repeat scroll -281px -58px rgba(0, 0, 0, 0);
+    background: url("../img/sprite.png") no-repeat scroll -249px -77px rgba(0, 0, 0, 0);
     cursor: pointer;
     display: inline-block;
     height: 24px;
@@ -118,7 +143,7 @@ input[type="checkbox"] + label span.chk {
 }
 
 input[type="checkbox"]:checked + label span.chk {
-    background-position: -281px -92px;
+    background-position: -248px -46px;
 }
 
 .spark_btn {
@@ -132,21 +157,21 @@ input[type="checkbox"]:checked + label span.chk {
     text-decoration: none;
     cursor: pointer;
     /* medium size is default */
-    height: 44px;
-    line-height: 44px;
-    padding: 0px 30px;
+    height: 35px;
+    line-height: 35px;
+    padding: 0px 50px;
     font-size: 14px;
     position: relative;
 }
 
-.spark_btn:hover{
+.spark_btn:hover {
     color: #EA5426;
 }
 
 .spark_btn.primary {
     background: #eb5528;
     color: white;
-    font-weight: 600;
+    font-weight: 400;
     border-radius: 3px;
     text-transform: uppercase;
 }
@@ -179,15 +204,108 @@ input[type="checkbox"]:checked + label span.chk {
     font-size: 16px;
 }
 
+.form_field{
+    margin-bottom: 20px;
+}
+.form_field .field_error {
+    position: relative;
+    z-index: 10;
+    float: right;
+    clear: right;
+    display: inline-block;
+    padding: 1px 7px;
+    margin: -10px 8px 0 0;
+    color: #101010;
+    background: #ffde82;
+    border-radius: 3px;
+    font-size: 13px;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.field-label {
+    color: lightgray;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.form-footer{
+    border-top: 1px solid #e5e5e5;
+    padding: 15px 0;
+}
+
+.form-footer div{
+    display: inline;
+}
+.form-footer div.submit-wrapper{
+    float: right;
+}
+.form-footer div.submit-wrapper a{
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.dropdown-menu{
+    min-width: 100px;
+    top:22px;
+    left:-82px;
+}
+
+.dropdown-menu li{
+    font-size: 12px;
+}
+
+.modal .modal-header,.modal .modal-footer{
+    border: none;
+}
+.modal .modal-footer{
+    text-align: left;
+}
+
+/***** TOOLTIP *****/
+i.stooltip {
+    outline: none;
+    position: relative;
+    font-style: normal;
+}
+
+i.stooltip:hover {
+    text-decoration: none;
+}
+
+i.stooltip span {
+    background: none repeat scroll 0 0 #F1F1F1;
+    bottom: 25px;
+    display: none;
+    left: -30px;
+    position: absolute;
+    width: 200px;
+    z-index: 10;
+    text-align: left;
+    color: #333333;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 12px;
+}
+
+i.stooltip:hover span {
+    display: block;
+}
+
+i.stooltip span {
+    border-radius: 4px;
+}
+
 /******* SPINNER **********/
 .spinner {
     height: 20px;
     width: 20px;
     margin: auto;
-    top:0;
+    top: 0;
     bottom: 0;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
     position: absolute;
     -webkit-animation: rotation .6s infinite linear;
     -moz-animation: rotation .6s infinite linear;
@@ -248,19 +366,55 @@ input[type="checkbox"]:checked + label span.chk {
 }
 
 .si-help {
-    background-position: -286px -410px;
+    background-position: -286px -47px;
     width: 17px;
     height: 16px;
 }
 
 .si-help-hover {
-    background-position: -286px -436px;
+    background-position: -286px -73px;
     width: 17px;
     height: 16px;
 }
 
 .si-help.with_hover:hover, .si-help.with_hover:active, .si-help.with_hover.clicked {
-    background-position: -286px -436px;
+    background-position: -286px -73px;
+}
+
+.si-asset-icon{
+    background-position: -160px -16px;
+    width: 16px;
+    height: 17px;
+}
+
+.si-actions-icon{
+    background-position: -10px -49px;
+    height: 20px;
+    width: 20px;
+}
+
+.si-mosaic-layout{
+    background-position: -270px -19px;
+    width: 13px;
+    height: 13px;
+}
+
+.si-mosaic-layout-active{
+    background-position: -290px -19px;
+    width: 13px;
+    height: 13px;
+}
+
+.si-list-layout{
+    background-position: -245px -19px;
+    width: 13px;
+    height: 13px;
+}
+
+.si-list-layout-active{
+    background-position: -223px -19px;
+    width: 13px;
+    height: 13px;
 }
 
 /***** END SPRITE *****/
