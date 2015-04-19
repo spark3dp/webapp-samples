@@ -22,71 +22,67 @@
 <body>
 <div class="container">
 	<div id="manageAsset">
-		<div class="">
-			<div class="modal-header">
-				<h4 class="modal-title" id="manageTitle">CREATE NEW ASSET</h4>
-			</div>
-			<div class="modal-body">
-				<form id="asset-form" novalidate="">
-					<section class="form_field">
-						<label for="manage-assets-title">
-							Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>The name of the asset</span></i>
-						</label>
-						<input type="text" required id="manage-assets-title" class="form-control">
-
-						<div class="field_error hidden">
-							<span>Required</span>
-						</div>
-					</section>
-					<section class="form_field">
-						<label for="manage-assets-description">
-							Add description <span class="field-label">&nbsp;/&nbsp;description</span>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>The description of the asset</span></i>
-						</label>
-						<textarea class="form-control field"
-						          id="manage-assets-description"
-						          required
-								></textarea>
-
-						<div class="field_error hidden">
-							<span>Required</span>
-						</div>
-
-					</section>
-
-					<section class="form_field">
-						<label for="manage-assets-tags">
-							Add tags <span class="field-label">&nbsp;/&nbsp;tags</span>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>Tags that describe the asset</span></i>
-						</label>
-						<input type="text" required id="manage-assets-tags" class="form-control">
-
-						<div class="field_error hidden">
-							<span>Required</span>
-						</div>
-					</section>
-
-					<div class="form-footer">
-						<div class="publish-wrapper">
-							<input type="checkbox" id="c1">
-							<label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
-						</div>
-						<div class="submit-wrapper">
-							<a href="../show-my-assets">Cancel</a>
-							<input class="spark_btn primary" type="submit" value="CREATE">
-						</div>
-
-
-					</div>
-				</form>
-			</div>
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">CREATE NEW ASSET</h4>
 		</div>
+		<div class="modal-body">
+			<form id="asset-form" novalidate="">
+				<section class="form_field">
+					<label for="manage-assets-title">
+						Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The name of the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-title" class="form-control">
 
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+				<section class="form_field">
+					<label for="manage-assets-description">
+						Add description <span class="field-label">&nbsp;/&nbsp;description</span>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The description of the asset</span></i>
+					</label>
+					<textarea class="form-control field"
+					          id="manage-assets-description"
+					          required
+							></textarea>
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+
+				</section>
+
+				<section class="form_field">
+					<label for="manage-assets-tags">
+						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Tags that describe the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-tags" class="form-control">
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+
+				<div class="form-footer">
+					<div class="publish-wrapper">
+						<input type="checkbox" id="c1">
+						<label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
+					</div>
+					<div class="submit-wrapper">
+						<a href="../show-my-assets">Cancel</a>
+						<input class="spark_btn primary" type="submit" value="CREATE">
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
+
 </div>
 <!-- /container -->
 
@@ -129,10 +125,9 @@ should be cloudfront!
 				tags: assetTags.val()
 			};
 
-			if ($('#c1:checked').length){
+			if ($('#c1:checked').length) {
 				asset.publish = true;
 			}
-
 
 
 			spark.drive.createAsset(asset, function (response) {

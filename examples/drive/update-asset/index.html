@@ -23,45 +23,73 @@
 <div class="container">
 	<div id="manageAsset">
 		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">Update an asset</h4>
+			<h4 class="modal-title" id="manageTitle">UPDATE AN ASSET</h4>
 		</div>
 		<div class="modal-body">
-			<form id="asset-form" onsubmit="return updateAsset()">
-				<div class="form-group">
-					<label for="manage-assets-title">Title</label>
-					<input type="text"
-					       class="form-control field"
-					       placeholder="Title"
-					       id="manage-assets-title"
-					       required>
-				</div>
-				<div class="form-group">
-					<label for="manage-assets-description">Description</label>
-					<textarea type="text" class="form-control field" id="manage-assets-description"
-					          placeholder="Description"
-					          required></textarea>
-				</div>
-				<div class="form-group">
-					<label for="manage-assets-tags">Tags</label>
-					<input type="text" class="form-control field" id="manage-assets-tags"
-					       placeholder="Add a comma seperated list of tags" required>
-				</div>
-				<div class="modal-footer">
-					<a href="../show-my-assets">
-						<input class="btn btn-primary" value="cancel" id="manage-assets-cancel">
-					</a>
+			<form id="asset-form" novalidate="">
+				<section class="form_field">
+					<label for="manage-assets-title">
+						Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The name of the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-title" class="form-control">
 
-					<input class="btn btn-primary" type="submit" value="Send" id="submit1">
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+				<section class="form_field">
+					<label for="manage-assets-description">
+						Add description <span class="field-label">&nbsp;/&nbsp;description</span>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The description of the asset</span></i>
+					</label>
+					<textarea class="form-control field"
+					          id="manage-assets-description"
+					          required
+							></textarea>
 
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+
+				</section>
+
+				<section class="form_field">
+					<label for="manage-assets-tags">
+						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Tags that describe the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-tags" class="form-control">
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+
+				<div class="form-footer">
+					<div class="publish-wrapper">
+						<input type="checkbox" id="c1">
+						<label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
+					</div>
+					<div class="submit-wrapper">
+						<a href="../show-my-assets">Cancel</a>
+						<input class="spark_btn primary" type="submit" value="UPDATE">
+					</div>
 				</div>
 			</form>
 		</div>
-
 	</div>
+
 </div>
 <!-- /container -->
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
 
 <!-- your config file -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
@@ -80,27 +108,37 @@ should be cloudfront!
 
 <script>
 
+
 	var currentAssetId = 0;
 
 	/**
-	 * Creates a new asset
+	 * Updates a new asset
 	 */
 	function updateAsset() {
 
-		var asset = {
-			title: $('#manage-assets-title').val(),
-			description: $('#manage-assets-description').val(),
-			tags: $('#manage-assets-tags').val()
-		};
+		var assetTitle = $('#manage-assets-title'),
+				assetDescription = $('#manage-assets-description'),
+				assetTags = $('#manage-assets-tags');
 
-		asset.assetId = currentAssetId;
-		spark.drive.updateAsset(asset, function (response) {
-			console.info('update asset response:', response);
-			alert('Asset has updated successfully')
-		});
 
-		return false;
+		if (common.validateInput(assetTitle) && common.validateInput(assetDescription) && common.validateInput(assetTags)) {
+			var asset = {
+				title: assetTitle.val(),
+				description: assetDescription.val(),
+				tags: assetTags.val()
+			};
+
+			if ($('#c1:checked').length) {
+				asset.publish = true;
+			}
+
+			asset.assetId = currentAssetId;
+			spark.drive.updateAsset(asset, function (response) {
+				console.info('update asset response:', response);
+			});
+		}
 	}
+
 
 	/**
 	 * Calls get asset and sets the retreived data inside the form
@@ -119,7 +157,6 @@ should be cloudfront!
 			}
 		});
 	}
-
 
 	/**
 	 * Run when DOM is ready.
@@ -141,6 +178,15 @@ should be cloudfront!
 			} else {
 				getAssetAndSetDataIntoForm();
 			}
+
+
+			//Set listener to form submit
+			$('#asset-form').on('submit', function (e) {
+				e.preventDefault();
+				updateAsset();
+			});
+
+			common.setUIFunctionality();
 		}
 
 	});
