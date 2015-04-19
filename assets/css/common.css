@@ -416,5 +416,10 @@ i.stooltip span {
     width: 13px;
     height: 13px;
 }
+.si-asset-file-icon{
+    background-position: -114px -53px;
+    height: 16px;
+    width: 19px;
+}
 
 /***** END SPRITE *****/

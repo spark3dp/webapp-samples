@@ -47,8 +47,7 @@
 					</label>
 					<textarea class="form-control field"
 					          id="manage-assets-description"
-					          required
-							></textarea>
+					          required></textarea>
 
 					<div class="field_error hidden">
 						<span>Required</span>
@@ -132,7 +131,7 @@ should be cloudfront!
 
 			spark.drive.createAsset(asset, function (response) {
 				console.info('create asset:', response);
-				window.location.href = '../show-my-assets/';
+				window.location.href = '../show-my-assets/files.html';
 			});
 
 		}

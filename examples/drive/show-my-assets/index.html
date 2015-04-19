@@ -215,6 +215,9 @@ should be cloudfront!
 
 						tr.append($('<td>' + actionsElem + '</td>'));
 						$('#assetsTbody').append(tr);
+						tr.on('click',function(){
+							location.href = 'files.html?assetId=' + item.asset_id;
+						});
 
 					});
 				} else {

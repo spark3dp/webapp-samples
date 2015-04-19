@@ -205,7 +205,7 @@ should be cloudfront!
 	 */
 	function loopGallery(index, item) {
 		var imgUrlRow, imgUrlThumb;
-		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
+		imgUrlRow = imgUrlThumb = item.asset_image;
 		if (imgUrlRow.indexOf('FullPreview/') < 0) {
 			imgUrlThumb += 'Medium.jpg';
 		}
