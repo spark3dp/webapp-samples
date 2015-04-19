@@ -4,40 +4,6 @@
 var statePlugin = function($){
 	'use strict';
 
-	/**
-	 * change state of the whole page from an iframe
-	 * @param state
-	 * @param optionalParams - GET params for the next state (will)
-	 */
-	var changeStateFromIframe = function(state,optionalParams){
-		var data = {
-			type:"changeState",
-			data:{
-				state:state,
-				optionalParams:optionalParams
-			}
-		};
-		parent.postMessage(data,"*");
-
-	};
-
-	var startIframeStateListener = function() {
-
-		var iframeStateListener = function(){
-			if (event.origin === window.location.origin) {
-				if(event.data!=undefined && event.data.type=="changeState")
-					changeState(event.data.data.state,event.data.data.optionalParams);
-			}
-		};
-
-		if (window.addEventListener) {
-			addEventListener("message", iframeStateListener, false)
-		} else {
-			attachEvent("onmessage", iframeStateListener)
-		}
-	};
-
-
 	var setTabEnable = function(tabSelector, isEnable){
 		if(!isEnable){
 			$(tabSelector).addClass("disabled");
@@ -68,9 +34,7 @@ var statePlugin = function($){
 	};
 
 	return {
-		changeState:changeState,
-		startIframeStateListener:startIframeStateListener,
-		changeStateFromIframe:changeStateFromIframe
+		changeState:changeState
 	}
 
 }(jQuery);

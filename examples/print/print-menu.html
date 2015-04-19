@@ -35,7 +35,7 @@
 			<ul class="nav nav-pills pull-right" role="tablist">
 
 				<li role="presentation">
-					<a href="plugins/simulator/print_simulator.html" target="_blank" id="printer-simulator" class="btn btn-primary btn-large">
+					<a href="../../plugins/simulator/print_simulator.html" target="_blank" id="printer-simulator" class="btn btn-primary btn-large">
 						Printer Simulator
 					</a>
 				</li>
@@ -68,10 +68,15 @@
 			-->
 
 			<li>
+				<a id="manageId" onclick="statePlugin.changeState('manage')" role="tab" >
+					Manage Printers
+				</a>
+			</li>
+			<!--<li>
 				<a id="registerId" onclick="statePlugin.changeState('register')" role="tab" >
 					Register Printer
 				</a>
-			</li>
+			</li>-->
 			<li><a id="printId" onclick="statePlugin.changeState('print')" role="tab" >
 				Print Job
 			</a>
@@ -122,6 +127,7 @@
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallLogger.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/broadcastEventListener.js"></script>
 
 
 
@@ -129,7 +135,9 @@
 	$(document).ready(function(){
 		ajaxCallLogger.createLoggerElement(".footer");
 		ajaxCallLogger.startIframeListener();
-		statePlugin.startIframeStateListener();
+		//statePlugin.startIframeStateListener();
+		broadcastEventListener.startIframeBroadcastListener();
+		statePlugin.changeState('manage');
 	});
 
 	if (spark.auth.isAccessTokenValid()) {
@@ -148,25 +156,56 @@
 			disabledTabs:["#printId","#registerId","#statusId"]
 		},
 
+		manage:{
+			"src":"manage-printers.html",
+			enabledTabs:["#manageId","#registerId"],
+			disabledTabs:["#printId","#statusId"]
+		},
+
 		register:{
 			"src":"register-printer.html",
-			enabledTabs:["#registerId"],
+			enabledTabs:["#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"]
 		},
 
 		print:{
 			"src":"create-print-job.html",
-			enabledTabs:["#registerId","#printId"],
+			enabledTabs:["#manageId","#registerId","#printId"],
 			disabledTabs:["#statusId"]
 		},
 
 		status:{
 			"src":"printer-status.html",
-			enabledTabs:["#printId","#registerId","#statusId"],
+			enabledTabs:["#manageId","#printId","#registerId","#statusId"],
 			disabledTabs:[]
 		}
 
 	};
+
+
+	var broadcastMapper = [];
+	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
+		statePlugin.changeState("print",optionalParams)
+	};
+	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
+		statePlugin.changeState("register",optionalParams)
+	};
+	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams)
+	};
+	broadcastMapper["registerIframe.add"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams)
+	};
+	broadcastMapper["printIframe.next"] = function(optionalParams){
+		statePlugin.changeState("status",optionalParams)
+	};
+
+	/**
+	var broadcastMapper = {
+		"manageContinueClick":function(optionalParams){
+			statePlugin.changeState("register",optionalParams)
+		}
+	};*/
 
 
 

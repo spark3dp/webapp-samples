@@ -23,7 +23,7 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
 
 </head>
 
@@ -51,10 +51,8 @@
 
 
 					<div class="modal-footer">
-						<input class="btn btn-primary" type="submit" value="Send" id="submit">
-						<a href="#" class="btn" data-dismiss="modal">Cancel</a>
-						<input class="btn btn-primary" onclick="statePlugin.changeStateFromIframe('print','param=test')" value="Next State">
-
+						<a href="#" class="btn" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+						<input class="btn btn-primary" type="submit" value="Add Printer" id="submit">
 					</div>
 				</form>
 			</div>
@@ -64,10 +62,6 @@
 				<h2>Settings Content Goes Here</h2>
 			</div>
 		</div>
-
-
-
-
 
 
 		<div class="footer">
@@ -91,6 +85,7 @@
 		sparkPrint.registerPrinter(token,printerName,function(response){
 					var printerId = response.printer_id;
 					//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+					eventBroadCaster.broadcastEvent("registerIframe.add")
 				},
 				function(response){
 					//logger("#register-printer-form #inputLog",response);
