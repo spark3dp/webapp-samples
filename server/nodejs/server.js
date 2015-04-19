@@ -90,11 +90,20 @@ app.post('/printCallbackPost', function(req, res){
 	console.log(JSON.stringify(req.query));
 });
 
+app.get('/printCallbackPost/support', function(req, res){
+	console.log(JSON.stringify(req.query));
+	res.send({"callback":"supported"});
+});
+
 
 app.get('/printCallbackGet', function(req, res){
 	console.log(JSON.stringify(req.query));
 });
 
+app.get('/printCallbackGet/support', function(req, res){
+	console.log(JSON.stringify(req.query));
+	res.send({"callback":"supported"});
+});
 
 
 //@todo: Add a refresh token endpoint
