@@ -87,14 +87,12 @@ app.get('/guest_token', function(req, res){
 
 
 app.post('/printCallbackPost', function(req, res){
-	console.log(JSON.stringify(req));
-	console.log(JSON.stringify(res));
+	console.log(JSON.stringify(req.query));
 });
 
 
 app.get('/printCallbackGet', function(req, res){
-	console.log(JSON.stringify(req));
-	console.log(JSON.stringify(res));
+	console.log(JSON.stringify(req.query));
 });
 
 
