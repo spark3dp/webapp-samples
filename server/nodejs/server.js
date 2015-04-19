@@ -86,6 +86,19 @@ app.get('/guest_token', function(req, res){
 });
 
 
+app.post('/printCallbackPost', function(req, res){
+	console.log(JSON.stringify(req));
+	console.log(JSON.stringify(res));
+});
+
+
+app.get('/printCallbackGet', function(req, res){
+	console.log(JSON.stringify(req));
+	console.log(JSON.stringify(res));
+});
+
+
+
 //@todo: Add a refresh token endpoint
 
 app.listen(3000);
