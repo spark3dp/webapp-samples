@@ -72,7 +72,7 @@ var sparkPrint = function () {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
-				var params =JSON.stringify( {printable_id:printableId,settings:settings});
+				var params =JSON.stringify( {printable_url:printableId,settings:settings});
 				//var params = {printable_id:fileUrl,settings:settings};
 				console.log(params);
 				var headers = {
