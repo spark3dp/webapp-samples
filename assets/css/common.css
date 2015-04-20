@@ -91,17 +91,17 @@ textarea {
     padding: 16px!important;
 }
 
-.table tr.asset-in-table:hover {
+.table tr.in-table:hover {
     background-color: #F7F7F7;
     cursor: pointer;
 }
 
-.table tr.asset-in-table .actions{
+.table tr.in-table .actions{
     display:none;
     position: absolute;
 }
 
-.table tr.asset-in-table:hover .actions{
+.table tr.in-table:hover .actions{
     display:block;
 }
 
@@ -421,10 +421,16 @@ i.stooltip span {
     width: 13px;
     height: 13px;
 }
-.si-asset-file-icon{
+.si-asset-folder-icon{
     background-position: -114px -53px;
     height: 16px;
     width: 19px;
+}
+
+.si-asset-file-icon{
+    background-position: -157px -52px;
+    height: 19px;
+    width: 17px;
 }
 
 /***** END SPRITE *****/
