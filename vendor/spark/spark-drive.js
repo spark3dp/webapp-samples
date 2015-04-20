@@ -434,7 +434,7 @@ spark.drive = function () {
 					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/sources?file_ids=' + fileIds;
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/thumbnails?thumbnail_ids=' + fileIds;
 				spark.util.xhr(url, 'DELETE', '', headers, callback);
 			} else {
 				callback(false);
