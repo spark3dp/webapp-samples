@@ -15,6 +15,7 @@
 
 	<!-- Custom styles -->
 	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
@@ -38,17 +39,19 @@
 
 			<input class="btn btn-primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')" value="Add Printer"><br/><br/>
 
-			<table class="table table-condensed" id="printers">
 
-				<tr class="header">
-					<td>Printer ID</td>
-					<td>Printer Name</td>
-					<td>Registration Date</td>
-					<td>firmware</td>
+			<table class="table" id="printers">
+				<thead>
+				<tr>
+					<th>Printer ID<br><span>Printer ID</span></th>
+					<th>Printer Name<br><span>Printer Name</span></th>
+					<th>Registration Date<br><span>Registration Date</span></th>
+					<th>firmware<br><span>firmware</span></th>
+					<th></th>
 				</tr>
-
+				</thead>
+				<tbody id="printersTbody">
 			</table>
-
 			<br/> <br/>
 
 		</form>
@@ -82,8 +85,8 @@
 			//$("#printers-select").find('option').remove()
 
 			for(var i in printers){
-				var printer = $("<tr class='"+"'><td>"+printers[i].printer_id+"</td><td>"+printers[i].printer_name+"</td><td>"+printers[i].printer_registered_date+"</td><td>"+printers[i].firmware+"</td></tr>")
-				printer.appendTo("#printers");
+				var printer = $("<tr class='in-table "+"'><td>"+printers[i].printer_id+"</td><td>"+printers[i].printer_name+"</td><td>"+printers[i].printer_registered_date+"</td><td>"+printers[i].firmware+"</td></tr>")
+				printer.appendTo("#printersTbody");
 			}
 		});
 	};
