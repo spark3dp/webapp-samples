@@ -149,7 +149,7 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}else {
 			//Assume we provided assetId in URL
 			var urlParams = spark.util.extractParamsFromURL();

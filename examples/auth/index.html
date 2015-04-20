@@ -116,7 +116,7 @@ should be cloudfront!
 	 */
 	function logout() {
 		spark.auth.logout();
-		window.location.reload();
+		location.reload();
 	}
 
 
@@ -129,7 +129,7 @@ should be cloudfront!
 		//First let's see if we have a valid access token
 		if (spark.auth.isAccessTokenValid()) {
 			//getMyProfileAndAddtoDOM();
-			window.location.href = '../drive/show-my-assets/';
+			location.href = '../drive/show-my-assets/';
 
 		} else {//user needs to login
 

@@ -131,7 +131,7 @@ should be cloudfront!
 
 			spark.drive.createAsset(asset, function (response) {
 				console.info('create asset:', response);
-				window.location.href = '../show-my-assets/files.html';
+				location.href = '../show-my-assets/files.html';
 			});
 
 		}
@@ -146,7 +146,7 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}
 
 		//Set listener to form submit

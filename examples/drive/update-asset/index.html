@@ -166,7 +166,7 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		} else {
 
 			//Assume we provided assetId in URL
@@ -174,7 +174,7 @@ should be cloudfront!
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
 			if (!currentAssetId) {
-				$('#manageAsset').html('This example requires a valid asset ID that is passed as a parameter "assetId" through the URL');
+				location.href = '../show-my-assets/';
 			} else {
 				getAssetAndSetDataIntoForm();
 			}
