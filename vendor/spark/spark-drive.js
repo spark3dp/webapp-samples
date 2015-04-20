@@ -22,9 +22,9 @@ spark.drive = function () {
 		for (var i = 0; i < files_array.length; i++) {
 			var thumbnail = {
 				id: files_array[i].id,
-				caption: files_array[i].caption?files_array[i].caption:'',
-				description: files_array[i].description?files_array[i].description:'',
-				is_primary: files_array[i].isPrimary?files_array[i].isPrimary:false
+				caption: files_array[i].caption ? files_array[i].caption : '',
+				description: files_array[i].description ? files_array[i].description : '',
+				is_primary: files_array[i].isPrimary ? files_array[i].isPrimary : false
 			}
 
 			thumbnails.push(thumbnail);
@@ -88,7 +88,7 @@ spark.drive = function () {
 					conditions.limit = conditions.limit ? conditions.limit : 12;
 					conditions.offset = conditions.offset ? conditions.offset : 0;
 
-					//spark.construct the full request
+					//construct the full request
 					var params = Object.keys(conditions).map(function (k) {
 						return encodeURIComponent(k) + "=" + encodeURIComponent(conditions[k]);
 					}).join('&');
@@ -154,8 +154,12 @@ spark.drive = function () {
 		createAsset: function (assetPost, callback) {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
-				var params = "title=" + assetPost.title + "&description=" + assetPost.description +
-					"&media_type=file&tags=" + assetPost.tags;
+
+				//construct the full params
+				var params = Object.keys(assetPost).map(function (k) {
+					return encodeURIComponent(k) + "=" + encodeURIComponent(assetPost[k]);
+				}).join('&');
+
 				var headers = {
 					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
@@ -176,8 +180,13 @@ spark.drive = function () {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
-				var params = "title=" + assetPost.title + "&description=" + assetPost.description + "&tags=" + assetPost.tags
-				"&publish=true";
+				//construct the full params
+				var params = Object.keys(assetPost).map(function (k) {
+					if (k !== 'assetId') {
+						return encodeURIComponent(k) + "=" + encodeURIComponent(assetPost[k]);
+					}
+				}).join('&');
+
 				var headers = {
 					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
@@ -249,8 +258,8 @@ spark.drive = function () {
 				callback(false);
 			}
 		},
-		createAssetSource:createAssetSource,
-		createAssetThumbnail:createAssetThumbnail,
+		createAssetSource: createAssetSource,
+		createAssetThumbnail: createAssetThumbnail,
 		/**
 		 * Upload 3d model file and attach it as a source to asset
 		 * @param assetId
@@ -259,7 +268,7 @@ spark.drive = function () {
 		 * See reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/create-a-new-source-within-the-asset
 		 */
 		createSourceWithinAsset: function (assetId, fileData, callback) {
-			driveObj.uploadFile(fileData, function(filesResp){
+			driveObj.uploadFile(fileData, function (filesResp) {
 				if (filesResp.files != undefined && filesResp.files.length > 0) {
 
 					var files_ids_array = [filesResp.files[0].file_id];
@@ -279,18 +288,18 @@ spark.drive = function () {
 		 * See reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/create-a-new-thumbnail-within-the-asset
 		 */
 		createThumbnailWithinAsset: function (assetId, fileData, callback) {
-			driveObj.uploadFile(fileData, function(filesResp){
+			driveObj.uploadFile(fileData, function (filesResp) {
 				if (filesResp.files != undefined && filesResp.files.length > 0) {
 
 					var thumbnail = {
-						id:filesResp.files[0].file_id,
+						id: filesResp.files[0].file_id,
 						caption: fileData.caption,
 						description: fileData.description,
-						isPrimary:fileData.isPrimary
+						isPrimary: fileData.isPrimary
 					}
 
 					var file_array = [thumbnail];
-					createAssetThumbnail(assetId,file_array,callback);
+					createAssetThumbnail(assetId, file_array, callback);
 				}
 				else {
 					callback(response);
@@ -393,7 +402,7 @@ spark.drive = function () {
 		 * @param callback
 		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-sources/delete-an-asset-source
 		 */
-		deleteAssetSources: function (assetId, fileIds,callback) {
+		deleteAssetSources: function (assetId, fileIds, callback) {
 
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
@@ -417,7 +426,7 @@ spark.drive = function () {
 		 * @param callback
 		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/delete-asset-thumbnails
 		 */
-		deleteAssetThumbnails: function (assetId, fileIds,callback) {
+		deleteAssetThumbnails: function (assetId, fileIds, callback) {
 
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
@@ -425,7 +434,7 @@ spark.drive = function () {
 					"Authorization": "Bearer " + spark.auth.accessToken(),
 					"Content-type": "application/x-www-form-urlencoded"
 				}
-				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/sources?file_ids=' + fileIds;
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/assets/' + assetId + '/thumbnails?thumbnail_ids=' + fileIds;
 				spark.util.xhr(url, 'DELETE', '', headers, callback);
 			} else {
 				callback(false);
@@ -470,7 +479,6 @@ spark.drive = function () {
 			}
 		}
 	}
-
 
 
 	//Return the factory object

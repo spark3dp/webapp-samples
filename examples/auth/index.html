@@ -4,6 +4,9 @@
 	<title>Spark Sample Application</title>
 	<meta charset="utf-8">
 
+	<!-- fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
@@ -11,34 +14,50 @@
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<style>
+
 		iframe {
 			width: 100%;
 			border: 0;
 			height: 500px;
 		}
 
-		#user-wrapper{
-			display:none;
+		.left-wrapper{
+			position: relative;
+			height:320px;
+			margin-top: 20px;
+			border-right: 1px solid lightgray;
 		}
+
+		#welcome-wrapper{
+			position: absolute;
+			top:0;
+			bottom:0;
+			left:0;
+			right:0;
+			margin: auto;
+			text-align: center;
+			height:170px;
+			padding-right: 40px;
+		}
+		#auth-iframe-wrapper{
+			padding-left: 40px;
+		}
+
 	</style>
 
 </head>
 
 <body>
 <div class="container">
-	<div id="auth-iframe-wrapper">
-		<iframe></iframe>
-	</div>
+	<div class="col-md-6 left-wrapper">
+		<div id="welcome-wrapper">
+			<h2>Welcome to <br/>Spark Storage</h2>
 
-	<div id="user-wrapper">
-		<div id="user-profile"></div>
-		<div id="user-actions">
-			<a href="../drive/create-asset">Create asset</a>
-			&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="../drive/show-my-assets">Show my assets</a>
-			&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="#" onclick="logout()">Logout</a>
+			<p>To try the demo, you need to login with a test environment account.</p>
 		</div>
+	</div>
+	<div class="col-md-6" id="auth-iframe-wrapper">
+		<iframe></iframe>
 	</div>
 
 </div>
@@ -81,15 +100,13 @@ should be cloudfront!
 	/**
 	 * Get the current logged in user and shows his scrren name
 	 */
-	function getMyProfileAndAddtoDOM(){
+	function getMyProfileAndAddtoDOM() {
 		//get the current member
 		spark.auth.getMyProfile(function (response) {
 
 			console.info('profile:', response);
 			var loggedInText = 'Hi <b>' + response.member.screen_name + '</b>';
-			$('#user-wrapper')  .show()
-					.find('#user-profile')
-					.html(loggedInText);
+			$('body').prepend(loggedInText);
 			$('#auth-iframe-wrapper').remove();
 		});
 	}
@@ -97,9 +114,9 @@ should be cloudfront!
 	/**
 	 * Log the user out
 	 */
-	function logout(){
+	function logout() {
 		spark.auth.logout();
-		window.location.reload();
+		location.reload();
 	}
 
 
@@ -111,7 +128,8 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (spark.auth.isAccessTokenValid()) {
-			getMyProfileAndAddtoDOM();
+			//getMyProfileAndAddtoDOM();
+			location.href = '../drive/show-my-assets/';
 
 		} else {//user needs to login
 
@@ -124,7 +142,7 @@ should be cloudfront!
 						//You can redirect now to some page in your app or to homepage
 						// or to reload the top window or any other action
 						parent.window.location.reload();
-						//getMyProfileAndAddtoDOM();
+
 
 					} else {
 						console.error('Problem with fetching token');

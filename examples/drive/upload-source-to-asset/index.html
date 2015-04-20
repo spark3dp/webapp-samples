@@ -4,6 +4,9 @@
 	<title>Spark Sample Application</title>
 	<meta charset="utf-8">
 
+	<!-- fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
@@ -146,7 +149,7 @@ should be cloudfront!
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}else {
 			//Assume we provided assetId in URL
 			var urlParams = spark.util.extractParamsFromURL();
