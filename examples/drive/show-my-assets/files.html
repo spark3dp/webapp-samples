@@ -14,7 +14,7 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-		.si-asset-file-icon {
+		.si-asset-folder-icon {
 			margin-bottom: -3px;
 		}
 	</style>
@@ -27,6 +27,13 @@
 	<div class="spinner"></div>
 
 	<div class="hidden" id="assets-files">
+		<div class="modal-header">
+			<div class="layouts">
+				<a href="gallery-view.html"><i class="spark_icon si-mosaic-layout"></i></a>
+				<i class="spark_icon si-list-layout-active"></i>
+			</div>
+		</div>
+
 		<table class="table">
 			<thead>
 			<tr>
@@ -35,12 +42,12 @@
 			</tr>
 			</thead>
 			<tbody id="assetsTbody">
-			<tr class="asset-in-table thumbnails">
-				<td><i class="spark_icon si-asset-file-icon"></i>Thumbnail files</td>
+			<tr class="in-table thumbnails">
+				<td><i class="spark_icon si-asset-folder-icon"></i>Thumbnail files</td>
 				<td id="thumbnail-count">Empty</td>
 			</tr>
-			<tr class="asset-in-table sources">
-				<td><i class="spark_icon si-asset-file-icon"></i>Source files</td>
+			<tr class="in-table sources">
+				<td><i class="spark_icon si-asset-folder-icon"></i>Source files</td>
 				<td id="sources-count">Empty</td>
 			</tr>
 			</tbody>
@@ -77,10 +84,14 @@
 			console.info('asset response was:', asset);
 			$('.spinner').hide();
 			$('#assets-files').removeClass('hidden');
-			if (asset.thumbnails.length > 0){
+
+			//for empty thumbnails the file_id of the first thumbnail is 0
+			if (asset.thumbnails.length > 0 && asset.thumbnails[0].file_id){
 				$('#thumbnail-count').text(asset.thumbnails.length + ' file' + (asset.thumbnails.length>1?'s':''));
 			}
-			if (asset.file_formats.length > 0){
+
+			//for empty sources the id of the first source is 999
+			if (asset.file_formats.length > 0 && asset.file_formats[0].id !== 999){
 				$('#sources-count').text(asset.thumbnails.length + ' file' + (asset.thumbnails.length>1?'s':''));
 			}
 
@@ -88,11 +99,11 @@
 
 		//set up the links
 		$('tr.thumbnails').on('click', function(){
-			location.href = '../upload-thumbnail-to-asset/?assetId=' + currentAssetId;
+			location.href = '../show-asset-thumbnails/?assetId=' + currentAssetId;
 		});
 
 		$('tr.sources').on('click', function(){
-			location.href = '../upload-source-to-asset/?assetId=' + currentAssetId;
+			location.href = '../show-asset-sources/?assetId=' + currentAssetId;
 		});
 	}
 
@@ -105,14 +116,14 @@
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}else {
 			//Assume we provided assetId in URL
 			var urlParams = spark.util.extractParamsFromURL();
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
 			if (!currentAssetId) {
-				$('#manageAsset').html('This example requires a valid asset ID that is passed as a parameter "assetId" through the URL');
+				location.href = '../show-my-assets/';
 			} else {
 				setUpAssetFiles();
 			}

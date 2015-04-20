@@ -168,8 +168,8 @@ should be cloudfront!
 				assetElem.remove();
 
 				//make sure aseets still left
-				if (!$('.asset-in-table td').length){
-					window.location.reload();
+				if (!$('.in-table td').length){
+					location.reload();
 				}
 			});
 		});
@@ -198,7 +198,7 @@ should be cloudfront!
 					$('#assets').removeClass('hidden');
 
 					$.each(response.assets, function (index, item) {
-						var tr = $('<tr class="asset-in-table"></tr>')
+						var tr = $('<tr class="in-table"></tr>')
 						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
 						tr.append(nameTd);
 						tr.append($('<td>' + item.date_submitted + '</td>'));
@@ -215,7 +215,9 @@ should be cloudfront!
 
 						tr.append($('<td>' + actionsElem + '</td>'));
 						$('#assetsTbody').append(tr);
-						tr.on('click',function(){
+
+						//click on tr row takes us to the files html (except the last actions td)
+						tr.find('td:not(:last)').on('click',function(){
 							location.href = 'files.html?assetId=' + item.asset_id;
 						});
 
@@ -227,7 +229,7 @@ should be cloudfront!
 
 
 		} else {//user needs to login
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}
 
 	});

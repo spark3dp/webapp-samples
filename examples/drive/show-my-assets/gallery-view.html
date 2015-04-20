@@ -67,6 +67,7 @@
 		}
 		.box{
 			margin-bottom: 20px;
+			height: 190px;
 		}
 		.thumb{
 			position: relative;
@@ -85,7 +86,15 @@
 			border-bottom-left-radius: 5px;
 			border-bottom-right-radius: 5px;
 			border: 1px solid #ccc;
+
+		}
+		.text a{
 			padding: 8px;
+			display: block;
+			color:#333333;
+		}
+		.text a:hover{
+			color:#333333;
 		}
 		.text .si-asset-icon{
 			margin-right:10px;
@@ -191,7 +200,7 @@ should be cloudfront!
 
 				//make sure aseets still left
 				if (!$('#assets-gallery div').length) {
-					window.location.reload();
+					location.reload();
 				}
 			});
 		});
@@ -205,14 +214,15 @@ should be cloudfront!
 	 */
 	function loopGallery(index, item) {
 		var imgUrlRow, imgUrlThumb;
-		imgUrlRow = imgUrlThumb = item.asset_image;
+		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
 		if (imgUrlRow.indexOf('FullPreview/') < 0) {
 			imgUrlThumb += 'Medium.jpg';
 		}
 
 		var box = $('<div class="col-md-3 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
-		var text = $('<div class="text"><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</div>');
+		var text = $('<div class="text"><a href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
+						'<i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
@@ -261,7 +271,7 @@ should be cloudfront!
 
 
 		} else {//user needs to login
-			window.location.href = '../../auth/';
+			location.href = '../../auth/';
 		}
 
 	});
