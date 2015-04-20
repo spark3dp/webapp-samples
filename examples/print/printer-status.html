@@ -75,7 +75,7 @@
 		sparkPrint.getAllPrinters(function(response){
 			var printers = response.printers;
 			$("#printers-select").find('option').remove()
-			$("<option value=''>please choose</option>").appendTo("#printers-select");
+			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
 			for(var i in printers){
 				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_id+":"+printers[i].printer_name+"</option>").appendTo("#printers-select")
@@ -113,7 +113,9 @@
 		e.preventDefault();
 
 		var printerId = $('#printers-select').val();
-		getJobsStatusByPrinter(printerId);
+		if(printerId!=0) {
+			getJobsStatusByPrinter(printerId);
+		}
 
 	});
 
