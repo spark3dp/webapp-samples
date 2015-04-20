@@ -4,7 +4,8 @@ var spark = {};
 spark.const = function () {
 	'use strict';
 
-	var apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',
+	//var apiHostSandbox = 'api-alpha.spark.autodesk.com/api/v1',
+	var apiHostSandbox = 'sandbox.spark.autodesk.com/api/v1',
 		apiHostProduction = 'api.spark.autodesk.com/api/v1';
 
 	return {
