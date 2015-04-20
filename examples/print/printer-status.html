@@ -75,22 +75,19 @@
 		sparkPrint.getAllPrinters(function(response){
 			var printers = response.printers;
 			$("#printers-select").find('option').remove()
+			$("<option value=''>please choose</option>").appendTo("#printers-select");
 
 			for(var i in printers){
 				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_id+":"+printers[i].printer_name+"</option>").appendTo("#printers-select")
 			}
+
 		});
 	};
 
 
 	getAllPrinters();
 
-
-	$("#printers-select").on('change', function (e) {
-		e.preventDefault();
-
-		var printerId = $('#printers-select').val();
-
+	var getJobsStatusByPrinter = function(printerId){
 		sparkPrint.getJobsStatusByPrinter(printerId,function(response){
 					$("#print-statuses").find("tr:not(.header)").remove();
 					//var printerId = response.printer_id;
@@ -110,6 +107,14 @@
 					//logger("#inputLogStatus",response);
 
 				});
+	};
+
+	$("#printers-select").on('change', function (e) {
+		e.preventDefault();
+
+		var printerId = $('#printers-select').val();
+		getJobsStatusByPrinter(printerId);
+
 	});
 
 	var classMapper = {
@@ -122,11 +127,12 @@
 
 	var sendPrinterCommand = function(jobId, command){
 		sparkPrint.sendPrintCommand($("#printers-select").val(),jobId,command,function(response){
-					logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select").val());
+					//logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select").val());
+
 				}
 				,function(response){
-					logger("#inputLogStatus",response);
-					logger("#inputLogStatus","Error sending " + command + " command to printer "+$("#printers-select").val());
+					//logger("#inputLogStatus",response);
+					//logger("#inputLogStatus","Error sending " + command + " command to printer "+$("#printers-select").val());
 				});
 	}
 
