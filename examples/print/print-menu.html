@@ -49,7 +49,7 @@
 			margin: 5px;
 		}
 
-		.simultaor-row{
+		.simulator-row{
 			background-color: black;
 			border-radius: 6px;
 		}
@@ -97,7 +97,11 @@
 				</a>
 			</li>
 			-->
-
+			<li>
+				<a id="loginId" onclick="statePlugin.changeState('login')" role="tab" >
+					Login
+				</a>
+			</li>
 			<li>
 				<a id="manageId" onclick="statePlugin.changeState('manage')" role="tab" >
 					Manage Printers
@@ -142,7 +146,7 @@
 		<iframe name="mainIframe" id="mainIframe" style="width: 100%;border: 0;height:500px;" src="register-printer.html"></iframe>
 
 
-		<div class="row simultaor-row">
+		<div class="row simulator-row">
 
 			<div class="jumbotron span12">
 				<div class="center-block lcd"></div>
@@ -181,6 +185,8 @@
 <!--script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script-->
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallLogger.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
@@ -192,49 +198,56 @@
 	$(document).ready(function(){
 		ajaxCallLogger.createLoggerElement(".footer");
 		ajaxCallLogger.startIframeListener();
+		//ajaxCallLogger.startRegularListener();
+
 		//statePlugin.startIframeStateListener();
 		broadcastEventListener.startIframeBroadcastListener();
-		statePlugin.changeState('manage');
-	});
+		//statePlugin.changeState('manage');
+		if (spark.auth.isAccessTokenValid()) {
+			statePlugin.changeState('manage');
 
-	if (spark.auth.isAccessTokenValid()) {
-		spark.auth.getMyProfile(function (response) {
-			$('#user span').text(response.member.screen_name);
-			$('#user img').attr('src', response.member.profile.avatar_path);
-		});
-	}
+			spark.auth.getMyProfile(function (response) {
+				$('#user span').text(response.member.screen_name);
+				$('#user img').attr('src', response.member.profile.avatar_path);
+			});
+		}
+		else{
+			statePlugin.changeState('login');
+			$(".simulator-row").hide();
+		}
+
+	});
 
 
 	var states = {
-
 		login:{
-			"src":"plugins/simulator/print_simulator.html",
+			"src":"../../plugins/login/login.html",
 			enabledTabs:[],
-			disabledTabs:["#printId","#registerId","#statusId"]
+			disabledTabs:["#printId","#registerId","#statusId","#manageId"]
 		},
 
 		manage:{
 			"src":"manage-printers.html",
 			enabledTabs:["#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId"]
+			disabledTabs:["#printId","#statusId","#loginId"]
 		},
 
 		register:{
 			"src":"register-printer.html",
 			enabledTabs:["#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId"]
+			disabledTabs:["#printId","#statusId","#loginId"]
 		},
 
 		print:{
 			"src":"create-print-job.html",
 			enabledTabs:["#manageId","#registerId","#printId"],
-			disabledTabs:["#statusId"]
+			disabledTabs:["#statusId","#loginId"]
 		},
 
 		status:{
 			"src":"printer-status.html",
 			enabledTabs:["#manageId","#printId","#registerId","#statusId"],
-			disabledTabs:[]
+			disabledTabs:["#loginId"]
 		}
 
 	};
