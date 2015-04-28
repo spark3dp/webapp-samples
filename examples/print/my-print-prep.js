@@ -10,7 +10,8 @@ var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-
+var canvasHeight = 500;
+var canvasWidth = 800;
 var manager = new THREE.LoadingManager();
 var loader = new THREE.OBJLoader( manager );
 
@@ -20,13 +21,12 @@ animate();
 var lastObj;
 
 function init() {
-	//var radius =100;
 
-	container = document.createElement( 'div' );
-	container.setAttribute("class","logged-in-container");
-	document.body.appendChild( container );
 
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight,  0.1, 1000 );
+	container = $('<div style="text-align: center;"></div>');
+	$("#canvas").append(container);
+
+	camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight,  0.1, 1000 );
 	camera.position.z = 200;
 
 
@@ -40,7 +40,7 @@ function init() {
 	//controls.update();
 	// scene
 
-	controls = new THREE.OrbitControls( camera );
+	controls = new THREE.OrbitControls( camera,container.get(0) );
 //        controls.damping = 0.2;
 	controls.addEventListener( 'change', render );
 
@@ -64,14 +64,8 @@ function init() {
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	container.appendChild( renderer.domElement );
-
-	//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-	window.addEventListener( 'resize', onWindowResize, false );
-
-
+	renderer.setSize( canvasWidth, canvasHeight );
+	container.append( renderer.domElement );
 
 }
 
