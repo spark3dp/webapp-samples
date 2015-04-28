@@ -59,7 +59,7 @@
 	<div id="canvas"></div>
 	<br/>
 	<div id="logger"></div>
-
+	<div id="footer"></div>
 </div>
 
 
@@ -79,12 +79,18 @@
 
 <script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 
-<script type="">
+<script>
 	$(document).ready(function(){
-		$("#logger").load("plugins/ajaxlogger/loggers.html");
+		ajaxCallLogger.createLoggerElement("#footer");
+		ajaxCallLogger.startRegularListener();
 	});
 
 </script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="plugins/login/login.js"></script>
 
 
