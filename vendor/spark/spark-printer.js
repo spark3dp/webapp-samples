@@ -72,17 +72,16 @@ var sparkPrint = function () {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
-				//var params =JSON.stringify( {printable_url:printableId,settings:settings});
-				//var params = {printable_id:fileUrl,settings:settings};
+				var params =JSON.stringify( {printable_url:printableId,settings:settings});
 
-				var params = "printable_url="+printableId;
+				//var params = {printable_id:fileUrl,settings:settings};
+				//var params = "printable_url="+printableId;
 
 				console.log(params);
 
 				var headers = {
 					"Authorization": "Bearer " + spark.auth.accessToken(),
-					"Content-type": "application/x-www-form-urlencoded"
-					//"Content-type": "application/json"
+					"Content-type": "application/json"
 				};
 				var url = serverUrl + 'print/printers/'+printerId+"/jobs";
 				spark.util.xhr(url, 'POST', params, headers, callback,errorCallback);
