@@ -4,6 +4,8 @@
 var statePlugin = function($){
 	'use strict';
 
+	var _currentState = "";
+
 	var setTabEnable = function(tabSelector, isEnable){
 		if(!isEnable){
 			$(tabSelector).addClass("disabled");
@@ -15,6 +17,8 @@ var statePlugin = function($){
 
 	var changeState = function(stateName,optionalParams){
 		if(states[stateName]!=undefined){
+
+			_currentState = stateName;
 			var enabledTabs = states[stateName].enabledTabs;
 			var disabledTabs = states[stateName].disabledTabs;
 
@@ -33,8 +37,13 @@ var statePlugin = function($){
 		}
 	};
 
+	var getCurrentState = function(){
+		return _currentState;
+	};
+
 	return {
-		changeState:changeState
+		changeState:changeState,
+		getCurrentState:getCurrentState
 	}
 
 }(jQuery);

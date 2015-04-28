@@ -80,7 +80,7 @@
 		</div>
 
 
-		<ul class="nav nav-tabs" role="tablist">
+		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<!--
 			<li>
 				<a href="register-printer.html" target="mainIframe" role="tab" >
@@ -98,12 +98,12 @@
 			</li>
 			-->
 			<li>
-				<a id="loginId" onclick="statePlugin.changeState('login')" role="tab" >
+				<a id="loginId" class="menu-item" data-state="login" role="tab" >
 					Login
 				</a>
 			</li>
 			<li>
-				<a id="manageId" onclick="statePlugin.changeState('manage')" role="tab" >
+				<a id="manageId" class="menu-item" data-state="manage" role="tab" >
 					Manage Printers
 				</a>
 			</li>
@@ -112,12 +112,12 @@
 					Register Printer
 				</a>
 			</li>-->
-			<li><a id="printId" onclick="statePlugin.changeState('print')" role="tab" >
+			<li><a id="printId" class="menu-item" data-state="print" role="tab" >
 				Print Job
 			</a>
 			</li>
 			<li>
-				<a  id="statusId" onclick="statePlugin.changeState('status')" role="tab">
+				<a  id="statusId" class="menu-item" data-state="status" role="tab">
 					Check Status
 				</a>
 			</li>
@@ -143,7 +143,7 @@
 			-->
 		</ul>
 
-		<iframe name="mainIframe" id="mainIframe" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe>
+		<iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe>
 
 
 		<div class="row simulator-row">
@@ -215,6 +215,13 @@
 			statePlugin.changeState('login');
 			$(".simulator-row").hide();
 		}
+
+		$(".menu-item").click(function(e){
+			e.preventDefault();
+			var state = $(this).data("state");
+			statePlugin.changeState(state);
+			$(this).addClass("selected");
+		});
 
 	});
 

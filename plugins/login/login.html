@@ -20,26 +20,22 @@
 
 
 		.left-wrapper{
-			position: relative;
 			height:320px;
-			margin-top: 20px;
 			border-right: 1px solid lightgray;
+
+
 		}
 
-		#welcome-wrapper{
-			position: absolute;
-			top:0;
-			bottom:0;
-			left:0;
-			right:0;
-			margin: auto;
-			text-align: center;
-			height:170px;
-			padding-right: 40px;
+		.left-wrapper h2 {
+			letter-spacing: normal;
 		}
-		#auth-iframe-wrapper{
-			padding-left: 40px;
+
+		.logged-out-container
+		{
+			margin-top: 50px;
+
 		}
+
 
 	</style>
 
@@ -55,14 +51,13 @@ Logged in now.
 
 <div class="container logged-out-container">
 <div class="row">
-	<div class="col-sm-4 left-wrapper">
+	<div class="col-sm-5 left-wrapper">
 		<div id="welcome-wrapper">
-			<h2>Welcome to <br>Spark Storage</h2>
-
+			<h2>Welcome to <br>Spark Print App</h2>
 			<p>To try the demo, you need to login with a test environment account.</p>
 		</div>
 	</div>
-	<div class="col-sm-8 login-container" id="">
+	<div class="col-sm-7 login-container" id="">
 	</div>
 </div>
 </div>
