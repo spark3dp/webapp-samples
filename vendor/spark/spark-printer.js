@@ -75,7 +75,7 @@ var sparkPrint = function () {
 				//var params =JSON.stringify( {printable_url:printableId,settings:settings});
 				//var params = {printable_id:fileUrl,settings:settings};
 
-				var params = "printable_id="+printableId;
+				var params = "printable_url="+printableId;
 
 				console.log(params);
 
