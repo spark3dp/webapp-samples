@@ -209,6 +209,11 @@ input[type="checkbox"]:checked + label span.chk {
     font-size: 16px;
 }
 
+.spark_btn[disabled] {
+    cursor: default;
+    opacity: 0.5;
+}
+
 .form_field{
     margin-bottom: 20px;
 }
@@ -225,6 +230,17 @@ input[type="checkbox"]:checked + label span.chk {
     border-radius: 3px;
     font-size: 13px;
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.title-label {
+    color: lightgray;
+    font-size: 16px;
+}
+
+.title-label > span{
+    font-size: 20px;
+    line-height: 16px;
+    margin: 0 3px;
 }
 
 .field-label {
@@ -264,6 +280,18 @@ input[type="checkbox"]:checked + label span.chk {
 }
 .modal .modal-footer{
     text-align: left;
+}
+
+.notification-bar {
+    background: none repeat scroll 0 0 #fefae6;
+    border-bottom: 1px solid #ebeae7;
+    font-size: 13px;
+    padding: 8px;
+    position: absolute;
+    width: 100%;
+    left:0;
+    top:0;
+    text-align: center;
 }
 
 /***** TOOLTIP *****/
@@ -368,6 +396,7 @@ i.stooltip span {
     overflow: hidden;
     text-indent: -9999px;
     text-align: left;
+    margin-bottom: -3px;
 }
 
 .si-help {
@@ -431,6 +460,18 @@ i.stooltip span {
     background-position: -157px -52px;
     height: 19px;
     width: 17px;
+}
+
+.si-upload-icon{
+    background-position: -21px -82px;
+    height: 42px;
+    width:48px;
+}
+
+.si-status-ok{
+    background-position: -12px -14px;
+    height: 18px;
+    width: 18px;
 }
 
 /***** END SPRITE *****/

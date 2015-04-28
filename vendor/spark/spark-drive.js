@@ -237,10 +237,11 @@ spark.drive = function () {
 				var headers = {
 					"Authorization": "Bearer " + spark.auth.accessToken()
 				}
-				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload?unzip=false';
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload';
 
 				var fd = new FormData();
 				fd.append("file", fileData);
+				fd.append("unzip", false);
 
 				spark.util.xhr(url, 'POST', fd, headers, function (filesResp) {
 					if (filesResp.files != undefined && filesResp.files.length > 0) {
@@ -321,10 +322,11 @@ spark.drive = function () {
 				var headers = {
 					"Authorization": "Bearer " + spark.auth.accessToken()
 				}
-				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload?unzip=false';
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload';
 
 				var fd = new FormData();
 				fd.append("file", file.fileData);
+				fd.append("unzip", false);
 
 				if (file.filePublicStatus) {
 					fd.append("public", file.filePublicStatus);
