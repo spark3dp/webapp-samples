@@ -486,3 +486,13 @@ i.stooltip span {
 }
 
 /***** END SPRITE *****/
+
+
+.sample-top-menu a
+{
+    text-transform: uppercase;
+}
+
+.sample-top-menu a.selected {
+    border-bottom: 1px solid red;
+}
