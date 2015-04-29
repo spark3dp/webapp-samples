@@ -487,6 +487,47 @@ i.stooltip span {
 
 /***** END SPRITE *****/
 
+/**** galleries ****/
+
+.thumb{
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.thumb:hover .actions{
+    display: block;
+}
+
+.thumb img.img {
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    position: absolute;
+    top:0;
+    bottom:0;
+    margin: auto;
+}
+
+.thumb .actions{
+    display: none;
+    position: absolute;
+    top:3px;
+    right:20px;
+}
+
+.text{
+    background-color: #f8f8f8;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+}
 
 .sample-top-menu a
 {
