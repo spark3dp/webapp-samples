@@ -34,6 +34,13 @@ var statePlugin = function($){
 				setTabEnable(disabledTabs[i],false);
 			}
 			$("#mainIframe").attr("src",srcIframe);
+
+			//Callback function after state changes
+			var callbackFunc = states[stateName].callbackFunc;
+
+			if (callbackFunc){
+				callbackFunc();
+			}
 		}
 	};
 
