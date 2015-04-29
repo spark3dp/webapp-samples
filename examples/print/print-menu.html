@@ -60,47 +60,39 @@
 
 <div class="logged-in-container">
 	<div class="container sample-app-container">
-		<div class="header">
-			<a class="btn pull-right view-source" href="" target="_blank">View on github</a>
+		<div class="sample-app-header clearfix">
+			<a class="btn pull-right btn-github view-source" href="" target="_blank">View on github</a>
 
 			<!-- Navigation links at the top right of the screen -->
 			<ul class="nav nav-pills pull-right" role="tablist" style="display: block;">
-
-				<!---<li role="presentation">
-					<a href="../../plugins/simulator/print_simulator.html" target="_blank" id="printer-simulator" class="btn btn-primary btn-large">
-						Printer Simulator
-					</a>
-				</li>-->
-				<li role="presentation" id="user">
-					<span></span>
-					<img src=""/>
-				</li>
 				<li role="presentation" id="logout"><a href="#" onclick="spark.auth.logout()">Logout</a></li>
 			</ul>
 			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
+		<div style="text-align: center;">
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
-			<li>
-				<a id="loginId" class="menu-item" data-state="login" role="tab" >
-					Login
-				</a>
+			<li id="loginId">
+				<a class="menu-item pull-left" data-state="login" role="tab" >Login</a>
+				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
-			<li>
-				<a id="manageId" class="menu-item" data-state="manage" role="tab" >
-					Manage Printers
-				</a>
+			<li id="manageId">
+				<a class="menu-item pull-left" data-state="manage" role="tab" >Manage Printers</a>
+				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
-			<li>
-				<a id="printId" class="menu-item" data-state="print" role="tab" >
-				Print Job
-			    </a>
+			<li id="printId">
+				<a class="menu-item pull-left" data-state="print" role="tab" >Print Job</a>
+				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
-			<li>
-				<a  id="statusId" class="menu-item" data-state="status" role="tab">
-					Check Status
-				</a>
+			<li id="statusId">
+				<a class="menu-item pull-left" data-state="status" role="tab">Check Status</a>
+				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
 		</ul>
+		</div>
 		<iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe>
 		<div class="row simulator-row">
 
@@ -174,39 +166,42 @@
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
-			$(this).addClass("selected");
 		});
-
 	});
 
 
 	var states = {
 		login:{
 			"src":"../../plugins/login/login.html",
+			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"]
 		},
 
 		manage:{
 			"src":"manage-printers.html",
-			enabledTabs:["#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId","#loginId"]
+			selectedTab:"#manageId",
+			enabledTabs:["#loginId", "#manageId","#registerId"],
+			disabledTabs:["#printId","#statusId"]
 		},
 
 		register:{
 			"src":"register-printer.html",
+			selectedTab:"#manageId",
 			enabledTabs:["#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId","#loginId"]
 		},
 
 		print:{
 			"src":"create-print-job.html",
+			selectedTab:"#printId",
 			enabledTabs:["#manageId","#registerId","#printId"],
 			disabledTabs:["#statusId","#loginId"]
 		},
 
 		status:{
 			"src":"printer-status.html",
+			selectedTab:"#statusId",
 			enabledTabs:["#manageId","#printId","#registerId","#statusId"],
 			disabledTabs:["#loginId"]
 		}
@@ -215,6 +210,11 @@
 
 
 	var broadcastMapper = [];
+
+
+	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams)
+	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
 		statePlugin.changeState("print",optionalParams)
 	};

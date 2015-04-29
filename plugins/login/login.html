@@ -12,6 +12,8 @@
 	<!-- Bootstrap core CSS -->
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
 
 
 	<!-- Common styles, also cloudfront-->
@@ -35,6 +37,11 @@
 			margin-top: 50px;
 
 		}
+		.logged-in-container
+		{
+			margin-top: 50px;
+
+		}
 
 
 	</style>
@@ -43,9 +50,20 @@
 <body>
 
 
-<div class="logged-in-container">
-Logged in now.
-<span role="presentation" id="logout"><a href="#" onclick="spark.auth.logout()">Logout</a></span>
+<div class="logged-in-container center">
+
+	You are logged in as
+	<br/><br/><br/>
+	<div id="user">
+		<span></span>
+		<br/>
+		<img src=""/>
+	</div>
+	<div id="logout" style="display: inline;">
+		<a href="#" onclick="spark.auth.logout()">Logout</a>
+	</div>
+	<span>Or</span>
+	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn')">Continue</a>
 
 </div>
 
@@ -61,6 +79,18 @@ Logged in now.
 	</div>
 </div>
 </div>
+<script>
+	$(document).ready(function() {
 
+		if (spark.auth.isAccessTokenValid()) {
+
+
+			spark.auth.getMyProfile(function (response) {
+				$('#user span').text(response.member.screen_name);
+				$('#user img').attr('src', response.member.profile.avatar_path);
+			});
+		}
+	});
+</script>
 </body>
 </html>

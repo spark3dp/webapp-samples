@@ -42,6 +42,16 @@ a.disabled{
     color: darkgrey;
 }
 
+li.disabled{
+    pointer-events:none;
+    color: darkgrey;
+}
+
+li[disabled] {
+    pointer-events: none;
+    cursor: default;
+}
+
 label {
     font-weight: normal;
 }
@@ -485,8 +495,26 @@ i.stooltip span {
     width: 18px;
 }
 
+.si-status-disabled{
+    background-position: -42px -14px;
+    height: 18px;
+    width: 18px;
+}
+
 /***** END SPRITE *****/
 
+
+.btn-github {
+
+    background: url(../img/github_btn_normal.png) no-repeat;
+    display: inline-block;
+}
+
+.btn-github:hover {
+
+    background: url(../img/github_btn_hover.png) no-repeat;
+    display: inline-block;
+}
 
 .logged-out-container
 {
@@ -494,19 +522,61 @@ i.stooltip span {
     margin: 0;
 }
 
-.sample-top-menu a
-{
-    text-transform: uppercase;
-}
-
-.sample-top-menu a.selected {
-    border-bottom: 1px solid red;
+.sample-app-header{
+    margin-top: 10px;
+    margin-bottom: 25px;
 }
 
 .sample-title
 {
     text-transform: uppercase;
 }
+
+.sample-top-menu {
+    display: inline-block;
+    border-bottom: none;
+}
+
+.sample-top-menu li
+{
+    padding: 15px 10px;
+}
+
+.sample-top-menu li a
+{
+    text-transform: uppercase;
+    color: #777;
+    margin-right: 10px;
+    padding: 0 0 2px 0;
+}
+
+.sample-top-menu li a:hover
+{
+    color: #777;
+}
+
+.sample-top-menu li a:hover, .sample-top-menu li.selected a {
+    border-bottom: 1px solid red;
+    color: black;
+}
+
+.sample-top-menu li .si-status-ok{
+    display:none;
+}
+
+.sample-top-menu li .si-status-disabled{
+    display:block;
+}
+
+.sample-top-menu li.verified .si-status-ok{
+    display:block;
+}
+
+.sample-top-menu li.verified .si-status-disabled{
+    display:none;
+}
+
+
 
 .view-source
 {
@@ -546,4 +616,9 @@ i.stooltip span {
     margin-left:0;
     margin-right:0;
     margin-bottom: 10px;
+}
+
+.center
+{
+    text-align: center;
 }
