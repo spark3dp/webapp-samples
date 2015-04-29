@@ -48,13 +48,13 @@ var ajaxCallLogger = function(){
 		 * @param parentSelector - css selector of the parent element of the logger
 		 */
 		createLoggerElement: function (parentSelector) {
-			var div = $('<div class="container">' +
-				'<div class="row" style="background: black">' +
+			var div = $(
+				'<div class="row footer-row" style="background: black">' +
 				'<div class="col-md-12">' +
 				'<div class="form-group">' +
 				'<label for="'+loggerId+'">Request Log</label>' +
 				'<span class="pull-right" onClick="$(\'#'+loggerId+'\').empty()">CLEAR</span>' +
-				'<div id="'+loggerId+'"></div></div></div></div></div>');
+				'<div id="'+loggerId+'"></div></div></div></div>');
 			$(parentSelector).append(div);
 
 
