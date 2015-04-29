@@ -9,14 +9,14 @@ var apiHostSandbox = 'sandbox.spark.autodesk.com/api/v1',
 ;
 
 // Spark constants
-const IMPORT_TASK_TYPE = 'import';
-const ANALYZE_TASK_TYPE = 'analyze';
-const REPAIR_TASK_TYPE = 'repair';
-const EXPORT_TASK_TYPE = 'export';
+var IMPORT_TASK_TYPE = 'import';
+var ANALYZE_TASK_TYPE = 'analyze';
+var REPAIR_TASK_TYPE = 'repair';
+var EXPORT_TASK_TYPE = 'export';
 
-const RUNNING_TASK_STATUS = 'running';
-const ERROR_TASK_STATUS = 'error';
-const DONE_TASK_STATUS = 'done';
+var RUNNING_TASK_STATUS = 'running';
+var ERROR_TASK_STATUS = 'error';
+var DONE_TASK_STATUS = 'done';
 
 
 
