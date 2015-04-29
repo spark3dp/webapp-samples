@@ -64,8 +64,12 @@ textarea {
     resize: vertical;
 }
 
-.container {
+#container {
     width: 800px;
+}
+
+.container {
+    width: 768px;
 }
 
 .form_control {
