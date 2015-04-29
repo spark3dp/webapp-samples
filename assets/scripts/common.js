@@ -55,20 +55,14 @@ var common = function ($) {
 		},
 
 		/**
-		 * Clear the modal content after closing it
+		 *  Adjsut string length to desired length
 		 */
-		setResetModalListener:function () {
-			$('body').on('hidden.bs.modal', '.modal', function () {
-				$(this)
-					.find("input.field,textarea.field,select.field")
-					.val('')
-					.end();
-
-				$(this)
-					.find("img")
-					.remove()
-					.end()
-			});
+		maxLength: function(input, desiredLength, hidePoints) {
+			if (input.length <= desiredLength) {
+				return input;
+			} else {
+				return input.substring(0, desiredLength) + (!hidePoints ? '...' : '');
+			}
 		}
 	}
 

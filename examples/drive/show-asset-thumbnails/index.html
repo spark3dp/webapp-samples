@@ -91,7 +91,7 @@
 		<div class="img">
 			<img src="../../../assets/img/empty_thumbnail_folder_illustration.png" alt="thumbnails illustrations"/>
 		</div>
-		<a class="spark_btn upload-link" href="../upload-file/">Upload your thumbnails</a>
+		<a class="spark_btn upload-link" href="../upload-thumbnail-file/">Upload your thumbnails</a>
 	</div>
 
 </div>
@@ -154,7 +154,8 @@
 				$('#files').removeClass('hidden');
 				$.each(thumbnails, function (index, item) {
 					var tr = $('<tr class="in-table"></tr>');
-					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.caption + '<span>' + (item.is_primary?'primary':'') + '</span></td>'));
+					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + (item.caption.length?item.caption:'-') +
+					'<span>' + (item.is_primary?' <span class="title-label">(primary)</span>':'') + '</span></td>'));
 					tr.append($('<td>' + item.file_id + '</td>'));
 
 					var actionsElem = '<div class="dropdown actions">' +

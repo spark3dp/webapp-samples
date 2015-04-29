@@ -22,7 +22,7 @@
 		#file-input.hidden-upload {
 			height: 25px;
 			width: 50px;
-			left: 400px;
+			left:400px;
 			position: absolute;
 			top: 112px;
 			cursor: pointer;
@@ -36,8 +36,7 @@
 			border: 2px dashed lightgray;
 			border-radius: 4px;
 		}
-
-		#file-upload-result {
+		#file-upload-result{
 			display: none;
 			height: 50px;
 			text-align: center;
@@ -67,12 +66,11 @@
 			display: none;
 		}
 
-		#file-upload-text-res {
+		#file-upload-text-res{
 			font-weight: bold;
-			margin-top: 70px;
+			margin-top:70px;
 		}
-
-		.si-status-ok {
+		.si-status-ok{
 			margin-right: 10px;
 		}
 
@@ -86,7 +84,7 @@
 		<div class="modal-header">
 			<h4 class="modal-title" id="manageTitle">
 				<i class="spark_icon si-asset-file-icon"></i>UPLOADING FILE <span
-					class="title-label"> <span>&middot;</span> Thumbnail file</span>
+					class="title-label"> <span>&middot;</span> Source file</span>
 			</h4>
 		</div>
 		<div class="modal-body" id="upload-wrapper">
@@ -103,12 +101,11 @@
 
 			<div id="dropzone" class="post-upload">
 				<div id="upload-icon" class="spark_icon si-upload-icon"></div>
-				<h4 id="file-name" class="post-upload">Upload Thumbnail Item</h4>
+				<h4 id="file-name" class="post-upload">Upload Source Item</h4>
 
 				<div id="file-upload-text">
-					<span>Drop an image</span> or <a id="browse-file">Browse</a>
-
-					<p>Maximum file size of 1MB</p>
+					<span>Drop a file</span> or <a id="browse-file">Browse</a>
+					<p>Maximum file size of 100MB</p>
 				</div>
 			</div>
 
@@ -166,36 +163,9 @@ should be cloudfront!
 	 */
 	function handleFileDrop(file) {
 
-		//clear the previous file
-		$('.thumb-img').remove();
-
 		fileData = file;
 		$('#file-name').html('<b>' + fileData.name + '</b> is waiting for upload');
 		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-
-		// Only process image files.
-		if (file.type.match('image.*')) {
-			var reader = new FileReader();
-
-			// Closure to capture the file information.
-			reader.onload = (function (theFile) {
-				return function (e) {
-					// Render thumbnail.
-					var span = document.createElement('span');
-					span.innerHTML = ['<img class="thumb" src="', e.target.result,
-						'" title="', escape(theFile.name), '"/>'].join('');
-
-					var imgSpan = $('<span class="thumb-img post-upload"><img class="thumb" src="' + e.target.result + '" title="' + escape(theFile.name) + '"/></span>');
-					$('#dropzone').prepend(imgSpan);
-				};
-			})(file);
-
-			// Read in the image file as a data URL.
-			reader.readAsDataURL(file);
-
-		}
-
-
 	}
 
 	/**
@@ -248,32 +218,12 @@ should be cloudfront!
 		}
 	}
 
-	/**
-	 * UI stuff that happen after we've received the file upload response
-	 */
-	function applyUIcallback(fileId, fileName, filesArray) {
-		if (filesArray && filesArray.length > 0) {
-
-			var continueBtn = '<a class="spark_btn primary" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + fileId + '">CONTINUE</a>';
-
-			$('.spinner').hide();
-			$('.post-upload').remove();
-			$('#file-upload-result').show().find('#file-id').text(fileId);
-			$('#file-upload-text-res').text('File Name: ' + fileName);
-			$('.submit-wrapper').append(continueBtn);
-		} else {
-			$('#file-upload-text').show();
-			$('.spinner').hide();
-			$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-
-		}
-	}
 
 	/**
 	 * Set listener on form submit
 	 * to upload the file
 	 */
-	function setupUploadFile() {
+	function setUpUploadFileFlow() {
 
 		//catch the form submit
 		$('#file-form').on('submit', function (e) {
@@ -292,16 +242,27 @@ should be cloudfront!
 				sourceFile.filePublicStatus = true;
 			}
 
-			//This is the important part - upload the file to spark drive
+			console.log(sourceFile);
+
+
+			//upload the file to spark drive
 			spark.drive.uploadFile(sourceFile, function (response) {
 				console.info('upload file response:', response);
+				if (response.files && response.files.length > 0) {
 
-				var fileId = response.files[0].file_id,
-					fileName = response.files[0].name;
+					var continueBtn = '<a class="spark_btn primary" href="../add-source-to-asset/?assetId=' + currentAssetId + '&fileId=' + response.files[0].file_id + '">CONTINUE</a>';
 
-				console.info('fileId:', fileId,' | ', 'fileName:', fileName);
+					$('.spinner').hide();
+					$('.post-upload').remove();
+					$('#file-upload-result').show().find('#file-id').text(response.files[0].file_id);
+					$('#file-upload-text-res').text('File Name: ' + response.files[0].name);
+					$('.submit-wrapper').append(continueBtn);
+				}else{
+					$('#file-upload-text').show();
+					$('.spinner').hide();
+					$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 
-				applyUIcallback(fileId, fileName, response.files);
+				}
 
 			});
 
@@ -328,7 +289,7 @@ should be cloudfront!
 				location.href = '../show-my-assets/';
 			} else {
 				setFileUploadUI();
-				setupUploadFile();
+				setUpUploadFileFlow();
 				common.setUIFunctionality();
 
 				//set up correct links

@@ -133,7 +133,7 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"] + label {
-    cursor: pointer;
+
     font-size: 14px;
 }
 
@@ -254,12 +254,19 @@ input[type="checkbox"]:checked + label span.chk {
     padding: 15px 0;
 }
 
-.form-footer div{
-    display: inline;
-}
 .form-footer div.submit-wrapper{
     float: right;
+    position: relative;
+    display: inline;
 }
+.form-footer div.publish-wrapper{
+    display: inline;
+}
+
+.form-footer div.submit-wrapper .spinner{
+    right:25px;
+}
+
 .form-footer div.submit-wrapper a{
     margin-right: 20px;
     font-size: 14px;
@@ -277,6 +284,9 @@ input[type="checkbox"]:checked + label span.chk {
 
 .modal .modal-header,.modal .modal-footer{
     border: none;
+}
+.modal-header{
+    padding-bottom: 5px;
 }
 .modal .modal-footer{
     text-align: left;
@@ -460,6 +470,7 @@ i.stooltip span {
     background-position: -157px -52px;
     height: 19px;
     width: 17px;
+    margin-right: 15px;
 }
 
 .si-upload-icon{
