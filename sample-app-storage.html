@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+	</style>
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container sample-app-container" id="container">
+
+		<div class="header">
+			<a class="btn pull-right view-source" href="" target="_blank">View on github</a>
+			<!-- Navigation links at the top right of the screen -->
+			<h5 class="sample-title">Spark Print Sample App</h5>
+		</div>
+
+		<ul class="nav nav-tabs sample-top-menu" role="tablist">
+			<li><a id="loginId" class="menu-item" data-state="login" role="tab">Login</a></li>
+			<li><a id="myAssetsId" class="menu-item" data-state="myAssets" role="tab">My Assets</a></li>
+			<li><a id="createAssetId" class="menu-item" data-state="createAsset" role="tab">Create Asset</a></li>
+			<li><a id="manageFilesId" class="menu-item" data-state="manageFiles" role="tab">Manage Files</a></li>
+		</ul>
+
+		<iframe name="mainIframe"
+		        id="mainIframe"
+		        width="768px"
+		        height="500px"
+		        frameborder="0"
+		        src="examples/auth/index.html"></iframe>
+
+		<div class="footer"></div>
+	</div>
+
+</div>
+
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+
+
+<script>
+	jQuery(document).ready(function ($) {
+		ajaxCallLogger.createLoggerElement(".footer");
+		ajaxCallLogger.startIframeListener();
+		broadcastEventListener.startIframeBroadcastListener();
+
+		statePlugin.changeState('login');
+
+		$(".menu-item").click(function (e) {
+			e.preventDefault();
+			var state = $(this).data("state");
+			statePlugin.changeState(state);
+			$(this).addClass("selected");
+		});
+
+	});
+
+
+	var states = {
+		login: {
+			src: 'examples/auth/index.html',
+			enabledTabs: [],
+			disabledTabs: ['#myAssetsId','#createAssetId','#manageFilesId']
+		},
+
+		myAssets1: {
+			src: 'examples/drive/show-my-assets/index.html',
+			enabledTabs: [],
+			disabledTabs: []
+		},
+
+		createAsset: {
+			src: 'examples/drive/create-asset/index.html',
+			enabledTabs: [],
+			disabledTabs: []
+		},
+
+		manageFiles: {
+			src: 'examples/drive/show-my-assets/files.html',
+			enabledTabs: [],
+			disabledTabs: []
+		}
+	};
+
+
+	var broadcastMapper = [];
+	broadcastMapper["assets.load"] = function (optionalParams) {
+		statePlugin.changeState("myAssets", optionalParams)
+	};
+	broadcastMapper["manageIframe.addClick"] = function (optionalParams) {
+		statePlugin.changeState("register", optionalParams)
+	};
+	broadcastMapper["registerIframe.cancel"] = function (optionalParams) {
+		statePlugin.changeState("manage", optionalParams)
+	};
+	broadcastMapper["registerIframe.add"] = function (optionalParams) {
+		statePlugin.changeState("manage", optionalParams)
+	};
+	broadcastMapper["printIframe.next"] = function (optionalParams) {
+		statePlugin.changeState("status", optionalParams)
+	};
+
+	/**
+	 var broadcastMapper = {
+		"manageContinueClick":function(optionalParams){
+			statePlugin.changeState("register",optionalParams)
+		}
+	};*/
+
+
+</script>
+
+
+</body>
+</html>
