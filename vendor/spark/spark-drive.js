@@ -10,7 +10,7 @@ spark.drive = function () {
 	/**
 	 * Create asset thumbnail(s)
 	 * @param asset_id - The asset id for which the thumbnails are created
-	 * @param files_array - The files that are attached to this asset, they come in the form of [{id:"id",caption:"caption",description,"description",isPrimary:true/false}]
+	 * @param files_array - The files that are attached to this asset, they come in the form of [{id:"id",caption:"caption",description,"description",is_primary:true/false}]
 	 * @param callback - Callback function
 	 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/assets/asset-thumbnails/create-a-new-thumbnail-within-the-asset
 	 */
@@ -24,7 +24,7 @@ spark.drive = function () {
 				id: files_array[i].id,
 				caption: files_array[i].caption ? files_array[i].caption : '',
 				description: files_array[i].description ? files_array[i].description : '',
-				is_primary: files_array[i].isPrimary ? files_array[i].isPrimary : false
+				is_primary: files_array[i].is_primary ? files_array[i].is_primary : false
 			}
 
 			thumbnails.push(thumbnail);
@@ -296,7 +296,7 @@ spark.drive = function () {
 						id: filesResp.files[0].file_id,
 						caption: fileData.caption,
 						description: fileData.description,
-						isPrimary: fileData.isPrimary
+						is_primary: fileData.is_primary
 					}
 
 					var file_array = [thumbnail];
@@ -336,12 +336,34 @@ spark.drive = function () {
 					callback(filesResp);
 				});
 
+
 			} else {
 				callback(false);
 			}
 
-		}
-		,
+		},
+		/**
+		 * Get the details for a specific file
+		 * @param callback
+		 * See API reference - http://docs.sparkdriveapi.apiary.io/#reference/files/details/get-file-details
+		 */
+		getFileDetails: function (fileId, callback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/' + fileId;
+				spark.util.xhr(url, 'GET', '', headers, callback);
+			} else {
+				callback(false);
+			}
+
+		},
+
 		/**
 		 * Retrieve all thumbnails for an asset
 		 * @param assetId - The id of the asset
