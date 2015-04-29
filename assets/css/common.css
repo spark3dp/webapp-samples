@@ -435,6 +435,12 @@ i.stooltip span {
     height: 17px;
 }
 
+.si-asset-icon-transparent{
+    background-position: -100px -16px;
+    width: 16px;
+    height: 17px;
+}
+
 .si-actions-icon{
     background-position: -10px -49px;
     height: 20px;
@@ -584,6 +590,19 @@ i.stooltip span {
 
     /* W3C Markup, IE10 Release Preview */
     background-image: linear-gradient(to top, #DCDCDC 0%, #EFEFEF 100%);
+}
+
+#breadcrumbs-section{
+    background-color: white;
+    display: inline-block;
+    padding: 13px;
+    width: 100%;
+}
+#breadcrumbs-section div a{
+    display: none;
+}
+#breadcrumbs-section #action-button{
+    float: right;
 }
 
 .footer-row
