@@ -65,7 +65,7 @@ textarea {
 }
 
 .container {
-    width: 760px;
+    width: 800px;
 }
 
 .form_control {
@@ -529,6 +529,12 @@ i.stooltip span {
     padding: 8px;
 }
 
+.logged-out-container
+{
+    width: 768px;
+    margin: 0;
+}
+
 .sample-top-menu a
 {
     text-transform: uppercase;
@@ -536,4 +542,49 @@ i.stooltip span {
 
 .sample-top-menu a.selected {
     border-bottom: 1px solid red;
+}
+
+.sample-title
+{
+    text-transform: uppercase;
+}
+
+.view-source
+{
+    text-transform: uppercase;
+    background-color: #c0c0c0;
+    border-color: #000000;
+    color: #000000;
+}
+
+.sample-app-container
+{
+    margin-top: 10px;
+    border: 1px solid silver;
+    border-radius: 3px;
+
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
+
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
+
+    /* Opera */
+    background-image: -o-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
+
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #DCDCDC), color-stop(1, #EFEFEF));
+
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
+
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to top, #DCDCDC 0%, #EFEFEF 100%);
+}
+
+.footer-row
+{
+    margin-left:0;
+    margin-right:0;
+    margin-bottom: 10px;
 }

@@ -14,7 +14,7 @@
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
@@ -59,11 +59,12 @@
 <body>
 
 <div class="logged-in-container">
-	<div class="container">
-
+	<div class="container sample-app-container">
 		<div class="header">
+			<a class="btn pull-right view-source" href="" target="_blank">View on github</a>
+
 			<!-- Navigation links at the top right of the screen -->
-			<ul class="nav nav-pills pull-right" role="tablist">
+			<ul class="nav nav-pills pull-right" role="tablist" style="display: block;">
 
 				<!---<li role="presentation">
 					<a href="../../plugins/simulator/print_simulator.html" target="_blank" id="printer-simulator" class="btn btn-primary btn-large">
@@ -71,32 +72,14 @@
 					</a>
 				</li>-->
 				<li role="presentation" id="user">
-					<span><!-- user --></span>
+					<span></span>
 					<img src=""/>
 				</li>
 				<li role="presentation" id="logout"><a href="#" onclick="spark.auth.logout()">Logout</a></li>
 			</ul>
-			<h3 class="text-muted"><a href="index.html">Spark Sample App</a></h3>
+			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
-
-
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
-			<!--
-			<li>
-				<a href="register-printer.html" target="mainIframe" role="tab" >
-					Register Printer
-				</a>
-			</li>
-			<li><a href="create-print-job.html" target="mainIframe" role="tab" >
-				Print Job
-			</a>
-			</li>
-			<li>
-				<a href="printer-status.html" target="mainIframe" role="tab">
-					Check Status
-				</a>
-			</li>
-			-->
 			<li>
 				<a id="loginId" class="menu-item" data-state="login" role="tab" >
 					Login
@@ -107,45 +90,18 @@
 					Manage Printers
 				</a>
 			</li>
-			<!--<li>
-				<a id="registerId" onclick="statePlugin.changeState('register')" role="tab" >
-					Register Printer
-				</a>
-			</li>-->
-			<li><a id="printId" class="menu-item" data-state="print" role="tab" >
+			<li>
+				<a id="printId" class="menu-item" data-state="print" role="tab" >
 				Print Job
-			</a>
+			    </a>
 			</li>
 			<li>
 				<a  id="statusId" class="menu-item" data-state="status" role="tab">
 					Check Status
 				</a>
 			</li>
-<!--
-			<li>
-				<a onclick="$('#fakeIframe').load('register-printer.html?aaaa=bbb')" role="tab">
-
-					Register Printer
-				</a>
-			</li>
-			<li>
-				<a onclick="$('#fakeIframe').load('create-print-job.html')" role="tab">
-
-					Print Job
-				</a>
-			</li>
-			<li>
-				<a onclick="$('#fakeIframe').load('printer-status.html')" role="tab">
-
-					Check Status
-				</a>
-			</li>
-			-->
 		</ul>
-
 		<iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe>
-
-
 		<div class="row simulator-row">
 
 			<div class="jumbotron span12">
@@ -171,10 +127,8 @@
 		</button>
 		</div>
 		</div>
+		<div class="footer"></div>
 	</div>
-
-	<div class="footer"></div>
-
 </div>
 
 <!-- /container -->
