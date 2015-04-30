@@ -62,6 +62,9 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
+<!-- Enable broadcasting events to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+
 <script>
 
 	//the asset id we are referring to
@@ -70,7 +73,7 @@
 	/**
 	 * Fetch the asset and it's metadata and set data in the DOM
 	 */
-	function setUpAssetFiles(){
+	function setupAssetFiles(){
 		spark.drive.getAsset(currentAssetId, function(asset){
 			console.info('asset response was:', asset);
 			$('.spinner').hide();
@@ -113,12 +116,13 @@
 			var urlParams = spark.util.extractParamsFromURL();
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
-			if (!currentAssetId) {
-				location.href = '../show-my-assets/';
-			} else {
-				setUpAssetFiles();
+			if (currentAssetId) {
+				setupAssetFiles();
 			}
 		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showMyAssets.files',{assetId:currentAssetId});
 
 	});
 

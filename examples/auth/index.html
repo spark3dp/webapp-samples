@@ -45,7 +45,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container" style="display: none">
 	<div class="col-sm-6 left-wrapper">
 		<div id="welcome-wrapper">
 			<h2>Welcome to <br/>Spark Storage</h2>
@@ -130,6 +130,7 @@ should be cloudfront!
 
 		} else {//user needs to login
 
+			$('.container').show();
 			//if we get back from the login service
 			var code = spark.util.extractRedirectionCode();
 

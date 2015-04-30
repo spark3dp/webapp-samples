@@ -38,10 +38,15 @@ var statePlugin = function($){
 			var enabledTabs = states[stateName].enabledTabs;
 			var disabledTabs = states[stateName].disabledTabs;
 
-			var srcIframe = states[stateName].src;
-			if(optionalParams!=undefined){
-				srcIframe = srcIframe+"?"+optionalParams;
+			if (states[stateName].src){
+				var srcIframe = states[stateName].src;
+				if(optionalParams!=undefined){
+					srcIframe = srcIframe+"?"+optionalParams;
+				}
+
+				$("#mainIframe").attr("src",srcIframe);
 			}
+
 
 			for(var i in enabledTabs){
 				setTabEnable(enabledTabs[i],true);
@@ -54,8 +59,6 @@ var statePlugin = function($){
 				setTabVerified(enabledTabs[0]);
 			}
 			$(selectedTab).addClass("selected");
-
-			$("#mainIframe").attr("src",srcIframe);
 
 			//Callback function after state changes
 			var callbackFunc = states[stateName].callbackFunc;

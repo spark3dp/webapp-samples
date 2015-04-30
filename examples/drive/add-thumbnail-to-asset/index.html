@@ -203,12 +203,12 @@ should be cloudfront!
 		spark.drive.getFileDetails(currentFileId, function (response) {
 			if (response) {
 				console.info('response from getFileDetails:', response);
-				$('#filename-placeholder').text(response.name);
+				$('#filename-placeholder').text(common.maxLength(response.name,30));
 				if (response.public_url.length) {
 
 					//apply bootstrap classes to align the form
-					$('#img-placeholder').addClass('col-md-5');
-					$('#form-fields').addClass('col-md-7');
+					$('#img-placeholder').addClass('col-sm-5');
+					$('#form-fields').addClass('col-sm-7');
 
 					var img = $('<img src="' + response.public_url + '" alt="' + response.name + '">');
 					$('#img-placeholder').append(img);
