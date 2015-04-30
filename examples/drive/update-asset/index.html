@@ -96,11 +96,9 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
-<!-- end spark sdk -->
-<!--<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/spark-sdk-latest.min.js"></script>
-should be cloudfront!
--->
-
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
 
@@ -160,6 +158,8 @@ should be cloudfront!
 	 */
 	jQuery(function ($) {
 
+		ajaxCallListenerFromIframe();
+
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {
 			location.href = '../../auth/';
@@ -184,6 +184,9 @@ should be cloudfront!
 
 			common.setUIFunctionality();
 		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('updateAsset',{assetId:currentAssetId});
 
 	});
 

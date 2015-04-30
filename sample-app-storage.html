@@ -58,7 +58,10 @@
 				<div class="bread-crumb hidden" id="file-type">
 					<p class="bread-crumb-tail"></p>
 					<a disabled>
-						<span class="bread-crumb-inner"></span>
+						<span class="bread-crumb-inner">
+							<i class="spark_icon si-asset-file-icon"></i>
+							<b></b>
+						</span>
 					</a>
 				</div>
 
@@ -145,6 +148,7 @@
 	 * Show breadcrumb
 	 */
 	function showBreadcramb(breadcrumb) {
+		$('#breadcrumbs > div').removeClass('dark');
 		$('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
 
 	}
@@ -167,7 +171,7 @@
 
 	function showAssetFilesBreadcrumb(fileType){
 		showBreadcramb('file-type');
-		$('#file-type').find('.bread-crumb-inner').text(fileType);
+		$('#file-type').find('.bread-crumb-inner > b').text(fileType);
 	}
 
 	/**
@@ -273,7 +277,7 @@
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 		},
 
-		myAssetsFilesEvent: function (optionalParams) {
+		showSpecificAssetEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
 			showAssetBreadcrumb(currentAssetId);
 		},
@@ -281,6 +285,8 @@
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 		},
 		showAssetFilesEvent: function(optionalParams){
+			currentAssetId = optionalParams.assetId;
+			showAssetBreadcrumb(currentAssetId);
 			showAssetFilesBreadcrumb(optionalParams.fileType);
 		}
 	}
@@ -292,9 +298,10 @@
 	var broadcastMapper = [];
 
 	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
-	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.myAssetsFilesEvent;
+	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
 	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
 	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
+	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent
 
 
 
