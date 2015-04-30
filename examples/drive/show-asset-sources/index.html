@@ -127,6 +127,8 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
+<!-- Enable broadcasting events to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
 
 <script>
 
@@ -227,6 +229,10 @@
 				$('.gallery-view-link').attr('href', 'gallery-view.html?assetId=' + currentAssetId);
 			}
 		}
+
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'sources'});
 
 	});
 

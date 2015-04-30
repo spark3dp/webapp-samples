@@ -137,6 +137,7 @@
 
 <!-- Enable broadcasting events to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 
 <script>
@@ -178,6 +179,7 @@
 	 */
 	jQuery(function ($) {
 
+		ajaxCallListenerFromIframe();
 		//First let's see if we have a valid access token
 		if (spark.auth.isAccessTokenValid()) {
 

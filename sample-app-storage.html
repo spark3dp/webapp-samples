@@ -50,7 +50,14 @@
 				</div>
 
 				<div class="bread-crumb hidden" id="asset">
+					<p class="bread-crumb-tail"></p>
 					<a onclick="showMyAssetFiles()">
+						<span class="bread-crumb-inner"></span>
+					</a>
+				</div>
+				<div class="bread-crumb hidden" id="file-type">
+					<p class="bread-crumb-tail"></p>
+					<a disabled>
 						<span class="bread-crumb-inner"></span>
 					</a>
 				</div>
@@ -71,12 +78,12 @@
 
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 						<li role="presentation">
-							<a role="menuitem" onclick="">SOURCE FILE</a>
+							<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
 							<i class="spark_icon si-help with_hover"></i>
 							<i class="stooltip"><span>Asset sources</span></i>
 						</li>
 						<li role="presentation">
-							<a role="menuitem" onclick="">THUMBNAIL FILE</a>
+							<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
 							<i class="spark_icon si-help with_hover"></i>
 							<i class="stooltip"><span>Asset thumbnails</span></i>
 						</li>
@@ -123,6 +130,9 @@
 	var currentAssetId,
 			currentFileId;
 
+
+	//functions
+
 	/**
 	 * Change state to 'state'
 	 * @param state
@@ -135,21 +145,12 @@
 	 * Show breadcrumb
 	 */
 	function showBreadcramb(breadcrumb) {
-		$('#breadcrumbs > div').addClass('hidden');
-
-		//always show home 
-		$('#breadcrumbs #home').removeClass('hidden')
-
 		$('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
 
 	}
 
-	/**
-	 * Show a specific action button on the right
-	 */
-	function showActionButton(button) {
 
-	}
+
 	/**
 	 * Show asset breadcrumb
 	 */
@@ -164,6 +165,11 @@
 		$('#create-file').show();
 	}
 
+	function showAssetFilesBreadcrumb(fileType){
+		showBreadcramb('file-type');
+		$('#file-type').find('.bread-crumb-inner').text(fileType);
+	}
+
 	/**
 	 * Load show my assets files page
 	 * Shows my assets file groups
@@ -175,11 +181,19 @@
 	}
 
 	function openUploadFileMenu(elem){
-		console.log($(elem).next('i'));
 		$(elem).next('i').click();
 	}
 
+	function goToUploadFilePage(page){
+		var uploadPage = page === 'source' ? 'upload-source-file' : 'upload-thumbnail-file';
 
+		uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
+
+		$('#mainIframe').attr('src',uploadPage);
+	}
+
+
+	//run onload
 	jQuery(document).ready(function ($) {
 		ajaxCallLogger.createLoggerElement(".footer");
 		ajaxCallLogger.startIframeListener();
@@ -198,6 +212,9 @@
 			statePlugin.changeState(state);
 			$(this).addClass("selected");
 		});
+
+
+		common.setUIFunctionality();
 
 	});
 
@@ -262,6 +279,9 @@
 		},
 		createAssetEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').show();
+		},
+		showAssetFilesEvent: function(optionalParams){
+			showAssetFilesBreadcrumb(optionalParams.fileType);
 		}
 	}
 
@@ -274,6 +294,8 @@
 	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
 	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.myAssetsFilesEvent;
 	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
+	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
+
 
 
 </script>

@@ -713,6 +713,8 @@ i.stooltip span {
 
 #breadcrumbs-section #action-button #create-file i{
     position: absolute;
+    right:5px;
+    top:7px;
 }
 
 #breadcrumbs-section #action-button #create-file i.si-dropdown-open{
@@ -723,6 +725,28 @@ i.stooltip span {
 #breadcrumbs-section #action-button #create-file i.si-add-item{
     left:12px;
     top:11px;
+}
+
+#breadcrumbs-section #action-button #create-file i.stooltip span{
+    bottom: 5px;
+    left:-120px;
+    width:120px;
+
+}
+
+#breadcrumbs-section #action-button #create-file ul{
+    width:180px;
+    left:-40px;
+    top:38px;
+}
+
+#breadcrumbs-section #action-button #create-file ul li{
+    padding: 3px 0;
+    position: relative;
+}
+
+#breadcrumbs-section #action-button #create-file ul li > a{
+    padding: 3px 10px;
 }
 
 #breadcrumbs{
@@ -741,7 +765,16 @@ i.stooltip span {
     display: inline-block;
     padding: 9px;
 }
-
+.bread-crumb-tail{
+    background-image: url("../img/light_bread_crumbs_arrow_C.png");
+    background-repeat: no-repeat;
+    display: inline;
+    float: left;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    width: 9px;
+}
 .bread-crumb span{
     background-color: #F5F4F4;
     padding: 11px;
@@ -754,6 +787,10 @@ i.stooltip span {
 }
 .bread-crumb.dark span{
     background-color: #EBEBEB;
+}
+
+.bread-crumb.dark .bread-crumb-tail{
+    background-image: url("../img/dark_bread_crumbs_arrow_C.png");
 }
 
 .footer-row
