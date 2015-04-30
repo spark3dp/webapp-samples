@@ -178,7 +178,7 @@ input[type="checkbox"]:checked + label span.chk {
     /* medium size is default */
     height: 35px;
     line-height: 35px;
-    padding: 0px 50px;
+    padding: 0px 25px;
     font-size: 14px;
     position: relative;
 }
@@ -318,6 +318,10 @@ input[type="checkbox"]:checked + label span.chk {
     text-align: center;
 }
 
+#welcome-wrapper{
+    text-align: center;
+}
+
 /***** TOOLTIP *****/
 i.stooltip {
     outline: none;
@@ -449,6 +453,7 @@ i.stooltip span {
     background-position: -100px -16px;
     width: 16px;
     height: 17px;
+    margin-right: 10px;
 }
 
 .si-actions-icon{
@@ -505,6 +510,24 @@ i.stooltip span {
     width: 18px;
 }
 
+.si-home{
+    background-position: -188px -52px;
+    height: 18px;
+    width: 20px;
+}
+
+.si-dropdown-open{
+    background-position: -76px -57px;
+    height: 6px;
+    width: 11px;
+}
+
+.si-add-item{
+    background-position: -47px -53px;
+    height: 12px;
+    width: 12px;
+}
+
 .si-status-disabled{
     background-position: -42px -14px;
     height: 18px;
@@ -527,7 +550,7 @@ i.stooltip span {
     border-right: 1px solid lightgray;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    height: 200px;
+    height: 150px;
     overflow: hidden;
     position: relative;
 }
@@ -674,12 +697,63 @@ i.stooltip span {
     display: inline-block;
     padding: 13px;
     width: 100%;
+    position: relative;
+    height: 61px;
 }
-#breadcrumbs-section div a{
+#breadcrumbs-section div#action-button div{
     display: none;
 }
 #breadcrumbs-section #action-button{
     float: right;
+}
+
+#breadcrumbs-section #action-button #create-file > a{
+    padding: 0 32px;
+}
+
+#breadcrumbs-section #action-button #create-file i{
+    position: absolute;
+}
+
+#breadcrumbs-section #action-button #create-file i.si-dropdown-open{
+    right:10px;
+    top:16px;
+}
+
+#breadcrumbs-section #action-button #create-file i.si-add-item{
+    left:12px;
+    top:11px;
+}
+
+#breadcrumbs{
+    bottom: 0;
+    float: left;
+    height: 61px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+}
+
+.bread-crumb{
+    background-image: url("../img/light_bread_crumbs_arrow_A.png");
+    background-position: 100% center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    padding: 9px;
+}
+
+.bread-crumb span{
+    background-color: #F5F4F4;
+    padding: 11px;
+    display: inline-block;
+    height: 40px;
+}
+
+.bread-crumb.dark{
+    background-image: url("../img/dark_bread_crumbs_arrow_A.png");
+}
+.bread-crumb.dark span{
+    background-color: #EBEBEB;
 }
 
 .footer-row
