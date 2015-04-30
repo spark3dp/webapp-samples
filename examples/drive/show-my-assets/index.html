@@ -142,6 +142,9 @@
 
 <script>
 
+	//log http requests
+	ajaxCallListenerFromIframe();
+
 	/**
 	 * Deletes an asset
 	 */
@@ -179,7 +182,6 @@
 	 */
 	jQuery(function ($) {
 
-		ajaxCallListenerFromIframe();
 		//First let's see if we have a valid access token
 		if (spark.auth.isAccessTokenValid()) {
 

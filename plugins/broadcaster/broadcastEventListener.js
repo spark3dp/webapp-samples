@@ -16,7 +16,7 @@ var broadcastEventListener = function($){
 						broadcastMapper[event.data.data.event](event.data.data.optionalParams);
 					}
 					else {
-						console.error("broadcastMapper doesn't have " + event.data.data.event + " mapping");
+						console.info("broadcastMapper doesn't have " + event.data.data.event + " mapping");
 					}
 				}
 			}

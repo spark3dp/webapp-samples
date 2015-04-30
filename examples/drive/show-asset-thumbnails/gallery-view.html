@@ -141,12 +141,14 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
-<!-- Enable broadcasting events to top window -->
+<!-- Enable broadcasting events and logging requests to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
 
-
+	//log http requests
+	ajaxCallListenerFromIframe();
 
 	//the asset id we are referring to
 	var currentAssetId;

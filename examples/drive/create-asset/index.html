@@ -99,11 +99,14 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
-<!-- Enable broadcasting events to top window -->
+<!-- Enable broadcasting events and logging requests to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
-
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
 
 	/**
 	 * Creates a new asset
@@ -129,7 +132,8 @@
 
 			spark.drive.createAsset(asset, function (response) {
 				console.info('create asset:', response);
-				location.href = '../show-my-assets/files.html';
+				location.href = '../show-my-assets/files.html?assetId=' + response.asset_id;
+				console.log('../show-my-assets/files.html?assetId=' + response.asset_id);
 			});
 
 		}
@@ -157,6 +161,7 @@
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('createAsset');
+
 
 
 	});

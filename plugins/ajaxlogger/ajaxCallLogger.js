@@ -17,19 +17,21 @@ var ajaxCallLogger = function(){
 	 * @param data - the data to log
 	 */
 	var log = function (data) {
-		console.log(data);
+		//console.log(data);
 		renderjson.set_show_to_level(1);
 
 		var rendered = renderjson((data.res));
-		console.log("rendered", rendered)
+		//console.log("rendered", rendered)
 
-		var div = $("<pre></pre>");
+		var div = $('<div class="request"></div>');
 		var txt = $(document.getElementById(loggerId));
 		var id = "response" + txt.children().size();
 
 		var on = "$('#" + id + "').toggle()";
 		var onclick = "onclick=" + on;
-		div.append("<pre class='renderjson' " + onclick + "><div id='" + "req" + id + "'>" + data.req.METHOD + " " + data.req.URL + "</div></pre>");
+		div.append("<pre class='renderjson' " + onclick + "><div id='" + "req" + id + "'>" +
+					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
+			 			data.req.URL + "</div></pre>");
 		var response = $("<div id='" + id + "' style='display:none'></div>");
 		var renderedReq = renderjson((data.req));
 
@@ -50,10 +52,12 @@ var ajaxCallLogger = function(){
 		createLoggerElement: function (parentSelector) {
 			var div = $(
 				'<div class="logger-container center">' +
-				'<div class="logger-header clearfix">' +
-				'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
-				'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
-				'<div id="'+loggerId+'"></div></div>Please log in</div>');
+					'<div class="logger-header clearfix">' +
+						'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
+						'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
+					'</div>' +
+					'<div id="'+loggerId+'"></div>' +
+				'</div>');
 			$(parentSelector).append(div);
 
 

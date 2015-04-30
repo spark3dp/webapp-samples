@@ -18,6 +18,17 @@ a {
     outline: 0;
 }
 
+pre{
+    text-align: left;
+    margin: 0;
+    border-radius: 0;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid #3a3e4d;
+    font-size: 12px;
+    color:#ffffff;
+}
+
 a:hover, a:active, a.clicked, a:focus {
     text-decoration: none;
     outline: 0;
@@ -278,7 +289,7 @@ input[type="checkbox"]:checked + label span.chk {
 }
 
 .form-footer div.submit-wrapper .spinner{
-    right:25px;
+    right:15px;
 }
 
 .form-footer div.submit-wrapper a{
@@ -836,7 +847,24 @@ i.stooltip span {
 {
    border-bottom: 1px solid #3a3e4d;
    padding-top: 5px;
-    margin-bottom: 20px;
+}
+
+.logger-container .method{
+    border:1px solid #ffffff;
+    border-radius: 4px;
+    padding: 3px 8px;
+}
+.logger-container .method.method-get{
+    border-color: greenyellow;
+}
+.logger-container .method.method-post{
+    border-color: coral;
+}
+.logger-container .method.method-put{
+    border-color: cornflowerblue;
+}
+.logger-container .method.method-delete{
+    border-color: palevioletred;
 }
 
 .logger-header .title{
@@ -849,4 +877,6 @@ i.stooltip span {
     margin-right: 15px;
     cursor: pointer;
 }
-
+.request > .renderjson{
+    cursor: pointer;
+}

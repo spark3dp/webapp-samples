@@ -13,6 +13,14 @@
 	<!-- Common styles -->
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
+	<style>
+		.notification-bar{
+			position: relative;
+			margin-bottom: 10px;
+			margin-top: -15px;
+			display: none;
+		}
+	</style>
 </head>
 
 <body>
@@ -22,6 +30,9 @@
 			<h4 class="modal-title" id="manageTitle">UPDATE AN ASSET</h4>
 		</div>
 		<div class="modal-body">
+			<div class="notification-bar">
+				<i class="spark_icon si-status-ok"></i> Asset was updated successfully
+			</div>
 			<form id="asset-form" novalidate="">
 				<section class="form_field">
 					<label for="manage-assets-title">
@@ -102,6 +113,9 @@
 
 <script>
 
+	//log http requests
+	ajaxCallListenerFromIframe();
+
 	//the asset id we are referring to
 	var currentAssetId;
 
@@ -129,6 +143,11 @@
 			asset.assetId = currentAssetId;
 			spark.drive.updateAsset(asset, function (response) {
 				console.info('update asset response:', response);
+				$('.notification-bar').show();
+				setTimeout(function(){
+					$('.notification-bar').hide();
+				},3000);
+
 			});
 		}
 	}
@@ -157,8 +176,6 @@
 	 * The spark object already exists in this point
 	 */
 	jQuery(function ($) {
-
-		ajaxCallListenerFromIframe();
 
 		//First let's see if we have a valid access token
 		if (!spark.auth.isAccessTokenValid()) {

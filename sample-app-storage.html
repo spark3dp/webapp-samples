@@ -153,7 +153,11 @@
 
 	}
 
-
+	function hideBreadcrumbs(breadcrumbs){
+		for (var i in breadcrumbs){
+			$('#' + breadcrumbs[i]).addClass('hidden');
+		}
+	}
 
 	/**
 	 * Show asset breadcrumb
@@ -180,6 +184,7 @@
 	 */
 	function showMyAssetFiles() {
 		$('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
+		hideBreadcrumbs(['file-type']);
 		showAssetBreadcrumb(currentAssetId)
 
 	}
@@ -203,12 +208,8 @@
 		ajaxCallLogger.startIframeListener();
 		broadcastEventListener.startIframeBroadcastListener();
 
-		if (spark.auth.isAccessTokenValid()) {
-			statePlugin.changeState('myAssets');
-		}
-		else {
-			statePlugin.changeState('login');
-		}
+		statePlugin.changeState('login');
+
 
 		$(".menu-item").click(function (e) {
 			e.preventDefault();
@@ -222,6 +223,7 @@
 
 	});
 
+	//States of the app
 
 	var states = {
 		login: {
@@ -229,15 +231,16 @@
 			enabledTabs: [],
 			disabledTabs: ['#myAssetsId', '#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
-				$('#breadcrumbs-section').hide();
+				$('#breadcrumbs > div').addClass('hidden');
+				$('#breadcrumbs-section div#action-button div').hide();
 				$('.menu-item').removeClass('selected');
 			}
 		},
 
 		myAssets: {
 			src: 'examples/drive/show-my-assets/index.html',
-			enabledTabs: ['#myAssetsId'],
-			disabledTabs: ['#loginId', '#createAssetId', '#manageFilesId'],
+			enabledTabs: ['#myAssetsId','#loginId'],
+			disabledTabs: ['#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
 				$('.menu-item').removeClass('selected');
@@ -252,6 +255,7 @@
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
 				$('.menu-item').removeClass('selected');
+				$('.menu-item#createAssetId').addClass('selected');
 			}
 		},
 
@@ -269,27 +273,34 @@
 
 	/**
 	 * Events that are called from the iframe
-	 * @type {{myAssetsEvent: Function, myAssetsFilesEvent: Function}}
 	 */
 	var broadCastsCallbacks = {
 
+		redirectUserToDefaultPage: function(){
+			changeState('myAssets');
+		},
 		myAssetsEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').show();
+			showBreadcramb('home');
+			hideBreadcrumbs(['asset','file-type']);
 		},
 
 		showSpecificAssetEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
+			showBreadcramb('home');
 			showAssetBreadcrumb(currentAssetId);
+			hideBreadcrumbs(['file-type']);
 		},
 		createAssetEvent: function () {
-			$('#breadcrumbs-section div#action-button #create-asset').show();
+			$('#breadcrumbs-section div#action-button #create-asset').hide();
 		},
 		showAssetFilesEvent: function(optionalParams){
 			currentAssetId = optionalParams.assetId;
+			showBreadcramb('home');
 			showAssetBreadcrumb(currentAssetId);
 			showAssetFilesBreadcrumb(optionalParams.fileType);
 		}
-	}
+	};
 
 	/**
 	 * Map of all the possible broadcased events from the iframe
@@ -297,11 +308,13 @@
 	 */
 	var broadcastMapper = [];
 
+	broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
 	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
 	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
 	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
 	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
-	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent
+	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
+	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
 
 
 
