@@ -27,18 +27,41 @@
 <div class="logged-in-container">
 	<div class="container sample-app-container" id="container">
 
-		<div class="header">
-			<a class="btn pull-right view-source" href="" target="_blank">View on github</a>
+		<div class="sample-app-header clearfix">
+			<a class="btn pull-right btn-github" href="#" target="_blank"></a>
 			<!-- Navigation links at the top right of the screen -->
-			<h5 class="sample-title">Spark Print Sample App</h5>
+			<h5 class="sample-title">Spark Storage Sample App</h5>
 		</div>
-
-		<ul class="nav nav-tabs sample-top-menu" role="tablist">
-			<li><a id="loginId" class="menu-item" data-state="login" role="tab">Login</a></li>
-			<li><a id="myAssetsId" class="menu-item" data-state="myAssets" role="tab">My Assets</a></li>
-			<li><a id="createAssetId" class="menu-item" data-state="createAsset" role="tab">Create Asset</a></li>
-			<li><a id="manageFilesId" class="menu-item" data-state="manageFiles" role="tab">Manage Files</a></li>
-		</ul>
+		<div style="text-align: center;">
+			<ul class="nav nav-tabs sample-top-menu" role="tablist">
+				<li>
+					<div id="user" class="pull-left">
+						<img class="user-avatar" src=""/>
+					</div>
+					<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li>
+					<a id="myAssetsId" class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li>
+					<a id="createAssetId" class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li>
+					<a id="manageFilesId" class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				</li>
+			</ul>
+		</div>
 
 
 		<div id="breadcrumbs-section">
@@ -73,7 +96,8 @@
 					</a>
 				</div>
 				<div id="create-file" class="dropdown actions">
-					<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1" data-toggle="dropdown"
+					<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
+					   data-toggle="dropdown"
 					   aria-expanded="true">
 						<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add File
 					</a>
@@ -153,8 +177,8 @@
 
 	}
 
-	function hideBreadcrumbs(breadcrumbs){
-		for (var i in breadcrumbs){
+	function hideBreadcrumbs(breadcrumbs) {
+		for (var i in breadcrumbs) {
 			$('#' + breadcrumbs[i]).addClass('hidden');
 		}
 	}
@@ -173,7 +197,7 @@
 		$('#create-file').show();
 	}
 
-	function showAssetFilesBreadcrumb(fileType){
+	function showAssetFilesBreadcrumb(fileType) {
 		showBreadcramb('file-type');
 		$('#file-type').find('.bread-crumb-inner > b').text(fileType);
 	}
@@ -189,16 +213,16 @@
 
 	}
 
-	function openUploadFileMenu(elem){
+	function openUploadFileMenu(elem) {
 		$(elem).next('i').click();
 	}
 
-	function goToUploadFilePage(page){
+	function goToUploadFilePage(page) {
 		var uploadPage = page === 'source' ? 'upload-source-file' : 'upload-thumbnail-file';
 
 		uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
 
-		$('#mainIframe').attr('src',uploadPage);
+		$('#mainIframe').attr('src', uploadPage);
 	}
 
 
@@ -208,8 +232,16 @@
 		ajaxCallLogger.startIframeListener();
 		broadcastEventListener.startIframeBroadcastListener();
 
-		statePlugin.changeState('login');
-
+		if (spark.auth.isAccessTokenValid()) {
+			statePlugin.changeState('myAssets');
+			hideBreadcrumbs(['home','asset','file-type']);
+			spark.auth.getMyProfile(function (response) {
+				$('#user span').text(response.member.screen_name);
+				$('#user img').attr('src', response.member.profile.avatar_path);
+			});
+		}else{
+			statePlugin.changeState('login');
+		}
 
 		$(".menu-item").click(function (e) {
 			e.preventDefault();
@@ -239,7 +271,7 @@
 
 		myAssets: {
 			src: 'examples/drive/show-my-assets/index.html',
-			enabledTabs: ['#myAssetsId','#loginId'],
+			enabledTabs: ['#myAssetsId', '#loginId'],
 			disabledTabs: ['#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
@@ -276,13 +308,13 @@
 	 */
 	var broadCastsCallbacks = {
 
-		redirectUserToDefaultPage: function(){
+		redirectUserToDefaultPage: function () {
 			changeState('myAssets');
 		},
 		myAssetsEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 			showBreadcramb('home');
-			hideBreadcrumbs(['asset','file-type']);
+			hideBreadcrumbs(['asset', 'file-type']);
 		},
 
 		showSpecificAssetEvent: function (optionalParams) {
@@ -294,7 +326,7 @@
 		createAssetEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').hide();
 		},
-		showAssetFilesEvent: function(optionalParams){
+		showAssetFilesEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
 			showBreadcramb('home');
 			showAssetBreadcrumb(currentAssetId);
@@ -315,7 +347,6 @@
 	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
 	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
 	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
-
 
 
 </script>
