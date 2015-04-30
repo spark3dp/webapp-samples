@@ -40,6 +40,29 @@ var sparkPrint = function () {
 
 		},
 
+		/**
+		 * Unregisters a printer for the logged in user.
+		 * @param printer_id
+		 * @param callback
+		 * @param errorCallback
+		 */
+		unregisterPrinter: function (printer_id,callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+
+				var url = serverUrl + "print/printers/" + printer_id
+				spark.util.xhr(url, 'DELETE', "", headers, callback,errorCallback);
+			}else{
+				callback(false);
+			}
+
+		},
+
 
 		/**
 		 * Gets all printer that are registered to the logged in user

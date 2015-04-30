@@ -30,7 +30,7 @@ spark.util = function () {
 
 
 			xhr.onload = function () {
-				if (xhr.status == 200 || xhr.status == 201 || xhr.status == 202) {
+				if (xhr.status == 200 || xhr.status == 201 || xhr.status == 202 || xhr.status == 204) {
 					var response = xhr.responseText;
 					if (isJsonResponse == undefined || isJsonResponse == true) {
 						response = JSON.parse(xhr.responseText);

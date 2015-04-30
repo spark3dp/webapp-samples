@@ -74,22 +74,50 @@
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script type="">
-	$(document).ready(function(){
-		ajaxCallListenerFromIframe();
-		getAllPrinters();
-	});
 
-	var getAllPrinters = function(){
+	function getAllPrinters(){
 		sparkPrint.getAllPrinters(function(response){
 			var printers = response.printers;
-			//$("#printers-select").find('option').remove()
 
 			for(var i in printers){
-				var printer = $("<tr class='in-table "+"'><td>"+printers[i].printer_id+"</td><td>"+printers[i].printer_name+"</td><td>"+printers[i].printer_registered_date+"</td><td>"+printers[i].firmware+"</td></tr>")
+
+				var printer = $("<tr class='in-table "+"'>" +
+								"<td>"+printers[i].printer_id+"</td>" +
+								"<td>"+printers[i].printer_name+"</td>" +
+								"<td>"+printers[i].printer_registered_date+"</td>" +
+								"<td>"+printers[i].firmware+"</td>" +
+								"<td><div class='unregister-printer' data-printer-id='" + printers[i].printer_id + "'>Delete</div></td>" +
+						        "</tr>");
+
 				printer.appendTo("#printersTbody");
 			}
+		}, function(){
+			console.log("error get printers");
 		});
 	};
+
+	$(document).ready(function() {
+
+		ajaxCallListenerFromIframe();
+		getAllPrinters();
+
+		$("#printersTbody").on('click', ".unregister-printer", function (e) {
+			e.preventDefault();
+
+
+			var printer_id = $(this).data('printer-id');
+			sparkPrint.unregisterPrinter(printer_id, function (response) {
+
+					},
+					function (response) {
+						console.log("error unregister printer");
+						//logger("#register-printer-form #inputLog",response);
+
+					});
+		});
+	});
+
+
 
 
 

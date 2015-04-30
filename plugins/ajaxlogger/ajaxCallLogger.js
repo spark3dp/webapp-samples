@@ -49,12 +49,11 @@ var ajaxCallLogger = function(){
 		 */
 		createLoggerElement: function (parentSelector) {
 			var div = $(
-				'<div class="row footer-row" style="background: black">' +
-				'<div class="col-md-12">' +
-				'<div class="form-group">' +
-				'<label for="'+loggerId+'">Request Log</label>' +
-				'<span class="pull-right" onClick="$(\'#'+loggerId+'\').empty()">CLEAR</span>' +
-				'<div id="'+loggerId+'"></div></div></div></div>');
+				'<div class="logger-container center">' +
+				'<div class="logger-header clearfix">' +
+				'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
+				'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
+				'<div id="'+loggerId+'"></div></div>Please log in</div>');
 			$(parentSelector).append(div);
 
 

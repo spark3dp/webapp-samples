@@ -501,19 +501,29 @@ i.stooltip span {
     width: 18px;
 }
 
+.si-status-right-arrow{
+    background-position: -72px -14px;
+    height: 18px;
+    width: 18px;
+}
+
 /***** END SPRITE *****/
 
 
 .btn-github {
 
     background: url(../img/github_btn_normal.png) no-repeat;
-    display: inline-block;
+    width:206px;
+    height: 41px;
+    display: block;
 }
 
 .btn-github:hover {
 
-    background: url(../img/github_btn_hover.png) no-repeat;
-    display: inline-block;
+    background: url(../img/github_btn_over.png) no-repeat;
+    width:206px;
+    height: 41px;
+    display: block;
 }
 
 .logged-out-container
@@ -530,6 +540,7 @@ i.stooltip span {
 .sample-title
 {
     text-transform: uppercase;
+    color:#333333;
 }
 
 .sample-top-menu {
@@ -539,29 +550,37 @@ i.stooltip span {
 
 .sample-top-menu li
 {
-    padding: 15px 10px;
+    padding: 15px 5px;
+}
+
+.sample-top-menu li.disabled a
+{
+    color:#c0c0c0;
 }
 
 .sample-top-menu li a
 {
     text-transform: uppercase;
-    color: #777;
+    color: #333333;
     margin-right: 10px;
     padding: 0 0 2px 0;
 }
 
 .sample-top-menu li a:hover
 {
-    color: #777;
+    color: #333333;
+    background-color: transparent;
+    border-color: transparent;
 }
 
 .sample-top-menu li a:hover, .sample-top-menu li.selected a {
     border-bottom: 1px solid red;
-    color: black;
+    color: #333333;
 }
 
 .sample-top-menu li .si-status-ok{
     display:none;
+
 }
 
 .sample-top-menu li .si-status-disabled{
@@ -576,39 +595,27 @@ i.stooltip span {
     display:none;
 }
 
+.sample-top-menu li .si-status-right-arrow{
+    margin-left: 10px;
+    top: -1px;
+    position: relative;
+}
 
-
-.view-source
+.sample-top-menu li .user-avatar
 {
-    text-transform: uppercase;
-    background-color: #c0c0c0;
-    border-color: #000000;
-    color: #000000;
+    width:25px;
+    height: 25px;
+    margin-right: 10px;
+    position: relative;
+    top:-2px;
 }
 
 .sample-app-container
 {
     margin-top: 10px;
-    border: 1px solid silver;
+    border: 1px solid #cccccc;
     border-radius: 3px;
-
-    /* IE10 Consumer Preview */
-    background-image: -ms-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
-
-    /* Mozilla Firefox */
-    background-image: -moz-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
-
-    /* Opera */
-    background-image: -o-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
-
-    /* Webkit (Safari/Chrome 10) */
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #DCDCDC), color-stop(1, #EFEFEF));
-
-    /* Webkit (Chrome 11+) */
-    background-image: -webkit-linear-gradient(bottom, #DCDCDC 0%, #EFEFEF 100%);
-
-    /* W3C Markup, IE10 Release Preview */
-    background-image: linear-gradient(to top, #DCDCDC 0%, #EFEFEF 100%);
+    background-color: #f9f8f8;
 }
 
 .footer-row
@@ -622,3 +629,42 @@ i.stooltip span {
 {
     text-align: center;
 }
+
+.mainIframe-container
+{
+    border-top:1px solid #cccccc;
+    border-left:1px solid #cccccc;
+    border-right:1px solid #cccccc;
+    width: 770px;
+}
+
+.logger-container
+{
+    background-color: #2b2f3e;
+    color:#8c92a4;
+    min-height: 100px;
+    margin-bottom: 10px;
+    border-bottom:1px solid #2b2f3e;
+    border-left:1px solid #2b2f3e;
+    border-right:1px solid #2b2f3e;
+    width: 770px;
+}
+
+.logger-container .logger-header
+{
+   border-bottom: 1px solid #3a3e4d;
+   padding-top: 5px;
+    margin-bottom: 20px;
+}
+
+.logger-header .title{
+    color:#cfd3dd;
+    text-transform: uppercase;
+    margin-left: 15px;
+}
+
+.logger-header .clear{
+    margin-right: 15px;
+    cursor: pointer;
+}
+

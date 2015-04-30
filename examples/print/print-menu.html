@@ -61,39 +61,40 @@
 <div class="logged-in-container">
 	<div class="container sample-app-container">
 		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github view-source" href="" target="_blank">View on github</a>
-
-			<!-- Navigation links at the top right of the screen -->
-			<ul class="nav nav-pills pull-right" role="tablist" style="display: block;">
-				<li role="presentation" id="logout"><a href="#" onclick="spark.auth.logout()">Logout</a></li>
-			</ul>
+			<a class="btn pull-right btn-github" href="" target="_blank"></a>
 			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
 		<div style="text-align: center;">
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<li id="loginId">
-				<a class="menu-item pull-left" data-state="login" role="tab" >Login</a>
+				<div id="user" class="pull-left">
+					<img class="user-avatar" src=""/>
+				</div>
+				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-right-arrow"></div>
 			</li>
 			<li id="manageId">
 				<a class="menu-item pull-left" data-state="manage" role="tab" >Manage Printers</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-right-arrow"></div>
 			</li>
 			<li id="printId">
 				<a class="menu-item pull-left" data-state="print" role="tab" >Print Job</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				<div class="pull-left spark_icon si-status-right-arrow"></div>
 			</li>
 			<li id="statusId">
-				<a class="menu-item pull-left" data-state="status" role="tab">Check Status</a>
+				<a class="menu-item pull-left" data-state="status" role="tab">Jobs Status</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
 		</ul>
 		</div>
-		<iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe>
+		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe></div>
 		<div class="row simulator-row">
 
 			<div class="jumbotron span12">
@@ -188,22 +189,22 @@
 		register:{
 			"src":"register-printer.html",
 			selectedTab:"#manageId",
-			enabledTabs:["#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId","#loginId"]
+			enabledTabs:["#loginId","#manageId","#registerId"],
+			disabledTabs:["#printId","#statusId"]
 		},
 
 		print:{
 			"src":"create-print-job.html",
 			selectedTab:"#printId",
-			enabledTabs:["#manageId","#registerId","#printId"],
-			disabledTabs:["#statusId","#loginId"]
+			enabledTabs:["#loginId","#manageId","#registerId","#printId"],
+			disabledTabs:["#statusId"]
 		},
 
 		status:{
 			"src":"printer-status.html",
 			selectedTab:"#statusId",
-			enabledTabs:["#manageId","#printId","#registerId","#statusId"],
-			disabledTabs:["#loginId"]
+			enabledTabs:["#loginId","#manageId","#printId","#registerId","#statusId"],
+			disabledTabs:[]
 		}
 
 	};
