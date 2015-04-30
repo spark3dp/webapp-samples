@@ -148,11 +148,8 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
-<!-- end spark sdk -->
-<!--<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/spark-sdk-latest.min.js"></script>
-should be cloudfront!
--->
-
+<!-- Enable broadcasting events to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
 
 <script>
 
@@ -251,6 +248,9 @@ should be cloudfront!
 		} else {//user needs to login
 			location.href = '../../auth/';
 		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showMyAssets.index');
 
 	});
 
