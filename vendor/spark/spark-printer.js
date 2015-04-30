@@ -16,6 +16,29 @@ var sparkPrint = function () {
 	 */
 	return {
 
+		/**
+		 * Get printer type by type id.
+		 * @param type_id
+		 * @param callback
+		 * @param errorCallback
+		 */
+		getPrinterTypeById: function (type_id, callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+
+				var url = serverUrl + "printdb/printertypes/" + type_id
+				spark.util.xhr(url, 'GET', "", headers, callback,errorCallback);
+			}else{
+				callback(false);
+			}
+
+		},
+
 
 		/**
 		 * Registers a printer for the logged in user.

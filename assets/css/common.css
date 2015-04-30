@@ -526,6 +526,8 @@ i.stooltip span {
     background-position: -47px -53px;
     height: 12px;
     width: 12px;
+    margin-right: 10px;
+    margin-bottom: -1px;
 }
 
 .si-status-disabled{
@@ -539,6 +541,7 @@ i.stooltip span {
     height: 18px;
     width: 18px;
 }
+
 
 /***** END SPRITE *****/
 
@@ -807,5 +810,9 @@ i.stooltip span {
 .logger-header .clear{
     margin-right: 15px;
     cursor: pointer;
+}
+
+.spacer{
+    margin-bottom: 20px;
 }
 

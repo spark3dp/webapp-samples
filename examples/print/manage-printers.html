@@ -10,11 +10,15 @@
 
 	<title>Spark Sample Application - My Drive</title>
 
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
 	<!-- Bootstrap core CSS -->
-	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
@@ -31,40 +35,66 @@
 
 <div class="logged-in-container">
 	<div class="container">
-
-
-
+		<div class="spacer clearfix"></div>
+		<div class="spinner"></div>
 		<form id="print-status-form">
-			<div class="sample-title">Manage your 3D Printers</div>
-
-			<input class="btn btn-primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')" value="Add Printer"><br/><br/>
-
-
-			<table class="table" id="printers">
+			<div class="sample-title pull-left">Manage your 3D Printers</div>
+			<a class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
+				<i class="spark_icon si-add-item"></i>  Add Printer
+			</a>
+			<div class="spacer clearfix"></div>
+			<hr>
+			<table class="table hidden" id="printers">
 				<thead>
 				<tr>
-					<th>Printer ID<br><span>Printer ID</span></th>
-					<th>Printer Name<br><span>Printer Name</span></th>
-					<th>Registration Date<br><span>Registration Date</span></th>
-					<th>firmware<br><span>firmware</span></th>
+					<!--<th>Printer ID<br><span>Printer ID</span></th>-->
+					<th>Printer Name<br><span>printer_name</span></th>
+					<th>Printer Type<br><span>type_id</span></th>
+					<!--<th>Registration Date<br><span>Registration Date</span></th>-->
+					<th>Firmware<br><span>firmware</span></th>
 					<th></th>
 				</tr>
 				</thead>
 				<tbody id="printersTbody">
 			</table>
-			<br/> <br/>
-
 		</form>
+
+		<div class="hidden" id="empty-printers">
+			<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+				They are equivelent to a project or a folder with metadata.
+			</p>
+
+			<div class="img">
+				<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
+			</div>
+			<a class="spark_btn" href="../create-asset/">Create your first Printer</a>
+		</div>
+
 		<div class="modal-footer">
 			<input class="btn btn-primary" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')" value="Contintue">
 		</div>
-
-
-
-
-
-	</div></div>
+	</div>
+</div>
 <!-- /container -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this Printer?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small delete" type="button">DELETE PRINTER</a>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
@@ -73,67 +103,92 @@
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
-<script type="">
+<script type="text/javascript">
+
+
+	/**
+	 * Delete a printer
+	 */
+	function deletePrinter(printer_id, printerElem) {
+
+		$('#myModal').modal('show');
+
+		//cancel events
+		$('.cancel').off();
+		$('.cancel').on('click', function(){
+			$('#myModal').modal('hide');
+		});
+
+		//delete events
+		$('.delete').off();
+		$('.delete').on('click',function(){
+			sparkPrint.unregisterPrinter(printer_id, function () {
+				$('#myModal').modal('hide');
+				printerElem.remove();
+
+				//make sure printers still left
+				if (!$('.in-table td').length){
+					location.reload();
+				}
+			}, function(){});
+		});
+	}
+
 
 	function getAllPrinters(){
 		sparkPrint.getAllPrinters(function(response){
-			var printers = response.printers;
 
-			for(var i in printers){
+			$('.spinner').hide();
 
-				var printer = $("<tr class='in-table "+"'>" +
-								"<td>"+printers[i].printer_id+"</td>" +
-								"<td>"+printers[i].printer_name+"</td>" +
-								"<td>"+printers[i].printer_registered_date+"</td>" +
-								"<td>"+printers[i].firmware+"</td>" +
-								"<td><div class='unregister-printer' data-printer-id='" + printers[i].printer_id + "'>Delete</div></td>" +
-						        "</tr>");
+			$('#printersTbody').empty();
 
-				printer.appendTo("#printersTbody");
+
+			if (response.count) {
+
+				$('#printers').removeClass('hidden');
+
+				$.each(response.printers, function (index, item) {
+
+					sparkPrint.getPrinterTypeById(item.type_id, function (type) {
+
+						var tr = $('<tr class="in-table"></tr>')
+						tr.append($('<td>' + item.printer_name + '</td>'));
+						tr.append($('<td>' + type.name + '</td>'));
+						tr.append($('<td>' + item.firmware + '</td>'));
+
+						var actionsElem = '<div class="dropdown actions">' +
+								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
+								'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+								'<li role="presentation"><a role="menuitem" href="../update-printer/?printerId=' + item.printer_id + '">EDIT</a></li>' +
+								'<li role="presentation"><a role="menuitem" onclick="deletePrinter(' + item.printer_id + ',$(this).parents(\'tr\'))">DELETE</a></li>' +
+								'</ul></div>';
+
+
+						tr.append($('<td>' + actionsElem + '</td>'));
+						$('#printersTbody').append(tr);
+
+					});
+
+				});
+			}else {
+				$('#empty-printers').removeClass('hidden');
 			}
+
 		}, function(){
 			console.log("error get printers");
 		});
+
 	};
+
+
+
 
 	$(document).ready(function() {
 
 		ajaxCallListenerFromIframe();
 		getAllPrinters();
-
-		$("#printersTbody").on('click', ".unregister-printer", function (e) {
-			e.preventDefault();
-
-
-			var printer_id = $(this).data('printer-id');
-			sparkPrint.unregisterPrinter(printer_id, function (response) {
-
-					},
-					function (response) {
-						console.log("error unregister printer");
-						//logger("#register-printer-form #inputLog",response);
-
-					});
-		});
 	});
 
-
-
-
-
-
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
 </body>
 </html>
