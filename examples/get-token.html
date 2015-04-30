@@ -1,0 +1,23 @@
+<html>
+
+<head>
+	<script type="text/javascript" charset="utf-8" src="../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../vendor/spark/spark-auth.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../plugins/login/login.js"></script>
+
+</head>
+<body>
+<div class="logged-in-container">
+Token: <input id="token" style="width: 300px;">
+</div>
+<script>
+	$(document).ready(function() {
+
+		$("#token").val(spark.auth.accessToken());
+	});
+</script>
+</body>
+
+</html>

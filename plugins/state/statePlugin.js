@@ -56,6 +56,13 @@ var statePlugin = function($){
 			$(selectedTab).addClass("selected");
 
 			$("#mainIframe").attr("src",srcIframe);
+
+			//Callback function after state changes
+			var callbackFunc = states[stateName].callbackFunc;
+
+			if (callbackFunc){
+				callbackFunc();
+			}
 		}
 	};
 

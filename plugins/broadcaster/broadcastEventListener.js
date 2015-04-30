@@ -8,7 +8,7 @@ var broadcastEventListener = function($){
 
 	var startIframeBroadcastListener = function() {
 
-		var iframeBroadCastListener = function(){
+		var iframeBroadCastListener = function(event){
 			if (event.origin === window.location.origin) {
 				if(event.data!=undefined && event.data.type=="eventBroadcast") {
 
