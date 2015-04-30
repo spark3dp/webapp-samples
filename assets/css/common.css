@@ -592,6 +592,8 @@ i.stooltip span {
 {
     text-transform: uppercase;
     color:#333333;
+    font-size:16px;
+    font-weight: 500;
 }
 
 .sample-top-menu {
@@ -615,6 +617,7 @@ i.stooltip span {
     color: #333333;
     margin-right: 10px;
     padding: 0 0 2px 0;
+    font-size:15px;
 }
 
 .sample-top-menu li a:hover
