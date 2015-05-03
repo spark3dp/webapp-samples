@@ -880,3 +880,14 @@ i.stooltip span {
 .request > .renderjson{
     cursor: pointer;
 }
+
+.renderjson a { text-decoration: none; }
+.renderjson .disclosure { color: crimson;  font-size: 150%; }
+.renderjson .syntax { color: grey; }
+.renderjson .string { color: lightgreen; }
+.renderjson .number { color: #add8e6; }
+.renderjson .boolean { color: orange; }
+.renderjson .key    { color: mediumpurple; }
+.renderjson .keyword { color: mediumpurple; }
+.renderjson .object.syntax { color: lightsalmon; }
+.renderjson .array.syntax  { color: orange; }
