@@ -349,6 +349,7 @@
 			changeState('login');
 		},
 		myAssetsEvent: function () {
+			$('#breadcrumbs-section div#action-button #create-file').hide();
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 			showBreadcramb('home');
 			hideBreadcrumbs(['asset', 'file-type']);
@@ -377,6 +378,7 @@
 			if (!currentAssetId){
 				changeState('myAssets');
 			}else {
+				$('#breadcrumbs-section div#action-button #create-file').hide();
 				showBreadcramb('home');
 				showAssetBreadcrumb(currentAssetId);
 				showAssetFilesBreadcrumb(optionalParams.fileType);

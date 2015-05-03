@@ -159,7 +159,7 @@
 			if (thumbnails.length) {
 				$('#files').removeClass('hidden');
 				$.each(thumbnails, function (index, item) {
-					var tr = $('<tr class="in-table"></tr>');
+					var tr = $('<tr></tr>');
 					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + (item.caption.length?item.caption:'-') +
 					'<span>' + (item.is_primary?' <span class="title-label">(primary)</span>':'') + '</span></td>'));
 					tr.append($('<td>' + item.file_id + '</td>'));

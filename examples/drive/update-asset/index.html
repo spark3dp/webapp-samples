@@ -48,7 +48,7 @@
 				</section>
 				<section class="form_field">
 					<label for="manage-assets-description">
-						Add description <span class="field-label">&nbsp;/&nbsp;description</span>
+						Add description <span class="field-label">&nbsp;/&nbsp;description</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
 						<i class="stooltip"><span>The description of the asset</span></i>
 					</label>
@@ -65,7 +65,7 @@
 
 				<section class="form_field">
 					<label for="manage-assets-tags">
-						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span>
+						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
 						<i class="stooltip"><span>Tags that describe the asset</span></i>
 					</label>
@@ -136,9 +136,7 @@
 				tags: assetTags.val()
 			};
 
-			if ($('#c1:checked').length) {
-				asset.publish = true;
-			}
+			asset.publish = !!$('#c1:checked').length;
 
 			asset.assetId = currentAssetId;
 			spark.drive.updateAsset(asset, function (response) {
@@ -147,6 +145,8 @@
 				setTimeout(function(){
 					$('.notification-bar').hide();
 				},3000);
+
+				$('.submit-wrapper a').text('Back to my assets');
 
 			});
 		}
@@ -165,6 +165,11 @@
 				var tags = response.keywords.replace(/ /g, ",");
 				tags = (tags != "undefined") ? tags : "";
 				$("#manage-assets-tags").val(tags);
+				if (response.is_gallery_asset) {
+					$('#c1').attr('checked', 'checked');
+				}else{
+					$('#c1').removeAttr('checked');
+				}
 			} else {
 				$('#manageAsset').html('The requested asset is not available');
 			}
