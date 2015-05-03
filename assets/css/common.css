@@ -831,6 +831,7 @@ i.stooltip span {
     width: 770px;
 }
 
+/****** Ajaj Logger *****/
 .logger-container
 {
     background-color: #2b2f3e;
@@ -891,3 +892,7 @@ i.stooltip span {
 .renderjson .keyword { color: mediumpurple; }
 .renderjson .object.syntax { color: lightsalmon; }
 .renderjson .array.syntax  { color: orange; }
+
+/**** END Ajax Logger *****/
+
+
