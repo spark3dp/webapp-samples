@@ -1,10 +1,192 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-	<meta charset="UTF-8">
-	<title></title>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
+
+		.modal-header .layouts {
+			position: absolute;
+			right: 0;
+			background-color: #ffffff;
+			padding-left: 10px;
+		}
+
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
+		}
+
+		#empty-assets {
+			background-color: #F8F8F8;
+			text-align: center;
+		}
+
+		#empty-assets p {
+			padding: 20px 0;
+			color: darkgray;
+		}
+
+		#empty-assets a {
+			margin: 20px 0;
+		}
+
+
+		.dropdown i {
+			cursor: pointer;
+			position: absolute;
+			left: -10px;
+		}
+
+		.si-asset-icon {
+			margin-right: 8px;
+		}
+		#assets-gallery{
+			padding-top: 20px;
+			overflow-y: scroll;
+			height: 400px;
+		}
+		.box{
+			margin-bottom: 20px;
+			height: 190px;
+		}
+
+		.text a{
+			padding: 8px;
+			display: block;
+			color:#333333;
+		}
+		.text a:hover{
+			color:#333333;
+		}
+		.text .si-asset-icon{
+			margin-right:10px;
+		}
+
+
+
+	</style>
 </head>
+
 <body>
+
+<div class="container">
+
+	<div class="spinner"></div>
+	<div class="spacer clearfix"></div>
+	<div class="sample-title">Select a file to print</div>
+	<hr>
+	<div class="hidden" id="assets">
+		<div id="assets-gallery">
+
+		</div>
+	</div>
+
+	<div class="hidden" id="empty-assets">
+		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+			They are equivelent to a project or a folder with metadata.
+		</p>
+
+		<div class="img">
+			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
+		</div>
+	</div>
+
+</div>
+
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+<script>
+	function loopGallery(index, item) {
+		var imgUrlRow, imgUrlThumb;
+		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
+		if (imgUrlRow.indexOf('FullPreview/') < 0) {
+			imgUrlThumb += 'Medium.jpg';
+		}
+
+		var box = $('<div class="col-sm-3 box box-' + index + '"></div>');
+		var view = $('<div class="view thumb"></div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">' +
+				'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,10) + '</a></div>');
+
+		$('#assets-gallery').append(box);
+		box.append(view);
+
+		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
+		box.append(text);
+	}
+
+
+	$(document).ready(function(){
+
+		ajaxCallListenerFromIframe();
+
+
+		//First let's see if we have a valid access token
+		if (spark.auth.isAccessTokenValid()) {
+
+			//Get my assets and append to table in DOM
+			spark.drive.getMyAssets(100, 0, function (response) {
+				$('.spinner').hide();
+				console.info('my assets:', response);
+
+
+				if (response.count) {
+					$('#assets').removeClass('hidden');
+
+					$.each(response.assets, function (index, item) {
+
+						loopGallery(index, item);
+
+					});
+				} else {
+					$('#empty-assets').removeClass('hidden');
+				}
+			});
+
+
+		} else {//user needs to login
+			location.href = '../../auth/';
+		}
+
+	});
+
+</script>
 
 </body>
 </html>

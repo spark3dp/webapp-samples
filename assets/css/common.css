@@ -853,7 +853,8 @@ i.stooltip span {
 .logger-container .logger-header
 {
    border-bottom: 1px solid #3a3e4d;
-   padding-top: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
 .logger-container .method{
