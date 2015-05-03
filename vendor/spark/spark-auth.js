@@ -64,7 +64,7 @@ spark.auth = function () {
 		return spark.const.API_PROTOCOL + "://" + spark.const.API_SERVER + '/oauth/authorize' +
 			"?response_type=code" +
 			"&client_id=" + CLIENT_ID
-			//"&redirect_uri=" + REDIRECT_URL
+			"&redirect_uri=" + REDIRECT_URL
 			;
 	};
 

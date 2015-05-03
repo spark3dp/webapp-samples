@@ -37,7 +37,12 @@ var ajaxCallListener = function(callbackPushData) {
 		requestResponseMap[this.guid].req.PARAMS = {};
 
 		if(data!="") {
-			requestResponseMap[this.guid].req.PARAMS = tryJsonParse(data);
+			if(data.constructor!=undefined && data.constructor.name==="FormData"){
+				requestResponseMap[this.guid].req.PARAMS = "FormData";
+			}
+			else {
+				requestResponseMap[this.guid].req.PARAMS = tryJsonParse(data);
+			}
 		}
 
 		if(this.onload){

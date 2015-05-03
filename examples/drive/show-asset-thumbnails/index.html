@@ -133,8 +133,14 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
 
 	//the asset id we are referring to
 	var currentAssetId;
@@ -153,7 +159,7 @@
 			if (thumbnails.length) {
 				$('#files').removeClass('hidden');
 				$.each(thumbnails, function (index, item) {
-					var tr = $('<tr class="in-table"></tr>');
+					var tr = $('<tr></tr>');
 					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + (item.caption.length?item.caption:'-') +
 					'<span>' + (item.is_primary?' <span class="title-label">(primary)</span>':'') + '</span></td>'));
 					tr.append($('<td>' + item.file_id + '</td>'));
@@ -233,6 +239,9 @@
 				$('.gallery-view-link').attr('href', 'gallery-view.html?assetId=' + currentAssetId);
 			}
 		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'thumbnails',assetId:currentAssetId});
 
 	});
 

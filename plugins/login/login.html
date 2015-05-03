@@ -62,10 +62,10 @@
 		<img src=""/>
 	</div>
 	<div id="logout" style="display: inline;">
-		<a href="#" onclick="spark.auth.logout()">Logout</a>
+		<a href="#" onclick="spark.auth.logout();eventBroadCaster.broadcastEvent('manageIframe.loggedOut');">Logout</a>
 	</div>
 	<span>Or</span>
-	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn')">Continue</a>
+	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
 
 </div>
 
@@ -86,11 +86,12 @@
 
 		if (spark.auth.isAccessTokenValid()) {
 
-
 			spark.auth.getMyProfile(function (response) {
 				$('#user span').text(response.member.screen_name);
 				$('#user img').attr('src', response.member.profile.avatar_path);
 				$('#user').show();
+
+				eventBroadCaster.broadcastEvent('manageIframe.loggedIn')
 			});
 		}
 		else
