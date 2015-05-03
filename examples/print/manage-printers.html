@@ -21,13 +21,42 @@
 	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
-	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+	<style>
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
 
-	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+		.modal-header .layouts {
+			position: absolute;
+			right: 0;
+			background-color: #ffffff;
+			padding-left: 10px;
+		}
+
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
+		}
+
+		#empty-printers {
+			background-color: #F8F8F8;
+			text-align: center;
+		}
+
+		#empty-printers p {
+			padding: 60px 0;
+			color: darkgray;
+		}
+
+		#empty-printers a {
+			color: #333;
+			text-decoration: underline;
+		}
+
+	</style>
+
 
 </head>
 
@@ -38,13 +67,15 @@
 		<div class="spacer clearfix"></div>
 		<div class="spinner"></div>
 		<form id="print-status-form">
-			<div class="sample-title pull-left">Manage your 3D Printers</div>
+			<div class="sample-title">Manage your 3D Printers</div>
+			<hr>
+			<div class="pull-left">Manage your existing printers, or register a new printer.</div>
 			<a class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
 				<i class="spark_icon si-add-item"></i>  Add Printer
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
-			<table class="table hidden" id="printers">
+			<table class="table" id="printers">
 				<thead>
 				<tr>
 					<!--<th>Printer ID<br><span>Printer ID</span></th>-->
@@ -59,20 +90,11 @@
 			</table>
 		</form>
 
-		<div class="hidden" id="empty-printers">
-			<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
-				They are equivelent to a project or a folder with metadata.
-			</p>
-
-			<div class="img">
-				<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
-			</div>
-			<a class="spark_btn" href="../create-asset/">Create your first Printer</a>
+		<div id="empty-printers" style="display: none;">
+			<p>You have no printers registered. Please <a onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">add a new printer</a>.</p>
 		</div>
-
-		<div class="modal-footer">
-			<input class="btn btn-primary" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')" value="Contintue">
-		</div>
+		<br>
+	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Continue</a>
 	</div>
 </div>
 <!-- /container -->
@@ -96,6 +118,15 @@
 	</div>
 </div>
 
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
@@ -104,35 +135,6 @@
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script type="text/javascript">
-
-
-	/**
-	 * Delete a printer
-	 */
-	function deletePrinter(printer_id, printerElem) {
-
-		$('#myModal').modal('show');
-
-		//cancel events
-		$('.cancel').off();
-		$('.cancel').on('click', function(){
-			$('#myModal').modal('hide');
-		});
-
-		//delete events
-		$('.delete').off();
-		$('.delete').on('click',function(){
-			sparkPrint.unregisterPrinter(printer_id, function () {
-				$('#myModal').modal('hide');
-				printerElem.remove();
-
-				//make sure printers still left
-				if (!$('.in-table td').length){
-					location.reload();
-				}
-			}, function(){});
-		});
-	}
 
 
 	function getAllPrinters(){
@@ -145,13 +147,14 @@
 
 			if (response.count) {
 
-				$('#printers').removeClass('hidden');
+				$("#empty-printers").hide();
+				$("#continue").prop("disabled", false);
 
 				$.each(response.printers, function (index, item) {
 
 					sparkPrint.getPrinterTypeById(item.type_id, function (type) {
 
-						var tr = $('<tr class="in-table"></tr>')
+						var tr = $('<tr class="in-table" printer_id="' + item.printer_id + '"></tr>');
 						tr.append($('<td>' + item.printer_name + '</td>'));
 						tr.append($('<td>' + type.name + '</td>'));
 						tr.append($('<td>' + item.firmware + '</td>'));
@@ -160,21 +163,25 @@
 								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
 								'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
 								'<li role="presentation"><a role="menuitem" href="../update-printer/?printerId=' + item.printer_id + '">EDIT</a></li>' +
-								'<li role="presentation"><a role="menuitem" onclick="deletePrinter(' + item.printer_id + ',$(this).parents(\'tr\'))">DELETE</a></li>' +
+								'<li role="presentation"><a role="menuitem" class="deletePrinter" printer_id="' + item.printer_id + '">DELETE</a></li>' +
 								'</ul></div>';
 
 
 						tr.append($('<td>' + actionsElem + '</td>'));
 						$('#printersTbody').append(tr);
+						//onclick="deletePrinter(' + item.printer_id + ',$(this).parents(\'tr\'))"
 
-					});
+					}, function(){});
 
 				});
-			}else {
-				$('#empty-printers').removeClass('hidden');
+			}
+			else
+			{
+				$("#empty-printers").show();
+				$("#continue").attr("disabled", true);
 			}
 
-		}, function(){
+		}, function(response){
 			console.log("error get printers");
 		});
 
@@ -187,6 +194,40 @@
 
 		ajaxCallListenerFromIframe();
 		getAllPrinters();
+
+		$('#myModal').on('click', '.delete', function (e) {
+			e.preventDefault();
+
+			var printer_id = $('#myModal').attr("printer_id");
+
+			sparkPrint.unregisterPrinter(printer_id, function (result) {
+
+				$('#myModal').modal('hide');
+
+				$( "#printersTbody tr[printer_id=" +  printer_id + "]").remove();
+
+				//make sure printers still left
+				if (!$('.in-table td').length) {
+					location.reload();
+				}
+			}, function (result) {
+				console.log("error unregister printer");
+			});
+
+		});
+
+		$("#printersTbody").on('click', '.deletePrinter', function () {
+			$('#myModal').attr("printer_id", $(this).attr("printer_id"));
+			$('#myModal').modal('show');
+		});
+
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
+		});
+
+
 	});
 
 </script>

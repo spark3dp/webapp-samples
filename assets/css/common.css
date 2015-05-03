@@ -337,7 +337,7 @@ i.stooltip span {
     background: none repeat scroll 0 0 #F1F1F1;
     bottom: 25px;
     display: none;
-    left: -30px;
+    left: 0px;
     position: absolute;
     width: 200px;
     z-index: 10;
