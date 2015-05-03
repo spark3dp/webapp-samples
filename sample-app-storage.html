@@ -358,7 +358,6 @@
 		showSpecificAssetEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
 
-
 			if (!currentAssetId){
 				changeState('myAssets');
 			}else {
@@ -366,6 +365,7 @@
 				showAssetBreadcrumb(currentAssetId);
 				hideBreadcrumbs(['file-type']);
 				showManageFileStep();
+				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
 
 		},
@@ -383,6 +383,7 @@
 				showAssetBreadcrumb(currentAssetId);
 				showAssetFilesBreadcrumb(optionalParams.fileType);
 				showManageFileStep();
+				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
 		}
 	};
