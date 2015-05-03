@@ -1,7 +1,13 @@
 //provide environment through console i.e. ENV=beta node server.js
 var env = process.env.ENV || 'local',
+	port = process.env.PORT || 3000,
 	config = require('./config.js'),
 	API_SERVER = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://api-alpha.spark.autodesk.com/api/v1');
+
+
+if (isNaN(port)){
+	port = 3000;
+}
 
 //setup express + request
 var express = require('express'),
@@ -108,6 +114,6 @@ app.get('/printCallbackGet/support', function(req, res){
 
 //@todo: Add a refresh token endpoint
 
-app.listen(3000);
+app.listen(port);
 
-console.log('Express server started on port 3000');
+console.log('Express server started on port ' + port);
