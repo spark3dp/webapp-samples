@@ -130,6 +130,11 @@ textarea {
     display:block;
 }
 
+.table tr.in-table.selected {
+    background-color: #F7F7F7;
+    cursor: pointer;
+}
+
 .table td i{
     margin-right:10px;
 }
@@ -906,4 +911,10 @@ i.stooltip span {
 .spacer{
     margin-bottom: 20px;
 }
+
+.main-container
+{
+    padding: 20px;
+}
+
 

@@ -8,10 +8,13 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
 
 	<!-- Bootstrap core CSS -->
-	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
 	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
@@ -34,9 +37,10 @@
 
 		.lcd{
 			font-family:'digital', sans-serif;
-			background-color:black;
-			color:lime;
-			font-size: 30px;
+			margin-top: 10px;
+			margin-left: 20px;
+			color:#eb5528;
+			font-size: 20px;
 			padding: 0px;
 			letter-spacing: 20px;
 		}
@@ -50,8 +54,29 @@
 		}
 
 		.simulator-row{
-			background-color: black;
-			border-radius: 6px;
+			width: 768px;
+			margin-left: 1px;
+			background-color: #f9f8f8;
+			padding-bottom: 5px;
+			padding-top: 5px;
+		}
+
+		.simulator-tab
+		{
+			background-color: #f9f8f8;
+			width:200px;
+			text-align: center;
+			position: relative;
+			left:270px;
+			font-size:12px;
+			padding: 2px 0 2px 0;
+		}
+
+		.simulator-container
+		{
+			position: relative;
+			top: -74px;
+			height: 70px;
 		}
 	</style>
 </head>
@@ -61,7 +86,7 @@
 <div class="logged-in-container">
 	<div id="container" class="container sample-app-container">
 		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="" target="_blank"></a>
+			<a class="btn pull-right btn-github" href="https://github.com/Spark-API/Sample-App-Auth-Drive-JS" target="_blank"></a>
 			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
 		<div style="text-align: center;">
@@ -95,31 +120,32 @@
 		</ul>
 		</div>
 		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe></div>
-		<!--<div class="row simulator-row">
 
-			<div class="jumbotron span12">
-				<div class="center-block lcd"></div>
+
+		<div class="simulator-container">
+			<div class="simulator-tab">simulator</div>
+			<div class="row simulator-row">
+				<div class="pull-left">
+					<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
+					</button>
+			   </div>
+				<div class="pull-left center-block lcd"></div>
+				<div class="pull-right">
+				<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
+					<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
+				</button>
+
+				<button type="button" class="btn btn-default btn-simulator pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job">
+					<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
+				</button>
+
+				<button type="button" class="btn btn-default btn-simulator cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
+					<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
+				</button>
+				</div>
 			</div>
-		<div class="pull-left">
-
-		<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
-		</button>
-			</div>
-		<div class="pull-right">
-		<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
-			<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
-		</button>
-
-		<button type="button" class="btn btn-default btn-simulator pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job">
-			<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
-		</button>
-
-		<button type="button" class="btn btn-default btn-simulator cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
-			<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
-		</button>
 		</div>
-		</div>-->
 		<div class="footer"></div>
 	</div>
 </div>
@@ -197,8 +223,8 @@
 		print:{
 			"src":"create-print-job.html",
 			selectedTab:"#printId",
-			enabledTabs:["#loginId","#manageId","#registerId","#printId"],
-			disabledTabs:["#statusId"]
+			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
+			disabledTabs:[]
 		},
 
 		choose_asset:{

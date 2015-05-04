@@ -44,6 +44,12 @@
 			margin: 20px 0;
 		}
 
+		#files .table-container{
+			overflow-y: scroll;
+			height: 345px;
+			margin-bottom: 25px;
+		}
+
 		.img {
 			width: 100%;
 		}
@@ -58,58 +64,38 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container main-container">
 
 	<div class="spinner"></div>
-
+	<div class="sample-title">Select a file to print</div>
+	<hr>
 	<div class="hidden" id="files">
-		<table class="table">
-			<thead>
-			<tr>
-				<th>Name<br/><span>file_name</span></th>
-				<th>ID<br/><span>file_id</span></th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody id="filesTbody">
+		<div class="table-container">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Name<br/><span>file_name</span></th>
+					<th>ID<br/><span>file_id</span></th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody id="filesTbody">
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
+		<a class="spark_btn primary pull-right" disabled="true" href="#" id="chooseFile">Continue</a>
+		<a href="#" class="btn pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Cancel</a>
 	</div>
 
 	<div class="hidden" id="empty-files">
-		<p>Any uploaded file can be defined as an asset source file,<br/>
-			but they are usually 3D printable files or high-resolution images.
+		<p>This asset is empty.
 		</p>
-
-		<div class="img">
-			<img src="../../assets/img/empty_source_folder_illustration.png" alt="sources illustrations"/>
-		</div>
-		<a class="spark_btn upload-link" href="../upload-source-file/">Upload your source file</a>
 	</div>
 
 </div>
 <!-- /container -->
 
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4>WARNING</h4>
-			</div>
-			<div class="modal-body">
-				Are you sure you want to remove this file from the asset?
-			</div>
-			<div class="modal-footer">
-				<a class="spark_btn small cancel" type="button">CANCEL</a>
-				<a class="spark_btn primary small delete" type="button">REMOVE FILE FROM ASSET</a>
-			</div>
-		</div>
-	</div>
-</div>
 
 
 
@@ -154,16 +140,15 @@
 				$('#files').removeClass('hidden');
 				$.each(sources, function (index, item) {
 
-					var tr = $('<tr></tr>');
+					var tr = $('<tr class="in-table" data-fileid="' + item.file_id + '"></tr>');
 					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
 					tr.append($('<td>' + item.file_id + '</td>'));
-					
+
 
 					$('#filesTbody').append(tr);
 				});
 			} else {
 				$('#empty-files').removeClass('hidden');
-				$('.upload-link').attr('href',$('.upload-link').attr('href') + '?assetId=' + currentAssetId);
 			}
 		});
 
@@ -216,18 +201,23 @@
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
 			if (!currentAssetId) {
-				location.href = '../show-my-assets/';
+				location.href = '/choose-asset.html';
 			} else {
 				retrieveAssetSourcesAndSetInDOM();
-
-				//set up the correct link to for the gallery view
-				$('.gallery-view-link').attr('href', 'gallery-view.html?assetId=' + currentAssetId);
 			}
 		}
 
+		$("#filesTbody").on('click', '.in-table', function(e){
 
-		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'sources',assetId:currentAssetId});
+			e.preventDefault();
+			$(".in-table").each(function(e){
+				$(this).removeClass("selected");
+			});
+			$(this).addClass("selected");
+			var fileid = $(this).data("fileid");
+			$("#chooseFile").attr("disabled", false);
+			$("#chooseFile").attr("href", "create-print-job.html?fileId=" + fileid);
+		});
 
 	});
 

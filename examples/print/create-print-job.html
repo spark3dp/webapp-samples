@@ -35,14 +35,16 @@
 			margin: 10px 10px 0 10px;
 			text-transform: uppercase;
 		}
+
+		#fileURL{
+			width: 350px;
+		}
 	</style>
 </head>
 
 <body>
 
-<div class="logged-in-container">
-	<div class="container">
-		<div class="spacer clearfix"></div>
+	<div class="container main-container">
 			<form id="print-job-form">
 				<div class="sample-title">Create a 3D print job</div>
 				<hr>
@@ -88,7 +90,7 @@
 				</div>
 			</form>
 
-	</div></div>
+	</div>
 <!-- /container -->
 
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
@@ -106,10 +108,19 @@
 <script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 <script>
+
+	var currentFileId;
+
 	$(document).ready(function(){
 
 		ajaxCallListenerFromIframe();
 		common.setUIFunctionality();
+
+		var urlParams = spark.util.extractParamsFromURL();
+		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
+		if (currentFileId != "") {
+			$("#fileURL").val(currentFileId);
+		}
 
 		var getAllPrinters = function(){
 			sparkPrint.getAllPrinters(function(response){

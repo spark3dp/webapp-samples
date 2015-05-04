@@ -55,6 +55,13 @@
 			text-decoration: underline;
 		}
 
+		.printers-container
+		{
+			overflow-y: scroll;
+			height: 245px;
+			margin-bottom: 20px;
+		}
+
 	</style>
 
 
@@ -62,9 +69,7 @@
 
 <body>
 
-<div class="logged-in-container">
-	<div class="container">
-		<div class="spacer clearfix"></div>
+	<div class="container main-container">
 		<div class="spinner"></div>
 		<form id="print-status-form">
 			<div class="sample-title">Manage your 3D Printers</div>
@@ -75,19 +80,21 @@
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
-			<table class="table" id="printers">
-				<thead>
-				<tr>
-					<!--<th>Printer ID<br><span>Printer ID</span></th>-->
-					<th>Printer Name<br><span>printer_name</span></th>
-					<th>Printer Type<br><span>type_id</span></th>
-					<!--<th>Registration Date<br><span>Registration Date</span></th>-->
-					<th>Firmware<br><span>firmware</span></th>
-					<th></th>
-				</tr>
-				</thead>
-				<tbody id="printersTbody">
-			</table>
+			<div class="printers-container">
+				<table class="table" id="printers">
+					<thead>
+					<tr>
+						<!--<th>Printer ID<br><span>Printer ID</span></th>-->
+						<th>Printer Name<br><span>printer_name</span></th>
+						<th>Printer Type<br><span>type_id</span></th>
+						<!--<th>Registration Date<br><span>Registration Date</span></th>-->
+						<th>Firmware<br><span>firmware</span></th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody id="printersTbody">
+				</table>
+			</div>
 		</form>
 
 		<div id="empty-printers" style="display: none;">
@@ -96,7 +103,7 @@
 		<br>
 	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Continue</a>
 	</div>
-</div>
+
 <!-- /container -->
 
 <!-- Modal -->
