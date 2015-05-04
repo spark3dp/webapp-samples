@@ -10,7 +10,7 @@ spark.auth = function () {
 	 * @returns {*|any}
 	 */
 	var getTokenObj = function () {
-		var rawToken = localStorage.getItem('spark-token');
+		var rawToken = localStorage.getItem('spark-access-token');
 
 		return rawToken ? JSON.parse(rawToken) : {};
 
@@ -89,7 +89,7 @@ spark.auth = function () {
 		 * Logout the user - clear the token and the member in local storage
 		 */
 		logout: function () {
-			localStorage.removeItem('spark-token');
+			localStorage.removeItem('spark-access-token');
 			localStorage.removeItem('spark-member');
 			location.reload();
 		},
@@ -118,7 +118,7 @@ spark.auth = function () {
 					var date = new Date();
 					var now = date.getTime();
 					response.expires_at = now + parseInt(response.expires_in) * 1000;
-					localStorage.setItem('spark-token', JSON.stringify(response));
+					localStorage.setItem('spark-access-token', JSON.stringify(response));
 				}
 				callback(response);
 			});
