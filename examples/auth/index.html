@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application</title>
+	<title>Spark Sample Application - Auth</title>
 	<meta charset="utf-8">
 
 	<!-- fonts -->
@@ -15,29 +15,20 @@
 
 	<style>
 
-		iframe {
-			width: 100%;
-			border: 0;
-			height: 500px;
-		}
-
-		.left-wrapper{
-			position: relative;
-			height:320px;
-			margin-top: 20px;
-			border-right: 1px solid lightgray;
-		}
-
-		#welcome-wrapper{
+		#welcome-wrapper {
 			position: absolute;
-			top:0;
-			bottom:0;
-			left:0;
-			right:0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 			margin: auto;
 			text-align: center;
-			height:170px;
+			height: 170px;
 			padding-right: 40px;
+		}
+
+		#logout{
+			display: none;
 		}
 
 	</style>
@@ -45,16 +36,23 @@
 </head>
 
 <body>
-<div class="container" style="display: none">
-	<div class="col-sm-6 left-wrapper">
+<div class="container">
+	<div class="col-md-12">
 		<div id="welcome-wrapper">
-			<h2>Welcome to <br/>Spark Storage</h2>
+			<h2>Welcome to <br/>Spark Auth Demo</h2>
 
 			<p>To try the demo, you need to login with a test environment account.</p>
+
+			<div class="col-md-12">
+				<p>Guest Token: <span id="guest-token-span">none</span></p>
+				<p>Access Token: <span id="access-token-span">none</span></p>
+
+				<a onclick="login()" id="login" class="spark_btn primary">Login</a>
+				<a onclick="logout()" id="logout" class="spark_btn primary">Logout</a>
+				<a onclick="getGuestToken()" class="spark_btn">Get Guest Token</a>
+			</div>
+
 		</div>
-	</div>
-	<div class="col-sm-6" id="auth-iframe-wrapper">
-		<iframe></iframe>
 	</div>
 
 </div>
@@ -62,99 +60,45 @@
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 
-<!-- your config file -->
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-
 <!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
-
-<!-- end spark sdk -->
-<!--<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/spark-sdk-latest.min.js"></script>
-should be cloudfront!
--->
-
+<script type="text/javascript" charset="utf-8" src="../../sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../sdk/src/auth/Client.js"></script>
 
 <script>
 
 	/**
-	 * This is called upon returning from the login service
+	 * Open login window
 	 */
-	function callbackFromAuthService(code, callback) {
-
-		spark.auth.getAccessToken(code, function (token) {
-
-			//if successful - the token will reside in the localStorage of the browser
-			console.info('token:', token);
-			if (callback) {
-				callback(token);
-			}
-
-		});
+	function login() {
+		ADSKSpark.Client.openLoginWindow();
 	}
 
-	/**
-	 * Get the current logged in user and shows his scrren name
-	 */
-	function getMyProfileAndAddtoDOM() {
-		//get the current member
-		spark.auth.getMyProfile(function (response) {
-
-			console.info('profile:', response);
-			var loggedInText = 'Hi <b>' + response.member.screen_name + '</b>';
-			$('body').prepend(loggedInText);
-			$('#auth-iframe-wrapper').remove();
-		});
-	}
-
-	/**
-	 * Log the user out
-	 */
-	function logout() {
-		spark.auth.logout();
+	function logout(){
+		ADSKSpark.Client.logout();
 		location.reload();
 	}
 
+	function getGuestToken(){
+		ADSKSpark.Client.getGuestToken().then(function(token) {
+			$('#guest-token-span').text(token);
+		});
+	}
 
-	/**
-	 * Run when DOM is ready.
-	 * The spark object already exists in this point
-	 */
-	jQuery(function ($) {
-
-		//First let's see if we have a valid access token
-		if (spark.auth.isAccessTokenValid()) {
-			//getMyProfileAndAddtoDOM();
-			location.href = '../drive/show-my-assets/';
-
-		} else {//user needs to login
-
-			$('.container').show();
-			//if we get back from the login service
-			var code = spark.util.extractRedirectionCode();
-
-			if (code) {
-				callbackFromAuthService(code, function (token) {
-					if (token) {
-						//You can redirect now to some page in your app or to homepage
-						// or to reload the top window or any other action
-						parent.window.location.reload();
+	//Init the Spark Client
+	ADSKSpark.Client.initialize('L6bHueQ3ADRhkn8cWCi4njZrDM9ZZV0r',// Your app key
+			'http://localhost:3000/guest_token',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			'http://localhost:3000/access_token',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
 
 
-					} else {
-						console.error('Problem with fetching token');
-					}
-				});
-			} else {
-
-				// Set up the iframe for the login screen
-				//and it's appropriate source
-				$('#auth-iframe-wrapper iframe').attr('src', spark.auth.getAuthLoginUrl());
-			}
-		}
-
-	});
+	if (ADSKSpark.Client.isAccessTokenValid()) {
+		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
+		$('#login').hide();
+		$('#logout').css('display','inline-block');
+	}
 
 </script>
 
