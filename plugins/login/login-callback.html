@@ -22,7 +22,16 @@
 
 	spark.auth.getAccessToken(code, function (token) {
 		if (token) {
-			window.top.location.reload();
+
+			if (window.opener){
+
+				window.opener.location.reload(true);
+				//close the login window
+				window.close();
+			}else {
+				window.top.location.reload();
+			}
+
 		} else {
 			console.log('Problem with fetching token');
 		}
