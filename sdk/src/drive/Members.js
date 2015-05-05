@@ -7,13 +7,14 @@ var ADSKSpark = ADSKSpark || {};
     //
     ADSKSpark.Members = {
 
-        // meshAttrs, defaultMaterialId, progressCallback are optional
-        getMyProfile: function() {
-            var accessTokenObj = Client.getAccessTokenObject();
+        /**
+         * Gets user profile by ID
+         * @param callback
+         * See API reference - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fmembers%2Fmembers-with-id%2Fretrieve-member-details
+         */
+        getMemberById: function(memberId) {
 
-            var userId = accessTokenObj.spark_member_id;
-
-            return Client.authorizedApiRequest('/members/' + userId)
+            return Client.authorizedApiRequest('/members/' + memberId)
                 .get()
                 .then(function (data) {
                     return data;
