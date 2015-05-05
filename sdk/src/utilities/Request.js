@@ -6,8 +6,14 @@ var ADSKSpark = ADSKSpark || {};
 /**
  * @param {String} url - The url for the request.
  * @param {String} [authorization] - If specified, the Authorization header will be set with this value by default.
+ * @param {Object} [options] - May have the following options:
+ *                              {
+ *                                  notJsonResponse
+ *                              }
  */
-ADSKSpark.Request = function(url, authorization) {
+ADSKSpark.Request = function(url, authorization,options) {
+    options = options || {};
+
     var makeRequest = function(method, headers, data) {
         headers = headers || {};
 
@@ -48,7 +54,23 @@ ADSKSpark.Request = function(url, authorization) {
 
             xhr.onload = function() {
                 if (xhr.status === 200 || xhr.status === 201 || xhr.status === 202 || xhr.status === 204) {
-                    resolve(JSON.parse(xhr.responseText));
+
+                    var response;
+
+                    if (xhr.status != 204) {
+                        if (!options.notJsonResponse) {
+                            response = JSON.parse(xhr.responseText);
+                        }else{
+                            response = xhr.responseText;
+                        }
+
+                    }else{
+                        //xhr.status 204 in the API means that the response is empty
+                        response = true;
+                    }
+
+                    resolve(response);
+
                 } else {
                     reject(new Error(xhr.status + ' ' + xhr.responseText));
                 }

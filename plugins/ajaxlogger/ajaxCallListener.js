@@ -36,7 +36,7 @@ var ajaxCallListener = function(callbackPushData) {
 
 		requestResponseMap[this.guid].req.PARAMS = {};
 
-		if(data!="") {
+		if(data) {
 			if(data.constructor!=undefined && data.constructor.name==="FormData"){
 				requestResponseMap[this.guid].req.PARAMS = "FormData";
 			}

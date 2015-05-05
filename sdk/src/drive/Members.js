@@ -4,7 +4,7 @@ var ADSKSpark = ADSKSpark || {};
     var Client = ADSKSpark.Client;
 
     // The Members API singleton.
-    //
+    // See reference - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fmembers
     ADSKSpark.Members = {
 
         /**
