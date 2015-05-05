@@ -22,6 +22,25 @@ var ADSKSpark = ADSKSpark || {};
                 .catch(function (error) {
                     return error;
                 });
+        },
+
+
+        /**
+         * Gets logged in user profile
+         * @param callback
+         * See API reference - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fmembers%2Fmembers-with-id%2Fretrieve-member-details
+         */
+        getMyProfile: function() {
+
+            if (Client.isAccessTokenValid()) {
+                var accessTokenObj = Client.getAccessTokenObject();
+
+                var userId = accessTokenObj.spark_member_id;
+
+                return ADSKSpark.Members.getMemberById(userId);
+            }else{
+                return Promise.reject(new Error('Access token is invalid'));
+            }
         }
 
     };
