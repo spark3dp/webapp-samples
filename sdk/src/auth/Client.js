@@ -104,6 +104,17 @@ var ADSKSpark = ADSKSpark || {};
     };
 
     /**
+     * Returns the full access token object if one is currently in local storage. Null otherwise.
+     *
+     * @returns {?String} - The access token or null if not found.
+     */
+    Client.getAccessTokenObject = function() {
+        var accessToken = JSON.parse(localStorage.getItem(ACCESS_TOKEN_KEY));
+
+        return (accessToken && accessToken.access_token) ? accessToken : null;
+    };
+
+    /**
      * Return a promise that resolves to the guest access token.
      * This will attempt to retrieve the token from local storage. If it's missing, a call will be made to
      * the authentication server.
@@ -122,15 +133,19 @@ var ADSKSpark = ADSKSpark || {};
     Client.authorizedApiRequest = function(endpoint) {
         var authorization;
 
-        if( _accessToken )
+        _accessToken = Client.getAccessToken();
+
+        if( _accessToken ) {
             authorization = 'Bearer ' + _accessToken;
+
+        }
 
         return ADSKSpark.Request(_apiUrl + endpoint, authorization);
     };
 
 
     Client.openLoginWindow = function(){
-        Helpers.popupWindow(Client.getLoginRedirectUrl(),'spark',350,450);
+        Helpers.popupWindow(Client.getLoginRedirectUrl(),'spark',350,600);
     };
 
 
