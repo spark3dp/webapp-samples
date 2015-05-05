@@ -364,6 +364,22 @@ spark.drive = function () {
 
 		},
 
+		downloadFile: function (fileId, callback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/download?file_ids=' + fileId;
+				spark.util.xhr(url, 'GET', '', headers, callback,'',false);
+			} else {
+				callback(false);
+			}
+		},
+
 		/**
 		 * Retrieve all thumbnails for an asset
 		 * @param assetId - The id of the asset
