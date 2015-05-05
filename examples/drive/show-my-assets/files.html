@@ -90,7 +90,7 @@
 
 			//for empty sources the id of the first source is 999
 			if (asset.file_formats.length > 0 && asset.file_formats[0].id !== 999){
-				$('#sources-count').text(asset.thumbnails.length + ' file' + (asset.thumbnails.length>1?'s':''));
+				$('#sources-count').text(asset.file_formats.length + ' file' + (asset.file_formats.length>1?'s':''));
 			}
 
 		});

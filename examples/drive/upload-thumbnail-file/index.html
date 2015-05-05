@@ -211,7 +211,9 @@
 
 		//handle file select
 		$('#file-input').on('change', function () {
-			handleFileDrop(this.files[0]);
+			if (this.files[0]) {
+				handleFileDrop(this.files[0]);
+			}
 		});
 
 		// Check for the various File API support.
