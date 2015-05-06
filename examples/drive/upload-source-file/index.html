@@ -137,14 +137,16 @@
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
 
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../../../spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../../spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../../spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../../spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../../../spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+
 <!-- your config file -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
-
-<!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
 <!-- Enable broadcasting events and logging requests to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
@@ -155,6 +157,17 @@
 
 	//log http requests
 	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
 
 	var currentAssetId, //the asset id we are referring to
 			fileData //the file data
@@ -237,18 +250,15 @@
 			e.preventDefault();
 
 			var sourceFile = {
-				fileData: fileData
+				file: fileData
 			};
 
 			if ($('#c1:checked').length) {
-				sourceFile.filePublicStatus = true;
+				sourceFile.public = true;
 			}
 
-			console.log(sourceFile);
-
-
-			//upload the file to spark drive
-			spark.drive.uploadFile(sourceFile, function (response) {
+			//This is the important part - upload the file to spark drive
+			ADSKSpark.Files.uploadFile(sourceFile).then(function (response) {
 				console.info('upload file response:', response);
 				if (response.files && response.files.length > 0) {
 
@@ -280,11 +290,11 @@
 	jQuery(function ($) {
 
 		//First let's see if we have a valid access token
-		if (!spark.auth.isAccessTokenValid()) {
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
 			location.href = '../../auth/';
 		} else {
 			//Assume we provided assetId in URL
-			var urlParams = spark.util.extractParamsFromURL();
+			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
 			if (!currentAssetId) {
