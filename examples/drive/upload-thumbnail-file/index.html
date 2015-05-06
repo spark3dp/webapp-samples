@@ -340,7 +340,7 @@
 
 		//First let's see if we have a valid access token
 		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../auth/';
+			location.href = '../../../plugins/login/login.html';
 		} else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
