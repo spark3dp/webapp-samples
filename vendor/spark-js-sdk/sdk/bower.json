@@ -1,0 +1,11 @@
+{
+  "name": "autodesk-spark-sdk",
+  "version": "0.0.1",
+  "author": "Autodesk, Inc.",
+  "license": "Apache 2.0",
+  "description": "Client side SDK for leveraging the Spark REST APIs",
+  "dependencies": {
+    "promise-polyfill":"~2.0.2"
+  },
+  "devDependencies": {}
+}

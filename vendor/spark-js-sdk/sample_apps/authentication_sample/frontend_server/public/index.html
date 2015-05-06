@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Spark Sample Application</title>
+        <meta charset="utf-8">
+        <!-- Bootstrap core CSS -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+            #login-button, #logout-button{display: none}
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+                <div id="welcome-wrapper">
+                    <h2>Spark SDK Authentication Sample</h2>
+
+                    <div class="col-md-10 col-md-offset-1">
+                        <p>Guest Token: <span id="guest-token-span">none</span></p>
+                        <p>Access Token: <span id="access-token-span">none</span></p>
+
+                        <button id="login-button" class="btn btn-primary">Login</button>
+                        <button id="logout-button" class="btn btn-danger">Logout</button>
+                        <button id="guest-button" class="btn btn-primary">Get Guest Token</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /container -->
+
+        <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+        <!-- spark sdk -->
+        <script type="text/javascript" charset="utf-8" src="Request.js"></script>
+        <script type="text/javascript" charset="utf-8" src="Client.js"></script>
+        <!-- end spark sdk -->
+
+        <script>
+            var APP_KEY = ''; // Your app key
+            var GUEST_TOKEN_URL = 'http://localhost:3000/guest_token';// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+            var ACCESS_TOKEN_URL = 'http://localhost:3000/access_token';// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+
+            function transformToAssocArray(prmstr) {
+                var params = {};
+                var prmarr = prmstr.split("&");
+                for (var i = 0; i < prmarr.length; i++) {
+                    var tmparr = prmarr[i].split("=");
+                    params[tmparr[0]] = tmparr[1];
+                }
+                return params;
+            }
+
+            function extractParamsFromURL() {
+                var prmstr = window.location.search.substr(1);
+
+                return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : [];
+            }
+
+            function extractRedirectionCode() {
+                var getParams = extractParamsFromURL();
+
+                return getParams['code'] ? getParams['code'] : null;
+            }
+
+            /**
+             * Run when DOM is ready.
+             * The spark object already exists in this point
+             */
+            jQuery(function ($) {
+                // Initialize the client
+                var Client = ADSKSpark.Client;
+                Client.initialize(APP_KEY, GUEST_TOKEN_URL, ACCESS_TOKEN_URL, 'https://sandbox.spark.autodesk.com/api/v1');
+
+                //First let's see if we have a valid access token
+                if (Client.isAccessTokenValid()) {
+                    $('#access-token-span').text(Client.getAccessToken());
+                    $('#logout-button').show();
+                } else {//user needs to login
+                    $('#login-button').show();
+                    //if we get back from the login service
+                    var code = extractRedirectionCode();
+
+                    if (code) {
+                        Client.completeLogin(code).then(function (token) {
+                            console.log('Completed login with token: ' + token);
+                            if (token) {
+                                //You can redirect now to some page in your app or to homepage
+                                // or to reload the top window or any other action
+                                window.location.reload();
+                            } else {
+                                console.error('Problem with fetching token');
+                            }
+                        }, function (error) {
+                            console.error(JSON.parse(error.message));
+                        });
+                    }
+                }
+
+                // Register buttons
+                $('#login-button').click(function() {
+                    window.location = Client.getLoginRedirectUrl();
+                });
+
+                $('#logout-button').click(function() {
+                    Client.logout();
+                    window.location.reload();
+                });
+
+                $('#guest-button').click(function() {
+                    Client.getGuestToken().then(function(token) {
+                        $('#guest-token-span').text(token);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
