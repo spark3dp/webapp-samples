@@ -225,6 +225,7 @@
 		var actionsElem = '<div class="dropdown actions">' +
 				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
 				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+				'<li role="presentation"><a role="menuitem" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + item.file_id + '">EDIT</a></li>' +
 				'<li role="presentation"><a role="menuitem" onclick="deleteThumbnailsFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
 				'</ul></div>';
 

@@ -15,14 +15,15 @@
 
 	<style>
 
-		.fileid-label{
+		.fileid-label {
 			color: lightgray;
 			font-size: 14px;
 			line-height: 29px;
 		}
-		.form-body{
+
+		.form-body {
 			display: inline-block;
-			width:100%;
+			width: 100%;
 			margin: 10px 0;
 		}
 
@@ -73,7 +74,7 @@
 						</section>
 						<section class="form_field">
 							<label for="thumbnail-description">
-								Add description <span class="field-label">&nbsp;/&nbsp;description</span>
+								Edit description <span class="field-label">&nbsp;/&nbsp;description</span>
 								<i class="spark_icon si-help with_hover"></i>
 								<i class="stooltip"><span>The description of this thumbnail</span></i>
 							</label>
@@ -200,12 +201,25 @@
 				//get the primary thumbnail
 				if (response.thumbnails.length) {
 					for (var i in response.thumbnails) {
+						//edit mode
+						if (response.thumbnails[i].file_id == currentFileId) {
+							$('#thumbnail-caption').val(response.thumbnails[i].caption);
+							$('#thumbnail-description').val(response.thumbnails[i].description);
+							if (response.thumbnails[i].is_primary) {
+								$('#c1').attr('checked', 'checked');
+								break;
+							}else{
+								$('#c1').removeAttr('checked');
+							}
+
+						}
+
+						//search for primary if the current one wasn't primary (in edit mode)
 						if (response.thumbnails[i].is_primary) {
 							ADSKSpark.Files.getFileDetails(response.thumbnails[i].file_id).then(function (fileResponse) {
 								//set the image
-								$('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name,20) + ')');
+								$('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name, 20) + ')');
 							});
-							break;
 						}
 					}
 				}
@@ -218,7 +232,7 @@
 		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
 			if (response) {
 				console.info('response from getFileDetails:', response);
-				$('#filename-placeholder').text(common.maxLength(response.name,30));
+				$('#filename-placeholder').text(common.maxLength(response.name, 30));
 				if (response.public_url.length) {
 
 					//apply bootstrap classes to align the form
@@ -270,7 +284,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('addFileToAsset',{fileType:'thumbnails',assetId:currentAssetId});
+		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
 
 
 	});
