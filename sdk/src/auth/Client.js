@@ -137,7 +137,6 @@ var ADSKSpark = ADSKSpark || {};
 
         if( _accessToken ) {
             authorization = 'Bearer ' + _accessToken;
-
         }
 
         return ADSKSpark.Request(_apiUrl + endpoint, authorization);
