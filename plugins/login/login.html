@@ -4,13 +4,8 @@
 	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
-
 	<!-- spark sdk -->
-	<script type="text/javascript" charset="utf-8" src="../../sdk/src/config/Constants.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Helpers.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Request.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../sdk/src/auth/Client.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
 
 	<!-- Personal config -->
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
@@ -23,6 +18,8 @@
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 
 	<!-- Common styles, also cloudfront-->
@@ -91,24 +88,25 @@
 </div>
 <script>
 
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
 
 	function logout() {
 		ADSKSpark.Client.logout();
 		eventBroadCaster.broadcastEvent('manageIframe.loggedOut');
 		location.reload();
 	}
-
-	var APP_KEY = CLIENT_ID || '',
-			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
-
-
-	//Init the Spark Client
-	ADSKSpark.Client.initialize(APP_KEY,// Your app key
-			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
-	);
 
 	jQuery(document).ready(function ($) {
 

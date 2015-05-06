@@ -90,14 +90,11 @@
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
 
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+
 <!-- your config file -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
-
-<!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-auth.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../../vendor/spark/spark-drive.js"></script>
 
 <!-- Enable broadcasting events and logging requests to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
@@ -107,6 +104,17 @@
 
 	//log http requests
 	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
 
 	/**
 	 * Creates a new asset
@@ -129,11 +137,9 @@
 				asset.publish = true;
 			}
 
-
-			spark.drive.createAsset(asset, function (response) {
+			ADSKSpark.Assets.createAsset(asset).then(function (response) {
 				console.info('create asset:', response);
 				location.href = '../show-my-assets/files.html?assetId=' + response.asset_id;
-				console.log('../show-my-assets/files.html?assetId=' + response.asset_id);
 			});
 
 		}
@@ -147,7 +153,7 @@
 	jQuery(function ($) {
 
 		//First let's see if we have a valid access token
-		if (!spark.auth.isAccessTokenValid()) {
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
 			location.href = '../../auth/';
 		}
 
