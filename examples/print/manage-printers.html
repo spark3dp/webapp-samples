@@ -46,7 +46,7 @@
 		}
 
 		#empty-printers p {
-			padding: 60px 0;
+			padding: 120px 0;
 			color: darkgray;
 		}
 
@@ -80,7 +80,7 @@
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
-			<div class="printers-container">
+			<div class="printers-container" style="display: none;">
 				<table class="table" id="printers">
 					<thead>
 					<tr>
@@ -154,7 +154,8 @@
 
 			if (response.count) {
 
-				$("#empty-printers").hide();
+				//$("#empty-printers").hide();
+				$(".printers-container").show();
 				$("#continue").prop("disabled", false);
 
 				$.each(response.printers, function (index, item) {
@@ -215,7 +216,8 @@
 
 				//make sure printers still left
 				if (!$('.in-table td').length) {
-					location.reload();
+					//location.reload();
+					eventBroadCaster.broadcastEvent("manageIframe.reload")
 				}
 			}, function (result) {
 				console.log("error unregister printer");

@@ -95,11 +95,11 @@
 							<i class="stooltip"><span style="display: none;">The printer token</span></i>
 						</label>
 						<input type="text" class="form-control" id="inputToken" required>
-						<div class="form-control token_simulator_container">
+						<!--<div class="form-control token_simulator_container">
 							<div class="spinner pull-left"></div>
 							<div class="generating pull-left">Generating a simulation token...</div>
 							<div class="token_simulator pull-left"></div>
-						</div>
+						</div>-->
 						<div class="form-control-tip">Find your printer's IP address/ token code in the Settings tab of your printer's LCD screen.</div>
 					</div>
 					<div>
@@ -154,7 +154,7 @@
 			});
 		});
 
-		$("#inputPrinterType").change(function (e) {
+		/*$("#inputPrinterType").change(function (e) {
 			e.preventDefault();
 			var id = $("#inputPrinterType option:selected").val();
 			if (id == -1) {
@@ -186,7 +186,7 @@
 				$(".token_simulator_container .token_simulator").html("");
 				$(".token_simulator_container .token_simulator").hide();
 			}
-		});
+		});*/
 
 		common.setUIFunctionality();
 
@@ -197,12 +197,12 @@
 			var printerName = $('#inputName').val();
 			var token = "";
 			var id = $("#inputPrinterType option:selected").val();
-			if (id == -1) {
+			/*if (id == -1) {
 				token = $(".token_simulator_container .token_simulator").attr("token");
 			}
-			else {
+			else {*/
 				token = $('#inputToken').val();
-			}
+			//}
 
 			sparkPrint.registerPrinter(token, printerName, function (response) {
 						var printerId = response.printer_id;

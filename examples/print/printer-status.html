@@ -31,7 +31,6 @@
 			<div class="sample-title">Manage job status</div>
 			<hr>
 				<div class="form-group">
-					<label for="printers-select">Printer name</label>
 					<select class="form-control" id="printers-select" required>
 					</select>
 				</div>
@@ -39,8 +38,8 @@
 				<table class="table table-condensed" id="print-statuses">
 
 					<tr class="header">
-						<td>Job ID</td>
-						<td>Job Date</td>
+						<td style="width: 43%;">Job ID</td>
+						<td style="width: 25%;">Job Date</td>
 						<td>Status</td>
 						<td>Actions</td>
 					</tr>
@@ -79,7 +78,7 @@
 			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
 			for(var i in printers){
-				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_id+":"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
 			}
 
 		});
@@ -95,7 +94,7 @@
 					var printerJobs = response.printer_jobs;
 					for(var i in printerJobs){
 						$("<tr class='"+ classMapper[printerJobs[i].job_status.job_status]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
-								'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
+								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
 								'<button type="button" class="btn btn-default pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>'+
 								'<button type="button" class="btn btn-default cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>' +
 								"</td></tr>").appendTo("#print-statuses");

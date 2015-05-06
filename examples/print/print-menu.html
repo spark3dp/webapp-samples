@@ -59,6 +59,7 @@
 			background-color: #f9f8f8;
 			padding-bottom: 5px;
 			padding-top: 5px;
+			border-top: 1px solid #cccccc;
 		}
 
 		.simulator-tab
@@ -70,13 +71,18 @@
 			left:270px;
 			font-size:12px;
 			padding: 2px 0 2px 0;
+			text-transform: uppercase;
+			border-top: 1px solid #cccccc;
+			border-right: 1px solid #cccccc;
+			border-left: 1px solid #cccccc;
+			top: 1px;
 		}
 
 		.simulator-container
 		{
 			position: relative;
-			top: -74px;
-			height: 70px;
+			top: -23px;
+			display: none;
 		}
 	</style>
 </head>
@@ -123,14 +129,14 @@
 
 
 		<div class="simulator-container">
-			<div class="simulator-tab">simulator</div>
+			<div class="simulator-tab">printer simulator</div>
 			<div class="row simulator-row">
+				<div class="center-block lcd"></div>
 				<div class="pull-left">
 					<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
 					</button>
 			   </div>
-				<div class="pull-left center-block lcd"></div>
 				<div class="pull-right">
 				<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
 					<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
@@ -186,13 +192,14 @@
 		}
 		else{
 			statePlugin.changeState('login');
-			$(".simulator-row").hide();
 		}
 
 		$(".menu-item").click(function(e){
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
+			var hideSimulator = state == "manage" || state == "login" || state == "choose_asset";
+			showSimulator(!hideSimulator);
 		});
 	});
 
@@ -243,6 +250,15 @@
 
 	};
 
+	var showSimulator = function(show){
+		if(show == true){
+			$(".simulator-container").show();
+		}
+		else{
+			$(".simulator-container").hide();
+		}
+	};
+
 	var isLoggedIn = false;
 
 	var broadcastMapper = [];
@@ -253,26 +269,37 @@
 		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 			isLoggedIn = true;
 			statePlugin.changeState("manage", optionalParams);
+			showSimulator(false);
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
-		statePlugin.changeState("print",optionalParams)
+		statePlugin.changeState("print",optionalParams);
+		showSimulator(true);
 	};
 	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
-		statePlugin.changeState("register",optionalParams)
+		statePlugin.changeState("register",optionalParams);
+		showSimulator(true);
 	};
 	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
-		statePlugin.changeState("manage",optionalParams)
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["registerIframe.add"] = function(optionalParams){
-		statePlugin.changeState("manage",optionalParams)
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
+	};
+	broadcastMapper["manageIframe.reload"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["printIframe.next"] = function(optionalParams){
-		statePlugin.changeState("status",optionalParams)
+		statePlugin.changeState("status",optionalParams);
+		showSimulator(true);
 	};
 
 	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
-		statePlugin.changeState("choose_asset",optionalParams)
+		statePlugin.changeState("choose_asset",optionalParams);
+		showSimulator(false);
 	};
 
 	/**
