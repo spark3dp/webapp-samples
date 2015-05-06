@@ -14,45 +14,98 @@
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+	<link href="../../assets/css/common.css" rel="stylesheet">
 
-	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<style>
 
-	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+		.token_simulator_container{
+			display: none;
+			padding: 15px 0 15px 10px;
+			height: 44px;
+		}
 
+		.token_simulator_container .spinner{
+			position: relative;
+
+		}
+
+		.token_simulator_container .generating{
+			padding-left: 10px;
+
+		}
+
+		.printer_type_container{
+			border-right: 1px silver solid;
+			padding-right: 10px;
+			margin-right: 20px;
+		}
+
+		#inputPrinterType{
+			min-width: 350px;
+			height: 44px;
+		}
+
+		.form-control-tip
+		{
+			font-size: 12px;
+		    color:silver;
+			margin-top: 5px;
+		}
+
+   </style>
 </head>
 
 <body>
 
-<div class="logged-in-container">
-	<div class="container">
-
-
-
-
+	<div class="container main-container">
+		<div class="spacer clearfix"></div>
 		<div class="tab-content">
 			<div class="tab-pane fade active in" id="register">
 				<form id="register-printer-form">
-					<h1>Register Printer</h1>
+					<div class="sample-title">Add Printer</div>
+					<hr>
+					<label for="inputPrinterType">
+						Printer type <span class="field-label">&nbsp;/&nbsp;type</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">The printer type</span></i>
+					</label>
 					<div class="form-group">
-						<label for="inputToken">Printer Token (should get this from the printer simulator)</label>
-						<input type="text" class="form-control" id="inputToken" placeholder="Printer Token" required>
+						<div class="pull-left printer_type_container">
+							<select id="inputPrinterType" class="form-control" required="required">
+							<option value="">Please select...</option>
+						    <option value="-1">Printer Simulator</option>
+						</select>
+						</div>
+						<div class="pull-left">Use our Printer Simulator for a quick<br>demonstration.</div>
+						<div class="clearfix"></div>
 					</div>
 					<div class="form-group">
-						<label for="inputName">Printer name</label>
-						<input type="text" class="form-control" id="inputName" placeholder="Printer name"
-						       required>
+						<label for="inputName">
+							Printer nickname <span class="field-label">&nbsp;/&nbsp;printer_name</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">The printer name</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputName" required>
 					</div>
+					<div class="form-group">
+						<label for="inputToken">
+							Token/IP address <span class="field-label">&nbsp;/&nbsp;registration_code</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">The printer token</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputToken" required>
+						<!--<div class="form-control token_simulator_container">
+							<div class="spinner pull-left"></div>
+							<div class="generating pull-left">Generating a simulation token...</div>
+							<div class="token_simulator pull-left"></div>
+						</div>-->
+						<div class="form-control-tip">Find your printer's IP address/ token code in the Settings tab of your printer's LCD screen.</div>
+					</div>
+					<div>
+						<input class="spark_btn primary pull-right" type="submit" value="Add Printer" id="submit">
 
-
-					<div class="modal-footer">
-						<a href="#" class="btn" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
-						<input class="btn btn-primary" type="submit" value="Add Printer" id="submit">
+						<a href="#" class="btn pull-right" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
 					</div>
 				</form>
 			</div>
@@ -63,37 +116,18 @@
 			</div>
 		</div>
 
-
-		<div class="footer">
-			<p>&copy; Spark Sample Application 2015</p>
-		</div>
-
-	</div></div>
+	</div>
 <!-- /container -->
 
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
-<script>
-	$(document).ready(function(){
-		ajaxCallListenerFromIframe();
-	});
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
 
-	$("#register-printer-form").on('submit', function (e) {
-		e.preventDefault();
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 
-		var token = $('#inputToken').val();
-		var printerName = $('#inputName').val();
-		sparkPrint.registerPrinter(token,printerName,function(response){
-					var printerId = response.printer_id;
-					//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
-					eventBroadCaster.broadcastEvent("registerIframe.add")
-				},
-				function(response){
-					//logger("#register-printer-form #inputLog",response);
-
-				});
-	});
-
-</script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
@@ -103,9 +137,88 @@
 <!--script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script-->
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+
+<script>
+	jQuery(function ($) {
+		ajaxCallListenerFromIframe();
+
+		sparkPrint.getPrinterTypes(function (response) {
+
+			$.each(response.printerTypes, function (index, item) {
+				var inputPrinterType = $("#inputPrinterType");
+				var option = $('<option value="' + item.id + '">' + item.name + '</option>');
+				inputPrinterType.append(option);
+			});
+		});
+
+		/*$("#inputPrinterType").change(function (e) {
+			e.preventDefault();
+			var id = $("#inputPrinterType option:selected").val();
+			if (id == -1) {
+
+				$("#inputToken").hide();
+				$("#inputToken").removeAttr("required");
+				$(".token_simulator_container").show();
+
+				setTimeout(function () {
+					var success = Printer.resetToken();
+
+					if (success) {
+						var token = JSON.parse(localStorage.getItem('com.autodesk.print.tokenalpha'));
+						$(".token_simulator_container .spinner").hide();
+						$(".token_simulator_container .generating").hide();
+						$(".token_simulator_container .token_simulator").attr("token", token.registration_code);
+						$(".token_simulator_container .token_simulator").html(token.registration_code);
+						$(".token_simulator_container .token_simulator").show();
+					}
+				}, 1500);
+			}
+			else {
+				$("#inputToken").show();
+				$("#inputToken").attr("required", "");
+				$(".token_simulator_container").hide();
+				$(".token_simulator_container .spinner").show();
+				$(".token_simulator_container .generating").show();
+				$(".token_simulator_container .token_simulator").attr("token", "");
+				$(".token_simulator_container .token_simulator").html("");
+				$(".token_simulator_container .token_simulator").hide();
+			}
+		});*/
+
+		common.setUIFunctionality();
 
 
+		$("#register-printer-form").on('submit', function (e) {
+			e.preventDefault();
 
+			var printerName = $('#inputName').val();
+			var token = "";
+			var id = $("#inputPrinterType option:selected").val();
+			/*if (id == -1) {
+				token = $(".token_simulator_container .token_simulator").attr("token");
+			}
+			else {*/
+				token = $('#inputToken').val();
+			//}
+
+			sparkPrint.registerPrinter(token, printerName, function (response) {
+						var printerId = response.printer_id;
+						//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+						eventBroadCaster.broadcastEvent("registerIframe.add")
+					},
+					function (response) {
+						//logger("#register-printer-form #inputLog",response);
+
+					});
+		});
+
+	});
+
+</script>
 </body>
 </html>

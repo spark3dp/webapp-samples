@@ -8,13 +8,48 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Bootstrap core CSS -->
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<link href="../../assets/css/styleOld.css" rel="stylesheet">
+	<link href="../../assets/css/common.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+	<div class="container main-container">
+		<form id="print-status-form">
+			<div class="sample-title">Manage job status</div>
+			<hr>
+				<div class="form-group">
+					<select class="form-control" id="printers-select" required>
+					</select>
+				</div>
+
+				<table class="table table-condensed" id="print-statuses">
+
+					<tr class="header">
+						<td style="width: 43%;">Job ID</td>
+						<td style="width: 25%;">Job Date</td>
+						<td>Status</td>
+						<td>Actions</td>
+					</tr>
+
+				</table>
+	</form>
+
+
+	</div>
+<!-- /container -->
 
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
@@ -22,49 +57,16 @@
 
 	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-</head>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
-<body>
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 
-<div class="logged-in-container">
-	<div class="container">
-
-
-
-		<form id="print-status-form">
-		<h1>Check Status</h1>
-
-		<div class="form-group">
-			<label for="printers-select">Printer name</label>
-			<select class="form-control" id="printers-select" required>
-			</select>
-		</div>
-
-		<table class="table table-condensed" id="print-statuses">
-
-			<tr class="header">
-				<td>Job ID</td>
-				<td>Job Date</td>
-				<td>Status</td>
-				<td>Actions</td>
-			</tr>
-
-		</table>
-
-		<br/> <br/>
-
-	</form>
-
-
-	</div></div>
-<!-- /container -->
-
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
-
-<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
-
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <script type="">
 	$(document).ready(function(){
@@ -78,7 +80,7 @@
 			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
 			for(var i in printers){
-				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_id+":"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
 			}
 
 		});
@@ -94,7 +96,7 @@
 					var printerJobs = response.printer_jobs;
 					for(var i in printerJobs){
 						$("<tr class='"+ classMapper[printerJobs[i].job_status.job_status]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
-								'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
+								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
 								'<button type="button" class="btn btn-default pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>'+
 								'<button type="button" class="btn btn-default cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>' +
 								"</td></tr>").appendTo("#print-statuses");

@@ -130,6 +130,11 @@ textarea {
     display:block;
 }
 
+.table tr.in-table.selected {
+    background-color: #F7F7F7;
+    cursor: pointer;
+}
+
 .table td i{
     margin-right:10px;
 }
@@ -354,7 +359,7 @@ i.stooltip span {
     background: none repeat scroll 0 0 #F1F1F1;
     bottom: 25px;
     display: none;
-    left: -30px;
+    left: 0px;
     position: absolute;
     width: 200px;
     z-index: 10;
@@ -543,6 +548,8 @@ i.stooltip span {
     background-position: -47px -53px;
     height: 12px;
     width: 12px;
+    margin-right: 10px;
+    margin-bottom: -1px;
 }
 
 .si-status-disabled{
@@ -556,6 +563,7 @@ i.stooltip span {
     height: 18px;
     width: 18px;
 }
+
 
 /***** END SPRITE *****/
 
@@ -632,6 +640,8 @@ i.stooltip span {
 {
     text-transform: uppercase;
     color:#333333;
+    font-size:16px;
+    font-weight: 500;
 }
 
 .sample-top-menu {
@@ -655,6 +665,7 @@ i.stooltip span {
     color: #333333;
     margin-right: 10px;
     padding: 0 0 2px 0;
+    font-size:15px;
 }
 
 .sample-top-menu li a:hover
@@ -853,7 +864,8 @@ i.stooltip span {
 .logger-container .logger-header
 {
    border-bottom: 1px solid #3a3e4d;
-   padding-top: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
 .logger-container .method{
@@ -900,5 +912,15 @@ i.stooltip span {
 .renderjson .array.syntax  { color: orange; }
 
 /**** END Ajax Logger *****/
+
+
+.spacer{
+    margin-bottom: 20px;
+}
+
+.main-container
+{
+    padding: 20px;
+}
 
 

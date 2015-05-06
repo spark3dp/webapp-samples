@@ -8,23 +8,19 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
 
 	<!-- Bootstrap core CSS -->
-	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
 	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
-	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/faye-browser.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/printer.js"></script>
 
 	<style>
 		@font-face {
@@ -34,9 +30,10 @@
 
 		.lcd{
 			font-family:'digital', sans-serif;
-			background-color:black;
-			color:lime;
-			font-size: 30px;
+			margin-top: 10px;
+			margin-left: 20px;
+			color:#eb5528;
+			font-size: 20px;
 			padding: 0px;
 			letter-spacing: 20px;
 		}
@@ -50,8 +47,35 @@
 		}
 
 		.simulator-row{
-			background-color: black;
-			border-radius: 6px;
+			width: 768px;
+			margin-left: 1px;
+			background-color: #f9f8f8;
+			padding-bottom: 5px;
+			padding-top: 5px;
+			border-top: 1px solid #cccccc;
+		}
+
+		.simulator-tab
+		{
+			background-color: #f9f8f8;
+			width:200px;
+			text-align: center;
+			position: relative;
+			left:270px;
+			font-size:12px;
+			padding: 2px 0 2px 0;
+			text-transform: uppercase;
+			border-top: 1px solid #cccccc;
+			border-right: 1px solid #cccccc;
+			border-left: 1px solid #cccccc;
+			top: 1px;
+		}
+
+		.simulator-container
+		{
+			position: relative;
+			top: -23px;
+			display: none;
 		}
 	</style>
 </head>
@@ -61,13 +85,13 @@
 <div class="logged-in-container">
 	<div id="container" class="container sample-app-container">
 		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="" target="_blank"></a>
+			<a class="btn pull-right btn-github" href="https://github.com/Spark-API/Sample-App-Auth-Drive-JS" target="_blank"></a>
 			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
 		<div style="text-align: center;">
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<li id="loginId">
-				<div id="user" class="pull-left">
+				<div id="user" class="pull-left" style="display: none;">
 					<img class="user-avatar" src=""/>
 				</div>
 				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
@@ -95,36 +119,46 @@
 		</ul>
 		</div>
 		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe></div>
-		<div class="row simulator-row">
 
-			<div class="jumbotron span12">
+
+		<div class="simulator-container">
+			<div class="simulator-tab">printer simulator</div>
+			<div class="row simulator-row">
 				<div class="center-block lcd"></div>
+				<div class="pull-left">
+					<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
+					</button>
+			   </div>
+				<div class="pull-right">
+				<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
+					<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
+				</button>
+
+				<button type="button" class="btn btn-default btn-simulator pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job">
+					<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
+				</button>
+
+				<button type="button" class="btn btn-default btn-simulator cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
+					<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
+				</button>
+				</div>
 			</div>
-		<div class="pull-left">
-
-		<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
-		</button>
-			</div>
-		<div class="pull-right">
-		<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
-			<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
-		</button>
-
-		<button type="button" class="btn btn-default btn-simulator pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job">
-			<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
-		</button>
-
-		<button type="button" class="btn btn-default btn-simulator cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
-			<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
-		</button>
-		</div>
 		</div>
 		<div class="footer"></div>
 	</div>
 </div>
 
 <!-- /container -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/faye-browser.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/printer.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
@@ -142,6 +176,19 @@
 
 
 <script>
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
 	$(document).ready(function(){
 		ajaxCallLogger.createLoggerElement(".footer");
 		ajaxCallLogger.startIframeListener();
@@ -150,23 +197,24 @@
 		//statePlugin.startIframeStateListener();
 		broadcastEventListener.startIframeBroadcastListener();
 		//statePlugin.changeState('manage');
-		if (spark.auth.isAccessTokenValid()) {
+		if (ADSKSpark.Client.isAccessTokenValid()) {
 			statePlugin.changeState('manage');
 
-			spark.auth.getMyProfile(function (response) {
+			ADSKSpark.Members.getMyProfile().then(function (response) {
 				$('#user span').text(response.member.screen_name);
 				$('#user img').attr('src', response.member.profile.avatar_path);
 			});
 		}
 		else{
 			statePlugin.changeState('login');
-			$(".simulator-row").hide();
 		}
 
 		$(".menu-item").click(function(e){
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
+			var hideSimulator = state == "manage" || state == "login" || state == "choose_asset";
+			showSimulator(!hideSimulator);
 		});
 	});
 
@@ -193,10 +241,18 @@
 			disabledTabs:["#printId","#statusId"]
 		},
 
+
 		print:{
 			"src":"create-print-job.html",
 			selectedTab:"#printId",
-			enabledTabs:["#loginId","#manageId","#registerId","#printId"],
+			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
+			disabledTabs:[]
+		},
+
+		choose_asset:{
+			"src":"choose-asset.html",
+			selectedTab:"#printId",
+			enabledTabs:["#loginId","#manageId","#registerId"],
 			disabledTabs:["#statusId"]
 		},
 
@@ -209,27 +265,56 @@
 
 	};
 
+	var showSimulator = function(show){
+		if(show == true){
+			$(".simulator-container").show();
+		}
+		else{
+			$(".simulator-container").hide();
+		}
+	};
+
+	var isLoggedIn = false;
 
 	var broadcastMapper = [];
 
 
 	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
-		statePlugin.changeState("manage",optionalParams)
+
+		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+			isLoggedIn = true;
+			statePlugin.changeState("manage", optionalParams);
+			showSimulator(false);
+		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
-		statePlugin.changeState("print",optionalParams)
+		statePlugin.changeState("print",optionalParams);
+		showSimulator(true);
 	};
 	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
-		statePlugin.changeState("register",optionalParams)
+		statePlugin.changeState("register",optionalParams);
+		showSimulator(true);
 	};
 	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
-		statePlugin.changeState("manage",optionalParams)
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["registerIframe.add"] = function(optionalParams){
-		statePlugin.changeState("manage",optionalParams)
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
+	};
+	broadcastMapper["manageIframe.reload"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["printIframe.next"] = function(optionalParams){
-		statePlugin.changeState("status",optionalParams)
+		statePlugin.changeState("status",optionalParams);
+		showSimulator(true);
+	};
+
+	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
+		statePlugin.changeState("choose_asset",optionalParams);
+		showSimulator(false);
 	};
 
 	/**

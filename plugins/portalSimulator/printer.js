@@ -201,6 +201,8 @@ var Printer= (function() {
 
 	//clear the token and registration state in the printer
 	var resetToken = function(){
+
+		console.log("!!!!!!!!!!!!!");
 		log("resetting token...");
 		var token=getNewToken();
 		if(token==null){
