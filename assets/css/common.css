@@ -244,6 +244,12 @@ input[type="checkbox"]:checked + label span.chk {
     opacity: 0.5;
 }
 
+#assets-gallery{
+    padding-top: 20px;
+    overflow-y: scroll;
+    height: 400px;
+}
+
 .form_field{
     margin-bottom: 20px;
 }

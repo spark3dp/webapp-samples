@@ -121,7 +121,7 @@
 		<iframe name="mainIframe"
 		        id="mainIframe"
 		        width="768px"
-		        height="500px"
+		        height="600px"
 		        frameborder="0"
 		        style="overflow-x: hidden; overflow-y: scroll"
 		        src="#"></iframe>
@@ -255,10 +255,14 @@
 				$('#user span').text(response.member.screen_name);
 				$('#user img').attr('src', response.member.profile.avatar_path);
 			});
+			$('#breadcrumbs-section').css('display','inline-block');
+			$('#mainIframe').attr('height','500px');
 		}else{
 			$('.menu-item[data-state=loggedIn]').data('state','login');
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
+			$('#breadcrumbs-section').hide();
+			$('#mainIframe').attr('height','600px');
 		}
 
 		$(".sample-top-menu").on('click','.menu-item',function (e) {
@@ -346,6 +350,7 @@
 		},
 		redirectUserToLoginPage: function(){
 			isLoggedIn = false;
+			$('#mainIframe').attr('height','600px');
 			changeState('login');
 		},
 		myAssetsEvent: function () {

@@ -186,7 +186,7 @@
 		if (spark.auth.isAccessTokenValid()) {
 
 			//Get my assets and append to table in DOM
-			spark.drive.getMyAssets(100, 0, function (response) {
+			spark.drive.getMyAssets(50, 0, function (response) {
 				$('.spinner').hide();
 				console.info('my assets:', response);
 				$('#assetsTbody').empty();

@@ -4,9 +4,17 @@
 	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../sdk/src/utilities/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../sdk/src/auth/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../sdk/src/drive/Members.js"></script>
+
+	<!-- Personal config -->
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+
 	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 	<!-- fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
@@ -17,16 +25,14 @@
 	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
 
 
-
 	<!-- Common styles, also cloudfront-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 	<style>
 
 
-		.left-wrapper{
-			height:320px;
+		.left-wrapper {
+			height: 420px;
 			border-right: 1px solid lightgray;
-
 
 		}
 
@@ -34,13 +40,12 @@
 			letter-spacing: normal;
 		}
 
-		.logged-out-container
-		{
+		.logged-out-container {
 			margin-top: 50px;
 
 		}
-		.logged-in-container
-		{
+
+		.logged-in-container {
 			margin-top: 50px;
 
 		}
@@ -56,43 +61,67 @@
 
 	You are logged in as
 	<br/><br/><br/>
+
 	<div id="user">
 		<span></span>
 		<br/>
 		<img src=""/>
 	</div>
 	<div id="logout" style="display: inline;">
-		<a href="#" onclick="spark.auth.logout();eventBroadCaster.broadcastEvent('manageIframe.loggedOut');">Logout</a>
+		<a href="#" onclick="logout()">Logout</a>
 	</div>
 	<span>Or</span>
-	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
+	<a style="display: inline;" href="#" id="continue"
+	   onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
 
 </div>
 
 <div class="container logged-out-container">
-<div class="row">
-	<div class="col-sm-6 left-wrapper">
-		<div id="welcome-wrapper">
-			<h2>Welcome to <br>Spark Print App</h2>
-			<p>To try the demo, you need to login with a test environment account.</p>
+	<div class="row">
+		<div class="col-sm-6 left-wrapper">
+			<div id="welcome-wrapper">
+				<h2>Welcome to <br>Spark Print App</h2>
+
+				<p>To try the demo, you need to login with a test environment account.</p>
+			</div>
+		</div>
+		<div class="col-sm-6 login-container" id="">
 		</div>
 	</div>
-	<div class="col-sm-6 login-container" id="">
-	</div>
-</div>
 </div>
 <script>
-	$(document).ready(function() {
 
-		if (spark.auth.isAccessTokenValid()) {
 
-			spark.auth.getMyProfile(function (response) {
+	function logout() {
+		ADSKSpark.Client.logout();
+		eventBroadCaster.broadcastEvent('manageIframe.loggedOut');
+		location.reload();
+	}
+
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+
+	//Init the Spark Client
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+	jQuery(document).ready(function ($) {
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+
+			ADSKSpark.Members.getMyProfile().then(function(response){
 				$('#user span').text(response.member.screen_name);
 				$('#user img').attr('src', response.member.profile.avatar_path);
 				$('#user').show();
 
-				eventBroadCaster.broadcastEvent('manageIframe.loggedIn')
 			});
+
+			eventBroadCaster.broadcastEvent('manageIframe.loggedIn');
 		}
 		else
 		{
