@@ -38,9 +38,9 @@
 				<table class="table table-condensed" id="print-statuses">
 
 					<tr class="header">
-						<td style="width: 43%;">Job ID</td>
-						<td style="width: 25%;">Job Date</td>
-						<td>Status</td>
+						<td style="width:40%;">Job ID<span class="field-label">&nbsp;/&nbsp;job_id</span></td>
+						<td>Job Date<span class="field-label">&nbsp;/&nbsp;job_date_time</span></td>
+						<td>Status<span class="field-label">&nbsp;/&nbsp;job_status</span></td>
 						<td>Actions</td>
 					</tr>
 
@@ -61,7 +61,13 @@
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
 	<!-- spark sdk -->
-	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 
 	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
@@ -97,8 +103,8 @@
 					for(var i in printerJobs){
 						$("<tr class='"+ classMapper[printerJobs[i].job_status.job_status]+"'><td>"+printerJobs[i].job_id+"</td><td>"+printerJobs[i].job_date_time+"</td><td>"+printerJobs[i].job_status.job_status+"</td><td>"+
 								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
-								'<button type="button" class="btn btn-default pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>'+
-								'<button type="button" class="btn btn-default cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></button>' +
+								'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></a>'+
+								'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>' +
 								"</td></tr>").appendTo("#print-statuses");
 					}
 

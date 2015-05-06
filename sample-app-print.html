@@ -18,14 +18,14 @@
 
 	<!-- Custom styles -->
 	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
-	<link href="../../assets/css/common.css" rel="stylesheet">
+	<link href="assets/css/common.css" rel="stylesheet">
 
 
 
 	<style>
 		@font-face {
 			font-family:"digital";
-			src: url("../../plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
+			src: url("plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
 		}
 
 		.lcd{
@@ -118,7 +118,7 @@
 			</li>
 		</ul>
 		</div>
-		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="register-printer.html"></iframe></div>
+		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="768px" height="500px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
 
 
 		<div class="simulator-container">
@@ -150,7 +150,7 @@
 </div>
 
 <!-- /container -->
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 <!-- spark sdk -->
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
@@ -160,25 +160,25 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/faye-browser.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
 
 <!--script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script-->
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/renderjson.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallLogger.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/broadcastEventListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
 
 
 
@@ -228,21 +228,21 @@
 
 	var states = {
 		login:{
-			"src":"../../plugins/login/login.html",
+			"src":"plugins/login/login.html",
 			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"]
 		},
 
 		manage:{
-			"src":"manage-printers.html",
+			"src":"examples/print/manage-printers.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId", "#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"]
 		},
 
 		register:{
-			"src":"register-printer.html",
+			"src":"examples/print/register-printer.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId","#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"]
@@ -250,21 +250,21 @@
 
 
 		print:{
-			"src":"create-print-job.html",
+			"src":"examples/print/create-print-job.html",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
 			disabledTabs:[]
 		},
 
 		choose_asset:{
-			"src":"choose-asset.html",
+			"src":"examples/print/choose-asset.html",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId"],
 			disabledTabs:["#statusId"]
 		},
 
 		status:{
-			"src":"printer-status.html",
+			"src":"examples/print/printer-status.html",
 			selectedTab:"#statusId",
 			enabledTabs:["#loginId","#manageId","#printId","#registerId","#statusId"],
 			disabledTabs:[]
