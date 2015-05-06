@@ -357,6 +357,9 @@
 				$('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
 			}
 		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'thumbnails',assetId:currentAssetId});
 	});
 
 </script>
