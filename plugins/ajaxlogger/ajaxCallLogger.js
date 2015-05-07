@@ -39,7 +39,7 @@ var ajaxCallLogger = function(){
 		response.append(renderedReq);
 		response.append(rendered);
 		div.append(response);
-		txt.append(div);
+		txt.prepend(div);
 	};
 
 	return{
