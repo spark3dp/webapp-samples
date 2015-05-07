@@ -15,7 +15,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+	  'bower_components/promise-polyfill/Promise.js',
       'node_modules/should/should.js',
+      'src/utilities/*.js',
+      'src/config/*.js',
+      'src/drive/*.js',
       'src/Request.js',
       'src/Client.js',
       'src/Paginated.js',
