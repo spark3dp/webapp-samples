@@ -39,6 +39,20 @@
 		#fileURL{
 			width: 350px;
 		}
+
+		.print-si-browse
+		{
+			margin-right: 10px;
+			margin-top: 5px;
+		}
+
+		.browse_btn{
+			height: 44px;
+		}
+
+		.browse_btn span{
+			vertical-align: super;
+		}
 	</style>
 </head>
 
@@ -57,7 +71,7 @@
 					<div class="clearfix"></div>
 					<!--<input type="text" class="form-control" id="fileURL" placeholder="File URL" required value="http://cdn.spark.com/print/abcefg">-->
 					<div class="pull-left"><input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required></div>
-					<div class="pull-left or-browse">OR</div><a class="btn pull-left btn-github" href="#" onclick="eventBroadCaster.broadcastEvent('printIframe.chooseAsset')"></a>
+					<div class="pull-left or-browse">OR</div><a class="spark_btn empty browse_btn pull-left" href="#" onclick="eventBroadCaster.broadcastEvent('printIframe.chooseAsset')"><i class="spark_print_icon print-si-browse"></i><span>Browse...</span></a>
 				</div>
 
 				<div class="spacer clearfix"></div>
@@ -84,9 +98,9 @@
 
 				<input type="hidden" id="assetId">
 
-				<div>
-					<!--<a class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">Continue</a>-->
-					<input class="spark_btn primary pull-right" type="submit" value="Print" id="print">
+				<div class="pull-right">
+					<input class="spark_btn primary" type="submit" value="Print" id="print">
+					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">View Job status</a>
 				</div>
 			</form>
 
@@ -141,6 +155,19 @@
 		};
 
 		getAllPrinters();
+
+		$("#printers-select").on("change", function(e){
+
+			var printerName = $('#printers-select option:selected').text();
+			if(printerName.indexOf("( simulator )") != -1){
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else
+			{
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+
+		});
 
 		$("#print-job-form").on('submit', function (e) {
 			e.preventDefault();
