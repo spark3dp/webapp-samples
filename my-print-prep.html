@@ -11,7 +11,10 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
+	<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 
+	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 </head>
 <body>
 <div class="logged-in-container">
@@ -64,6 +67,9 @@
 </div>
 
 
+
+
+
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-print-prep.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/STLLoader.js"></script>
@@ -74,7 +80,6 @@
 
 <script type="text/javascript" charset="utf-8" src="examples/print/my-print-prep.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
@@ -85,6 +90,17 @@
 	$(document).ready(function(){
 		//ajaxCallLogger.createLoggerElement("#footer");
 		//ajaxCallLogger.startRegularListener();
+		//Init the Spark Client
+		var APP_KEY = CLIENT_ID || '',
+				GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+				ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+
+		ADSKSpark.Client.initialize(APP_KEY,// Your app key
+				GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+				ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+				ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+		);
 	});
 
 </script>
@@ -96,6 +112,7 @@
 -->
 
 <!-- spark sdk -->
+<!--
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Request.js"></script>
@@ -103,7 +120,7 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
-
+-->
 <!-- OR use the minified version
 <script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
 -->
