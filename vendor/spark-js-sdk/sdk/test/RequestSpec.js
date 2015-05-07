@@ -21,7 +21,8 @@ describe('Request', function() {
         Should(fakeXhr.requestBody).not.be.ok; // body should be null or ''
 
         // Fake a successful response
-        fakeXhr.respond(responseCode, {'Content-Type': 'application/json'}, JSON.stringify('Success!'));
+        var response = responseCode == 204 ? 'Success!' : JSON.stringify('Success!');
+        fakeXhr.respond(responseCode, {'Content-Type': 'application/json'}, response);
 
         // Check the response
         return promise.then(function(data) {

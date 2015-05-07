@@ -40,11 +40,22 @@ module.exports = function (grunt) {
 					appConfig.src + '/drive/*.js'],
 				dest: appConfig.dist + '/<%= pkg.name %>-<%= version %>.min.js'
 			}
-		}
+		},
+		// Test settings
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js',
+				singleRun: true,
+				browsers: ['PhantomJS']
+			}
+		},
 	});
 
 	// Load the plugin that provides the "uglify" task.
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+
+	//Load grunt karma
+	grunt.loadNpmTasks('grunt-karma');
 
 	//Our build task
 	grunt.registerTask('build', function (version) {
@@ -54,7 +65,14 @@ module.exports = function (grunt) {
 		var buildVersion = version ? version : pkg.version;
 
 		grunt.config.set('version', buildVersion);
-		grunt.task.run(['uglify']);
+		grunt.task.run(['karma','uglify']);
+	});
+
+
+	//run tests through grunt
+	grunt.registerTask('test', function(){
+
+		grunt.task.run(['karma']);
 	});
 
 
