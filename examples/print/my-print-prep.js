@@ -27,7 +27,7 @@ function init() {
 	$("#canvas").append(container);
 
 	camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight,  0.1, 1000 );
-	camera.position.z = 200;
+	camera.position.z = 10;
 
 
 	//camera.position.set( 0.0, radius, radius * 3.5 );
@@ -132,6 +132,7 @@ function showObjOnScene(downloadData){
 	lastObj = object;
 	scene.add( object );
 	render();
+
 }
 
 function loadProblemsOnScene(downloadData){
@@ -186,7 +187,7 @@ var analyzeAndRepairCallback = function(response){
 	}
 	else{
 		problems = JSON.stringify(response.problems);
-		loadProblemsOnScene(response.problems);
+		//loadProblemsOnScene(response.problems);
 	}
 	document.getElementById('meshProblems').value = problems;
 	EnableButtons();
@@ -225,8 +226,10 @@ $( "#createTray" ).click(function() {
 	disableButtons();
 	var meshId=document.getElementById('meshId').value;
 	//var downloadFileId = document.getElementById('downloadFileId').value;
-	var printerTypeId= "7FAF097F-DB2E-45DC-9395-A30210E789AA";
-	var profileId="34F0E39A-9389-42BA-AB5A-4F2CD59C98E4";
+	//var printerTypeId= "7FAF097F-DB2E-45DC-9395-A30210E789AA";
+	var printerTypeId= "8D39294C-FA7A-40F4-AB79-19F506C64097"; // ultimaker
+	//var profileId="34F0E39A-9389-42BA-AB5A-4F2CD59C98E4";
+	var profileId="F3314255-711D-48A9-8CB2-C55CEACF58B7"; // ultimakerProfile
 
 	sparkPrintPrep.createTray(meshId, printerTypeId, profileId, function(response){
 		document.getElementById('trayId').value = response.id;
@@ -255,6 +258,41 @@ $( "#generatePrintable" ).click(function() {
 
 	sparkPrintPrep.generatePrintable(trayId, function(response){
 		document.getElementById('printableId').value = response.file_id;
+		EnableButtons();
+	});
+
+});
+
+$( "#download" ).click(function() {
+	disableButtons();
+	var printableId=document.getElementById('printableId').value;
+
+	var downloadPrintable= function(printableId,mainCallback) {
+
+		var token = spark.auth.isAccessTokenValid();
+		if (token) {
+			var headers = {
+				"Authorization": "Bearer " + spark.auth.accessToken(),
+				"Content-type": "application/x-www-form-urlencoded"
+			};
+
+			var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/publicurl?file_ids='+printableId;
+
+			spark.util.xhr(url, 'POST', "", headers, mainCallback,undefined,false);
+			//window.location=url;
+
+		}
+		else{
+			mainCallback(false);
+		}
+	};
+
+
+	downloadPrintable(printableId, function(response){
+
+		window.location.href = JSON.parse(response).files[0].public_url;
+		//document.getElementById('printableId').value = response.file_id;
+		//window.location=spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/download?file_ids='+printableId;
 		EnableButtons();
 	});
 
