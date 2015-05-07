@@ -207,7 +207,7 @@ var ADSKSpark = ADSKSpark || {};
 					thumbnails.push(thumbnail);
 				}
 
-				var params = "thumbnails=" + JSON.stringify(thumbnails);
+				var params = "thumbnails=" + JSON.stringify(thumbnails) + '&async=false';
 
 				var headers = {'Content-type': 'application/x-www-form-urlencoded'};
 				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails')
