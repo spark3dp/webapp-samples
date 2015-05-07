@@ -86,11 +86,11 @@ textarea {
 }
 
 #container {
-    width: 800px;
+    width: 716px;
 }
 
 .container {
-    width: 768px;
+    width: 682px;
 }
 
 .form_control {
@@ -627,7 +627,7 @@ i.stooltip span {
 
 .logged-out-container
 {
-    width: 768px;
+    width: 682px;
     margin: 0;
 }
 
@@ -845,7 +845,7 @@ i.stooltip span {
     border-top:1px solid #cccccc;
     border-left:1px solid #cccccc;
     border-right:1px solid #cccccc;
-    width: 770px;
+    width: 682px;
 }
 
 /****** Ajaj Logger *****/
@@ -858,7 +858,7 @@ i.stooltip span {
     border-bottom:1px solid #2b2f3e;
     border-left:1px solid #2b2f3e;
     border-right:1px solid #2b2f3e;
-    width: 770px;
+    width: 682px;
 }
 
 .logger-container .logger-header
