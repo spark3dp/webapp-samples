@@ -38,9 +38,10 @@ var ADSKSpark = ADSKSpark || {};
                 var userId = accessTokenObj.spark_member_id;
 
                 return ADSKSpark.Members.getMemberById(userId);
-            }else{
-                return Promise.reject(new Error('Access token is invalid'));
             }
+
+            return Promise.reject(new Error('Access token is invalid'));
+
         }
 
     };

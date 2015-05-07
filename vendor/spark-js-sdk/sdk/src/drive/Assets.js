@@ -31,16 +31,17 @@ var ADSKSpark = ADSKSpark || {};
 		/**
 		 * Get logged in user assets
 		 * @param {Object} params - limit/offset/sort/filter options.
-		 * @returns {Promise} - A promise that will resolve to an array of assets.
+		 * @returns {Promise} - A promise that will resolve to an object that contains a property "assets"
+		 * 				that holds an array of assets.
 		 */
 		getMyAssets: function (params) {
 
 			if (Client.isAccessTokenValid()) {
 				var accessTokenObj = Client.getAccessTokenObject();
 
-				var userId = accessTokenObj.spark_member_id;
+				var memberId = accessTokenObj.spark_member_id;
 
-				return Client.authorizedApiRequest('/members/' + userId + '/assets')
+				return Client.authorizedApiRequest('/members/' + memberId + '/assets')
 					.get(null, params)
 					.then(function (data) {
 						return data;
@@ -48,9 +49,10 @@ var ADSKSpark = ADSKSpark || {};
 					.catch(function (error) {
 						return error;
 					});
-			} else {
-				return Promise.reject(new Error('Access token is invalid'));
 			}
+
+			return Promise.reject(new Error('Access token is invalid'));
+
 		},
 
 		/**
@@ -86,16 +88,15 @@ var ADSKSpark = ADSKSpark || {};
 			//Make sure assetId is defined
 			if (asset.assetId && !isNaN(asset.assetId)) {
 
+				var assetId = asset.assetId;
+				delete(asset.assetId);
+
 				//construct the full params
 				var params = Object.keys(asset).map(function (k) {
-					if (k !== 'assetId') {
-						return encodeURIComponent(k) + "=" + encodeURIComponent(asset[k]);
-					}
+					return encodeURIComponent(k) + "=" + encodeURIComponent(asset[k]);
 				}).join('&');
 
-				params = params.substring(0, params.length - 1);
-
-				return Client.authorizedApiRequest('/assets/' + asset.assetId)
+				return Client.authorizedApiRequest('/assets/' + assetId)
 					.put(null, params)
 					.then(function (data) {
 						return data;
@@ -104,15 +105,16 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 
 		},
 
 		/**
 		 * Remove an asset for a logged in user
-		 * @param {Number} assetId - The id of the asset
+		 * @param {Number} assetId - The ID of the asset
 		 * @returns {Promise} - A promise that will resolve to an empty body with a proper success/failure response
 		 */
 		removeAsset: function (assetId) {
@@ -128,7 +130,7 @@ var ADSKSpark = ADSKSpark || {};
 
 		/**
 		 * Retrieve all thumbnails for an asset
-		 * @param {Number} assetId - The id of the asset
+		 * @param {Number} assetId - The ID of the asset
 		 * @returns {Promise} - A promise that will resolve to an array of asset thumbnails
 		 */
 		retrieveAssetThumbnails: function (assetId) {
@@ -148,15 +150,14 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+			return Promise.reject(new Error('Proper assetId was not supplied'));
 		}
 		,
 
 		/**
 		 * Retrieve all sources (3d model files) for an asset
-		 * @param {Number} assetId - The id of the asset
+		 * @param {Number} assetId - The ID of the asset
 		 * @returns {Promise} - A promise that will resolve to an array of asset sources
 		 */
 		retrieveAssetSources: function (assetId) {
@@ -176,16 +177,17 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 
 		}
 		,
 
 		/**
 		 * Create asset thumbnail(s)
-		 * @param {Number} assetId - The asset id for which the thumbnails are created
+		 * @param {Number} assetId - The asset ID for which the thumbnails are created
 		 * @param {Array} filesArray - The files that are attached to this asset, they come in the form of [{id:"id",caption:"caption",description,"description",is_primary:true/false}]
 		 * @returns {Promise} - A promise that will resolve to an asset thumbnails object
 		 */
@@ -219,16 +221,16 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 
 
 		},
 
 		/**
 		 * Create asset source(s)
-		 * @param {Number} assetId - The asset id for which the thumbnails are created
+		 * @param {Number} assetId - The asset ID for which the thumbnails are created
 		 * @param {String} fileIds - The file ids that are attached to this asset, separated by comma i.e. 123456,258242
 		 * @returns {Promise} - A promise that will resolve to an asset sources object
 		 */
@@ -248,14 +250,15 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 		},
 
 		/**
 		 * Remove sources from an asset for a logged in user
-		 * @param {Number} assetId - The id of the asset
+		 * @param {Number} assetId - The ID of the asset
 		 * @param {String} fileIds - String of file ids to delete from asset
 		 * @returns {Promise} - A promise that will resolve to an empty body with a proper success/failure response
 		 */
@@ -274,16 +277,17 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 
 		}
 		,
 
 		/**
 		 * Remove thumbnails from an asset for a logged in user
-		 * @param {Number} assetId - The id of the asset
+		 * @param {Number} assetId - The ID of the asset
 		 * @param {String} fileIds - Array of file ids to delete from asset
 		 * @returns {Promise} - A promise that will resolve to an empty body with a proper success/failure response
 		 */
@@ -302,9 +306,10 @@ var ADSKSpark = ADSKSpark || {};
 						return error;
 					});
 
-			} else {
-				return Promise.reject(new Error('Proper assetId was not supplied'));
 			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+
 
 		}
 	};
