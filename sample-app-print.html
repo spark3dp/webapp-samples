@@ -46,7 +46,7 @@
 		}
 
 		.simulator-row{
-			width: 769px;
+			width: 680px;
 			margin-left: 1px;
 			/*background-color: #f9f8f8;*/
 			padding-bottom: 10px;
@@ -84,7 +84,7 @@
 			position: relative;
 			left: 1px;
 			border-right: 1px solid #cccccc;
-			width: 769px;
+			width: 681px;
 		}
 
 
@@ -101,11 +101,28 @@
 
 		.btn-simulator-container
 		{
-			padding-right: 19px;
-			padding-left: 19px;
 			margin-top: 10px;
 			color: #333333;
 			cursor: pointer;
+
+		}
+		.btn-simulator-container-center{
+			padding-right: 19px;
+			padding-left: 19px;
+		}
+
+		.btn-simulator-container-right{
+
+			padding-left: 19px;
+		}
+
+		.btn-simulator-container-left{
+			padding-right: 19px;
+
+		}
+
+		.btn-simulator-container-new-token{
+			padding-left: 14px;
 
 		}
 
@@ -176,35 +193,35 @@
 			</li>
 		</ul>
 		</div>
-		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="682px" height="500px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
+		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="500px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
 
 
 		<div class="simulator-container simulator-grad">
 			<div class="row no-margin simulator-tab-container">
-			<div class="col-sm-4  no-padding simulator-teb-side" style="background-color:white;">&nbsp;</div>
-			<div class="col-sm-4  no-padding simulator-tab">printer simulator</div>
-			<div class="col-sm-4  no-padding simulator-teb-side"  style="background-color:white;">&nbsp;</div>
+			<div class="col-xs-4  no-padding simulator-teb-side" style="background-color:white;">&nbsp;</div>
+			<div class="col-xs-4  no-padding simulator-tab">printer simulator</div>
+			<div class="col-xs-4  no-padding simulator-teb-side"  style="background-color:white;">&nbsp;</div>
 			</div>
 			<div class="row simulator-row">
 
-				<div class="col-sm-8 no-padding pull-left">
-					<div class="new-token btn-simulator-container pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
+				<div class="col-xs-8 no-padding pull-left">
+					<div class="new-token btn-simulator-container btn-simulator-container-new-token pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
 						<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div> New Token
 					</div>
-					<div class="lcd-container pull-left"><div class="center-block lcd "></div></div>
+					<div class="lcd-container pull-right"><div class="center-block lcd "></div></div>
 				</div>
 
-				<div class="col-sm-4 no-padding pull-right">
+				<div class="col-xs-4 no-padding pull-right">
 
-					<div class="cancel-print btn-simulator-container pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
+					<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
 						<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div> Cancel
 					</div>
 
-					<div class="pause-print btn-simulator-container btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
+					<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
 						<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div> Pause
 					</div>
 
-					<div class="resume-print btn-simulator-container btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
+					<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
 						<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div> Resume
 					</div>
 
