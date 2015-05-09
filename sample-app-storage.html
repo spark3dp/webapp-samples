@@ -36,7 +36,7 @@
 			<ul class="nav nav-tabs sample-top-menu" role="tablist">
 				<li id="loginId">
 					<div id="user" class="pull-left">
-						<img class="user-avatar" src=""/>
+						<img class="user-avatar" src="" style="display: none"/>
 					</div>
 					<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
 					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
@@ -273,10 +273,6 @@
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
 			hideBreadcrumbs(['home','asset','file-type']);
-			ADSKSpark.Members.getMyProfile().then(function (response) {
-				$('#user span').text(response.member.screen_name);
-				$('#user img').attr('src', response.member.profile.avatar_path);
-			});
 			$('#breadcrumbs-section').css('display','inline-block');
 			$('#mainIframe').attr('height','500px');
 		}else{
@@ -371,6 +367,13 @@
 				changeState('myAssets');
 				isLoggedIn = true;
 			}
+			if (optionalParams.member) {
+				$('#user span').text(optionalParams.member.name);
+				if (optionalParams.member.profile.avatar_path) {
+					$('#user img').attr('src', optionalParams.member.profile.avatar_path).show();
+				}
+			}
+
 		},
 		redirectUserToLoginPage: function(){
 			isLoggedIn = false;

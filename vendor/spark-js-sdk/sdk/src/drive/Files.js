@@ -1,8 +1,9 @@
 var ADSKSpark = ADSKSpark || {};
 
 (function() {
-    var Client = ADSKSpark.Client;
+    'use strict';
 
+    var Client = ADSKSpark.Client;
 
     /**
      * The Files API singleton.
@@ -17,14 +18,12 @@ var ADSKSpark = ADSKSpark || {};
          */
         getFileDetails: function (fileId) {
 
-            return Client.authorizedApiRequest('/files/' + fileId)
-                .get()
-                .then(function (data) {
-                    return data;
-                })
-                .catch(function (error) {
-                    return error;
-                });
+            //Make sure fileId is defined and that it is a number
+            if (!isNaN(fileId)) {
+                return Client.authorizedApiRequest('/files/' + fileId).get();
+            }
+
+            return Promise.reject(new Error('Proper fileId was not supplied'));
         },
 
         /**
@@ -33,7 +32,7 @@ var ADSKSpark = ADSKSpark || {};
          *                      {
          *                          file: The actual file data that is passed in the body
          *                          unzip: Should we treat the upload as a zip of multiple files
-         *                          public: If it has full public URL for everyne's access
+         *                          public: If it has full public URL for everyone's access
          *                      }
          * @returns {Promise} - A promise that will resolve to a file object response
          */
@@ -48,15 +47,7 @@ var ADSKSpark = ADSKSpark || {};
             if (fileData.public) {
                 fd.append("public", fileData.public);
             }
-
-            return Client.authorizedApiRequest('/files/upload')
-                .post(null, fd)
-                .then(function (data) {
-                    return data;
-                })
-                .catch(function (error) {
-                    return error;
-                });
+            return Client.authorizedApiRequest('/files/upload').post(null, fd);
 
         },
     };

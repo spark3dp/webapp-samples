@@ -1,13 +1,11 @@
-'use strict';
-
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-
 module.exports = function (grunt) {
+	'use strict';
 
 	// Time how long tasks take. Can help when optimizing build times
 	require('time-grunt')(grunt);
@@ -49,6 +47,9 @@ module.exports = function (grunt) {
 				browsers: ['PhantomJS']
 			}
 		},
+		jshint: {
+			all: ['Gruntfile.js', 'src/{,*/}*.js', 'test/{,*/}*.js']
+		}
 	});
 
 	// Load the plugin that provides the "uglify" task.
@@ -56,6 +57,9 @@ module.exports = function (grunt) {
 
 	//Load grunt karma
 	grunt.loadNpmTasks('grunt-karma');
+
+	//JShint
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 
 	//Our build task
 	grunt.registerTask('build', function (version) {
@@ -65,7 +69,7 @@ module.exports = function (grunt) {
 		var buildVersion = version ? version : pkg.version;
 
 		grunt.config.set('version', buildVersion);
-		grunt.task.run(['karma','uglify']);
+		grunt.task.run(['jshint','karma','uglify']);
 	});
 
 

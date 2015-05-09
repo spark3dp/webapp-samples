@@ -45,11 +45,11 @@ ADSKSpark.Helpers = function () {
 		 */
 		extractParamsFromURL: function(){
 			var prmstr = window.location.search.substr(1);
-			var getParams = prmstr != null && prmstr != "" ? helpers.transformToAssocArray(prmstr) : [];
+			var getParams = prmstr ? helpers.transformToAssocArray(prmstr) : [];
 
 			return getParams;
 		},
-	}
+	};
 
 	return helpers;
 

@@ -13,6 +13,5 @@ ADSKSpark.Constants = function () {
 		EXPORT_TASK_TYPE: 'export',
 		ERROR_TASK_STATUS: 'error',
 		RUNNING_TASK_STATUS: 'running'
-
-	}
+	};
 }();

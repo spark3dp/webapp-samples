@@ -1,8 +1,9 @@
 var ADSKSpark = ADSKSpark || {};
 
 (function () {
-	var Client = ADSKSpark.Client;
+	'use strict';
 
+	var Client = ADSKSpark.Client;
 
 	/**
 	 * The Assets API singleton.
@@ -17,14 +18,12 @@ var ADSKSpark = ADSKSpark || {};
 		 */
 		getAsset: function (assetId) {
 
-			return Client.authorizedApiRequest('/assets/' + assetId)
-				.get()
-				.then(function (data) {
-					return data;
-				})
-				.catch(function (error) {
-					return error;
-				});
+			//Make sure assetId is defined and that it is a number
+			if (!isNaN(assetId)) {
+				return Client.authorizedApiRequest('/assets/' + assetId).get();
+			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
 		},
 
 
@@ -41,14 +40,10 @@ var ADSKSpark = ADSKSpark || {};
 
 				var memberId = accessTokenObj.spark_member_id;
 
-				return Client.authorizedApiRequest('/members/' + memberId + '/assets')
-					.get(null, params)
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
+				//Make sure memberId is defined and that it is a number
+				if (!isNaN(memberId)) {
+					return Client.authorizedApiRequest('/members/' + memberId + '/assets').get(null, params);
+				}
 			}
 
 			return Promise.reject(new Error('Access token is invalid'));
@@ -68,14 +63,7 @@ var ADSKSpark = ADSKSpark || {};
 			}).join('&');
 
 			var headers = {'Content-type': 'application/x-www-form-urlencoded'};
-			return Client.authorizedApiRequest('/assets')
-				.post(headers, params)
-				.then(function (data) {
-					return data;
-				})
-				.catch(function (error) {
-					return error;
-				});
+			return Client.authorizedApiRequest('/assets').post(headers, params);
 
 		},
 
@@ -85,26 +73,20 @@ var ADSKSpark = ADSKSpark || {};
 		 * @returns {Promise} - A promise that will resolve to a success/failure asset
 		 */
 		updateAsset: function (asset) {
-			//Make sure assetId is defined
-			if (asset.assetId && !isNaN(asset.assetId)) {
+
+			//Make sure assetId is defined and that it is a number
+			if (!isNaN(asset.assetId)) {
 
 				var assetId = asset.assetId;
-				delete(asset.assetId);
 
-				//construct the full params
-				var params = Object.keys(asset).map(function (k) {
+				//construct the full params, omit assetId in the request
+				var params = Object.keys(asset).filter(function (key) {
+					return key !== 'assetId';
+				}).map(function (k) {
 					return encodeURIComponent(k) + "=" + encodeURIComponent(asset[k]);
 				}).join('&');
 
-				return Client.authorizedApiRequest('/assets/' + assetId)
-					.put(null, params)
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
-
+				return Client.authorizedApiRequest('/assets/' + assetId).put(null, params);
 			}
 
 			return Promise.reject(new Error('Proper assetId was not supplied'));
@@ -118,108 +100,69 @@ var ADSKSpark = ADSKSpark || {};
 		 * @returns {Promise} - A promise that will resolve to an empty body with a proper success/failure response
 		 */
 		removeAsset: function (assetId) {
-			return Client.authorizedApiRequest('/assets/' + assetId)
-				.delete()
-				.then(function (data) {
-					return data;
-				})
-				.catch(function (error) {
-					return error;
-				});
+
+			//Make sure assetId is defined and that it is a number
+			if (!isNaN(assetId)) {
+				return Client.authorizedApiRequest('/assets/' + assetId).delete();
+			}
+			return Promise.reject(new Error('Proper assetId was not supplied'));
 		},
 
 		/**
 		 * Retrieve all thumbnails for an asset
 		 * @param {Number} assetId - The ID of the asset
-		 * @returns {Promise} - A promise that will resolve to an array of asset thumbnails
+		 * @returns {Promise} - A promise that will resolve to an object that has a "thumbnails" property
+		 * 						that is an array of asset thumbnails
 		 */
 		retrieveAssetThumbnails: function (assetId) {
 
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
 
-				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails')
-					.get()
-					.then(function (data) {
-						var thumbnailsResp = {
-							assetId: assetId,
-							thumbnails: data.thumbnails
-						}
-						return thumbnailsResp;
-					})
-					.catch(function (error) {
-						return error;
-					});
+				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails').get();
 
 			}
 			return Promise.reject(new Error('Proper assetId was not supplied'));
-		}
-		,
+		},
 
 		/**
 		 * Retrieve all sources (3d model files) for an asset
 		 * @param {Number} assetId - The ID of the asset
-		 * @returns {Promise} - A promise that will resolve to an array of asset sources
+		 * @returns {Promise} - A promise that will resolve to an object that has a "sources" property
+		 * 						that is an array of asset sources
 		 */
 		retrieveAssetSources: function (assetId) {
 
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
-
-				return Client.authorizedApiRequest('/assets/' + assetId + '/sources')
-					.get()
-					.then(function (data) {
-						var sourcesResp = {
-							assetId: assetId,
-							sources: data.sources
-						}
-						return sourcesResp;
-					})
-					.catch(function (error) {
-						return error;
-					});
-
+				return Client.authorizedApiRequest('/assets/' + assetId + '/sources').get();
 			}
 
 			return Promise.reject(new Error('Proper assetId was not supplied'));
 
 
-		}
-		,
+		},
 
 		/**
 		 * Create asset thumbnail(s)
 		 * @param {Number} assetId - The asset ID for which the thumbnails are created
 		 * @param {Array} filesArray - The files that are attached to this asset, they come in the form of [{id:"id",caption:"caption",description,"description",is_primary:true/false}]
+		 * @param {Boolean} async - Whether thumbnails should be generated asynchronously to save system resources.
 		 * @returns {Promise} - A promise that will resolve to an asset thumbnails object
 		 */
-		createAssetThumbnails: function (assetId, filesArray) {
+		createAssetThumbnails: function (assetId, filesArray, async) {
 
-			//Make sure assetId is defined
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
 
-				var thumbnails = [];
-
-				for (var i = 0; i < filesArray.length; i++) {
-					var thumbnail = {
-						id: filesArray[i].id,
-						caption: filesArray[i].caption ? filesArray[i].caption : '',
-						description: filesArray[i].description ? filesArray[i].description : '',
-						is_primary: filesArray[i].is_primary ? filesArray[i].is_primary : false
-					}
-
-					thumbnails.push(thumbnail);
-				}
-
-				var params = "thumbnails=" + JSON.stringify(thumbnails) + '&async=false';
+				var thumbnails = filesArray.map(function (file) {
+					return {id: file.id, caption: file.caption || '', description:file.description || '',is_primary:file.is_primary || false};
+				});
+				async = async || false;
+				var params = "thumbnails=" + JSON.stringify(thumbnails) + '&async=' + async;
 
 				var headers = {'Content-type': 'application/x-www-form-urlencoded'};
-				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails')
-					.post(headers, params)
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
+				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails').post(headers, params);
 
 			}
 			return Promise.reject(new Error('Proper assetId was not supplied'));
@@ -236,20 +179,11 @@ var ADSKSpark = ADSKSpark || {};
 		 */
 		createAssetSources: function (assetId, fileIds) {
 
-			//Make sure assetId is defined
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
-
 				var params = 'file_ids=' + fileIds;
 				var headers = {'Content-type': 'application/x-www-form-urlencoded'};
-				return Client.authorizedApiRequest('/assets/' + assetId + '/sources')
-					.post(headers, params)
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
-
+				return Client.authorizedApiRequest('/assets/' + assetId + '/sources').post(headers, params);
 			}
 
 			return Promise.reject(new Error('Proper assetId was not supplied'));
@@ -264,26 +198,14 @@ var ADSKSpark = ADSKSpark || {};
 		 */
 		deleteAssetSources: function (assetId, fileIds) {
 
-			//Make sure assetId is defined
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
-
 				var params = '?file_ids=' + fileIds;
-				return Client.authorizedApiRequest('/assets/' + assetId + '/sources' + params)
-					.delete()
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
-
+				return Client.authorizedApiRequest('/assets/' + assetId + '/sources' + params).delete();
 			}
 
 			return Promise.reject(new Error('Proper assetId was not supplied'));
-
-
-		}
-		,
+		},
 
 		/**
 		 * Remove thumbnails from an asset for a logged in user
@@ -293,18 +215,11 @@ var ADSKSpark = ADSKSpark || {};
 		 */
 		deleteAssetThumbnails: function (assetId, fileIds) {
 
-			//Make sure assetId is defined
+			//Make sure assetId is defined and that it is a number
 			if (!isNaN(assetId)) {
 
 				var params = '?thumbnail_ids=' + fileIds;
-				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails' + params)
-					.delete()
-					.then(function (data) {
-						return data;
-					})
-					.catch(function (error) {
-						return error;
-					});
+				return Client.authorizedApiRequest('/assets/' + assetId + '/thumbnails' + params).delete();
 
 			}
 
