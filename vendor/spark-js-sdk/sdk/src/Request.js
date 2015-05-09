@@ -57,18 +57,12 @@ ADSKSpark.Request = function(url, authorization,options) {
 
                     var response;
 
-                    //Successfull with an empty body
-                    if (xhr.status != 204) {
-                        if (!options.notJsonResponse) {
-                            response = JSON.parse(xhr.responseText);
-                        }else{
-                            response = xhr.responseText;
-                        }
-
-                    }else{
-                        //xhr.status 204 in the API means that the response is empty
-                        response = true;
-                    }
+					//Successful with an empty body - xhr.status 204 in the API means that the response is empty
+					if (xhr.status !== 204 && !options.notJsonResponse) {
+						response = JSON.parse(xhr.responseText);
+					} else {
+						response = xhr.responseText;
+					}
 
                     resolve(response);
 

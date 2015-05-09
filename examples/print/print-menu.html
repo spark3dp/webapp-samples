@@ -18,123 +18,65 @@
 
 	<!-- Custom styles -->
 	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
-	<link href="assets/css/common.css" rel="stylesheet">
+	<link href="../../assets/css/common.css" rel="stylesheet">
 
 
 
 	<style>
 		@font-face {
 			font-family:"digital";
-			src: url("plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
+			src: url("../../plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
 		}
 
 		.lcd{
-			font-family: 'digital', sans-serif;
-			color: #00C6FF;
+			font-family:'digital', sans-serif;
+			margin-top: 10px;
+			margin-left: 20px;
+			color:#eb5528;
 			font-size: 20px;
+			padding: 0px;
 			letter-spacing: 20px;
-
+		}
+		.jumbotron{
+			padding: 5px;
+			margin: 5px;
 		}
 
-		.lcd-container{
-			width: 362px;
-			height: 76px;
-			background:url('assets/img/simulator_panel.png') no-repeat;
-			border-radius: 3px;
-			padding: 15px 30px 15px 30px;
-			text-align: center;
+		.btn-simulator{
+			margin: 5px;
 		}
 
 		.simulator-row{
-			width: 769px;
+			width: 768px;
 			margin-left: 1px;
-			/*background-color: #f9f8f8;*/
-			padding-bottom: 10px;
-			padding-top: 10px;
-		
+			background-color: #f9f8f8;
+			padding-bottom: 5px;
+			padding-top: 5px;
+			border-top: 1px solid #cccccc;
 		}
 
 		.simulator-tab
 		{
-			/*background-color: #f9f8f8;*/
-
+			background-color: #f9f8f8;
+			width:200px;
 			text-align: center;
-			height: 21px;
+			position: relative;
+			left:270px;
 			font-size:12px;
 			padding: 2px 0 2px 0;
 			text-transform: uppercase;
 			border-top: 1px solid #cccccc;
 			border-right: 1px solid #cccccc;
 			border-left: 1px solid #cccccc;
+			top: 1px;
 		}
-
-		.simulator-teb-side{
-			border-bottom: 1px solid #cccccc;
-		}
-
 
 		.simulator-container
 		{
 			position: relative;
+			top: -23px;
 			display: none;
 		}
-
-		.simulator-tab-container
-		{
-			position: relative;
-			left: 1px;
-			border-right: 1px solid #cccccc;
-			width: 769px;
-		}
-
-
-		.simulator-grad{
-			/* Safari 5.1 to 6.0 */
-			background: -webkit-linear-gradient(left , #CECECE, #F6F6F6);
-			/* Opera 11.1 to 12.0 */
-			background: -o-linear-gradient(right , #CECECE, #F6F6F6);
-			/* Firefox 3.6 to 15 */
-			background: -moz-linear-gradient(right , #CECECE, #F6F6F6);
-			/* Standard syntax */
-			background: linear-gradient(right , #CECECE, #F6F6F6);
-		}
-
-		.btn-simulator-container
-		{
-			padding-right: 19px;
-			padding-left: 19px;
-			margin-top: 10px;
-			color: #333333;
-			cursor: pointer;
-
-		}
-
-		.btn-simulator-container-border{
-			border-right: 1px solid #cccccc;
-		}
-
-
-		.btn-simulator-container .spark_print_icon
-		{
-			display: block;
-			text-align: center;
-			margin-bottom: 10px;
-
-		}
-
-		.resume-print .spark_print_icon{
-			margin-left: 10px;
-		}
-		.pause-print .spark_print_icon{
-			margin-left: 5px;
-		}
-		.cancel-print .spark_print_icon{
-			margin-left: 7px;
-		}
-		.new-token .spark_print_icon{
-			margin-left: 18px;
-		}
-
 	</style>
 </head>
 
@@ -176,38 +118,30 @@
 			</li>
 		</ul>
 		</div>
-		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="682px" height="500px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
+		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="682px" height="500px" frameborder="0"  src="register-printer.html"></iframe></div>
 
 
-		<div class="simulator-container simulator-grad">
-			<div class="row no-margin simulator-tab-container">
-			<div class="col-sm-4  no-padding simulator-teb-side" style="background-color:white;">&nbsp;</div>
-			<div class="col-sm-4  no-padding simulator-tab">printer simulator</div>
-			<div class="col-sm-4  no-padding simulator-teb-side"  style="background-color:white;">&nbsp;</div>
-			</div>
+		<div class="simulator-container">
+			<div class="simulator-tab">printer simulator</div>
 			<div class="row simulator-row">
+				<div class="center-block lcd"></div>
+				<div class="pull-left">
+					<button type="button" class="btn btn-default btn-simulator new-token" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Shutdown current printer and get new registration token">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Token
+					</button>
+			   </div>
+				<div class="pull-right">
+				<button type="button" class="btn btn-default btn-simulator resume-print" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Resume Print Job">
+					<span class="glyphicon glyphicon-play" aria-hidden="true"></span> Resume
+				</button>
 
-				<div class="col-sm-8 no-padding pull-left">
-					<div class="new-token btn-simulator-container pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
-						<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div> New Token
-					</div>
-					<div class="lcd-container pull-left"><div class="center-block lcd "></div></div>
-				</div>
+				<button type="button" class="btn btn-default btn-simulator pause-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Pause Print Job">
+					<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
+				</button>
 
-				<div class="col-sm-4 no-padding pull-right">
-
-					<div class="cancel-print btn-simulator-container pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
-						<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div> Cancel
-					</div>
-
-					<div class="pause-print btn-simulator-container btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
-						<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div> Pause
-					</div>
-
-					<div class="resume-print btn-simulator-container btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
-						<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div> Resume
-					</div>
-
+				<button type="button" class="btn btn-default btn-simulator cancel-print" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
+					<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Cancel
+				</button>
 				</div>
 			</div>
 		</div>
@@ -216,7 +150,7 @@
 </div>
 
 <!-- /container -->
-<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 <!-- spark sdk -->
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
@@ -226,25 +160,25 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/faye-browser.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/portalSimulator/printer.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
 <!--script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script-->
 
-<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallLogger.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
-<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/broadcastEventListener.js"></script>
 
 
 
@@ -286,27 +220,29 @@
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
+			var hideSimulator = state == "manage" || state == "login" || state == "choose_asset";
+			showSimulator(!hideSimulator);
 		});
 	});
 
 
 	var states = {
 		login:{
-			"src":"plugins/login/login.html",
+			"src":"../../plugins/login/login.html",
 			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"]
 		},
 
 		manage:{
-			"src":"examples/print/manage-printers.html",
+			"src":"manage-printers.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId", "#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"]
 		},
 
 		register:{
-			"src":"examples/print/register-printer.html",
+			"src":"register-printer.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId","#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"]
@@ -314,21 +250,21 @@
 
 
 		print:{
-			"src":"examples/print/create-print-job.html",
+			"src":"create-print-job.html",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
 			disabledTabs:[]
 		},
 
 		choose_asset:{
-			"src":"examples/print/choose-asset.html",
+			"src":"choose-asset.html",
 			selectedTab:"#printId",
-			enabledTabs:["#loginId","#manageId","#registerId", "#statusId"],
-			disabledTabs:[]
+			enabledTabs:["#loginId","#manageId","#registerId"],
+			disabledTabs:["#statusId"]
 		},
 
 		status:{
-			"src":"examples/print/printer-status.html",
+			"src":"printer-status.html",
 			selectedTab:"#statusId",
 			enabledTabs:["#loginId","#manageId","#printId","#registerId","#statusId"],
 			disabledTabs:[]
@@ -338,10 +274,10 @@
 
 	var showSimulator = function(show){
 		if(show == true){
-			$('.simulator-container').animate({height: 'show'}, 290, function() {});
+			$(".simulator-container").show();
 		}
 		else{
-			$('.simulator-container').animate({height: 'hide'}, 290, function() {});
+			$(".simulator-container").hide();
 		}
 	};
 
@@ -355,41 +291,37 @@
 		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 			isLoggedIn = true;
 			statePlugin.changeState("manage", optionalParams);
-			//showSimulator(false);
+			showSimulator(false);
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
 		statePlugin.changeState("print",optionalParams);
-		//showSimulator(true);
+		showSimulator(true);
 	};
 	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
 		statePlugin.changeState("register",optionalParams);
-		//showSimulator(true);
+		showSimulator(true);
 	};
 	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
+		showSimulator(false);
 	};
 	broadcastMapper["registerIframe.add"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
+		showSimulator(false);
 	};
 	broadcastMapper["manageIframe.reload"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
+		showSimulator(false);
 	};
 	broadcastMapper["printIframe.next"] = function(optionalParams){
 		statePlugin.changeState("status",optionalParams);
-		//showSimulator(true);
+		showSimulator(true);
 	};
 
 	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
 		statePlugin.changeState("choose_asset",optionalParams);
-		//showSimulator(false);
-	};
-
-	broadcastMapper["showSimulator"] = function(show){
-		showSimulator(show);
+		showSimulator(false);
 	};
 
 	/**

@@ -5,9 +5,15 @@
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
 	<!-- spark sdk -->
-	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 
-	<!-- Personal config -->
+	<!-- your config file -->
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
 	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
@@ -72,7 +78,7 @@
 	<div id="user">
 		<span></span>
 		<br/>
-		<img src=""/>
+		<img src="" style="display: none;"/>
 	</div>
 	<div id="logout" style="display: inline;">
 		<a href="#" onclick="logout()">Logout</a>
@@ -85,7 +91,7 @@
 
 <div class="container logged-out-container">
 	<div class="row">
-		<div class="col-sm-6 left-wrapper">
+		<div class="col-xs-6 left-wrapper">
 			<div id="welcome-wrapper">
 				<h2>Welcome to <br>Spark Print App</h2>
 				<br>
@@ -95,7 +101,7 @@
 				<div class="login-img"></div>
 			</div>
 		</div>
-		<div class="col-sm-6 login-container" id="">
+		<div class="col-xs-6 login-container" id="">
 		</div>
 	</div>
 </div>
@@ -126,13 +132,16 @@
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 
 			ADSKSpark.Members.getMyProfile().then(function(response){
-				$('#user span').text(response.member.screen_name);
-				$('#user img').attr('src', response.member.profile.avatar_path);
+				$('#user span').text(response.member.name);
+
+				if (response.member.profile.avatar_path) {
+					$('#user img').attr('src', response.member.profile.avatar_path).show();
+				}
+				
 				$('#user').show();
 
+				eventBroadCaster.broadcastEvent('manageIframe.loggedIn',response);
 			});
-
-			eventBroadCaster.broadcastEvent('manageIframe.loggedIn');
 		}
 		else
 		{

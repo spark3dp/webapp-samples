@@ -171,6 +171,9 @@
 			});
 
 			common.setUIFunctionality();
+
+			//set up correct links
+			$('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
