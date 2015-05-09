@@ -64,7 +64,7 @@
 		}
 		#assets-gallery{
 			padding-top: 20px;
-			overflow-y: scroll;
+			overflow-y: auto;
 			height: 400px;
 		}
 		.box{
@@ -164,16 +164,19 @@
 			imgUrlThumb += 'Medium.jpg';
 		}
 
+
 		var box = $('<div class="col-sm-3 box box-' + index + '"></div>');
+		var click = $('<a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">' +
 				'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,10) + '</a></div>');
 
 		$('#assets-gallery').append(box);
-		box.append(view);
+		box.append(click);
+		click.append(view);
 
 		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
-		box.append(text);
+		click.append(text);
 	}
 
 

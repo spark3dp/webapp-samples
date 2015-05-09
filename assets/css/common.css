@@ -599,7 +599,7 @@ i.stooltip span {
     height: 26px;
 }
 
-.print-si-close-light:hover {
+.print-si-close-light:hover, .btn-simulator-container:hover .print-si-close-light {
     background-position: -35px -31px;
     width: 26px;
     height: 26px;
@@ -611,7 +611,7 @@ i.stooltip span {
     height: 26px;
 }
 
-.print-si-pause-light:hover {
+.print-si-pause-light:hover , .btn-simulator-container:hover .print-si-pause-light {
     background-position: -65px -31px;
     width: 26px;
     height: 26px;
@@ -623,20 +623,20 @@ i.stooltip span {
     height: 26px;
 }
 
-.print-si-play-light:hover {
+.print-si-play-light:hover, .btn-simulator-container:hover .print-si-play-light {
     background-position: -100px -31px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-cancel-light {
-    background-position: -162px -66px;
+    background-position: -162px -67px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-cancel-light:hover {
-    background-position: -162px -96px;
+    background-position: -162px -97px;
     width: 26px;
     height: 26px;
 }
@@ -668,7 +668,7 @@ i.stooltip span {
     height: 29px;
 }
 
-.print-si-new-token-light:hover
+.print-si-new-token-light:hover, .btn-simulator-container:hover .print-si-new-token-light
 {
     background-position: -100px -95px;
     width: 29px;
@@ -681,6 +681,8 @@ i.stooltip span {
     width: 26px;
     height: 26px;
 }
+
+
 /***** END SPRITE ******/
 
 /**** galleries ****/

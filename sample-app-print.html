@@ -37,7 +37,6 @@
 		}
 
 		.lcd-container{
-			margin-top: 10px;
 			width: 362px;
 			height: 76px;
 			background:url('assets/img/simulator_panel.png') no-repeat;
@@ -46,18 +45,13 @@
 			text-align: center;
 		}
 
-		.jumbotron{
-			padding: 5px;
-			margin: 5px;
-		}
-
 		.simulator-row{
 			width: 769px;
 			margin-left: 1px;
 			/*background-color: #f9f8f8;*/
-			padding-bottom: 5px;
-			padding-top: 15px;
-			border-top: 1px solid #cccccc;
+			padding-bottom: 10px;
+			padding-top: 10px;
+		
 		}
 
 		.simulator-tab
@@ -65,7 +59,7 @@
 			/*background-color: #f9f8f8;*/
 
 			text-align: center;
-
+			height: 21px;
 			font-size:12px;
 			padding: 2px 0 2px 0;
 			text-transform: uppercase;
@@ -73,6 +67,11 @@
 			border-right: 1px solid #cccccc;
 			border-left: 1px solid #cccccc;
 		}
+
+		.simulator-teb-side{
+			border-bottom: 1px solid #cccccc;
+		}
+
 
 		.simulator-container
 		{
@@ -104,7 +103,7 @@
 		{
 			padding-right: 19px;
 			padding-left: 19px;
-			margin-top: 20px;
+			margin-top: 10px;
 			color: #333333;
 			cursor: pointer;
 
@@ -182,14 +181,14 @@
 
 		<div class="simulator-container simulator-grad">
 			<div class="row no-margin simulator-tab-container">
-			<div class="col-sm-4  no-padding" style="background-color:white;">&nbsp;</div>
+			<div class="col-sm-4  no-padding simulator-teb-side" style="background-color:white;">&nbsp;</div>
 			<div class="col-sm-4  no-padding simulator-tab">printer simulator</div>
-			<div class="col-sm-4  no-padding"  style="background-color:white;">&nbsp;</div>
+			<div class="col-sm-4  no-padding simulator-teb-side"  style="background-color:white;">&nbsp;</div>
 			</div>
 			<div class="row simulator-row">
 
 				<div class="col-sm-8 no-padding pull-left">
-					<div class="new-token btn-simulator-container pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Shutdown current printer and get new registration token">
+					<div class="new-token btn-simulator-container pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
 						<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div> New Token
 					</div>
 					<div class="lcd-container pull-left"><div class="center-block lcd "></div></div>
@@ -287,8 +286,6 @@
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
-			//var hideSimulator = state == "manage" || state == "login" || state == "choose_asset";
-			//showSimulator(!hideSimulator);
 		});
 	});
 
@@ -341,10 +338,10 @@
 
 	var showSimulator = function(show){
 		if(show == true){
-			$(".simulator-container").show();
+			$('.simulator-container').animate({height: 'show'}, 290, function() {});
 		}
 		else{
-			$(".simulator-container").hide();
+			$('.simulator-container').animate({height: 'hide'}, 290, function() {});
 		}
 	};
 

@@ -25,8 +25,8 @@
 			text-align: center;
 			display: none;
 			background-color: #F8F8F8;
-			padding-top: 30px;
-			padding-bottom: 30px;
+			padding-top: 75px;
+			padding-bottom: 75px;
 		}
 
 		.create-print-job{
@@ -36,7 +36,7 @@
 
 		.print-statuses-container
 		{
-			overflow-y: scroll;
+			overflow-y: auto;
 			height: 350px;
 			margin-bottom: 20px;
 			display: none;
@@ -149,8 +149,8 @@
 						for (var i in printerJobs) {
 							$("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'><td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td><td>" + printerJobs[i].job_status.job_status + "</td><td>" +
 								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
-									'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></a>' +
-									'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>' +
+									'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+									'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
 									"</td></tr>").appendTo("#printersStatusTbody");
 						}
 
@@ -190,7 +190,9 @@
 		}
 		else
 		{
+			$("#empty-jobs").hide();
 			$(".choose-printer").show();
+			eventBroadCaster.broadcastEvent('showSimulator', false);
 		}
 
 

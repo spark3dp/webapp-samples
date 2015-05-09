@@ -53,6 +53,10 @@
 		.browse_btn span{
 			vertical-align: super;
 		}
+
+		.form-fields-container{
+			margin-bottom: 50px;
+		}
 	</style>
 </head>
 
@@ -60,6 +64,7 @@
 
 	<div class="container main-container">
 			<form id="print-job-form">
+				<div class="form-fields-container">
 				<div class="sample-title">Create a 3D print job</div>
 				<hr>
 				<div class="form-group pull-left">
@@ -73,7 +78,6 @@
 					<div class="pull-left"><input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required></div>
 					<div class="pull-left or-browse">OR</div><a class="spark_btn empty browse_btn pull-left" href="#" onclick="eventBroadCaster.broadcastEvent('printIframe.chooseAsset')"><i class="spark_print_icon print-si-browse"></i><span>Browse...</span></a>
 				</div>
-
 				<div class="spacer clearfix"></div>
 				<div class="form-group">
 					<label for="printers-select">
@@ -85,6 +89,7 @@
 						<option value="">Please select...</option>
 					</select>
 				</div>
+				<div class="spacer clearfix"></div>
 				<div class="form-group">
 					<label for="printer-settings">
 						Change default settings <span class="field-label">&nbsp;/&nbsp;settings</span><i class="required"></i>
@@ -94,10 +99,8 @@
 					<textArea type="text" class="form-control" id="printer-settings" placeholder="">{ "FirstApproachRPM": 6, "FirstZLiftMicrons": 2000, "FirstSeparationMicronsPerSec": 5000, "FirstApproachMicronsPerSec": 5000, "FirstRotationMilliDegrees": 60000 }
 					</textArea>
 				</div>
-
-
 				<input type="hidden" id="assetId">
-
+				</div>
 				<div class="pull-right">
 					<input class="spark_btn primary" type="submit" value="Print" id="print">
 					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">View Job status</a>
