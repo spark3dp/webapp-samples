@@ -6,7 +6,9 @@ var ADSKSpark = ADSKSpark || {};
 	var Client = ADSKSpark.Client;
 
 	/**
-	 * The Assets API singleton.
+	 * @class
+	 * @type {{getAsset: Function, getMyAssets: Function, createAsset: Function, updateAsset: Function, removeAsset: Function, retrieveAssetThumbnails: Function, retrieveAssetSources: Function, createAssetThumbnails: Function, createAssetSources: Function, deleteAssetSources: Function, deleteAssetThumbnails: Function}}
+	 * @description - The Assets API singleton.
 	 * See reference - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fassets
 	 */
 	ADSKSpark.Assets = {

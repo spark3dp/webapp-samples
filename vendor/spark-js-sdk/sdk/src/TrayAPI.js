@@ -8,8 +8,6 @@ var ADSKSpark = ADSKSpark || {};
     // The Tray API singleton.
     //
     ADSKSpark.TrayAPI = {
-        /**
-         */
 
         // meshAttrs, defaultMaterialId, progressCallback are optional
         createTray: function(printerTypeId, printerProfileId, meshIds, meshAttrs, defaultMaterialId, progressCallback) {

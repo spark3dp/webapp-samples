@@ -141,5 +141,3 @@ or
 $ grunt build:[version]
 ```
 Where version might be any string.
-
-(We package in the dist folder the latest version with a suffix "latest" and a suffix of the current stable version).

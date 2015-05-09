@@ -6,7 +6,9 @@ var ADSKSpark = ADSKSpark || {};
     var Client = ADSKSpark.Client;
 
     /**
-     * The Files API singleton.
+     * @class
+     * @type {{getFileDetails: Function, uploadFile: Function}}
+     * @description - The Files API singleton.
      * See reference - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Ffiles
      */
     ADSKSpark.Files = {
@@ -29,11 +31,9 @@ var ADSKSpark = ADSKSpark || {};
         /**
          * Upload a file to Spark Drive
          * @param fileData - The file object to upload - has the form of:
-         *                      {
          *                          file: The actual file data that is passed in the body
          *                          unzip: Should we treat the upload as a zip of multiple files
          *                          public: If it has full public URL for everyone's access
-         *                      }
          * @returns {Promise} - A promise that will resolve to a file object response
          */
         uploadFile: function (fileData) {

@@ -37,8 +37,6 @@ var ADSKSpark = ADSKSpark || {};
     // The Mesh API singleton.
     //
     ADSKSpark.MeshAPI = {
-        /**
-         */
 
         // progressCallback is optional
         importMesh: function(fileId, name, generateVisual, transform, progressCallback) {

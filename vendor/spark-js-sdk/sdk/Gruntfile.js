@@ -49,6 +49,14 @@ module.exports = function (grunt) {
 		},
 		jshint: {
 			all: ['Gruntfile.js', 'src/{,*/}*.js', 'test/{,*/}*.js']
+		},
+		jsdoc : {
+			dist : {
+				src: ['src/{,*/}*.js', 'test/{,*/}*.js'],
+				options: {
+					destination: 'doc'
+				}
+			}
 		}
 	});
 
@@ -60,6 +68,9 @@ module.exports = function (grunt) {
 
 	//JShint
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+
+	//JSdocs
+	grunt.loadNpmTasks('grunt-jsdoc');
 
 	//Our build task
 	grunt.registerTask('build', function (version) {
