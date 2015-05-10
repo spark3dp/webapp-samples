@@ -14,17 +14,19 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-		.modal-header{
+		.modal-header {
 			position: relative;
-			padding:8px 20px;
+			padding: 8px 20px;
 		}
-		.modal-header .layouts{
+
+		.modal-header .layouts {
 			position: absolute;
-			right:0;
+			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
 		}
-		.modal-header .layouts a{
+
+		.modal-header .layouts a {
 			border-right: 1px solid lightgrey;
 			margin-right: 6px;
 			padding: 4px 10px 0 0;
@@ -53,6 +55,13 @@
 			position: absolute;
 			left: -10px;
 		}
+
+		.assets-container{
+			padding-top: 20px;
+			overflow-y: scroll;
+			height: 500px;
+		}
+
 	</style>
 
 </head>
@@ -63,18 +72,20 @@
 	<div class="spinner"></div>
 
 	<div class="hidden" id="files">
-		<table class="table">
-			<thead>
-			<tr>
-				<th>Name<br/><span>file_name</span></th>
-				<th>ID<br/><span>file_id</span></th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody id="filesTbody">
+		<div class="assets-container">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Name<br/><span>file_name</span></th>
+					<th>ID<br/><span>file_id</span></th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody id="filesTbody">
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<div class="hidden" id="empty-files">
@@ -97,7 +108,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4>WARNING</h4>
 			</div>
 			<div class="modal-body">
@@ -110,8 +122,6 @@
 		</div>
 	</div>
 </div>
-
-
 
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -159,11 +169,11 @@
 	/**
 	 * Retrieve asset sources and set them in a table
 	 */
-	function retrieveAssetSourcesAndSetInDOM(){
+	function retrieveAssetSourcesAndSetInDOM() {
 		//Get my assets and append to table in DOM
 		ADSKSpark.Assets.retrieveAssetSources(currentAssetId).then(function (response) {
 			$('.spinner').hide();
-			console.info('response after sources for asset ' + currentAssetId + ':',response);
+			console.info('response after sources for asset ' + currentAssetId + ':', response);
 			$('#assetsTbody').empty();
 			var sources = response.sources;
 
@@ -189,7 +199,7 @@
 				});
 			} else {
 				$('#empty-files').removeClass('hidden');
-				$('.upload-link').attr('href',$('.upload-link').attr('href') + '?assetId=' + currentAssetId);
+				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
 			}
 		});
 
@@ -199,30 +209,29 @@
 	/**
 	 * Deletes a thumbnail in an asset
 	 */
-	function deleteSourceFromAsset(assetId,fileId,assetElem){
+	function deleteSourceFromAsset(assetId, fileId, assetElem) {
 
 		$('#myModal').modal('show');
 
 		//cancel events
 		$('.cancel').off();
-		$('.cancel').on('click', function(){
+		$('.cancel').on('click', function () {
 			$('#myModal').modal('hide');
 		})
 
 		//delete events
 		$('.delete').off();
-		$('.delete').on('click',function(){
+		$('.delete').on('click', function () {
 			ADSKSpark.Assets.deleteAssetSources(assetId, fileId).then(function () {
 				$('#myModal').modal('hide');
 				assetElem.remove();
 
 				//make sure aseets still left
-				if (!$('.in-table td').length){
+				if (!$('.in-table td').length) {
 					location.reload();
 				}
 			});
 		});
-
 
 
 	}
@@ -236,7 +245,7 @@
 		//First let's see if we have a valid access token
 		if (!ADSKSpark.Client.isAccessTokenValid()) {
 			location.href = '../../../plugins/login/login.html';
-		}else {
+		} else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
 			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
@@ -253,7 +262,7 @@
 
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'sources',assetId:currentAssetId});
+		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'sources', assetId: currentAssetId});
 
 	});
 

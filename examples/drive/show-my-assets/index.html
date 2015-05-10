@@ -14,17 +14,19 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-		.modal-header{
+		.modal-header {
 			position: relative;
-			padding:8px 20px;
+			padding: 8px 20px;
 		}
-		.modal-header .layouts{
+
+		.modal-header .layouts {
 			position: absolute;
-			right:0;
+			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
 		}
-		.modal-header .layouts a{
+
+		.modal-header .layouts a {
 			border-right: 1px solid lightgrey;
 			margin-right: 6px;
 			padding: 4px 10px 0 0;
@@ -54,6 +56,12 @@
 			left: -10px;
 		}
 
+		.assets-container{
+			padding-top: 20px;
+			overflow-y: scroll;
+			height: 500px;
+		}
+
 	</style>
 
 </head>
@@ -70,20 +78,22 @@
 				<i class="spark_icon si-list-layout-active"></i>
 			</div>
 		</div>
-		<table class="table">
-			<thead>
-			<tr>
-				<th>Name<br/><span>asset_name</span></th>
-				<th>Submitted<br/><span>date_submitted</span></th>
-				<th>Modified<br/><span>date_modified</span></th>
-				<th>Status<br/><span>status</span></th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody id="assetsTbody">
+		<div class="assets-container">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Name<br/><span>asset_name</span></th>
+					<th>Submitted<br/><span>date_submitted</span></th>
+					<th>Modified<br/><span>date_modified</span></th>
+					<th>Status<br/><span>status</span></th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody id="assetsTbody">
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	<div class="hidden" id="empty-assets">
@@ -106,7 +116,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4>WARNING</h4>
 			</div>
 			<div class="modal-body">
@@ -121,10 +132,9 @@
 </div>
 
 
-
-
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- spark sdk -->
 <script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
@@ -176,24 +186,23 @@
 
 		//cancel events
 		$('.cancel').off();
-		$('.cancel').on('click', function(){
+		$('.cancel').on('click', function () {
 			$('#myModal').modal('hide');
 		})
 
 		//delete events
 		$('.delete').off();
-		$('.delete').on('click',function(){
+		$('.delete').on('click', function () {
 			ADSKSpark.Assets.removeAsset(assetId).then(function () {
 				$('#myModal').modal('hide');
 				assetElem.remove();
 
 				//make sure aseets still left
-				if (!$('.in-table td').length){
+				if (!$('.in-table td').length) {
 					location.reload();
 				}
 			});
 		});
-
 
 
 	}
@@ -208,7 +217,7 @@
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 
 			//Get my assets and append to table in DOM
-			var params = {limit:50,offset:0};
+			var params = {limit: 50, offset: 0};
 			ADSKSpark.Assets.getMyAssets(params).then(function (response) {
 				$('.spinner').hide();
 				console.info('my assets:', response);
@@ -238,7 +247,7 @@
 						$('#assetsTbody').append(tr);
 
 						//click on tr row takes us to the files html (except the last actions td)
-						tr.find('td:not(:last)').on('click',function(){
+						tr.find('td:not(:last)').on('click', function () {
 							location.href = 'files.html?assetId=' + item.asset_id;
 						});
 

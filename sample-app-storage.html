@@ -38,93 +38,99 @@
 					<div id="user" class="pull-left">
 						<img class="user-avatar" src="" style="display: none"/>
 					</div>
-					<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
+					<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+
 					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-right-arrow"></div>
 				</li>
 				<li id="myAssetsId">
 					<a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
+
 					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-right-arrow"></div>
 				</li>
 				<li id="createAssetId">
 					<a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
+
 					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-right-arrow"></div>
 				</li>
 				<li id="manageFilesId">
 					<a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
+
 					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 				</li>
 			</ul>
 		</div>
 
+		<div class="mainIframe-container">
+			<div id="breadcrumbs-section">
+				<div id="breadcrumbs">
+					<div class="bread-crumb" id="home">
+						<a onclick="changeState('myAssets')">
+							<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
+						</a>
+					</div>
 
-		<div id="breadcrumbs-section">
-			<div id="breadcrumbs">
-				<div class="bread-crumb" id="home">
-					<a onclick="changeState('myAssets')">
-						<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
-					</a>
-				</div>
-
-				<div class="bread-crumb hidden" id="asset">
-					<p class="bread-crumb-tail"></p>
-					<a onclick="showMyAssetFiles()">
-						<span class="bread-crumb-inner"></span>
-					</a>
-				</div>
-				<div class="bread-crumb hidden" id="file-type">
-					<p class="bread-crumb-tail"></p>
-					<a disabled>
+					<div class="bread-crumb hidden" id="asset">
+						<p class="bread-crumb-tail"></p>
+						<a onclick="showMyAssetFiles()">
+							<span class="bread-crumb-inner"></span>
+						</a>
+					</div>
+					<div class="bread-crumb hidden" id="file-type">
+						<p class="bread-crumb-tail"></p>
+						<a disabled>
 						<span class="bread-crumb-inner">
 							<i class="spark_icon si-asset-file-icon"></i>
 							<b></b>
 						</span>
-					</a>
-				</div>
+						</a>
+					</div>
 
-			</div>
-			<div id="action-button">
-				<div id="create-asset">
-					<a onclick="changeState('createAsset')" class="spark_btn primary">
-						<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
-					</a>
 				</div>
-				<div id="create-file" class="dropdown actions">
-					<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
-					   data-toggle="dropdown"
-					   aria-expanded="true">
-						<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add File
-					</a>
-					<i class="spark_icon si-dropdown-open"></i>
+				<div id="action-button">
+					<div id="create-asset">
+						<a onclick="changeState('createAsset')" class="spark_btn primary">
+							<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
+						</a>
+					</div>
+					<div id="create-file" class="dropdown actions">
+						<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
+						   data-toggle="dropdown"
+						   aria-expanded="true">
+							<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add File
+						</a>
+						<i class="spark_icon si-dropdown-open"></i>
 
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-						<li role="presentation">
-							<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>Asset sources</span></i>
-						</li>
-						<li role="presentation">
-							<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>Asset thumbnails</span></i>
-						</li>
-					</ul>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+								<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
+								<i class="spark_icon si-help with_hover"></i>
+								<i class="stooltip"><span>Asset sources</span></i>
+							</li>
+							<li role="presentation">
+								<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
+								<i class="spark_icon si-help with_hover"></i>
+								<i class="stooltip"><span>Asset thumbnails</span></i>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
+
+			<iframe name="mainIframe"
+			        id="mainIframe"
+			        width="680px"
+			        height="600px"
+			        frameborder="0"
+			        scrolling="no"
+			        src="examples/drive/show-my-assets/index.html"></iframe>
 		</div>
-		<iframe name="mainIframe"
-		        id="mainIframe"
-		        width="682px"
-		        height="600px"
-		        frameborder="0"
-		        style="overflow-x: hidden; overflow-y: scroll"
-		        src="examples/drive/show-my-assets/index.html"></iframe>
 
 		<div class="footer"></div>
 	</div>
@@ -166,7 +172,7 @@
 <script>
 
 	var isLoggedIn = false, //Do we have access token
-			currentAssetId=0, //the asset id we are referring to
+			currentAssetId = 0, //the asset id we are referring to
 			currentFileId ////the file id we are referring to
 			;
 
@@ -175,7 +181,7 @@
 			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
 			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
 
-	
+
 	ADSKSpark.Client.initialize(APP_KEY,// Your app key
 			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
 			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
@@ -254,7 +260,7 @@
 	 * set manage asset as enabled
 	 */
 
-	function showManageFileStep(){
+	function showManageFileStep() {
 		$('#createAssetId').addClass('verified disabled').removeClass('selected');
 		$('#manageFilesId').addClass('verified selected').removeClass('disabled');
 		$('#myAssetsId').removeClass('selected').addClass('verified');
@@ -268,23 +274,23 @@
 		broadcastEventListener.startIframeBroadcastListener();
 
 		if (ADSKSpark.Client.isAccessTokenValid()) {
-			$('.menu-item[data-state=login]').data('state','loggedIn');
+			$('.menu-item[data-state=login]').data('state', 'loggedIn');
 			isLoggedIn = true;
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
-			hideBreadcrumbs(['home','asset','file-type']);
-			$('#breadcrumbs-section').css('display','inline-block');
-			$('#mainIframe').attr('height','500px');
-		}else{
-			$('.menu-item[data-state=loggedIn]').data('state','login');
+			hideBreadcrumbs(['home', 'asset', 'file-type']);
+			$('#breadcrumbs-section').css('display', 'inline-block');
+			$('#mainIframe').attr('height', '500px');
+		} else {
+			$('.menu-item[data-state=loggedIn]').data('state', 'login');
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
 			$('#breadcrumbs-section').hide();
-			$('#mainIframe').attr('height','600px');
+			$('#mainIframe').attr('height', '600px');
 		}
 
-		$(".sample-top-menu").on('click','.menu-item',function (e) {
+		$(".sample-top-menu").on('click', '.menu-item', function (e) {
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
@@ -301,34 +307,34 @@
 	var states = {
 		login: {
 			src: 'plugins/login/login.html',
-			selectedTab:"#loginId",
+			selectedTab: "#loginId",
 			enabledTabs: [],
-			disabledTabs: ['#loginId','#myAssetsId', '#createAssetId', '#manageFilesId'],
+			disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs > div').addClass('hidden');
 				$('#breadcrumbs-section div#action-button div').hide();
 				$('#user').hide();
-				$('.menu-item[data-state=loggedIn]').data('state','login');
+				$('.menu-item[data-state=loggedIn]').data('state', 'login');
 				$('#loginId').removeClass('verified');
 			}
 		},
 
 		loggedIn: {
 			src: 'plugins/login/login.html',
-			selectedTab:"#loginId",
-			enabledTabs: ['#loginId','#myAssetsId'],
+			selectedTab: "#loginId",
+			enabledTabs: ['#loginId', '#myAssetsId'],
 			disabledTabs: ['#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs > div').addClass('hidden');
 				$('#breadcrumbs-section div#action-button div').hide();
-				$('.menu-item[data-state=login]').data('state','loggedIn');
+				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 			}
 		},
 		myAssets: {
 			src: 'examples/drive/show-my-assets/index.html',
-			selectedTab:"#myAssetsId",
+			selectedTab: "#myAssetsId",
 			enabledTabs: ['#myAssetsId', '#loginId'],
-			disabledTabs: ['#manageFilesId','#createAssetId'],
+			disabledTabs: ['#manageFilesId', '#createAssetId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
@@ -337,8 +343,8 @@
 
 		createAsset: {
 			src: 'examples/drive/create-asset/index.html',
-			selectedTab:"#createAssetId",
-			enabledTabs: ['#loginId','#myAssetsId', '#createAssetId'],
+			selectedTab: "#createAssetId",
+			enabledTabs: ['#loginId', '#myAssetsId', '#createAssetId'],
 			disabledTabs: ['#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
@@ -347,8 +353,8 @@
 
 		manageFiles: {
 			src: 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId,
-			selectedTab:"#manageFilesId",
-			enabledTabs: ['#loginId','#myAssetsId','#manageFilesId'],
+			selectedTab: "#manageFilesId",
+			enabledTabs: ['#loginId', '#myAssetsId', '#manageFilesId'],
 			disabledTabs: ['#createAssetId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
@@ -375,9 +381,9 @@
 			}
 
 		},
-		redirectUserToLoginPage: function(){
+		redirectUserToLoginPage: function () {
 			isLoggedIn = false;
-			$('#mainIframe').attr('height','600px');
+			$('#mainIframe').attr('height', '600px');
 			changeState('login');
 		},
 		myAssetsEvent: function () {
@@ -390,9 +396,9 @@
 		showSpecificAssetEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
 
-			if (!currentAssetId){
+			if (!currentAssetId) {
 				changeState('myAssets');
-			}else {
+			} else {
 				showBreadcramb('home');
 				showAssetBreadcrumb(currentAssetId);
 				hideBreadcrumbs(['file-type']);
@@ -408,9 +414,9 @@
 		showAssetFilesEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
 
-			if (!currentAssetId){
+			if (!currentAssetId) {
 				changeState('myAssets');
-			}else {
+			} else {
 				$('#breadcrumbs-section div#action-button #create-file').hide();
 				showBreadcramb('home');
 				showAssetBreadcrumb(currentAssetId);
