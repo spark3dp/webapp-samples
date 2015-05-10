@@ -58,6 +58,7 @@ describe('Client', function() {
                 'getAccessTokenObject',
                 'getAccessToken',
                 'authorizedApiRequest',
+                'authorizedAsGuestApiRequest',
                 'openLoginWindow'
             ]
         );

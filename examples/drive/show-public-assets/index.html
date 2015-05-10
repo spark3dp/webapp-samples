@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show Asset Thumbnails - gallery view</title>
+	<title>Spark Sample Application - Show My Assets - gallery view</title>
 	<meta charset="utf-8">
 
 	<!-- fonts -->
@@ -10,7 +10,7 @@
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Common styles, also cloudfront-->
+	<!-- Common styles -->
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
@@ -46,12 +46,6 @@
 			margin: 20px 0;
 		}
 
-		.img {
-			width: 100%;
-			border-top-left-radius: 4px;
-			border-top-right-radius: 4px;
-		}
-
 		.dropdown i {
 			cursor: pointer;
 			position: absolute;
@@ -61,14 +55,30 @@
 		.si-asset-icon {
 			margin-right: 8px;
 		}
-		#files-gallery{
+
+		.box {
+			margin-bottom: 20px;
+			height: 190px;
+		}
+
+		.text a {
+			padding: 8px;
+			display: block;
+			color: #333333;
+		}
+
+		.text a:hover {
+			color: #333333;
+		}
+
+		.text .si-asset-icon {
+			margin-right: 10px;
+		}
+
+		#assets-gallery {
 			padding-top: 20px;
 			overflow-y: auto;
 			height: 500px;
-		}
-		.box{
-			margin-bottom: 20px;
-			height: 190px;
 		}
 
 	</style>
@@ -80,27 +90,27 @@
 
 	<div class="spinner"></div>
 
-	<div class="hidden" id="files">
+	<div class="hidden" id="assets">
 		<div class="modal-header">
 			<div class="layouts">
 				<i class="spark_icon si-mosaic-layout-active"></i>
-				<a class='list-view-link' href="index.html"><i class="spark_icon si-list-layout"></i></a>
+				<a href="index.html"><i class="spark_icon si-list-layout"></i></a>
 			</div>
 		</div>
-		<div id="files-gallery">
+		<div id="assets-gallery">
 
 		</div>
 	</div>
 
 	<div class="hidden" id="empty-assets">
-		<p>Thumbnails are uploaded files containing photos of the printed asset<br/>
-			or rendered images of the 3D model.
+		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+			They are equivelent to a project or a folder with metadata.
 		</p>
 
 		<div class="img">
-			<img src="../../../assets/img/empty_thumbnail_folder_illustration.png" alt="thumbnails illustrations"/>
+			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
 		</div>
-		<a class="spark_btn upload-link" href="../upload-thumbnail-file/">Upload your thumbnails</a>
+		<a class="spark_btn" href="../create-asset/">Create your first Asset</a>
 	</div>
 
 </div>
@@ -117,11 +127,11 @@
 				<h4>WARNING</h4>
 			</div>
 			<div class="modal-body">
-				Are you sure you want to remove this file from the asset?
+				Are you sure you want to delete this Asset?
 			</div>
 			<div class="modal-footer">
 				<a class="spark_btn small cancel" type="button">CANCEL</a>
-				<a class="spark_btn primary small delete" type="button">REMOVE FILE FROM ASSET</a>
+				<a class="spark_btn primary small delete" type="button">DELETE ASSET</a>
 			</div>
 		</div>
 	</div>
@@ -129,7 +139,8 @@
 
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
@@ -159,6 +170,7 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
+
 	//Init the Spark Client
 	var APP_KEY = CLIENT_ID || '',
 			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
@@ -170,40 +182,34 @@
 			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
 	);
 
-	//the asset id we are referring to
-	var currentAssetId;
-
 	/**
-	 * Deletes a thumbnail in an asset
+	 * Deletes an asset
 	 */
-	function deleteThumbnailsFromAsset(assetId,fileId,assetElem){
+	function deleteAsset(assetId, assetElem) {
 
 		$('#myModal').modal('show');
 
 		//cancel events
 		$('.cancel').off();
-		$('.cancel').on('click', function(){
+		$('.cancel').on('click', function () {
 			$('#myModal').modal('hide');
 		})
 
 		//delete events
 		$('.delete').off();
-		$('.delete').on('click',function(){
-			ADSKSpark.Assets.deleteAssetThumbnails(assetId, fileId).then(function () {
+		$('.delete').on('click', function () {
+			ADSKSpark.Assets.removeAsset(assetId).then(function () {
 				$('#myModal').modal('hide');
 				assetElem.remove();
 
 				//make sure aseets still left
-				if (!$('#files-gallery div').length){
+				if (!$('#assets-gallery div').length) {
 					location.reload();
 				}
 			});
 		});
 
-
-
 	}
-
 
 	/**
 	 * Loop through the gallery
@@ -219,45 +225,23 @@
 
 		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
-		var text = $('<div class="text"><i class="spark_icon si-asset-file-icon"></i>' + common.maxLength(item.caption,8) + '</div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 8) + '</a></div>');
 
-		$('#files-gallery').append(box);
+		$('#assets-gallery').append(box);
 		box.append(view);
 
 		var actionsElem = '<div class="dropdown actions">' +
 				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
 				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-				'<li role="presentation"><a role="menuitem" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + item.file_id + '">EDIT</a></li>' +
-				'<li role="presentation"><a role="menuitem" onclick="deleteThumbnailsFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
+				'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
+				'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
 				'</ul></div>';
 
 		view.append(actionsElem);
 
-		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.caption + '"/>');
+		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
 		box.append(text);
-	}
-
-	/**
-	 * Retrieve thumbnails and set into DOM
-	 */
-	function retrieveThumbnailsAndSetInDOM(){
-		ADSKSpark.Assets.retrieveAssetThumbnails(currentAssetId).then(function (response) {
-			$('.spinner').hide();
-			console.info('response after thumbnails for asset ' + currentAssetId + ':',response);
-			$('#filesTbody').empty();
-
-			if (response.thumbnails.length) {
-				$('#files').removeClass('hidden');
-
-				$.each(response.thumbnails, function (index, item) {
-
-					loopGallery(index, item);
-
-				});
-			} else {
-				$('#empty-assets').removeClass('hidden');
-			}
-		});
 	}
 
 	/**
@@ -267,26 +251,29 @@
 	jQuery(function ($) {
 
 
-		//First let's see if we have a valid access token
-		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../../plugins/login/login.html';
-		}else {
-			//Assume we provided assetId in URL
-			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+		//Get my assets and append to table in DOM
+		var conditions = {limit: 50, offset: 0};
+		ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
+			$('.spinner').hide();
+			console.info('my assets:', response);
+			$('#assetsTbody').empty();
 
-			if (!currentAssetId) {
-				location.href = '../show-my-assets/';
+
+			if (response.count) {
+				$('#assets').removeClass('hidden');
+
+				$.each(response.assets, function (index, item) {
+
+					loopGallery(index, item);
+
+				});
 			} else {
-				retrieveThumbnailsAndSetInDOM();
-
-				//set up the correct link to for the list view
-				$('.list-view-link').attr('href', 'index.html?assetId=' + currentAssetId);
+				$('#empty-assets').removeClass('hidden');
 			}
-		}
+		});
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'thumbnails',assetId:currentAssetId});
+		eventBroadCaster.broadcastEvent('showPublicAssets.index');
 
 	});
 

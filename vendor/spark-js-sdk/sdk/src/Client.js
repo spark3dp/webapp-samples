@@ -12,6 +12,7 @@ var ADSKSpark = ADSKSpark || {};
     var _guestTokenUrl = '';
     var _accessTokenUrl = '';
     var _accessToken = '';
+    var _guestToken = '';
 
     // Helper functions
     var getGuestTokenFromServer = function() {
@@ -125,8 +126,9 @@ var ADSKSpark = ADSKSpark || {};
     Client.getGuestToken = function() {
         var guestToken = JSON.parse(localStorage.getItem(GUEST_TOKEN_KEY));
         var now = Date.now();
-        if (guestToken && guestToken.expires_at && guestToken.expires_at > now)
+        if (guestToken && guestToken.expires_at && guestToken.expires_at > now) {
             return Promise.resolve(guestToken.access_token);
+        }
 
         return getGuestTokenFromServer();
     };
@@ -146,6 +148,25 @@ var ADSKSpark = ADSKSpark || {};
         }
 
         return ADSKSpark.Request(_apiUrl + endpoint, authorization);
+    };
+
+    /**
+     * Request the API with a guest token (if exists)
+     * @param endpoint
+     * @returns {*}
+     */
+    Client.authorizedAsGuestApiRequest = function(endpoint) {
+        var authorization;
+
+        return Client.getGuestToken().then(function(guestToken) {
+            _guestToken = guestToken;
+
+            if (_guestToken) {
+                authorization = 'Bearer ' + _guestToken;
+            }
+
+            return ADSKSpark.Request(_apiUrl + endpoint, authorization);
+        });
     };
 
     /**

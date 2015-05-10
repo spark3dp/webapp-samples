@@ -13,10 +13,44 @@ var ADSKSpark = ADSKSpark || {};
 	 */
 	ADSKSpark.Assets = {
 
+
+		/**
+		 * Get public assets - requires only a guest token
+		 * @param {Object} conditions - Various conditions for the query
+		 * @returns {Promise} - A promise that will resolve to all public assets
+		 */
+		getPublicAssetsByConditions: function (conditions) {
+
+			//default limit/offset
+			conditions.limit = conditions.limit ? conditions.limit : 12;
+			conditions.offset = conditions.offset ? conditions.offset : 0;
+
+			return Client.authorizedAsGuestApiRequest('/assets').then(function(promise){
+				return promise.get(null, conditions);
+			});
+		},
+
 		/**
 		 * Get a specific asset
 		 * @param {Number} assetId - The ID of the asset
-		 * @returns {Promise} - A promise that will resolve to an an asset
+		 * @returns {Promise} - A promise that will resolve to an asset
+		 */
+		getPublicAsset: function (assetId) {
+
+			//Make sure assetId is defined and that it is a number
+			if (!isNaN(assetId)) {
+				return Client.authorizedAsGuestApiRequest('/assets/' + assetId).then(function(promise){
+					return promise.get();
+				});
+			}
+
+			return Promise.reject(new Error('Proper assetId was not supplied'));
+		},
+
+		/**
+		 * Get a specific asset
+		 * @param {Number} assetId - The ID of the asset
+		 * @returns {Promise} - A promise that will resolve to an asset
 		 */
 		getAsset: function (assetId) {
 
