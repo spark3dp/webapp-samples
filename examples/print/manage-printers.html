@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+	<title>Spark Sample Application - Print</title>
 
 
 	<!-- fonts -->
@@ -43,23 +43,27 @@
 		#empty-printers {
 			background-color: #F8F8F8;
 			text-align: center;
+			padding-bottom: 20px;
 		}
 
 		#empty-printers p {
-			padding: 120px 0;
-			color: darkgray;
+			padding: 45px 0 20px 0;
+
 		}
 
 		#empty-printers a {
-			color: #333;
 			text-decoration: underline;
 		}
 
 		.printers-container
 		{
-			overflow-y: scroll;
+			overflow-y: auto;
 			height: 245px;
 			margin-bottom: 20px;
+		}
+
+		#print-status-form{
+			height: 404px;
 		}
 
 	</style>
@@ -75,8 +79,8 @@
 			<div class="sample-title">Manage your 3D Printers</div>
 			<hr>
 			<div class="pull-left">Manage your existing printers, or register a new printer.</div>
-			<a class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
-				<i class="spark_icon si-add-item"></i>  Add Printer
+			<a class="spark_btn empty pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
+				<i class="spark_print_icon print-si-plus"></i>  Add Printer
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
@@ -95,11 +99,15 @@
 					<tbody id="printersTbody">
 				</table>
 			</div>
+			<div id="empty-printers" style="display: none;">
+				<p>You have no printers registered.
+					<br>
+					<a onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">Add your first printer</a>.</p>
+				<div class="add-printer"></div>
+			</div>
 		</form>
 
-		<div id="empty-printers" style="display: none;">
-			<p>You have no printers registered. Please <a onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">add a new printer</a>.</p>
-		</div>
+
 		<br>
 	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Continue</a>
 	</div>
@@ -161,8 +169,6 @@
 
 
 			if (response.count) {
-
-				//$("#empty-printers").hide();
 				$(".printers-container").show();
 				$("#continue").prop("disabled", false);
 

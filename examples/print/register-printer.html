@@ -19,19 +19,9 @@
 
 	<style>
 
-		.token_simulator_container{
-			display: none;
-			padding: 15px 0 15px 10px;
-			height: 44px;
-		}
 
 		.token_simulator_container .spinner{
 			position: relative;
-
-		}
-
-		.token_simulator_container .generating{
-			padding-left: 10px;
 
 		}
 
@@ -95,17 +85,12 @@
 							<i class="stooltip"><span style="display: none;">The printer token</span></i>
 						</label>
 						<input type="text" class="form-control" id="inputToken" required>
-						<!--<div class="form-control token_simulator_container">
-							<div class="spinner pull-left"></div>
-							<div class="generating pull-left">Generating a simulation token...</div>
-							<div class="token_simulator pull-left"></div>
-						</div>-->
 						<div class="form-control-tip">Find your printer's IP address/ token code in the Settings tab of your printer's LCD screen.</div>
 					</div>
 					<div>
-						<input class="spark_btn primary pull-right" type="submit" value="Add Printer" id="submit">
+						<input class="btn spark_btn primary pull-right" type="submit" value="Add Printer" id="submit">
 
-						<a href="#" class="btn pull-right" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+						<a href="#" class="btn btn_link pull-right" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
 					</div>
 				</form>
 			</div>
@@ -162,55 +147,33 @@
 			});
 		});
 
-		/*$("#inputPrinterType").change(function (e) {
-			e.preventDefault();
-			var id = $("#inputPrinterType option:selected").val();
-			if (id == -1) {
-
-				$("#inputToken").hide();
-				$("#inputToken").removeAttr("required");
-				$(".token_simulator_container").show();
-
-				setTimeout(function () {
-					var success = Printer.resetToken();
-
-					if (success) {
-						var token = JSON.parse(localStorage.getItem('com.autodesk.print.tokenalpha'));
-						$(".token_simulator_container .spinner").hide();
-						$(".token_simulator_container .generating").hide();
-						$(".token_simulator_container .token_simulator").attr("token", token.registration_code);
-						$(".token_simulator_container .token_simulator").html(token.registration_code);
-						$(".token_simulator_container .token_simulator").show();
-					}
-				}, 1500);
-			}
-			else {
-				$("#inputToken").show();
-				$("#inputToken").attr("required", "");
-				$(".token_simulator_container").hide();
-				$(".token_simulator_container .spinner").show();
-				$(".token_simulator_container .generating").show();
-				$(".token_simulator_container .token_simulator").attr("token", "");
-				$(".token_simulator_container .token_simulator").html("");
-				$(".token_simulator_container .token_simulator").hide();
-			}
-		});*/
-
 		common.setUIFunctionality();
 
+		$("#inputPrinterType").on("change", function(e){
+
+			var id = $("#inputPrinterType option:selected").val();
+			if (id == -1) {
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else
+			{
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+
+		});
 
 		$("#register-printer-form").on('submit', function (e) {
 			e.preventDefault();
 
 			var printerName = $('#inputName').val();
-			var token = "";
+
+			var token =  $('#inputToken').val();
+
 			var id = $("#inputPrinterType option:selected").val();
-			/*if (id == -1) {
-				token = $(".token_simulator_container .token_simulator").attr("token");
+
+			if (id == -1) {
+				printerName = printerName + " ( simulator )";
 			}
-			else {*/
-				token = $('#inputToken').val();
-			//}
 
 			sparkPrint.registerPrinter(token, printerName, function (response) {
 						var printerId = response.printer_id;

@@ -199,6 +199,10 @@ input[type="checkbox"]:checked + label span.chk {
     position: relative;
 }
 
+.spark_btn.empty{
+    background: white;
+}
+
 .spark_btn:hover {
     color: #EA5426;
 }
@@ -242,6 +246,10 @@ input[type="checkbox"]:checked + label span.chk {
 .spark_btn[disabled] {
     cursor: default;
     opacity: 0.5;
+}
+
+.btn_link{
+
 }
 
 #assets-gallery{
@@ -565,7 +573,117 @@ i.stooltip span {
 }
 
 
+
 /***** END SPRITE *****/
+
+
+/***** PRINT SPRITE ******/
+.spark_print_icon {
+    background: url(../img/print_sprite.png) no-repeat;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    margin-bottom: -3px;
+}
+
+.print-si-printer {
+    background-position: -5px -5px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-close-light {
+    background-position: -35px -5px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-close-light:hover, .btn-simulator-container:hover .print-si-close-light {
+    background-position: -35px -31px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-pause-light {
+    background-position: -65px -5px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-pause-light:hover , .btn-simulator-container:hover .print-si-pause-light {
+    background-position: -65px -31px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-play-light {
+    background-position: -100px -5px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-play-light:hover, .btn-simulator-container:hover .print-si-play-light {
+    background-position: -100px -31px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-cancel-light {
+    background-position: -162px -67px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-cancel-light:hover {
+    background-position: -162px -97px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-pause-light {
+    background-position: -132px -66px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-pause-light:hover {
+    background-position: -132px -96px;
+    width: 26px;
+    height: 26px;
+}
+
+
+.print-si-browse {
+    background-position: -5px -30px;
+    width: 29px;
+    height: 29px;
+}
+
+
+.print-si-new-token-light
+{
+    background-position: -100px -66px;
+    width: 29px;
+    height: 29px;
+}
+
+.print-si-new-token-light:hover, .btn-simulator-container:hover .print-si-new-token-light
+{
+    background-position: -100px -95px;
+    width: 29px;
+    height: 29px;
+}
+
+.print-si-plus
+{
+    background-position: -69px -62px;
+    width: 26px;
+    height: 26px;
+}
+
+
+/***** END SPRITE ******/
 
 /**** galleries ****/
 
@@ -923,9 +1041,33 @@ i.stooltip span {
     padding: 20px;
 }
 
-.job-action
+.no-padding{
+    padding: 0 !important;
+}
+
+.no-margin{
+    margin: 0 !important;
+}
+
+.add-printer
 {
-    padding: 8px;
+    background: url('../img/add_printer.png') no-repeat;
+    width:59px;
+    height: 137px;
+  margin-left: 290px;
+}
+
+#requestLog pre{
+    font-family: 'Open Sans';
+    font-size:13px;
+    font-weight: 300;
+}
+
+.create-print-job{
+    background: url('../img/create_print_job.png') no-repeat;
+    width:144px;
+    height: 100px;
+    margin-left: 250px;
 }
 
 

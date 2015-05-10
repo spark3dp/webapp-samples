@@ -20,22 +20,23 @@
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-		.modal-header{
+		.modal-header {
 			position: relative;
-			padding:8px 20px;
+			padding: 8px 20px;
 		}
-		.modal-header .layouts{
+
+		.modal-header .layouts {
 			position: absolute;
-			right:0;
+			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
 		}
-		.modal-header .layouts a{
-			border-right: 1px solid lightgrey;
-			margin-right: 6px;
-			padding: 4px 10px 0 0;
-		}
 
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
+		}
 
 		#empty-assets {
 			background-color: #F8F8F8;
@@ -83,11 +84,6 @@
 			margin-right:10px;
 		}
 
-		.assets-container{
-			padding-top: 20px;
-			overflow-y: scroll;
-			height: 400px;
-		}
 
 
 	</style>
@@ -101,26 +97,16 @@
 	<div class="sample-title">Select a file to print</div>
 	<div class="modal-header">
 		<div class="layouts">
-			<a href="choose-asset-gallery.html"><i class="spark_icon si-mosaic-layout"></i></a>
-			<i class="spark_icon si-list-layout-active"></i>
+			<i class="spark_icon si-mosaic-layout-active"></i>
+			<a href="choose-asset.html"><i class="spark_icon si-list-layout"></i></a>
 		</div>
 	</div>
-	<div class="assets-container">
-	<table class="table">
-		<thead>
-		<tr>
-			<th>Name<br/><span>asset_name</span></th>
-			<th>Submitted<br/><span>date_submitted</span></th>
-			<th>Modified<br/><span>date_modified</span></th>
-			<th>Status<br/><span>status</span></th>
-			<th></th>
-		</tr>
-		</thead>
-		<tbody id="assetsTbody">
+	<div class="hidden" id="assets">
+		<div id="assets-gallery">
 
-		</tbody>
-	</table>
+		</div>
 	</div>
+
 	<div class="hidden" id="empty-assets">
 		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
 			They are equivalent to a project or a folder with metadata.
@@ -171,13 +157,30 @@
 			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
 	);
 
+	function loopGallery(index, item) {
+		var imgUrlRow, imgUrlThumb;
+		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
+		if (imgUrlRow.indexOf('FullPreview/') < 0) {
+			imgUrlThumb += 'Medium.jpg';
+		}
 
-	/**
-	 * Run when DOM is ready.
-	 * The spark object already exists in this point
-	 */
-	jQuery(function ($) {
 
+		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
+		var click = $('<a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">');
+		var view = $('<div class="view thumb"></div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">' +
+				'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,10) + '</a></div>');
+
+		$('#assets-gallery').append(box);
+		box.append(click);
+		click.append(view);
+
+		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
+		click.append(text);
+	}
+
+
+	$(document).ready(function(){
 
 		//First let's see if we have a valid access token
 		if (ADSKSpark.Client.isAccessTokenValid()) {
@@ -187,25 +190,14 @@
 			ADSKSpark.Assets.getMyAssets(params).then(function (response) {
 				$('.spinner').hide();
 				console.info('my assets:', response);
-				$('#assetsTbody').empty();
 
 
 				if (response.count) {
 					$('#assets').removeClass('hidden');
 
 					$.each(response.assets, function (index, item) {
-						var tr = $('<tr class="in-table"></tr>')
-						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
-						tr.append(nameTd);
-						tr.append($('<td>' + item.date_submitted + '</td>'));
-						tr.append($('<td>' + item.date_modified + '</td>'));
-						tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
-						$('#assetsTbody').append(tr);
 
-						//click on tr row takes us to the files html (except the last actions td)
-						tr.on('click',function(){
-							location.href = 'choose-file.html?assetId=' + item.asset_id;
-						});
+						loopGallery(index, item);
 
 					});
 				} else {

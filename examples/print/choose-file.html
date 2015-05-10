@@ -45,7 +45,7 @@
 		}
 
 		#files .table-container{
-			overflow-y: scroll;
+			overflow-y: auto;
 			height: 345px;
 			margin-bottom: 25px;
 		}
@@ -132,6 +132,16 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
 	//the asset id we are referring to
 	var currentAssetId;
 
@@ -140,7 +150,7 @@
 	 */
 	function retrieveAssetSourcesAndSetInDOM(){
 		//Get my assets and append to table in DOM
-		spark.drive.retrieveAssetSources(currentAssetId,function (response) {
+		ADSKSpark.Assets.retrieveAssetSources(currentAssetId).then(function (response) {
 			$('.spinner').hide();
 			console.info('response after sources for asset ' + currentAssetId + ':',response);
 			$('#assetsTbody').empty();
@@ -164,38 +174,6 @@
 
 	}
 
-
-	/**
-	 * Deletes a thumbnail in an asset
-	 */
-	function deleteSourceFromAsset(assetId,fileId,assetElem){
-
-		$('#myModal').modal('show');
-
-		//cancel events
-		$('.cancel').off();
-		$('.cancel').on('click', function(){
-			$('#myModal').modal('hide');
-		})
-
-		//delete events
-		$('.delete').off();
-		$('.delete').on('click',function(){
-			spark.drive.deleteAssetSources(assetId, fileId, function () {
-				$('#myModal').modal('hide');
-				assetElem.remove();
-
-				//make sure aseets still left
-				if (!$('.in-table td').length){
-					location.reload();
-				}
-			});
-		});
-
-
-
-	}
-
 	/**
 	 * Run when DOM is ready.
 	 * The spark object already exists in this point
@@ -203,7 +181,7 @@
 	jQuery(function ($) {
 
 		//First let's see if we have a valid access token
-		if (!spark.auth.isAccessTokenValid()) {
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
 			location.href = '../../auth/';
 		}else {
 			//Assume we provided assetId in URL
