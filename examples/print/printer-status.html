@@ -37,7 +37,7 @@
 		.print-statuses-container
 		{
 			overflow-y: auto;
-			height: 350px;
+			height: 450px;
 			margin-bottom: 20px;
 			display: none;
 		}
@@ -129,9 +129,12 @@
 			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
 			for(var i in printers){
-				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select");
+				if(printers[i].printer_last_health == "online"){
+					$("#printers-select").val(printers[i].printer_id);
+					$("#printers-select").change();
+				}
 			}
-
 		});
 	};
 
