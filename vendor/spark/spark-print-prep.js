@@ -260,6 +260,30 @@ var sparkPrintPrep = function() {
 
 		},
 
+		createSupport: function (trayId,mainCallback) {
+
+			var token = spark.auth.isAccessTokenValid();
+			if (token) {
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/print/trays/exportSupport';
+
+				var params="id="+trayId;
+
+				var callback = function (response) {
+
+					sparkPrintPrep.getTask(response.id, mainCallback);
+
+				};
+
+				spark.util.xhr(url, 'POST', params, headers, callback);
+			}
+
+		},
+
 		generatePrintable: function(trayId,mainCallback) {
 
 		var token = spark.auth.isAccessTokenValid();
