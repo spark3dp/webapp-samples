@@ -10,7 +10,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon'],
+    frameworks: ['mocha', 'sinon','chai','chai-as-promised'],
 
 
     // list of files / patterns to load in the browser
@@ -19,14 +19,14 @@ module.exports = function(config) {
       'node_modules/should/should.js',
       'src/utilities/*.js',
       'src/config/*.js',
-      'src/drive/*.js',
       'src/Request.js',
       'src/Client.js',
       'src/Paginated.js',
+      'src/drive/*.js',
       'src/Job.js',
       'src/Printer.js',
       'src/*.js',
-      'test/*Spec.js'
+      'test/{,*/}*Spec.js'
     ],
 
 

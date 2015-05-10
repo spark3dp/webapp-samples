@@ -17,8 +17,83 @@ You can get full reference to the APIs by visiting these URLs:
 * Drive APIs - https://spark.autodesk.com/developers/reference/drive
 * Print firmware APIs - https://spark.autodesk.com/developers/reference/firmware 
 
-### Code Guidelines
 
+### Quick start
+You can use the lastest published version of the SDK [here](http://spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js)
+
+To use the SDK you should include the SDK library in your HTML page right befory the closing </body>.
+
+```HTML
+<script type="text/javascript" src="//spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js"></script>
+```
+
+Then you would have to initialize the SDK client with your credentials and choose the environment between sandbox and production:
+
+```JavaScript
+	ADSKSpark.Client.initialize('',// Your app key
+			'',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			'',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
+	);
+```
+
+The current authentication process is using a server side that handles the fetching of access_token and guest_token. These are required
+so that your application will work. You can utilize one of the server implementations that are supplied in this repository.
+
+#### Sample code
+
+```HTML
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Sample Code</title>
+	<meta charset="utf-8">
+  </head>
+  <body>
+    <div class="content">
+
+    </div>
+
+    <script type="text/javascript" src="//spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js"></script>
+    <script>
+      ADSKSpark.Client.initialize('',// Your app key
+              '',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+              '',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+              ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
+      );
+
+      	/**
+      	 * Open login window
+      	 */
+      	function login() {
+      		ADSKSpark.Client.openLoginWindow();
+      	}
+
+      	function logout(){
+      		ADSKSpark.Client.logout();
+      		location.reload();
+      	}
+
+      	function getGuestToken(){
+      		ADSKSpark.Client.getGuestToken().then(function(guestToken) {
+      			console.log('guest token: ',guestToken);
+      		});
+      	}
+
+
+      	if (ADSKSpark.Client.isAccessTokenValid()) {
+      		console.log('access token: ',ADSKSpark.Client.getAccessToken());
+            ADSKSpark.Members.getMyProfile().then(function(response){
+              console.log('Current logged in member is: ', response.member);
+            });
+      	}
+
+    </script>
+  </body>
+</html>
+```
+
+### Code Guidelines
 In order to create a coherent code base for current and future code on this SDK, one should try to work according to the guidelines below.
 
 #### General
