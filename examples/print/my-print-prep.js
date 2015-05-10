@@ -11,7 +11,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var canvasHeight = 500;
-var canvasWidth = 800;
+var canvasWidth = 650;
 var manager = new THREE.LoadingManager();
 var loader = new THREE.OBJLoader( manager );
 
@@ -246,6 +246,20 @@ $( "#prepareTray" ).click(function() {
 	sparkPrintPrep.prepareTray(trayId, function(response){
 		document.getElementById('trayId').value = response.id;
 		document.getElementById('meshId').value = response.meshes[0].id;
+
+		EnableButtons();
+	});
+
+});
+
+
+$( "#createSupport" ).click(function() {
+	disableButtons();
+	var trayId=document.getElementById('trayId').value;
+
+	sparkPrintPrep.createSupport(trayId, function(response){
+		//document.getElementById('trayId').value = response.id;
+		//document.getElementById('meshId').value = response.meshes[0].id;
 
 		EnableButtons();
 	});
