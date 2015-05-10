@@ -16,19 +16,7 @@
 	<style>
 
 		#welcome-wrapper {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			margin: auto;
-			text-align: center;
-			height: 170px;
-			padding-right: 40px;
-		}
-
-		#logout{
-			display: none;
+			margin-top: 25%;
 		}
 
 		.token-wrapper span{
@@ -43,13 +31,8 @@
 <div class="container">
 	<div class="col-md-12">
 		<div id="welcome-wrapper">
-			<h2>Welcome to <br/>Spark Auth Demo</h2>
-
-			<p>To try the demo, you need to login with a test environment account.</p>
-
 			<div class="col-md-12">
-				<a onclick="login()" id="login" class="spark_btn primary">Login to Get an Access Token</a>
-				<a onclick="logout()" id="logout" class="spark_btn primary">Logout</a>
+				<a onclick="getGuestToken()" class="spark_btn">Get Guest Token</a>
 			</div>
 
 		</div>
@@ -75,6 +58,8 @@
 <!-- Personal config -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
@@ -93,23 +78,11 @@
 			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
 	);
 
-	/**
-	 * Open login window
-	 */
-	function login() {
-		ADSKSpark.Client.openLoginWindow();
-	}
-
-	function logout(){
-		ADSKSpark.Client.logout();
-		location.reload();
-	}
-
-
-	if (ADSKSpark.Client.isAccessTokenValid()) {
-		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
-		$('#login').hide();
-		$('#logout').css('display','inline-block');
+	function getGuestToken(){
+		ADSKSpark.Client.getGuestToken().then(function(token) {
+			console.info('guest token: ', token);
+			eventBroadCaster.broadcastEvent('auth.accessToken',token);
+		});
 	}
 
 </script>
