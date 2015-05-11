@@ -311,8 +311,7 @@
 			enabledTabs: [],
 			disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
-				$('#breadcrumbs > div').addClass('hidden');
-				$('#breadcrumbs-section div#action-button div').hide();
+				$('#breadcrumbs-section').hide();
 				$('#user').hide();
 				$('.menu-item[data-state=loggedIn]').data('state', 'login');
 				$('#loginId').removeClass('verified');
