@@ -44,7 +44,7 @@ app.get('/access_token', function(req, res){
 		params = "code=" + code + "&grant_type=authorization_code&response_type=code",
 		contentLength = params.length,
 		headers = {
-			'Authorization': 'Basic ' + toBase64(config.CLIENT_ID + ':' + config.CLIENT_SECRET),
+			'Authorization': 'Basic ' + toBase64(config.APP_KEY + ':' + config.APP_SECRET),
 			'Content-Type' : 'application/x-www-form-urlencoded',
 			'Content-Length': contentLength
 		};
@@ -71,7 +71,7 @@ app.get('/guest_token', function(req, res){
 		params = "grant_type=client_credentials",
 		contentLength = params.length,
 	 	headers = {
-			'Authorization': 'Basic ' + toBase64(config.CLIENT_ID + ':' + config.CLIENT_SECRET),
+			'Authorization': 'Basic ' + toBase64(config.APP_KEY + ':' + config.APP_SECRET),
 			'Content-Type' : 'application/x-www-form-urlencoded',
 			'Content-Length': contentLength
 		};
