@@ -314,7 +314,7 @@
 				$('#breadcrumbs-section').hide();
 				$('#user').hide();
 				$('.menu-item[data-state=loggedIn]').data('state', 'login');
-				$('#loginId').removeClass('verified');
+				$('.sample-top-menu > li').removeClass('verified');
 			}
 		},
 
@@ -326,6 +326,7 @@
 			callbackFunc: function () {
 				$('#breadcrumbs-section').hide();
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
+				$('#loginId').addClass('verified');
 			}
 		},
 		myAssets: {
@@ -338,6 +339,7 @@
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
 				$('#mainIframe').attr('height', '500px');
+				$('#loginId').addClass('verified');
 			}
 		},
 
@@ -348,6 +350,9 @@
 			disabledTabs: ['#manageFilesId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
+				$('#loginId').addClass('verified');
+				$('#myAssetsId').addClass('verified');
+
 			}
 		},
 
@@ -358,6 +363,9 @@
 			disabledTabs: ['#createAssetId'],
 			callbackFunc: function () {
 				$('#breadcrumbs-section div#action-button div').hide();
+				$('#loginId').addClass('verified');
+				$('#myAssetsId').addClass('verified');
+				$('#createAssetId').addClass('verified');
 			}
 		}
 	};
