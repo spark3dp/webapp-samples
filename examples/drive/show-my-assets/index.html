@@ -57,7 +57,7 @@
 		}
 
 		.assets-container{
-			padding-top: 20px;
+			margin-top: 20px;
 			overflow-y: scroll;
 			height: 500px;
 		}
@@ -78,7 +78,7 @@
 				<i class="spark_icon si-list-layout-active"></i>
 			</div>
 		</div>
-		<div class="assets-container">
+		<div class="assets-container" id="assets-container">
 			<table class="table">
 				<thead>
 				<tr>
@@ -207,6 +207,57 @@
 
 	}
 
+
+	function loadAssets(page,conditions){
+		conditions = conditions || {};
+		conditions.limit = 24;
+		conditions.offset = 24*(page-1);
+
+		return ADSKSpark.Assets.getMyAssets(conditions).then(function (response) {
+			$('.spinner').hide();
+			console.info('my assets:', response);
+
+			if (response.count) {
+				$('#assets').removeClass('hidden');
+
+				$.each(response.assets, function (index, item) {
+					var tr = $('<tr class="in-table"></tr>')
+					var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
+					tr.append(nameTd);
+					tr.append($('<td>' + item.date_submitted + '</td>'));
+					tr.append($('<td>' + item.date_modified + '</td>'));
+					tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
+
+					var actionsElem = '<div class="dropdown actions">' +
+							'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
+							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+							'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
+							'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'tr\'))">DELETE</a></li>' +
+							'</ul></div>';
+
+
+					tr.append($('<td>' + actionsElem + '</td>'));
+					$('#assetsTbody').append(tr);
+
+					//click on tr row takes us to the files html (except the last actions td)
+					tr.find('td:not(:last)').on('click', function () {
+						location.href = 'files.html?assetId=' + item.asset_id;
+					});
+
+				});
+			} else {
+				if (page < 2) {
+					$('#empty-assets').removeClass('hidden');
+				}
+			}
+
+			return response;
+		});
+	}
+
+	//pagination
+	var hasMoreAssets = true;
+
 	/**
 	 * Run when DOM is ready.
 	 * The spark object already exists in this point
@@ -216,47 +267,31 @@
 		//First let's see if we have a valid access token
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 
+			var currentPage = 1;
+
 			//Get my assets and append to table in DOM
-			var params = {limit: 50, offset: 0};
-			ADSKSpark.Assets.getMyAssets(params).then(function (response) {
+			loadAssets(currentPage).then(function(response) {
 				$('.spinner').hide();
-				console.info('my assets:', response);
-				$('#assetsTbody').empty();
-
-
-				if (response.count) {
-					$('#assets').removeClass('hidden');
-
-					$.each(response.assets, function (index, item) {
-						var tr = $('<tr class="in-table"></tr>')
-						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
-						tr.append(nameTd);
-						tr.append($('<td>' + item.date_submitted + '</td>'));
-						tr.append($('<td>' + item.date_modified + '</td>'));
-						tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
-
-						var actionsElem = '<div class="dropdown actions">' +
-								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-								'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-								'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
-								'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'tr\'))">DELETE</a></li>' +
-								'</ul></div>';
-
-
-						tr.append($('<td>' + actionsElem + '</td>'));
-						$('#assetsTbody').append(tr);
-
-						//click on tr row takes us to the files html (except the last actions td)
-						tr.find('td:not(:last)').on('click', function () {
-							location.href = 'files.html?assetId=' + item.asset_id;
-						});
-
-					});
-				} else {
-					$('#empty-assets').removeClass('hidden');
+				if (!response._link_next) {
+					hasMoreAssets = false;
 				}
 			});
 
+
+			//load more on scroll
+			$('#assets-container').scroll(function() {
+				if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+					currentPage++;
+					$('.spinner').show();
+					loadAssets(currentPage).then(function(response){
+						$('.spinner').hide();
+						if (!response._link_next) {
+							hasMoreAssets = false;
+						}
+					});
+
+				}
+			});
 
 		} else {//user needs to login
 			location.href = '../../../plugins/login/login.html';

@@ -138,6 +138,9 @@ textarea {
 .table td i{
     margin-right:10px;
 }
+.table .in-table{
+    position: relative;
+}
 
 .required:after {
     content: '';
