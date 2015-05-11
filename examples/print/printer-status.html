@@ -53,6 +53,10 @@
 			padding-top: 175px;
 		}
 
+		#print-status-form{
+			margin-top: 20px;
+		}
+
 	</style>
 </head>
 
@@ -159,6 +163,7 @@
 
 						$(".print-statuses-container").show();
 						$("#empty-jobs").hide();
+						eventBroadCaster.broadcastEvent('statusIframe.printerExist');
 					}
 					else
 					{

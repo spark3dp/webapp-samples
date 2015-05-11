@@ -30,6 +30,15 @@ var statePlugin = function($){
 		}
 	};
 
+	var verifyState = function(stateName){
+		if(states[stateName]!=undefined){
+			var selectedTab = states[stateName].selectedTab;
+			if($(selectedTab).length > 0 && !$(selectedTab).hasClass("verified")) {
+				$(selectedTab).addClass("verified");
+			}
+		}
+	}
+
 	var changeState = function(stateName,optionalParams){
 		if(states[stateName]!=undefined){
 
@@ -75,7 +84,8 @@ var statePlugin = function($){
 
 	return {
 		changeState:changeState,
-		getCurrentState:getCurrentState
+		getCurrentState:getCurrentState,
+		verifyState: verifyState
 	}
 
 }(jQuery);

@@ -828,6 +828,9 @@ i.stooltip span {
     margin-right: 10px;
     position: relative;
     top:-2px;
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
 }
 
 .sample-app-container
@@ -993,6 +996,7 @@ i.stooltip span {
 }
 .logger-container .method.method-get{
     border-color: greenyellow;
+    text-transform: uppercase;
 }
 .logger-container .method.method-post{
     border-color: coral;
@@ -1029,6 +1033,14 @@ i.stooltip span {
 .renderjson .object.syntax { color: lightsalmon; }
 .renderjson .array.syntax  { color: orange; }
 
+.renderjson div{
+    text-transform: lowercase;
+}
+
+.renderjson{
+    padding: 9.5px 7px 9.5px 7px;
+}
+
 /**** END Ajax Logger *****/
 
 
@@ -1038,7 +1050,7 @@ i.stooltip span {
 
 .main-container
 {
-    padding: 20px;
+    padding: 0 20px 0 20px;
 }
 
 .no-padding{

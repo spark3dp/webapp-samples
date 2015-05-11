@@ -65,7 +65,7 @@
 		#assets-gallery{
 			padding-top: 20px;
 			overflow-y: auto;
-			height: 500px;
+			height: 480px;
 		}
 		.box{
 			margin-bottom: 20px;
@@ -73,9 +73,10 @@
 		}
 
 		.text a{
-			padding: 8px;
+
 			display: block;
 			color:#333333;
+			height: 20px;
 		}
 		.text a:hover{
 			color:#333333;
@@ -84,7 +85,19 @@
 			margin-right:10px;
 		}
 
+		.main-container{
+			background-color: #333333;
+			background: rgba(51, 51, 51, 0.8);
+			height: 600px;
+		}
 
+		.tab-content{
+			background-color:#ffffff;
+			padding: 20px;
+			height: 550px;
+			border-bottom-left-radius: 3px;
+			border-bottom-right-radius: 3px;
+		}
 
 	</style>
 </head>
@@ -92,7 +105,7 @@
 <body>
 
 <div class="container main-container">
-
+<div class="tab-content">
 	<div class="spinner"></div>
 	<div class="sample-title">Select a file to print</div>
 	<div class="modal-header">
@@ -112,7 +125,7 @@
 			They are equivalent to a project or a folder with metadata.
 		</p>
 	</div>
-
+</div>
 </div>
 
 <!-- /container -->
@@ -169,7 +182,7 @@
 		var click = $('<a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="choose-file.html?assetId=' + item.asset_id + '">' +
-				'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,10) + '</a></div>');
+				'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,6) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(click);

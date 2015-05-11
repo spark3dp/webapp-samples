@@ -1,5 +1,3 @@
-
-
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -17,10 +15,7 @@
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
-	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="assets/css/common.css" rel="stylesheet">
-
-
 
 	<style>
 		@font-face {
@@ -48,55 +43,21 @@
 		.simulator-row{
 			width: 680px;
 			margin-left: 1px;
-			/*background-color: #f9f8f8;*/
 			padding-bottom: 10px;
 			padding-top: 10px;
 		
 		}
 
-		.simulator-tab
-		{
-			/*background-color: #f9f8f8;*/
-
-			text-align: center;
-			height: 21px;
-			font-size:12px;
-			padding: 2px 0 2px 0;
-			text-transform: uppercase;
-			border-top: 1px solid #cccccc;
-			border-right: 1px solid #cccccc;
-			border-left: 1px solid #cccccc;
-		}
-
-		.simulator-teb-side{
-			border-bottom: 1px solid #cccccc;
-		}
-
 
 		.simulator-container
 		{
+			padding-top: 30px;
 			position: relative;
+			top: -28px;
 			display: none;
-		}
-
-		.simulator-tab-container
-		{
-			position: relative;
-			left: 1px;
-			border-right: 1px solid #cccccc;
-			width: 681px;
-		}
-
-
-		.simulator-grad{
-			/* Safari 5.1 to 6.0 */
-			background: -webkit-linear-gradient(left , #CECECE, #F6F6F6);
-			/* Opera 11.1 to 12.0 */
-			background: -o-linear-gradient(right , #CECECE, #F6F6F6);
-			/* Firefox 3.6 to 15 */
-			background: -moz-linear-gradient(right , #CECECE, #F6F6F6);
-			/* Standard syntax */
-			background: linear-gradient(right , #CECECE, #F6F6F6);
+			width: 682px;
+			height: 125px;
+			background:url('assets/img/simulator_panel_bg.png') no-repeat;
 		}
 
 		.btn-simulator-container
@@ -107,18 +68,18 @@
 
 		}
 		.btn-simulator-container-center{
-			padding-right: 19px;
-			padding-left: 19px;
+			padding-right: 17px;
+			padding-left: 17px;
 		}
 
 		.btn-simulator-container-right{
 
-			padding-left: 19px;
+			padding-left: 17px;
 		}
 
 		.btn-simulator-container-left{
-			padding-right: 19px;
-
+			padding-right: 17px;
+			padding-left: 7px;
 		}
 
 		.btn-simulator-container-new-token{
@@ -152,6 +113,12 @@
 			margin-left: 18px;
 		}
 
+		.logger-after-simulator
+		{
+			position: relative;
+			top:-28px;
+		}
+
 	</style>
 </head>
 
@@ -166,7 +133,7 @@
 		<div style="text-align: center;">
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<li id="loginId">
-				<div id="user" class="pull-left" style="display: none;">
+				<div id="user" class="pull-left">
 					<img class="user-avatar" src=""/>
 				</div>
 				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
@@ -196,12 +163,7 @@
 		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
 
 
-		<div class="simulator-container simulator-grad">
-			<div class="row no-margin simulator-tab-container">
-			<div class="col-xs-4  no-padding simulator-teb-side" style="background-color:white;">&nbsp;</div>
-			<div class="col-xs-4  no-padding simulator-tab">printer simulator</div>
-			<div class="col-xs-4  no-padding simulator-teb-side"  style="background-color:white;">&nbsp;</div>
-			</div>
+		<div class="simulator-container">
 			<div class="row simulator-row">
 
 				<div class="col-xs-8 no-padding pull-left">
@@ -213,16 +175,18 @@
 
 				<div class="col-xs-4 no-padding pull-right">
 
-					<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
-						<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div> Cancel
+					<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
+						<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div> Resume
 					</div>
 
-					<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
+
+
+					<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
 						<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div> Pause
 					</div>
 
-					<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-right" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
-						<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div> Resume
+					<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
+						<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div> Cancel
 					</div>
 
 				</div>
@@ -253,8 +217,6 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
 
-<!--script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script-->
-
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
 
@@ -282,17 +244,20 @@
 	$(document).ready(function(){
 		ajaxCallLogger.createLoggerElement(".footer");
 		ajaxCallLogger.startIframeListener();
-		//ajaxCallLogger.startRegularListener();
 
-		//statePlugin.startIframeStateListener();
 		broadcastEventListener.startIframeBroadcastListener();
-		//statePlugin.changeState('manage');
+
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 			statePlugin.changeState('manage');
 
 			ADSKSpark.Members.getMyProfile().then(function (response) {
-				$('#user span').text(response.member.screen_name);
-				$('#user img').attr('src', response.member.profile.avatar_path);
+
+				if(response.member.profile.avatar_path) {
+					$('#user img').attr('src', response.member.profile.avatar_path);
+				}
+				else {
+					$('#user img').attr('src', "assets/img/default_avatar.png");
+				}
 			});
 		}
 		else{
@@ -355,10 +320,14 @@
 
 	var showSimulator = function(show){
 		if(show == true){
-			$('.simulator-container').animate({height: 'show'}, 290, function() {});
+			$('.simulator-container').animate({height: 'show'}, 290, function() {
+				$(".logger-container").addClass("logger-after-simulator");
+			});
 		}
 		else{
-			$('.simulator-container').animate({height: 'hide'}, 290, function() {});
+			$('.simulator-container').animate({height: 'hide'}, 290, function() {
+				$(".logger-container").removeClass("logger-after-simulator");
+			});
 		}
 	};
 
@@ -372,52 +341,39 @@
 		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 			isLoggedIn = true;
 			statePlugin.changeState("manage", optionalParams);
-			//showSimulator(false);
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
 		statePlugin.changeState("print",optionalParams);
-		//showSimulator(true);
 	};
 	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
 		statePlugin.changeState("register",optionalParams);
-		//showSimulator(true);
 	};
 	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
+		showSimulator(false);
 	};
 	broadcastMapper["registerIframe.add"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
 	};
 	broadcastMapper["manageIframe.reload"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
-		//showSimulator(false);
 	};
 	broadcastMapper["printIframe.next"] = function(optionalParams){
 		statePlugin.changeState("status",optionalParams);
-		//showSimulator(true);
 	};
 
 	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
 		statePlugin.changeState("choose_asset",optionalParams);
-		//showSimulator(false);
 	};
 
 	broadcastMapper["showSimulator"] = function(show){
 		showSimulator(show);
 	};
 
-	/**
-	var broadcastMapper = {
-		"manageContinueClick":function(optionalParams){
-			statePlugin.changeState("register",optionalParams)
-		}
-	};*/
-
-
-
+	broadcastMapper["statusIframe.printerExist"] = function(){
+		statePlugin.verifyState("status");
+	};
 
 </script>
 
