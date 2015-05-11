@@ -122,12 +122,12 @@ textarea {
 }
 
 .table tr.in-table .actions{
-    display:none;
-    position: absolute;
+   visibility: hidden;
+   text-align: right;
 }
 
 .table tr.in-table:hover .actions{
-    display:block;
+    visibility: visible;
 }
 
 .table tr.in-table.selected {

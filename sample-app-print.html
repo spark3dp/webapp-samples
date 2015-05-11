@@ -249,6 +249,7 @@
 
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 			statePlugin.changeState('manage');
+			statePlugin.verifyState("login");
 
 			ADSKSpark.Members.getMyProfile().then(function (response) {
 
@@ -341,6 +342,7 @@
 		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 			isLoggedIn = true;
 			statePlugin.changeState("manage", optionalParams);
+			statePlugin.verifyState("login");
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
@@ -374,6 +376,13 @@
 	broadcastMapper["statusIframe.printerExist"] = function(){
 		statePlugin.verifyState("status");
 	};
+	broadcastMapper["manageIframe.printerExist"] = function(){
+		statePlugin.verifyState("manage");
+	};
+	broadcastMapper["printIframe.jobExist"] = function(){
+		statePlugin.verifyState("print");
+	};
+
 
 </script>
 

@@ -17,19 +17,6 @@ var statePlugin = function($){
 		$(tabSelector).removeClass("selected");
 	};
 
-	var setTabVerified = function(tab){
-
-		var enabledTabs = $(tab).siblings().parents().first().children().not(".disabled");
-
-		if(enabledTabs.length > 1){
-			enabledTabs.each(function(index, element){
-				if (index < enabledTabs.length - 1) {
-					$(this).addClass("verified");
-				}
-			});
-		}
-	};
-
 	var verifyState = function(stateName){
 		if(states[stateName]!=undefined){
 			var selectedTab = states[stateName].selectedTab;
@@ -64,9 +51,6 @@ var statePlugin = function($){
 				setTabEnable(disabledTabs[i],false);
 			}
 
-			if(enabledTabs.length > 0) {
-				setTabVerified(enabledTabs[0]);
-			}
 			$(selectedTab).addClass("selected");
 
 			//Callback function after state changes

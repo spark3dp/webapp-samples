@@ -281,6 +281,7 @@
 			hideBreadcrumbs(['home', 'asset', 'file-type']);
 			$('#breadcrumbs-section').css('display', 'inline-block');
 			$('#mainIframe').attr('height', '500px');
+			$('#loginId').addClass('verified');
 		} else {
 			$('.menu-item[data-state=loggedIn]').data('state', 'login');
 			isLoggedIn = false;

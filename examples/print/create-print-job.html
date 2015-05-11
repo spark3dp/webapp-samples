@@ -197,14 +197,12 @@
 
 			sparkPrint.printJob(fileUrl,printerId,settings,function(response){
 						var printerId = response.printer_id;
-						//logger("#print-job-form #inputLog","Job sent successfully. "+JSON.stringify(response));
+						eventBroadCaster.broadcastEvent('printIframe.jobExist');
 					},
 					function(response){
-						//logger("#print-job-form #inputLog","error:" + response);
 
 					});
 		});
-		//$(".footer").load("../../plugins/ajaxlogger/loggers.html");
 	});
 
 </script>
