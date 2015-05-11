@@ -47,7 +47,9 @@
 		}
 
 		.logged-in-container {
-			margin-top: 50px;
+			height: 600px;
+			background-color: #333333;
+			opacity: 0.8;
 
 		}
 
@@ -63,6 +65,53 @@
 			margin-top: 50px;
 		}
 
+		.logged-in-as{
+			text-transform: uppercase;
+			color: #888888;
+			font-size:15px;
+			letter-spacing: 1px;
+			margin-bottom: 30px;
+		}
+
+		.user-name
+		{
+			font-size: 22px;
+			margin-bottom: 30px;
+		}
+
+
+
+		#user{
+			margin-bottom: 30px;
+		}
+
+		#user img
+		{
+			border:1px solid #dbdbdb;
+			width:136px;
+			height: 136px;
+			border-radius: 150px;
+			-webkit-border-radius: 150px;
+			-moz-border-radius: 150px;
+		}
+
+		#logout
+		{
+			margin-bottom: 10px;
+		}
+
+		.inner-logged-in-container
+		{
+			width: 400px;
+			height: 420px;
+			background-color: white;
+			padding: 20px;
+			margin-left: 130px;
+
+			border-bottom-left-radius: 3px;
+			border-bottom-right-radius: 3px;
+		}
+
 	</style>
 
 </head>
@@ -70,29 +119,24 @@
 
 
 <div class="logged-in-container center">
-
-	You are logged in as
-	<br/><br/><br/>
-
+	<div class="inner-logged-in-container">
+	<div class="logged-in-as">Logged in as:</div>
 	<div id="user">
-		<span></span>
-		<br/>
+		<div class="user-name"></div>
 		<img src="" style="display: none;"/>
 	</div>
-	<div id="logout" style="display: inline;">
-		<a href="#" onclick="logout()">Logout</a>
+	<div id="logout">
+		<a class="btn spark_btn empty" href="#" onclick="logout()">Logout</a>
 	</div>
-	<span>Or</span>
-	<a style="display: inline;" href="#" id="continue"
-	   onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
-
+	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Cancel</a>
+	</div>
 </div>
 
 <div class="container logged-out-container">
 	<div class="row">
 		<div class="col-xs-6 left-wrapper">
 			<div id="welcome-wrapper">
-				<h2>Welcome to <br>Spark Print App</h2>
+				<h2>Welcome to <br>Spark Sample App</h2>
 				<br>
 				<p>To try the demo, you need to login
 					<br>
@@ -131,10 +175,13 @@
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 
 			ADSKSpark.Members.getMyProfile().then(function(response){
-				$('#user span').text(response.member.name);
+				$('#user .user-name').text(response.member.name);
 
 				if (response.member.profile.avatar_path) {
 					$('#user img').attr('src', response.member.profile.avatar_path).show();
+				}
+				else{
+					$('#user img').attr('src', "../../assets/img/default_avatar.png").show();
 				}
 				
 				$('#user').show();

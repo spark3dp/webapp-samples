@@ -122,12 +122,12 @@ textarea {
 }
 
 .table tr.in-table .actions{
-    display:none;
-    position: absolute;
+   visibility: hidden;
+   text-align: right;
 }
 
 .table tr.in-table:hover .actions{
-    display:block;
+    visibility: visible;
 }
 
 .table tr.in-table.selected {
@@ -831,6 +831,9 @@ i.stooltip span {
     margin-right: 10px;
     position: relative;
     top:-2px;
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
 }
 
 .sample-app-container
@@ -996,6 +999,7 @@ i.stooltip span {
 }
 .logger-container .method.method-get{
     border-color: greenyellow;
+    text-transform: uppercase;
 }
 .logger-container .method.method-post{
     border-color: coral;
@@ -1041,6 +1045,14 @@ i.stooltip span {
 .renderjson .object.syntax { color: lightsalmon; }
 .renderjson .array.syntax  { color: orange; }
 
+.renderjson div{
+    text-transform: lowercase;
+}
+
+.renderjson{
+    padding: 9.5px 7px 9.5px 7px;
+}
+
 /**** END Ajax Logger *****/
 
 
@@ -1050,7 +1062,7 @@ i.stooltip span {
 
 .main-container
 {
-    padding: 20px;
+    padding: 0 20px 0 20px;
 }
 
 .no-padding{
@@ -1067,6 +1079,11 @@ i.stooltip span {
     width:59px;
     height: 137px;
   margin-left: 290px;
+}
+
+#requestLog{
+    overflow-y: scroll;
+    height: 150px;
 }
 
 #requestLog pre{

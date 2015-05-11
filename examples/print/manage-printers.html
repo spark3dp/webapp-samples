@@ -58,12 +58,17 @@
 		.printers-container
 		{
 			overflow-y: auto;
-			height: 245px;
+			height: 345px;
 			margin-bottom: 20px;
 		}
 
 		#print-status-form{
-			height: 404px;
+			padding-top: 20px;
+			height: 504px;
+		}
+
+		.dropdown-menu{
+			left:-52px !important;
 		}
 
 	</style>
@@ -184,18 +189,18 @@
 						var actionsElem = '<div class="dropdown actions">' +
 								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
 								'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-								//'<li role="presentation"><a role="menuitem" href="../update-printer/?printerId=' + item.printer_id + '">EDIT</a></li>' +
 								'<li role="presentation"><a role="menuitem" class="deletePrinter" printer_id="' + item.printer_id + '">DELETE</a></li>' +
 								'</ul></div>';
 
 
 						tr.append($('<td>' + actionsElem + '</td>'));
 						$('#printersTbody').append(tr);
-						//onclick="deletePrinter(' + item.printer_id + ',$(this).parents(\'tr\'))"
 
 					}, function(){});
 
 				});
+
+				eventBroadCaster.broadcastEvent('manageIframe.printerExist');
 			}
 			else
 			{
@@ -230,7 +235,6 @@
 
 				//make sure printers still left
 				if (!$('.in-table td').length) {
-					//location.reload();
 					eventBroadCaster.broadcastEvent("manageIframe.reload")
 				}
 			}, function (result) {
