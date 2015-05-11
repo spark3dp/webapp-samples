@@ -1018,9 +1018,18 @@ i.stooltip span {
     cursor: pointer;
 }
 .request > .renderjson{
-    cursor: pointer;
+
 }
 
+.request > .renderjson > div.req-resp{
+    position: relative;
+}
+.request > .renderjson > div.req-resp .open-full-request{
+    position: absolute;
+    right:10px;
+    cursor: pointer;
+    top:7px;
+}
 .renderjson a { text-decoration: none; }
 .renderjson .disclosure { color: crimson;  font-size: 150%; }
 .renderjson .syntax { color: grey; }
