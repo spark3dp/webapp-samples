@@ -46,7 +46,6 @@
 			margin: 20px 0;
 		}
 
-
 		.dropdown i {
 			cursor: pointer;
 			position: absolute;
@@ -56,25 +55,28 @@
 		.si-asset-icon {
 			margin-right: 8px;
 		}
-		.box{
+
+		.box {
 			margin-bottom: 20px;
 			height: 190px;
 		}
 
-		.text a{
+		.text a {
 			padding: 8px;
 			display: block;
-			color:#333333;
-		}
-		.text a:hover{
-			color:#333333;
-		}
-		.text .si-asset-icon{
-			margin-right:10px;
+			color: #333333;
 		}
 
-		#assets-gallery{
-			margin-top: 20px;
+		.text a:hover {
+			color: #333333;
+		}
+
+		.text .si-asset-icon {
+			margin-right: 10px;
+		}
+
+		#assets-gallery {
+			padding-top: 20px;
 			overflow-y: auto;
 			height: 460px;
 		}
@@ -89,12 +91,6 @@
 	<div class="spinner"></div>
 
 	<div class="hidden" id="assets">
-		<div class="modal-header">
-			<div class="layouts">
-				<i class="spark_icon si-mosaic-layout-active"></i>
-				<a href="index.html"><i class="spark_icon si-list-layout"></i></a>
-			</div>
-		</div>
 		<div id="assets-gallery">
 
 		</div>
@@ -115,29 +111,9 @@
 <!-- /container -->
 
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-						aria-hidden="true">&times;</span></button>
-				<h4>WARNING</h4>
-			</div>
-			<div class="modal-body">
-				Are you sure you want to delete this Asset?
-			</div>
-			<div class="modal-footer">
-				<a class="spark_btn small cancel" type="button">CANCEL</a>
-				<a class="spark_btn primary small delete" type="button">DELETE ASSET</a>
-			</div>
-		</div>
-	</div>
-</div>
-
-
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
@@ -179,34 +155,6 @@
 			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
 	);
 
-	/**
-	 * Deletes an asset
-	 */
-	function deleteAsset(assetId, assetElem) {
-
-		$('#myModal').modal('show');
-
-		//cancel events
-		$('.cancel').off();
-		$('.cancel').on('click', function () {
-			$('#myModal').modal('hide');
-		})
-
-		//delete events
-		$('.delete').off();
-		$('.delete').on('click', function () {
-			ADSKSpark.Assets.removeAsset(assetId).then(function () {
-				$('#myModal').modal('hide');
-				assetElem.remove();
-
-				//make sure aseets still left
-				if (!$('#assets-gallery div').length) {
-					location.reload();
-				}
-			});
-		});
-
-	}
 
 	/**
 	 * Loop through the gallery
@@ -222,32 +170,22 @@
 
 		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
-		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
-						'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,7) + '</a></div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 7) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
-
-		var actionsElem = '<div class="dropdown actions">' +
-				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-				'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
-				'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
-				'</ul></div>';
-
-		view.append(actionsElem);
 
 		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
 		box.append(text);
 	}
 
-
 	function loadAssets(page,conditions){
 		conditions = conditions || {};
-		conditions.limit = 24;
-		conditions.offset = 24*(page-1);
+		conditions.limit = 48;
+		conditions.offset = 48*(page-1);
 
-		return ADSKSpark.Assets.getMyAssets(conditions).then(function (response) {
+		return ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
 			console.info('my assets:', response);
 			$('#assetsTbody').empty();
 
@@ -273,44 +211,34 @@
 	 * The spark object already exists in this point
 	 */
 	jQuery(function ($) {
+		var currentPage = 1;
 
-		//First let's see if we have a valid access token
-		if (ADSKSpark.Client.isAccessTokenValid()) {
-
-			var currentPage = 1;
-
-			//Get my assets and append to table in DOM
-			loadAssets(currentPage).then(function(response) {
-				$('.spinner').hide();
-				if (!response._link_next) {
-					hasMoreAssets = false;
-				}
-			});
+		//Get my assets and append to table in DOM
+		loadAssets(currentPage).then(function(response) {
+			$('.spinner').hide();
+			if (!response._link_next) {
+				hasMoreAssets = false;
+			}
+		});
 
 
-			//load more on scroll
-			$('#assets-gallery').scroll(function() {
-				if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
-					currentPage++;
-					$('.spinner').show();
-					loadAssets(currentPage).then(function(response){
-						$('.spinner').hide();
-						if (!response._link_next) {
-							hasMoreAssets = false;
-						}
-					});
+		//load more on scroll
+		$('#assets-gallery').scroll(function() {
+			if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+				currentPage++;
+				$('.spinner').show();
+				loadAssets(currentPage).then(function(response){
+					$('.spinner').hide();
+					if (!response._link_next) {
+						hasMoreAssets = false;
+					}
+				});
 
-				}
-			});
-
-
-
-		} else {//user needs to login
-			location.href = '../../../plugins/login/login.html';
-		}
+			}
+		});
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showMyAssets.index');
+		eventBroadCaster.broadcastEvent('showPublicAssets.index');
 
 	});
 

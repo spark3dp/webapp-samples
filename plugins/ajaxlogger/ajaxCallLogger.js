@@ -29,11 +29,11 @@ var ajaxCallLogger = function(){
 
 		var on = "$('#" + id + "').toggle()";
 		var onclick = "onclick=" + on;
-		div.append("<pre class='renderjson' " + onclick + "><div id='" + "req" + id + "'>" +
+		div.append("<pre class='renderjson' " + onclick + "><div class='req-resp' id='" + "req" + id + "'>" +
 					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
-			 			data.req.URL + "</div></pre>");
+			 			data.req.URL + "<span class='open-full-request'><i class='spark_icon si-dropdown-open'></i></span></div></pre>");
 		var response = $("<div id='" + id + "' style='display:none'></div>");
-		var renderedReq = renderjson((data.req));
+		var renderedReq = renderjson(data.req);
 
 		var request = $("<div>data" + data.req.data + "</div>");
 		response.append(renderedReq);
