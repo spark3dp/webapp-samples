@@ -1082,7 +1082,7 @@ i.stooltip span {
 }
 
 #requestLog{
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 150px;
 }
 
