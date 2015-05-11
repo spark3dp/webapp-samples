@@ -170,24 +170,41 @@
 
 		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
-		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
-		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 8) + '</a></div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 7) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
 
-		var actionsElem = '<div class="dropdown actions">' +
-				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-				'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
-				'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
-				'</ul></div>';
-
-		view.append(actionsElem);
-
 		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
 		box.append(text);
 	}
+
+	function loadAssets(page,conditions){
+		conditions = conditions || {};
+		conditions.limit = 24;
+		conditions.offset = 24*(page-1);
+
+		return ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
+			console.info('my assets:', response);
+			$('#assetsTbody').empty();
+
+			if (response.count) {
+				$('#assets').removeClass('hidden');
+
+				$.each(response.assets, function (index, item) {
+					loopGallery(index, item);
+				});
+			} else {
+				$('#empty-assets').removeClass('hidden');
+			}
+
+			return response;
+		});
+	}
+
+	//pagination
+	var hasMoreAssets = true;
 
 	/**
 	 * Run when DOM is ready.
@@ -197,28 +214,28 @@
 		var currentPage = 1;
 
 		//Get my assets and append to table in DOM
-		var conditions = {limit: 24, offset: 0};
-		ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
+		loadAssets(currentPage).then(function(response) {
 			$('.spinner').hide();
-			console.info('my assets:', response);
-			$('#assetsTbody').empty();
-
-
-			if (response.count) {
-				$('#assets').removeClass('hidden');
-
-				$.each(response.assets, function (index, item) {
-
-					loopGallery(index, item);
-
-				});
-			} else {
-				$('#empty-assets').removeClass('hidden');
+			if (!response._link_next) {
+				hasMoreAssets = false;
 			}
 		});
 
+
 		//load more on scroll
-		
+		$('#assets-gallery').scroll(function() {
+			if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+				currentPage++;
+				$('.spinner').show();
+				loadAssets(currentPage).then(function(response){
+					$('.spinner').hide();
+					if (!response._link_next) {
+						hasMoreAssets = false;
+					}
+				});
+
+			}
+		});
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('showPublicAssets.index');
