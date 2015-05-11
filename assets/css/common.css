@@ -996,10 +996,10 @@ i.stooltip span {
     border:1px solid #ffffff;
     border-radius: 4px;
     padding: 3px 8px;
+    text-transform: uppercase;
 }
 .logger-container .method.method-get{
     border-color: greenyellow;
-    text-transform: uppercase;
 }
 .logger-container .method.method-post{
     border-color: coral;
