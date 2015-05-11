@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.modal-header{
+			position: relative;
+			padding:8px 20px;
+		}
+		.modal-header .layouts{
+			position: absolute;
+			right:0;
+			background-color: #ffffff;
+			padding-left: 10px;
+		}
+		.modal-header .layouts a{
+			border-right: 1px solid lightgrey;
+			margin-right: 6px;
+			padding: 4px 10px 0 0;
+		}
+
+
+		#empty-assets {
+			background-color: #F8F8F8;
+			text-align: center;
+		}
+
+		#empty-assets p {
+			padding: 20px 0;
+			color: darkgray;
+		}
+
+		#empty-assets a {
+			margin: 20px 0;
+		}
+
+
+		.dropdown i {
+			cursor: pointer;
+			position: absolute;
+			left: -10px;
+		}
+
+		.si-asset-icon {
+			margin-right: 8px;
+		}
+		#assets-gallery{
+			padding-top: 20px;
+			overflow-y: auto;
+			height: 400px;
+		}
+		.box{
+			margin-bottom: 20px;
+			height: 190px;
+		}
+
+		.text a{
+			padding: 8px;
+			display: block;
+			color:#333333;
+		}
+		.text a:hover{
+			color:#333333;
+		}
+		.text .si-asset-icon{
+			margin-right:10px;
+		}
+
+		.assets-container{
+			padding-top: 20px;
+			overflow-y: scroll;
+			height: 400px;
+		}
+
+
+	</style>
+</head>
+
+<body>
+
+<div class="container main-container">
+
+	<div class="spinner"></div>
+	<div class="sample-title">Select a file to print</div>
+	<div class="modal-header">
+		<div class="layouts">
+			<a href="choose-asset-gallery.html"><i class="spark_icon si-mosaic-layout"></i></a>
+			<i class="spark_icon si-list-layout-active"></i>
+		</div>
+	</div>
+	<div class="assets-container">
+	<table class="table">
+		<thead>
+		<tr>
+			<th>Name<br/><span>asset_name</span></th>
+			<th>Submitted<br/><span>date_submitted</span></th>
+			<th>Modified<br/><span>date_modified</span></th>
+			<th>Status<br/><span>status</span></th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody id="assetsTbody">
+
+		</tbody>
+	</table>
+	</div>
+	<div class="hidden" id="empty-assets">
+		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+			They are equivalent to a project or a folder with metadata.
+		</p>
+	</div>
+
+</div>
+
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-drive.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+
+		//First let's see if we have a valid access token
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+
+			//Get my assets and append to table in DOM
+			var params = {limit:50,offset:0};
+			ADSKSpark.Assets.getMyAssets(params).then(function (response) {
+				$('.spinner').hide();
+				console.info('my assets:', response);
+				$('#assetsTbody').empty();
+
+
+				if (response.count) {
+					$('#assets').removeClass('hidden');
+
+					$.each(response.assets, function (index, item) {
+						var tr = $('<tr class="in-table"></tr>')
+						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
+						tr.append(nameTd);
+						tr.append($('<td>' + item.date_submitted + '</td>'));
+						tr.append($('<td>' + item.date_modified + '</td>'));
+						tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
+						$('#assetsTbody').append(tr);
+
+						//click on tr row takes us to the files html (except the last actions td)
+						tr.on('click',function(){
+							location.href = 'choose-file.html?assetId=' + item.asset_id;
+						});
+
+					});
+				} else {
+					$('#empty-assets').removeClass('hidden');
+				}
+			});
+
+
+		} else {//user needs to login
+			location.href = '../../plugins/login/login.html';
+		}
+
+	});
+
+</script>
+
+</body>
+</html>

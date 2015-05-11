@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+	<!-- your config file -->
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+
+	<!-- Common styles, also cloudfront-->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+	<style>
+
+
+		.left-wrapper {
+			border-right: 1px solid lightgray;
+			background-color: #f9f8f8;
+			padding-top: 50px;
+			height: 600px;
+
+		}
+
+		.left-wrapper h2 {
+			letter-spacing: normal;
+
+		}
+
+		.logged-in-container {
+			margin-top: 50px;
+
+		}
+
+		.login-img{
+			background: url('../../assets/img/login_image.png') no-repeat;
+			width:273px;
+			height: 166px;
+			margin-left: 20px;
+			margin-top: 40px;
+		}
+
+		.login-container{
+			margin-top: 50px;
+		}
+
+	</style>
+
+</head>
+<body>
+
+
+<div class="logged-in-container center">
+
+	You are logged in as
+	<br/><br/><br/>
+
+	<div id="user">
+		<span></span>
+		<br/>
+		<img src="" style="display: none;"/>
+	</div>
+	<div id="logout" style="display: inline;">
+		<a href="#" onclick="logout()">Logout</a>
+	</div>
+	<span>Or</span>
+	<a style="display: inline;" href="#" id="continue"
+	   onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
+
+</div>
+
+<div class="container logged-out-container">
+	<div class="row">
+		<div class="col-xs-6 left-wrapper">
+			<div id="welcome-wrapper">
+				<h2>Welcome to <br>Spark Print App</h2>
+				<br>
+				<p>To try the demo, you need to login
+					<br>
+					with a test environment account.</p>
+				<div class="login-img"></div>
+			</div>
+		</div>
+		<div class="col-xs-6 login-container" id="">
+		</div>
+	</div>
+</div>
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+	function logout() {
+		ADSKSpark.Client.logout();
+		eventBroadCaster.broadcastEvent('manageIframe.loggedOut');
+		location.reload();
+	}
+
+	jQuery(document).ready(function ($) {
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+
+			ADSKSpark.Members.getMyProfile().then(function(response){
+				$('#user span').text(response.member.name);
+
+				if (response.member.profile.avatar_path) {
+					$('#user img').attr('src', response.member.profile.avatar_path).show();
+				}
+				
+				$('#user').show();
+
+				eventBroadCaster.broadcastEvent('manageIframe.loggedIn',response);
+			});
+		}
+		else
+		{
+			$('#user').hide();
+		}
+	});
+</script>
+</body>
+</html>

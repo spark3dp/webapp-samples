@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - Show My Assets - gallery view</title>
+	<meta charset="utf-8">
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
+
+		.modal-header .layouts {
+			position: absolute;
+			right: 0;
+			background-color: #ffffff;
+			padding-left: 10px;
+		}
+
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
+		}
+
+		#empty-assets {
+			background-color: #F8F8F8;
+			text-align: center;
+		}
+
+		#empty-assets p {
+			padding: 20px 0;
+			color: darkgray;
+		}
+
+		#empty-assets a {
+			margin: 20px 0;
+		}
+
+
+		.dropdown i {
+			cursor: pointer;
+			position: absolute;
+			left: -10px;
+		}
+
+		.si-asset-icon {
+			margin-right: 8px;
+		}
+		.box{
+			margin-bottom: 20px;
+			height: 190px;
+		}
+
+		.text a{
+			padding: 8px;
+			display: block;
+			color:#333333;
+		}
+		.text a:hover{
+			color:#333333;
+		}
+		.text .si-asset-icon{
+			margin-right:10px;
+		}
+
+		#assets-gallery{
+			margin-top: 20px;
+			overflow-y: auto;
+			height: 460px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+
+	<div class="spinner"></div>
+
+	<div class="hidden" id="assets">
+		<div class="modal-header">
+			<div class="layouts">
+				<i class="spark_icon si-mosaic-layout-active"></i>
+				<a href="index.html"><i class="spark_icon si-list-layout"></i></a>
+			</div>
+		</div>
+		<div id="assets-gallery">
+
+		</div>
+	</div>
+
+	<div class="hidden" id="empty-assets">
+		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
+			They are equivelent to a project or a folder with metadata.
+		</p>
+
+		<div class="img">
+			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
+		</div>
+		<a class="spark_btn" href="../create-asset/">Create your first Asset</a>
+	</div>
+
+</div>
+<!-- /container -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this Asset?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small delete" type="button">DELETE ASSET</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+-->
+
+<!-- your config file -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+	/**
+	 * Deletes an asset
+	 */
+	function deleteAsset(assetId, assetElem) {
+
+		$('#myModal').modal('show');
+
+		//cancel events
+		$('.cancel').off();
+		$('.cancel').on('click', function () {
+			$('#myModal').modal('hide');
+		})
+
+		//delete events
+		$('.delete').off();
+		$('.delete').on('click', function () {
+			ADSKSpark.Assets.removeAsset(assetId).then(function () {
+				$('#myModal').modal('hide');
+				assetElem.remove();
+
+				//make sure aseets still left
+				if (!$('#assets-gallery div').length) {
+					location.reload();
+				}
+			});
+		});
+
+	}
+
+	/**
+	 * Loop through the gallery
+	 * @param index
+	 * @param item
+	 */
+	function loopGallery(index, item) {
+		var imgUrlRow, imgUrlThumb;
+		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
+		if (imgUrlRow.indexOf('FullPreview/') < 0) {
+			imgUrlThumb += 'Medium.jpg';
+		}
+
+		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
+		var view = $('<div class="view thumb"></div>');
+		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
+						'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,7) + '</a></div>');
+
+		$('#assets-gallery').append(box);
+		box.append(view);
+
+		var actionsElem = '<div class="dropdown actions">' +
+				'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
+				'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+				'<li role="presentation"><a role="menuitem" href="../update-asset/?assetId=' + item.asset_id + '">EDIT</a></li>' +
+				'<li role="presentation"><a role="menuitem" onclick="deleteAsset(' + item.asset_id + ',$(this).parents(\'.box\'))">DELETE</a></li>' +
+				'</ul></div>';
+
+		view.append(actionsElem);
+
+		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
+		box.append(text);
+	}
+
+
+	function loadAssets(page,conditions){
+		conditions = conditions || {};
+		conditions.limit = 24;
+		conditions.offset = 24*(page-1);
+
+		return ADSKSpark.Assets.getMyAssets(conditions).then(function (response) {
+			console.info('my assets:', response);
+			$('#assetsTbody').empty();
+
+			if (response.count) {
+				$('#assets').removeClass('hidden');
+
+				$.each(response.assets, function (index, item) {
+					loopGallery(index, item);
+				});
+			} else {
+				$('#empty-assets').removeClass('hidden');
+			}
+
+			return response;
+		});
+	}
+
+	//pagination
+	var hasMoreAssets = true;
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+
+			var currentPage = 1;
+
+			//Get my assets and append to table in DOM
+			loadAssets(currentPage).then(function(response) {
+				$('.spinner').hide();
+				if (!response._link_next) {
+					hasMoreAssets = false;
+				}
+			});
+
+
+			//load more on scroll
+			$('#assets-gallery').scroll(function() {
+				if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+					currentPage++;
+					$('.spinner').show();
+					loadAssets(currentPage).then(function(response){
+						$('.spinner').hide();
+						if (!response._link_next) {
+							hasMoreAssets = false;
+						}
+					});
+
+				}
+			});
+
+
+
+		} else {//user needs to login
+			location.href = '../../../plugins/login/login.html';
+		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('showMyAssets.index');
+
+	});
+
+</script>
+
+</body>
+</html>

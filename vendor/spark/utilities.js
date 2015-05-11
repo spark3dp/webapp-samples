@@ -1,7 +1,8 @@
 /**
  * Our utilities object
  */
-var Util = function () {
+spark.util = function () {
+	'use strict';
 
 	/**
 	 * Return the factory object
@@ -17,9 +18,9 @@ var Util = function () {
 		 * @param callback - callback function in case of success or fail if no error callback exists.
 		 * @param errorCallback - error callback function.
 		 * @param isJsonResponse - indication if the response is json one, true or undefined are json response.
-		 * @param xhrEventMap - map of events with callback functions to perform when tje event listener fire the event.
+		 * @param xhrEventMap - map of events with callback functions to perform when the event listener fire the event.
 		 */
-		xhr:function (url, method, params, headers, callback, errorCallback,isJsonResponse,xhrEventMap) {
+		xhr: function (url, method, params, headers, callback, errorCallback, isJsonResponse, xhrEventMap) {
 			var xhr = new XMLHttpRequest();
 			xhr.open(method, url, true);
 
@@ -29,10 +30,18 @@ var Util = function () {
 
 
 			xhr.onload = function () {
-				if (xhr.status == 200 || xhr.status == 201 || xhr.status == 202) {
-					var response =xhr.responseText;
-					if (isJsonResponse == undefined || isJsonResponse == true) {
-						 response = JSON.parse(xhr.responseText);
+				if (xhr.status == 200 || xhr.status == 201 || xhr.status == 202 || xhr.status == 204) {
+
+					var response;
+
+					if (xhr.status != 204) {
+						response = xhr.responseText;
+						if (isJsonResponse == undefined || isJsonResponse == true) {
+							response = JSON.parse(xhr.responseText);
+						}
+					}else{
+						//xhr.status 204 in the API means that the response is empty
+						response = true;
 					}
 					callback(response);
 				} else {
@@ -46,13 +55,57 @@ var Util = function () {
 				}
 
 			};
-			if (xhrEventMap != undefined){
+			if (xhrEventMap != undefined) {
 				for (var key in xhrEventMap) {
-					xhr.addEventListener(key,xhrEventMap[key],false);
+					xhr.addEventListener(key, xhrEventMap[key], false);
 				}
 			}
 
 			xhr.send(params);
+		},
+
+		/**
+		 * Get a cookie by cookie name
+		 * @param cookieName
+		 * @returns {*}
+		 */
+		getCookie: function (cookieName) {
+
+			function getRawCookie(cname) {
+				var name = cname + "=";
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) === ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) !== -1) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return "";
+			}
+
+			var sessionCookie = getRawCookie(cookieName);
+
+			if (sessionCookie) {
+				return JSON.parse(decodeURIComponent(sessionCookie));
+			}
+
+			return false;
+		},
+
+		/**
+		 * Expire the cookie
+		 * @param cname
+		 */
+		expireCookie: function (cname) {
+
+			var date = new Date();
+			date.setTime(date.getTime() - 1);
+			var expires = "; expires=" + date.toUTCString();
+
+			document.cookie = cname + "=" + expires + "; path=/";
 		},
 
 		/**
@@ -71,14 +124,25 @@ var Util = function () {
 		},
 
 		/**
+		 * Extract params from URL
+		 * @returns {{}}
+		 */
+		extractParamsFromURL: function(){
+			var prmstr = window.location.search.substr(1);
+			var getParams = prmstr != null && prmstr != "" ? spark.util.transformToAssocArray(prmstr) : [];
+
+			return getParams;
+		},
+
+		/**
 		 * Extract the auth code
 		 */
 		extractRedirectionCode: function () {
-			var prmstr = window.location.search.substr(1);
-			var getParams = prmstr != null && prmstr != "" ? Util.transformToAssocArray(prmstr) : [];
+			var getParams = spark.util.extractParamsFromURL();
 
 			return getParams['code'] ? getParams['code'] : null;
 		}
+
 
 	}
 

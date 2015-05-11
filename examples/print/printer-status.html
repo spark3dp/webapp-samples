@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		#empty-jobs{
+			text-align: center;
+			display: none;
+			background-color: #F8F8F8;
+			padding-top: 75px;
+			padding-bottom: 75px;
+		}
+
+		.create-print-job{
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.print-statuses-container
+		{
+			overflow-y: auto;
+			height: 350px;
+			margin-bottom: 20px;
+			display: none;
+		}
+
+		.choose-printer{
+			background-color: #F8F8F8;
+			text-align: center;
+
+			height: 350px;
+		}
+
+		.choose-printer div {
+			padding-top: 175px;
+		}
+
+	</style>
+</head>
+
+<body>
+
+
+	<div class="container main-container">
+		<form id="print-status-form">
+			<div class="sample-title">Manage job status</div>
+			<hr>
+				<div class="form-group">
+					<select class="form-control" id="printers-select" required>
+					</select>
+				</div>
+				<div id="empty-jobs">
+					You have no print jobs in queue.
+					<div class="create-print-job"></div>
+					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Create new print job</a>
+				</div>
+				<div class="print-statuses-container">
+					<table class="table" id="print-statuses">
+						<thead>
+						<tr>
+							<th><div>Job ID</div><span class="field-label">job_id</span></th>
+							<th><div>Submitted</div><span class="field-label">job_date_time</span></th>
+							<th><div>Status</div><span class="field-label">job_status</span></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="printersStatusTbody">
+					</table>
+				</div>
+			   <div class="choose-printer">
+						<div>Choose printer above</div>
+			   </div>
+	</form>
+
+
+	</div>
+<!-- /container -->
+
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+
+<script type="">
+	$(document).ready(function(){
+		ajaxCallListenerFromIframe();
+	});
+
+	var getAllPrinters = function(){
+		sparkPrint.getAllPrinters(function(response){
+			var printers = response.printers;
+			$("#printers-select").find('option').remove()
+			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
+
+			for(var i in printers){
+				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+			}
+
+		});
+	};
+
+
+	getAllPrinters();
+
+	var getJobsStatusByPrinter = function(printerId){
+		sparkPrint.getJobsStatusByPrinter(printerId,function(response){
+
+					var printerJobs = response.printer_jobs;
+
+					if(printerJobs.length > 0) {
+
+
+						for (var i in printerJobs) {
+							$("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'><td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td><td>" + printerJobs[i].job_status.job_status + "</td><td>" +
+								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
+									'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+									'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+									"</td></tr>").appendTo("#printersStatusTbody");
+						}
+
+						$(".print-statuses-container").show();
+						$("#empty-jobs").hide();
+					}
+					else
+					{
+						$(".print-statuses-container").hide();
+						$("#empty-jobs").show();
+					}
+
+					//logger("#inputLogStatus","Got "+ printerJobs.length +" jobs!");
+
+				},
+				function(response){
+					//logger("#inputLogStatus",response);
+
+				});
+	};
+
+	$("#printers-select").on('change', function (e) {
+		e.preventDefault();
+
+		var printerId = $('#printers-select').val();
+		if(printerId!=0) {
+			getJobsStatusByPrinter(printerId);
+			$(".choose-printer").hide();
+			var printerName = $('#printers-select').text();
+			if(printerName.indexOf("( simulator )") != -1){
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else
+			{
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+		}
+		else
+		{
+			$("#empty-jobs").hide();
+			$(".choose-printer").show();
+			eventBroadCaster.broadcastEvent('showSimulator', false);
+		}
+
+
+
+	});
+
+	var classMapper = {
+		"completed":"success",
+		"queued":"warning",
+		"started":"info",
+		"canceled":"danger",
+		"printing":"info"
+	};
+
+	var sendPrinterCommand = function(jobId, command){
+		sparkPrint.sendPrintCommand($("#printers-select").val(),jobId,command,function(response){
+					//logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select").val());
+
+				}
+				,function(response){
+					//logger("#inputLogStatus",response);
+					//logger("#inputLogStatus","Error sending " + command + " command to printer "+$("#printers-select").val());
+				});
+	}
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

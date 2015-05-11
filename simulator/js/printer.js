@@ -12,14 +12,20 @@ var Printer= (function() {
 
  
    /**switch to these url's when Jayant enables passthrough in apigee for both /faye and printer hardware end points**/   
-    var BASE_URL="https://api-alpha.spark.autodesk.com/api/v1";
-    var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
+   //var BASE_URL="https://api-alpha.spark.autodesk.com/api/v1";
+   //var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
 
-    //var BASE_URL="https://alpha.spark.autodesk.com/api/v1";
-    //var FAYE_URL="https://alpha.spark.autodesk.com/faye";
-    
+
+    var BASE_URL="http://printer-sandbox.spark.autodesk.com/api/v1";
+    var FAYE_URL="http://printer-sandbox.spark.autodesk.com/faye";
+
     var BASE_URL_LOCAL="http://localhost:8080/api/v1";
     var FAYE_URL_LOCAL="http://localhost:8080/faye"
+
+    
+
+    var BASE_URL_ALPHA="http://alpha.spark.autodesk.com/api/v1";
+    var FAYE_URL_ALPHA="http://alpha.spark.autodesk.com/faye";
 
     var STATUS_READY="ready";
     var STATUS_PRINTING="printing";
@@ -55,9 +61,14 @@ var Printer= (function() {
             BASE_URL=BASE_URL_LOCAL;
             FAYE_URL=FAYE_URL_LOCAL;
         }
+        else if(local!=false&&local.toUpperCase()==='ALPHA'){
+            log("Setting url's to local mode");
+            BASE_URL=BASE_URL_ALPHA;
+            FAYE_URL=FAYE_URL_ALPHA;
+        }
 
         //first set up faye client 
-        client = new Faye.Client(FAYE_URL);
+        client = new Faye.Client(FAYE_URL,{timeout: 120,retry:3});
         client.disable('websocket');
 
         Logger = {
@@ -271,8 +282,8 @@ var Printer= (function() {
             return;
         }
         else{
-            var message={"command":"print_data","file_url":"http://cdn.spark.com/print/abcefg","command_token":""}
-            message.command_token="local_"+'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var message={"command":"print_data","file_url":"http://cdn.spark.com/print/abcefg","task_id":""}
+            message.task_id="local_"+'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                                     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
                                     return v.toString(16);
                                 });
@@ -297,7 +308,7 @@ var Printer= (function() {
             currentLayer=1;
             currentPrintCommand=message;
             currentJobStatus=STATUS_RECEIVED;
-            setPrintJobStatus(currentPrinterStatus,currentJobStatus,message.command_token,acg);
+            setPrintJobStatus(currentPrinterStatus,currentJobStatus,message.task_id,acg);
             processPrintCommand(message);
             return;
         }
@@ -306,7 +317,7 @@ var Printer= (function() {
             
             if(pause()==true){
                 
-                acg.data =JSON.stringify({"job_id":currentPrintCommand.command_token,"job_status":STATUS_PAUSED});
+                acg.data =JSON.stringify({"job_id":currentPrintCommand.task_id,"job_status":STATUS_PAUSED});
             }
             else{
                 acg.error_code=400;
@@ -319,7 +330,7 @@ var Printer= (function() {
            
             if(resume()==true){
                 
-                acg.data =JSON.stringify({"job_id":currentPrintCommand.command_token,"job_status":STATUS_PAUSED});
+                acg.data =JSON.stringify({"job_id":currentPrintCommand.task_id,"job_status":STATUS_PAUSED});
             }
             else{
                 acg.error_code=400;
@@ -331,7 +342,7 @@ var Printer= (function() {
             acg.progress=1.0;
            
             if(cancel()==true){
-                acg.data =JSON.stringify({"job_id":currentPrintCommand.command_token,"job_status":STATUS_CANCELED});
+                acg.data =JSON.stringify({"job_id":currentPrintCommand.task_id,"job_status":STATUS_CANCELED});
             }
             else{
                 acg.error_code=400;
@@ -358,7 +369,7 @@ var Printer= (function() {
             acg.data=JSON.stringify({"url":"http://logs.com/logs/"+rand_name});
             
         }
-        setPrintJobStatus(currentPrinterStatus, currentJobStatus,message.command_token,acg);
+        setPrintJobStatus(currentPrinterStatus, currentJobStatus,message.task_id,acg);
 
 
     }
@@ -376,13 +387,13 @@ var Printer= (function() {
         if(currentLayer<totalLayers){
             currentPrinterStatus=STATUS_PRINTING;
             currentJobStatus=STATUS_PRINTING;
-            setPrintJobStatus(currentPrinterStatus,currentJobStatus,currentPrintCommand.command_token,null);
+            setPrintJobStatus(currentPrinterStatus,currentJobStatus,currentPrintCommand.task_id,null);
         }
         else{
             currentPrinterStatus=STATUS_READY;
             currentJobStatus=STATUS_COMPLETED;
             healthCheck();
-            setPrintJobStatus(currentPrinterStatus,currentJobStatus, currentPrintCommand.command_token,null);
+            setPrintJobStatus(currentPrinterStatus,currentJobStatus, currentPrintCommand.task_id,null);
         }
         
         
@@ -415,7 +426,7 @@ var Printer= (function() {
         acg.printer_status=status;
         acg.progress=1.0;
         if(currentPrintCommand!=null){
-            acg.job_id=currentPrintCommand.command_token;
+            acg.job_id=currentPrintCommand.task_id;
             acg.job_progress=currentLayer/totalLayers;
             acg.progress=acg.job_progress;
             acg.job_status=jobStatus;
@@ -455,7 +466,7 @@ var Printer= (function() {
         acg.data.layer=currentLayer;
         acg.data.seconds_left=(totalLayers-currentLayer)*20;
         acg.data.temprature=71;
-        acg.data.job_id=currentPrintCommand.command_token;
+        acg.data.job_id=currentPrintCommand.task_id;
         return acg;
     }
 
@@ -479,7 +490,7 @@ var Printer= (function() {
             return false;
         }
         else{
-            log("resuming job "+currentPrintCommand.command_token);
+            log("resuming job "+currentPrintCommand.task_id);
             lcdWrite("Resume");
             currentPrinterStatus=STATUS_PRINTING;
             currentJobStatus=STATUS_PRINTING;
@@ -498,7 +509,7 @@ var Printer= (function() {
         }
         else{
 
-            log("Canceling job "+currentPrintCommand.command_token);
+            log("Canceling job "+currentPrintCommand.task_id);
             lcdWrite("Cancel");
             currentPrinterStatus=STATUS_READY;
             currentJobStatus=STATUS_CANCELED;
@@ -515,7 +526,7 @@ var Printer= (function() {
             return false;
         }
         else{
-            log("pausing job "+currentPrintCommand.command_token);
+            log("pausing job "+currentPrintCommand.task_id);
             lcdWrite("Pause");
             clearTimeout(printCommandTimer);
             currentPrinterStatus=STATUS_PAUSED;
@@ -560,7 +571,7 @@ var Printer= (function() {
                  var acg={};
                 acg.printer_status=currentPrinterStatus;
                 if(currentPrintCommand!=null){
-                    acg.job_id=currentPrintCommand.command_token;
+                    acg.job_id=currentPrintCommand.task_id;
                     acg.job_progress=currentLayer/totalLayers;
                     acg.job_status=currentJobStatus;
                     setPrintData(acg,currentJobStatus);
@@ -592,9 +603,12 @@ var Printer= (function() {
 
             }
 
-
-
+            if(healthCheckTimer!=null){
+                clearTimeout(healthCheckTimer);
+            }
+            
             healthCheckTimer=setTimeout(healthCheck,HEALTH_CHECK_INTERVAL);
+            
         }
 
     }

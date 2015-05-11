@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - Update Asset</title>
+	<meta charset="utf-8">
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.notification-bar{
+			position: relative;
+			margin-bottom: 10px;
+			margin-top: -15px;
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+<div class="container">
+	<div id="manageAsset">
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">UPDATE AN ASSET</h4>
+		</div>
+		<div class="modal-body">
+			<div class="notification-bar">
+				<i class="spark_icon si-status-ok"></i> Asset was updated successfully
+			</div>
+			<form id="asset-form" novalidate="">
+				<section class="form_field">
+					<label for="manage-assets-title">
+						Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The name of the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-title" class="form-control">
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+				<section class="form_field">
+					<label for="manage-assets-description">
+						Add description <span class="field-label">&nbsp;/&nbsp;description</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>The description of the asset</span></i>
+					</label>
+					<textarea class="form-control field"
+					          id="manage-assets-description"
+					          required
+							></textarea>
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+
+				</section>
+
+				<section class="form_field">
+					<label for="manage-assets-tags">
+						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Tags that describe the asset</span></i>
+					</label>
+					<input type="text" required id="manage-assets-tags" class="form-control">
+
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
+
+				<div class="form-footer">
+					<div class="publish-wrapper">
+						<input type="checkbox" id="c1">
+						<label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
+					</div>
+					<div class="submit-wrapper">
+						<a href="../show-my-assets/">Cancel</a>
+						<input class="spark_btn primary" type="submit" value="UPDATE">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+-->
+<!-- your config file -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+	//the asset id we are referring to
+	var currentAssetId;
+
+	/**
+	 * Updates a new asset
+	 */
+	function updateAsset() {
+
+		var assetTitle = $('#manage-assets-title'),
+				assetDescription = $('#manage-assets-description'),
+				assetTags = $('#manage-assets-tags');
+
+
+		if (common.validateInput(assetTitle) && common.validateInput(assetDescription) && common.validateInput(assetTags)) {
+			var asset = {
+				title: assetTitle.val(),
+				description: assetDescription.val(),
+				tags: assetTags.val()
+			};
+
+			asset.publish = !!$('#c1:checked').length;
+
+			asset.assetId = currentAssetId;
+			ADSKSpark.Assets.updateAsset(asset).then(function (response) {
+				console.info('update asset response:', response);
+				$('.notification-bar').show();
+				setTimeout(function(){
+					$('.notification-bar').hide();
+				},3000);
+
+				$('.submit-wrapper a').text('Back to my assets');
+
+			});
+		}
+	}
+
+
+	/**
+	 * Calls get asset and sets the retreived data inside the form
+	 */
+	function getAssetAndSetDataIntoForm() {
+
+		ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
+			if (response) {
+				$("#manage-assets-title").val(response.asset_name);
+				$("#manage-assets-description").text(response.description);
+				var tags = response.keywords.replace(/ /g, ",");
+				tags = (tags != "undefined") ? tags : "";
+				$("#manage-assets-tags").val(tags);
+				if (response.is_gallery_asset) {
+					$('#c1').attr('checked', 'checked');
+				}else{
+					$('#c1').removeAttr('checked');
+				}
+			}
+		});
+	}
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
+			location.href = '../../../plugins/login/login.html';
+		} else {
+
+			//Assume we provided assetId in URL
+			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+			if (!currentAssetId) {
+				location.href = '../show-my-assets/';
+			} else {
+				getAssetAndSetDataIntoForm();
+			}
+
+
+			//Set listener to form submit
+			$('#asset-form').on('submit', function (e) {
+				e.preventDefault();
+				updateAsset();
+			});
+
+			common.setUIFunctionality();
+		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('updateAsset',{assetId:currentAssetId});
+
+	});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		#printers-select{
+			height: 44px;
+		}
+		
+		#printer-settings{
+			min-height: 80px;
+		}
+
+		.or-browse{
+			margin: 10px 10px 0 10px;
+			text-transform: uppercase;
+		}
+
+		#fileURL{
+			width: 350px;
+		}
+
+		.print-si-browse
+		{
+			margin-right: 10px;
+			margin-top: 5px;
+		}
+
+		.browse_btn{
+			height: 44px;
+		}
+
+		.browse_btn span{
+			vertical-align: super;
+		}
+
+		.form-fields-container{
+			margin-bottom: 50px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="container main-container">
+			<form id="print-job-form">
+				<div class="form-fields-container">
+				<div class="sample-title">Create a 3D print job</div>
+				<hr>
+				<div class="form-group pull-left">
+					<label for="fileURL">
+						Choose file to print <span class="field-label">&nbsp;/&nbsp;printable_id</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">The file id</span></i>
+					</label>
+					<div class="clearfix"></div>
+					<!--<input type="text" class="form-control" id="fileURL" placeholder="File URL" required value="http://cdn.spark.com/print/abcefg">-->
+					<div class="pull-left"><input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required></div>
+					<div class="pull-left or-browse">OR</div><a class="spark_btn empty browse_btn pull-left" href="#" onclick="eventBroadCaster.broadcastEvent('printIframe.chooseAsset')"><i class="spark_print_icon print-si-browse"></i><span>Browse...</span></a>
+				</div>
+				<div class="spacer clearfix"></div>
+				<div class="form-group">
+					<label for="printers-select">
+						Select a printer <span class="field-label">&nbsp;/&nbsp;printer_id</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">The printer id</span></i>
+					</label>
+					<select class="form-control" id="printers-select" required>
+						<option value="">Please select...</option>
+					</select>
+				</div>
+				<div class="spacer clearfix"></div>
+				<div class="form-group">
+					<label for="printer-settings">
+						Change default settings <span class="field-label">&nbsp;/&nbsp;settings</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">The print settings</span></i>
+					</label>
+					<textArea type="text" class="form-control" id="printer-settings" placeholder="">{ "FirstApproachRPM": 6, "FirstZLiftMicrons": 2000, "FirstSeparationMicronsPerSec": 5000, "FirstApproachMicronsPerSec": 5000, "FirstRotationMilliDegrees": 60000 }
+					</textArea>
+				</div>
+				<input type="hidden" id="assetId">
+				</div>
+				<div class="pull-right">
+					<input class="spark_btn primary" type="submit" value="Print" id="print">
+					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">View Job status</a>
+				</div>
+			</form>
+
+	</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+
+<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+<script>
+
+	var currentFileId;
+
+	$(document).ready(function(){
+
+		ajaxCallListenerFromIframe();
+		common.setUIFunctionality();
+
+		var urlParams = spark.util.extractParamsFromURL();
+		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
+		if (currentFileId != "") {
+			$("#fileURL").val(currentFileId);
+		}
+
+		var getAllPrinters = function(){
+			sparkPrint.getAllPrinters(function(response){
+				var printers = response.printers;
+
+				for(var i in printers){
+					$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+				}
+			});
+		};
+
+		getAllPrinters();
+
+		$("#printers-select").on("change", function(e){
+
+			var printerName = $('#printers-select option:selected').text();
+			if(printerName.indexOf("( simulator )") != -1){
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else
+			{
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+
+		});
+
+		$("#print-job-form").on('submit', function (e) {
+			e.preventDefault();
+
+			var fileUrl = $('#fileURL').val();
+			var printerId = $('#printers-select option:selected').val();
+			var settings = JSON.parse($('#printer-settings').val());
+
+			sparkPrint.printJob(fileUrl,printerId,settings,function(response){
+						var printerId = response.printer_id;
+						//logger("#print-job-form #inputLog","Job sent successfully. "+JSON.stringify(response));
+					},
+					function(response){
+						//logger("#print-job-form #inputLog","error:" + response);
+
+					});
+		});
+		//$(".footer").load("../../plugins/ajaxlogger/loggers.html");
+	});
+
+</script>
+
+</body>
+</html>

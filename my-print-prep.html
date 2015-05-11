@@ -6,57 +6,140 @@
 		canvas { width: 100%; height: 100% }
 	</style>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="assets/css/common.css">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 </head>
 <body>
+<div class="logged-in-container">
+	<div class="container sample-app-container" id="container">
 <form>
 	<div id="content" class="container-fluid">
 		<div  class="row">
 			<h1 class="text-center">Print Sample</h1>
-			<div class="text-center" id="btn-div">
+			<div class="" id="btn-div">
 		<span class="btn btn-primary btn-file">
             Browse... <input id="file-select" type="file">
 
 		</span>
-				<input id="file-name" type="text"  readonly>
-				<button id="import" type="button" class="btn btn-primary">Import Mesh</button>
-				<button id="analyze" type="button" class="btn btn-primary">Analyze Mesh</button>
-				<button id="repair" type="button" class="btn btn-primary">Repair Mesh</button>
-				<button id="export" type="button" class="btn btn-primary">Export Mesh</button>
-				<button id="load" type="button" class="btn btn-primary">Load File</button>
+				<input id="file-name" type="text" readonly>
+				<button id="import" type="button" class="btn btn-primary">1. Import Mesh</button>
+				<br/><br/>
 
-			</div>
-			<div class="text-center">
 				<label for="meshId">Mesh ID:</label>
-				<input id="meshId" type="text"  readonly>
-				<label for="meshProblems">Problems:</label>
-				<textarea id="meshProblems" rows="4" cols="50" readonly></textarea>
+				<input id="meshId" type="text" value="" readonly>
 
+				<button id="analyze" type="button" class="btn btn-primary">2. Analyze Mesh</button>
+				<br/><br/>
+
+
+				<label for="meshProblems" >Problems:</label>
+				<input id="meshProblems" type="text" readonly></textarea>
+				<button id="repair" type="button" class="btn btn-primary">3. Repair Mesh</button>
+
+				<br/><br/>
+				<button id="createTray" type="button" class="btn btn-primary">4. Create Tray</button>
+				<button id="prepareTray" type="button" class="btn btn-primary">5. Prepare Tray</button>
+				<button id="createSupport" type="button" class="btn btn-primary">6. Create Support</button>
+
+				<button id="generatePrintable" type="button" class="btn btn-primary">7. Generate Printable From Tray</button>
+				<br/><br/>
+				<label for="trayId">Tray ID:</label>
+				<input id="trayId" type="text">
+
+				<label for="printableId">Printable ID:</label>
+				<input id="printableId" type="text" readonly value="">
+
+				<button id="download" type="button" class="btn btn-primary">8. Download Printable File</button>
+				<hr/>
+
+				<button id="export" type="button" class="btn btn-primary">Export Mesh</button>
+				<label for="downloadFileId">Download File ID:</label>
+				<input id="downloadFileId" type="text" readonly>
+				<button id="load" type="button" class="btn btn-primary">Load File To Canvas</button>
+				<hr/>
+				<br/>
 			</div>
-
-
-			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-print-prep.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/STLLoader.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/OBJLoader.js"></script>
-
-			<script type="text/javascript" charset="utf-8" src="scripts/my-print-prep.js"></script>
-
-			<script type="text/javascript" charset="utf-8" src="scripts/config.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
-			<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
-
-			<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
-
-
 
 
 		</div>
 	</div>
+
 </form>
+	<div id="canvas"></div>
+	<br/>
+	<div id="logger"></div>
+	<div id="footer" class="footer"></div>
+</div>
+
+	</div>
+
+
+
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-print-prep.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/STLLoader.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/OBJLoader.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/threejs.OrbitControls.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/threecsg/ThreeCSG.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="examples/print/my-print-prep.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+
+<script>
+	$(document).ready(function(){
+		ajaxCallLogger.createLoggerElement("#footer");
+		ajaxCallLogger.startRegularListener();
+		//Init the Spark Client
+		var APP_KEY = CLIENT_ID || '',
+				GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+				ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+
+		ADSKSpark.Client.initialize(APP_KEY,// Your app key
+				GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+				ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+				ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+		);
+	});
+
+</script>
+
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
+
+<!-- spark sdk -->
+<!--
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+-->
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+-->
+<script type="text/javascript" charset="utf-8" src="plugins/login/login.js"></script>
+
+
 </body>
 </html>
+

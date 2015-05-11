@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application Callback</title>
+</head>
+
+<body>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<!-- your config file -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	//Init the Spark Client
+	var APP_KEY = CLIENT_ID || '',
+			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+
+	ADSKSpark.Client.initialize(APP_KEY,// Your app key
+			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
+			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+	);
+
+	/**
+	 * Get the code param in URL after returning from Spark Auth flow
+	 */
+	function extractRedirectionCode() {
+		var getParams = ADSKSpark.Helpers.extractParamsFromURL();
+		return getParams['code'] ? getParams['code'] : null;
+	}
+
+
+	var code = extractRedirectionCode();
+
+	if (code) {
+		ADSKSpark.Client.completeLogin(code).then(function (token) {
+			if (token) {
+				if (window.opener){
+
+					window.opener.location.reload(true);
+					//close the login window
+					window.close();
+				}else {
+					window.parent.location.reload();
+				}
+			} else {
+				console.error('Problem with fetching token');
+			}
+		}, function (error) {
+			console.error(error);
+		});
+	}
+</script>
+</body>
+</html>

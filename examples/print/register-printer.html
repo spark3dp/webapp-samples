@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+
+	<style>
+
+
+		.token_simulator_container .spinner{
+			position: relative;
+
+		}
+
+		.printer_type_container{
+			border-right: 1px silver solid;
+			padding-right: 10px;
+			margin-right: 20px;
+		}
+
+		#inputPrinterType{
+			min-width: 350px;
+			height: 44px;
+		}
+
+		.form-control-tip
+		{
+			font-size: 12px;
+		    color:silver;
+			margin-top: 5px;
+		}
+
+   </style>
+</head>
+
+<body>
+
+	<div class="container main-container">
+		<div class="spacer clearfix"></div>
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="register">
+				<form id="register-printer-form">
+					<div class="sample-title">Add Printer</div>
+					<hr>
+					<label for="inputPrinterType">
+						Printer type <span class="field-label">&nbsp;/&nbsp;type</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">The printer type</span></i>
+					</label>
+					<div class="form-group">
+						<div class="pull-left printer_type_container">
+							<select id="inputPrinterType" class="form-control" required="required">
+							<option value="">Please select...</option>
+						    <option value="-1">Printer Simulator</option>
+						</select>
+						</div>
+						<div class="pull-left">Use our Printer Simulator for a quick<br>demonstration.</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="form-group">
+						<label for="inputName">
+							Printer nickname <span class="field-label">&nbsp;/&nbsp;printer_name</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">The printer name</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputName" required>
+					</div>
+					<div class="form-group">
+						<label for="inputToken">
+							Token/IP address <span class="field-label">&nbsp;/&nbsp;registration_code</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">The printer token</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputToken" required>
+						<div class="form-control-tip">Find your printer's IP address/ token code in the Settings tab of your printer's LCD screen.</div>
+					</div>
+					<div>
+						<input class="btn spark_btn primary pull-right" type="submit" value="Add Printer" id="submit">
+
+						<a href="#" class="btn btn_link pull-right" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="tab-pane fade" id="settings">
+				<h2>Settings Content Goes Here</h2>
+			</div>
+		</div>
+
+	</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<!--script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-drive.js"></script-->
+
+<!--script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script-->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+
+<script>
+	jQuery(function ($) {
+		ajaxCallListenerFromIframe();
+
+		sparkPrint.getPrinterTypes(function (response) {
+
+			$.each(response.printerTypes, function (index, item) {
+				var inputPrinterType = $("#inputPrinterType");
+				var option = $('<option value="' + item.id + '">' + item.name + '</option>');
+				inputPrinterType.append(option);
+			});
+		});
+
+		common.setUIFunctionality();
+
+		$("#inputPrinterType").on("change", function(e){
+
+			var id = $("#inputPrinterType option:selected").val();
+			if (id == -1) {
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else
+			{
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+
+		});
+
+		$("#register-printer-form").on('submit', function (e) {
+			e.preventDefault();
+
+			var printerName = $('#inputName').val();
+
+			var token =  $('#inputToken').val();
+
+			var id = $("#inputPrinterType option:selected").val();
+
+			if (id == -1) {
+				printerName = printerName + " ( simulator )";
+			}
+
+			sparkPrint.registerPrinter(token, printerName, function (response) {
+						var printerId = response.printer_id;
+						//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+						eventBroadCaster.broadcastEvent("registerIframe.add")
+					},
+					function (response) {
+						//logger("#register-printer-form #inputLog",response);
+
+					});
+		});
+
+	});
+
+</script>
+</body>
+</html>
