@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- Bootstrap CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom styles -->
+	<link href="css/style.css" rel="stylesheet">
+
+	<!--<link href="css/jquery.steps.css" rel="stylesheet">
+	<link href="css/prettify.css" rel="stylesheet">-->
+
+
+	<script type="text/javascript" charset="utf-8" src="modules/common/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-auth.js"></script>
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+	<div class="header">
+		HEADER STUFF
+	</div>
+	<div id="app-wrapper">
+		<div id="app-screen">
+			<!-- load dynamically html -->
+		</div>
+	</div>
+
+
+	<div id="footer">
+		<p>&copy; Spark Sample Application 2015</p>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="vendor/jquery/jquery.min.js"></script>
+<script>
+	jQuery(document).ready(function ($) {
+		common.init();
+		storage.init();
+	});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-drive.js"></script>
+<script type="text/javascript" charset="utf-8" src="modules/common/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="modules/auth/auth.js"></script>
+<script type="text/javascript" charset="utf-8" src="modules/drive/storage.js"></script>
+
+</body>
+</html>
