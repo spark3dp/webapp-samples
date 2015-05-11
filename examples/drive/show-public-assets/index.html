@@ -182,8 +182,8 @@
 
 	function loadAssets(page,conditions){
 		conditions = conditions || {};
-		conditions.limit = 24;
-		conditions.offset = 24*(page-1);
+		conditions.limit = 48;
+		conditions.offset = 48*(page-1);
 
 		return ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
 			console.info('my assets:', response);
