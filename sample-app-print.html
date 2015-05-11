@@ -134,7 +134,7 @@
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<li id="loginId">
 				<div id="user" class="pull-left">
-					<img class="user-avatar" src=""/>
+					<img class="user-avatar" src="" style="display: none;"/>
 				</div>
 				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
@@ -254,10 +254,10 @@
 			ADSKSpark.Members.getMyProfile().then(function (response) {
 
 				if(response.member.profile.avatar_path) {
-					$('#user img').attr('src', response.member.profile.avatar_path);
+					$('#user img').attr('src', response.member.profile.avatar_path).show();
 				}
 				else {
-					$('#user img').attr('src', "assets/img/default_avatar.png");
+					$('#user img').attr('src', "assets/img/default_avatar.png").show();
 				}
 			});
 		}
