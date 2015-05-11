@@ -9,7 +9,7 @@ This sample application provides an introduction to working with the Spark OAuth
 3. In the API Keys tab of the app registration, enter the fully qualified URL of the sample's plugins/login/login-callback.html file (do not use a relative path).
 4. Copy the app key and app secret for later use.
 5. You need to run a server. This repo is provided with a nodejs server. To run it you should:
-  * Copy server/nodejs/config.example.js to server/nodejs/config.js and set your app's details there
+  * Copy server/nodejs/config.example.js to server/nodejs/config.js and set your app's key and secret there.
   * Install nodejs and then:
   ```sh
   $ sudo npm -g install grunt-cli
