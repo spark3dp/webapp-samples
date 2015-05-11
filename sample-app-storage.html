@@ -279,7 +279,6 @@
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
 			hideBreadcrumbs(['home', 'asset', 'file-type']);
-			$('#breadcrumbs-section').css('display', 'inline-block');
 			$('#mainIframe').attr('height', '500px');
 		} else {
 			$('.menu-item[data-state=loggedIn]').data('state', 'login');
@@ -324,8 +323,7 @@
 			enabledTabs: ['#loginId', '#myAssetsId'],
 			disabledTabs: ['#createAssetId', '#manageFilesId'],
 			callbackFunc: function () {
-				$('#breadcrumbs > div').addClass('hidden');
-				$('#breadcrumbs-section div#action-button div').hide();
+				$('#breadcrumbs-section').hide();
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 			}
 		},
@@ -335,6 +333,7 @@
 			enabledTabs: ['#myAssetsId', '#loginId'],
 			disabledTabs: ['#manageFilesId', '#createAssetId'],
 			callbackFunc: function () {
+				$('#breadcrumbs-section').css('display', 'inline-block');
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
 			}
