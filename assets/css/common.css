@@ -1081,6 +1081,11 @@ i.stooltip span {
   margin-left: 290px;
 }
 
+#requestLog{
+    overflow-y: scroll;
+    height: 150px;
+}
+
 #requestLog pre{
     font-family: 'Open Sans';
     font-size:13px;
