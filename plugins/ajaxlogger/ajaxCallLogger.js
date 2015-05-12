@@ -13,6 +13,16 @@ var ajaxCallLogger = function(){
 	var loggerId = "requestLog";
 
 	/**
+	 *  Adjsut string length to desired length
+	 */
+	var maxLength = function(input, desiredLength, hidePoints) {
+		if (input.length <= desiredLength) {
+			return input;
+		} else {
+			return input.substring(0, desiredLength) + (!hidePoints ? '...' : '');
+		}
+	};
+	/**
 	 * adds another row in the logger
 	 * @param data - the data to log
 	 */
@@ -31,7 +41,7 @@ var ajaxCallLogger = function(){
 		var onclick = "onclick=" + on;
 		div.append("<pre class='renderjson' " + onclick + "><div class='req-resp' id='" + "req" + id + "'>" +
 					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
-			 			data.req.URL + "<span class='open-full-request'><i class='spark_icon si-dropdown-open'></i></span></div></pre>");
+			maxLength(data.req.URL,90) + "<span class='open-full-request'><i class='spark_icon si-dropdown-open'></i></span></div></pre>");
 		var response = $("<div id='" + id + "' style='display:none'></div>");
 		var renderedReq = renderjson(data.req);
 
