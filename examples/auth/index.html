@@ -27,11 +27,11 @@
 			padding-right: 40px;
 		}
 
-		#logout{
+		#logout {
 			display: none;
 		}
 
-		.token-wrapper span{
+		.token-wrapper span {
 			font-weight: bold;
 		}
 
@@ -49,6 +49,7 @@
 
 			<div class="col-md-12">
 				<p class="token-wrapper">Guest Token: <span id="guest-token-span">none</span></p>
+
 				<p class="token-wrapper">Access Token: <span id="access-token-span">none</span></p>
 
 				<a onclick="login()" id="login" class="spark_btn primary">Login to Get an Access Token</a>
@@ -86,15 +87,18 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	//Init the Spark Client
-	var APP_KEY = CLIENT_ID || '',
-			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
+	//Init the Spark Client - you may supply your personal config through the assets/scripts/config.js file
+	var APP_KEY = APP_KEY || '',
+		GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
+		ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token',
+		API_URL = (typeof ENVIRONMENT !== 'undefined' && ENVIRONMENT === 'production') ?
+												  ADSKSpark.Constants.API_HOST_PROD :
+												  ADSKSpark.Constants.API_HOST_SANDBOX;
 
 	ADSKSpark.Client.initialize(APP_KEY,// Your app key
 			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
 			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
+			API_URL // api host
 	);
 
 	/**
@@ -104,13 +108,13 @@
 		ADSKSpark.Client.openLoginWindow();
 	}
 
-	function logout(){
+	function logout() {
 		ADSKSpark.Client.logout();
 		location.reload();
 	}
 
-	function getGuestToken(){
-		ADSKSpark.Client.getGuestToken().then(function(token) {
+	function getGuestToken() {
+		ADSKSpark.Client.getGuestToken().then(function (token) {
 			$('#guest-token-span').text(token);
 		});
 	}
@@ -119,7 +123,7 @@
 	if (ADSKSpark.Client.isAccessTokenValid()) {
 		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
 		$('#login').hide();
-		$('#logout').css('display','inline-block');
+		$('#logout').css('display', 'inline-block');
 	}
 
 </script>
