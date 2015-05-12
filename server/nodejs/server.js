@@ -2,7 +2,7 @@
 var env = process.env.ENV || 'local',
 	port = process.env.PORT || 3000,
 	config = require('./config.js'),
-	API_SERVER = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://api-alpha.spark.autodesk.com/api/v1');
+	API_SERVER = (env === 'prod' ? 'api.spark.autodesk.com/api/v1' : 'https://sandbox.spark.autodesk.com/api/v1');
 
 
 if (isNaN(port)){
