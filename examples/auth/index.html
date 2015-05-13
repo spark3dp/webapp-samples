@@ -15,6 +15,9 @@
 
 	<style>
 
+		.container{
+			width:768px;
+		}
 		#welcome-wrapper {
 			position: absolute;
 			top: 0;
@@ -27,13 +30,10 @@
 			padding-right: 40px;
 		}
 
-		#logout {
+		#logout,#refresh_token {
 			display: none;
 		}
 
-		.token-wrapper span {
-			font-weight: bold;
-		}
 
 	</style>
 
@@ -48,12 +48,18 @@
 			<p>To try the demo, you need to login with a test environment account.</p>
 
 			<div class="col-md-12">
-				<p class="token-wrapper">Guest Token: <span id="guest-token-span">none</span></p>
+				<p class="token-wrapper">Guest Token: <b id="guest-token-span">none</b></p>
 
-				<p class="token-wrapper">Access Token: <span id="access-token-span">none</span></p>
+				<p class="token-wrapper" id="access-token">
+					Access Token: <b id="access-token-span">none</b>
+					<span class="hidden"> | Expires in: <b id="access-token-expired-span">none</b></span>
+				</p>
+
+				<p class="token-wrapper">Refresh Token: <b id="refresh-token-span">none</b></p>
 
 				<a onclick="login()" id="login" class="spark_btn primary">Login to Get an Access Token</a>
 				<a onclick="logout()" id="logout" class="spark_btn primary">Logout</a>
+				<a onclick="refreshToken()" id="refresh_token" class="spark_btn">Refresh access token</a>
 				<a onclick="getGuestToken()" class="spark_btn">Get Guest Token</a>
 			</div>
 
@@ -77,29 +83,17 @@
 <!-- OR use the minified version
 <script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
 -->
-<!-- Personal config -->
+<!-- your config file and initialization -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 <script>
 
+	var accessTokenObj = {};
 	//log http requests
 	ajaxCallListenerFromIframe();
-
-	//Init the Spark Client - you may supply your personal config through the assets/scripts/config.js file
-	var APP_KEY = APP_KEY || '',
-		GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-		ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token',
-		API_URL = (typeof ENVIRONMENT !== 'undefined' && ENVIRONMENT === 'production') ?
-												  ADSKSpark.Constants.API_HOST_PROD :
-												  ADSKSpark.Constants.API_HOST_SANDBOX;
-
-	ADSKSpark.Client.initialize(APP_KEY,// Your app key
-			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			API_URL // api host
-	);
 
 	/**
 	 * Open login window
@@ -108,22 +102,59 @@
 		ADSKSpark.Client.openLoginWindow();
 	}
 
+	/**
+	 * Logout and reload the page
+	 */
 	function logout() {
 		ADSKSpark.Client.logout();
 		location.reload();
 	}
 
+	/**
+	 * Get guest token and show it
+	 */
 	function getGuestToken() {
 		ADSKSpark.Client.getGuestToken().then(function (token) {
 			$('#guest-token-span').text(token);
 		});
 	}
 
+	/**
+	 * Refresh the access token and show it
+	 */
+	function refreshToken(){
+		ADSKSpark.Client.refreshAccessToken().then(function (tokenObj) {
+			accessTokenObj = tokenObj;
+			$('#access-token-span').text(tokenObj.access_token);
+			$('#refresh-token-span').text(tokenObj.refresh_token);
+		});
+	}
+
+	function setRemainingTime(){
+		var now = Date.now();
+		var remainingUnix = accessTokenObj.expires_at - now;
+		var remainingTime = Math.ceil(remainingUnix / 1000);
+
+		$('#access-token-expired-span').text(remainingTime + ' seconds');
+		setTimeout(function(){
+			if (remainingTime > 0){
+				setRemainingTime(accessTokenObj);
+			}
+		},1000);
+	}
 
 	if (ADSKSpark.Client.isAccessTokenValid()) {
+		accessTokenObj = ADSKSpark.Client.getAccessTokenObject();
 		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
 		$('#login').hide();
 		$('#logout').css('display', 'inline-block');
+
+		//Also show the refresh token options and the time that left for the access token
+		$('#refresh_token').css('display', 'inline-block');
+		$('#refresh-token-span').text(accessTokenObj.refresh_token);
+		$('#access-token').find('span.hidden').removeClass('hidden');
+		setRemainingTime(accessTokenObj);
+		//$('#access-token-expired-span').text(getRemainingTime(accessTokenObj.expires_at));
 	}
 
 </script>
