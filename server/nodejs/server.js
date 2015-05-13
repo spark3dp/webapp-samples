@@ -35,7 +35,7 @@ app.use(function(req, res, next) {
 
 
 // Access token service
-// See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/access-token
+// See API reference - https://spark.autodesk.com/developers/reference/authentication?deeplink=%2Freference%2Foauth-2.0%2Faccess-token
 app.get('/access_token', function(req, res){
 
 	var code = req.query.code;
@@ -65,7 +65,7 @@ app.get('/access_token', function(req, res){
 });
 
 // Guest token service
-// See API reference - http://docs.sparkauthentication.apiary.io/#reference/oauth-2.0/guest-token
+// See API reference - https://spark.autodesk.com/developers/reference/authentication?deeplink=%2Freference%2Foauth-2.0%2Fguest-token
 app.get('/guest_token', function(req, res){
 	var url = API_SERVER + '/oauth/accesstoken',
 		params = "grant_type=client_credentials",
@@ -91,28 +91,29 @@ app.get('/guest_token', function(req, res){
 
 });
 
+// Refresh token service
+// See API reference - https://spark.autodesk.com/developers/reference/authentication?deeplink=%2Freference%2Foauth-2.0%2Faccess-token-refresh
+app.get('/refresh_token', function(req, res) {
+	var url = API_SERVER + '/oauth/refreshtoken',
+		params = "grant_type=refresh_token&refresh_token=" + req.query.refresh_token,
+		contentLength = params.length,
+		headers = {
+			'Authorization': 'Basic ' + toBase64(config.APP_KEY + ':' + config.APP_SECRET),
+			'Content-Type' : 'application/x-www-form-urlencoded',
+			'Content-Length': contentLength
+		};
 
-app.post('/printCallbackPost', function(req, res){
-	console.log(JSON.stringify(req.query));
+	//call the refreshtoken endpoint
+	request({
+		headers: headers,
+		uri: url,
+		body: params,
+		method: 'POST'
+	}, function (err, result, body) {
+		//return the access token object (json)
+		res.send(body);
+	});
 });
-
-app.get('/printCallbackPost/support', function(req, res){
-	console.log(JSON.stringify(req.query));
-	res.send({"callback":"supported"});
-});
-
-
-app.get('/printCallbackGet', function(req, res){
-	console.log(JSON.stringify(req.query));
-});
-
-app.get('/printCallbackGet/support', function(req, res){
-	console.log(JSON.stringify(req.query));
-	res.send({"callback":"supported"});
-});
-
-
-//@todo: Add a refresh token endpoint
 
 app.listen(port);
 

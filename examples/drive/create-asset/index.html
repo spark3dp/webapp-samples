@@ -102,8 +102,9 @@
 <!-- OR use the minified version
 <script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
 -->
-<!-- your config file -->
+<!-- your config file and initialization -->
 <script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/init.js"></script>
 
 <!-- Enable broadcasting events and logging requests to top window -->
 <script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
@@ -113,20 +114,6 @@
 
 	//log http requests
 	ajaxCallListenerFromIframe();
-
-	//Init the Spark Client - you may supply your personal config through the assets/scripts/config.js file
-	var APP_KEY = APP_KEY || '',
-			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token',
-			API_URL = (typeof ENVIRONMENT !== 'undefined' && ENVIRONMENT === 'production') ?
-					ADSKSpark.Constants.API_HOST_PROD :
-					ADSKSpark.Constants.API_HOST_SANDBOX;
-
-	ADSKSpark.Client.initialize(APP_KEY,// Your app key
-			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			API_URL // api host
-	);
 
 	/**
 	 * Creates a new asset
