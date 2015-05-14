@@ -1,4 +1,4 @@
-Sample-App-Auth-Drive-JS
+Web App Samples
 ========================
 ### Introduction
 This sample application provides an introduction to working with the Spark OAuth 2.0 process and examples of Spark APIs functionalities.
