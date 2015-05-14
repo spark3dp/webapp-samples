@@ -23,7 +23,8 @@ var sparkPrintPrep = function() {
 						}
 
 					};
-					spark.drive.uploadFileToDrive(files,false,callback);
+					var zip = files[0].name.indexOf(".zip") != -1;
+					spark.drive.uploadFileToDrive(files,zip,callback);
 				}
 
 
@@ -46,6 +47,8 @@ var sparkPrintPrep = function() {
 
 					var params = "file_id=" + fileId + "&name=" + fileName + "&generate_visual=true";
 
+					console.log("importMesh");
+					console.log(params);
 
 					spark.util.xhr(url, 'POST', params, headers, function (response) {
 

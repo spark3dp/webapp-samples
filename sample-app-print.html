@@ -119,6 +119,11 @@
 			top:-28px;
 		}
 
+		.user-avatar
+		{
+			display: none;
+		}
+
 	</style>
 </head>
 
@@ -127,7 +132,7 @@
 <div class="logged-in-container">
 	<div id="container" class="container sample-app-container">
 		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="https://github.com/Spark-API/Sample-App-Auth-Drive-JS/tree/v0.1" target="_blank"></a>
+			<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
 			<h5 class="sample-title">Spark Print Sample App</h5>
 		</div>
 		<div style="text-align: center;">
@@ -221,21 +226,9 @@
 <script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
 
-
+<script type="text/javascript" charset="utf-8" src="assets/scripts/init.js"></script>
 
 <script>
-
-	//Init the Spark Client
-	var APP_KEY = CLIENT_ID || '',
-			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
-
-
-	ADSKSpark.Client.initialize(APP_KEY,// Your app key
-			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
-	);
 
 	$(document).ready(function(){
 		ajaxCallLogger.createLoggerElement(".footer");
@@ -244,20 +237,12 @@
 		broadcastEventListener.startIframeBroadcastListener();
 
 		if (ADSKSpark.Client.isAccessTokenValid()) {
+			isLoggedIn = true;
 			statePlugin.changeState('manage');
 			statePlugin.verifyState("login");
-
-			ADSKSpark.Members.getMyProfile().then(function (response) {
-
-				if(response.member.profile.avatar_path) {
-					$('#user img').attr('src', response.member.profile.avatar_path).show();
-				}
-				else {
-					$('#user img').attr('src', "assets/img/default_avatar.png").show();
-				}
-			});
 		}
 		else{
+			isLoggedIn = false;
 			statePlugin.changeState('login');
 		}
 
@@ -333,12 +318,23 @@
 	var broadcastMapper = [];
 
 
+	broadcastMapper['manageIframe.loggedOut']  = function(optionalParams){
+		isLoggedIn = false;
+		$('#user img').hide();
+		statePlugin.changeState('login');
+	};
+
 	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
 
 		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
-			isLoggedIn = true;
 			statePlugin.changeState("manage", optionalParams);
 			statePlugin.verifyState("login");
+			isLoggedIn = true;
+		}
+		if (optionalParams.member) {
+			if (optionalParams.member.profile.avatar_path) {
+				$('#user img').attr('src', optionalParams.member.profile.avatar_path).show();
+			}
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
