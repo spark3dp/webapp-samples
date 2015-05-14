@@ -47,6 +47,8 @@ var sparkPrintPrep = function() {
 
 					var params = "file_id=" + fileId + "&name=" + fileName + "&generate_visual=true";
 
+					console.log("importMesh");
+					console.log(params);
 
 					spark.util.xhr(url, 'POST', params, headers, function (response) {
 
