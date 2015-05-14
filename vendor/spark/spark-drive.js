@@ -500,8 +500,9 @@ spark.drive = function () {
 				var formData = new FormData();
 
 				// Add the file to the request.
-				formData.append(files[0].name, files[0]);
-				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload?unzip=' + zipFile;
+				formData.append(files[0].name, zipFile);
+				formData.append("unzip", files[0]);
+				var url = spark.const.API_PROTOCOL + '://' + spark.const.API_SERVER + '/files/upload';
 
 
 				spark.util.xhr(url, 'POST', formData, headers, function (filesResp) {

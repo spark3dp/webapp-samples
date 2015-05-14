@@ -23,7 +23,8 @@ var sparkPrintPrep = function() {
 						}
 
 					};
-					spark.drive.uploadFileToDrive(files,false,callback);
+					var zip = files[0].name.indexOf(".zip") != -1;
+					spark.drive.uploadFileToDrive(files,zip,callback);
 				}
 
 
