@@ -95,3 +95,6 @@ so that your application will work. You can utilize one of the server implementa
   </body>
 </html>
 ```
+
+#### SDK reference
+Full SDK docs are available [here](http://spark-sdks.s3.amazonaws.com/doc/index.html)

@@ -143,8 +143,6 @@
 <script type="text/javascript" charset="utf-8"
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
-
 <script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
 
 <!-- spark sdk -->
@@ -155,6 +153,10 @@
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/scripts/init.js"></script>
 
 <!-- OR use the minified version
 <script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
@@ -175,19 +177,6 @@
 			currentAssetId = 0, //the asset id we are referring to
 			currentFileId ////the file id we are referring to
 			;
-
-	//Init the Spark Client
-	var APP_KEY = CLIENT_ID || '',
-			GUEST_TOKEN_URL = GUEST_TOKEN_URL || 'http://localhost:3000/guest_token',
-			ACCESS_TOKEN_URL = ACCESS_TOKEN_URL || 'http://localhost:3000/access_token';
-
-
-	ADSKSpark.Client.initialize(APP_KEY,// Your app key
-			GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
-			ADSKSpark.Constants.API_HOST_SANDBOX // api host - production or sandbox
-	);
-
 
 	//functions
 
