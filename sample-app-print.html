@@ -119,6 +119,11 @@
 			top:-28px;
 		}
 
+		.user-avatar
+		{
+			display: none;
+		}
+
 	</style>
 </head>
 
@@ -254,10 +259,10 @@
 			ADSKSpark.Members.getMyProfile().then(function (response) {
 
 				if(response.member.profile.avatar_path) {
-					$('#user img').attr('src', response.member.profile.avatar_path);
+					$('#user img').attr('src', response.member.profile.avatar_path).show();
 				}
 				else {
-					$('#user img').attr('src', "assets/img/default_avatar.png");
+					$('#user img').attr('src', "assets/img/default_avatar.png").show();
 				}
 			});
 		}
