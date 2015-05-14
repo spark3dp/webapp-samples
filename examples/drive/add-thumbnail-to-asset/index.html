@@ -39,7 +39,7 @@
 		}
 
 		.img img {
-			max-width: 250px;
+			max-width: 200px;
 		}
 	</style>
 
@@ -226,8 +226,8 @@
 				if (response.public_url.length) {
 
 					//apply bootstrap classes to align the form
-					$('#img-placeholder').addClass('col-sm-5');
-					$('#form-fields').addClass('col-sm-7');
+					$('#img-placeholder').addClass('col-xs-5');
+					$('#form-fields').addClass('col-xs-7');
 
 					var img = $('<img src="' + response.public_url + '" alt="' + response.name + '">');
 					$('#img-placeholder').append(img);
