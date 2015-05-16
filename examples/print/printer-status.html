@@ -154,11 +154,24 @@
 
 
 						for (var i in printerJobs) {
-							$("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'><td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td><td>" + printerJobs[i].job_status.job_status + "</td><td>" +
-								//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
-									'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
-									'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
-									"</td></tr>").appendTo("#printersStatusTbody");
+
+							//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
+
+							var row = $("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'></tr>");
+							row.append("<td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td>");
+							row.append("<td>" + printerJobs[i].job_status.job_status + "</td>");
+
+							if(printerJobs[i].job_status.job_status == "completed"){
+								row.append('<td><a  class="job-action cancel-print" style="margin-left: 26px;"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a></td>');
+							}
+							else
+							{
+								row.append('<td><a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+										'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+										'</td>');
+							}
+
+							row.appendTo("#printersStatusTbody");
 						}
 
 						$(".print-statuses-container").show();

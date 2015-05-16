@@ -32,6 +32,7 @@ pre{
 a:hover, a:active, a.clicked, a:focus {
     text-decoration: none;
     outline: 0;
+    color: #eb5528;
 }
 
 a[disabled] {
@@ -249,10 +250,6 @@ input[type="checkbox"]:checked + label span.chk {
 .spark_btn[disabled] {
     cursor: default;
     opacity: 0.5;
-}
-
-.btn_link{
-
 }
 
 #assets-gallery{

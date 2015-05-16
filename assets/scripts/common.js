@@ -33,6 +33,19 @@ var common = function ($) {
 				}
 			});
 
+			//set listener to input focus to remove errors
+			$('.sample-app-form').on('keyup', '.error', function () {
+				if ($(this).val().length > 0) {
+					$(this).next('.field_error').addClass('hidden');
+				}
+			});
+
+		    //set listener to input focus to remove errors
+			$('.sample-app-form').on('change', '.error', function () {
+				if ($(this).val().length > 0) {
+					$(this).next('.field_error').addClass('hidden');
+				}
+			});
 
 			//checkboxes
 			//$('.chk')
@@ -42,6 +55,7 @@ var common = function ($) {
 		 * Validates input and sets proper errors
 		 */
 		validateInput: function (elem) {
+
 			if (elem.val().length) {
 				$('.error').removeClass('error');
 				$('.error').next('.field_error').addClass('hidden');
