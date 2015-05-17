@@ -16,7 +16,7 @@
 	<style>
 		.modal-header {
 			position: relative;
-			padding: 8px 20px;
+			padding: 10px 20px;
 		}
 
 		.modal-header .layouts {
@@ -24,6 +24,7 @@
 			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
+			top:9px;
 		}
 
 		.modal-header .layouts a {
@@ -56,10 +57,14 @@
 			left: -20px;
 		}
 
+		#files{
+			margin-top:-14px;
+		}
+
 		.assets-container{
 			padding-top: 20px;
 			overflow-y: scroll;
-			height: 480px;
+			height: 380px;
 		}
 
 	</style>
@@ -198,6 +203,9 @@
 			} else {
 				$('#empty-files').removeClass('hidden');
 				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
+				
+				//broadcast the state to the iframe - intended only for the storage UI
+				eventBroadCaster.broadcastEvent('emptyAssets');
 			}
 		});
 

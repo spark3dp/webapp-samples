@@ -16,7 +16,7 @@
 	<style>
 		.modal-header {
 			position: relative;
-			padding: 8px 20px;
+			padding: 10px 20px;
 		}
 
 		.modal-header .layouts {
@@ -24,6 +24,7 @@
 			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
+			top:9px;
 		}
 
 		.modal-header .layouts a {
@@ -56,10 +57,14 @@
 			left: -20px;
 		}
 
+		#assets{
+			margin-top:-14px;
+		}
+
 		.assets-container{
 			margin-top: 20px;
 			overflow-y: scroll;
-			height: 480px;
+			height: 380px;
 		}
 
 	</style>
@@ -236,6 +241,9 @@
 			} else {
 				if (page < 2) {
 					$('#empty-assets').removeClass('hidden');
+
+					//broadcast the state to the iframe - intended only for the storage UI
+					eventBroadCaster.broadcastEvent('emptyAssets');
 				}
 			}
 
