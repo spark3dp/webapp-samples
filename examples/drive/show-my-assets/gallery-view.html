@@ -16,7 +16,7 @@
 	<style>
 		.modal-header {
 			position: relative;
-			padding: 8px 20px;
+			padding: 10px 20px;
 		}
 
 		.modal-header .layouts {
@@ -24,6 +24,7 @@
 			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
+			top:9px;
 		}
 
 		.modal-header .layouts a {
@@ -56,13 +57,8 @@
 		.si-asset-icon {
 			margin-right: 8px;
 		}
-		.box{
-			margin-bottom: 20px;
-			height: 190px;
-		}
 
 		.text a{
-			padding: 8px;
 			display: block;
 			color:#333333;
 		}
@@ -73,10 +69,14 @@
 			margin-right:10px;
 		}
 
+		#assets{
+			margin-top:-14px;
+		}
+
 		#assets-gallery{
 			margin-top: 20px;
 			overflow-y: auto;
-			height: 460px;
+			height: 360px
 		}
 
 	</style>
@@ -195,10 +195,10 @@
 	function loopGallery(index, item) {
 		var imgUrlThumb =  item.thumb_path_prefix + 'Medium.jpg';
 
-		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
+		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-my-assets/files.html?assetId=' + item.asset_id + '">' +
-						'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,7) + '</a></div>');
+						'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name,18) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
@@ -234,6 +234,9 @@
 				});
 			} else {
 				$('#empty-assets').removeClass('hidden');
+
+				//broadcast the state to the iframe - intended only for the storage UI
+				eventBroadCaster.broadcastEvent('emptyAssets');
 			}
 
 			return response;

@@ -50,13 +50,7 @@
 			margin-right: 8px;
 		}
 
-		.box {
-			margin-bottom: 20px;
-			height: 190px;
-		}
-
 		.text a {
-			padding: 8px;
 			display: block;
 			color: #333333;
 		}
@@ -72,7 +66,7 @@
 		#assets-gallery {
 			padding-top: 20px;
 			overflow-y: auto;
-			height: 460px;
+			height: 360px;
 		}
 
 	</style>
@@ -140,10 +134,10 @@
 			imgUrlThumb += 'Medium.jpg';
 		}
 
-		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
+		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
-		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 7) + '</a></div>');
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 18) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);

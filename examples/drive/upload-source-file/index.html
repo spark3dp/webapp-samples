@@ -24,7 +24,7 @@
 			width: 50px;
 			left:345px;
 			position: absolute;
-			top: 112px;
+			top: 140px;
 			cursor: pointer;
 			opacity: 0.0;
 		}
@@ -33,9 +33,14 @@
 			display: none;
 			height: 200px;
 			text-align: center;
-			border: 2px dashed lightgray;
+			border: 2px dashed #e5e5e5;
 			border-radius: 4px;
 		}
+
+		#dropzone h4{
+			font-size: 16px;
+		}
+
 		#file-upload-result{
 			display: none;
 			height: 50px;
@@ -43,23 +48,13 @@
 		}
 
 		#dropzone.drag-active {
-			border: 2px solid lightgray;
+			border: 2px dashed #000000;
 			opacity: 0.3;
 		}
 
 		#upload-icon {
-			margin-top: 15px;
-		}
-
-		.thumb-img {
-			position: absolute;
-			right: 16px;
-			top: 16px;
-		}
-
-		.thumb {
-			max-height: 195px;
-			max-width: 150px;
+			margin-top: 26px;
+			margin-bottom: 5px;
 		}
 
 		.spinner {
@@ -72,6 +67,21 @@
 		}
 		.si-status-ok{
 			margin-right: 10px;
+		}
+
+		.uploaded-filename{
+			font-size: 16px;
+			margin: auto;
+			width: 350px;
+		}
+
+		.uploaded-filename b{
+			font-weight: 600;
+		}
+
+		#file-upload-text{
+			margin-top: 20px;
+			color:#555555;
 		}
 
 	</style>
@@ -164,7 +174,7 @@
 	function handleFileDrop(file) {
 
 		fileData = file;
-		$('#file-name').html('<b>' + fileData.name + '</b> is waiting for upload');
+		$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
 		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 	}
 

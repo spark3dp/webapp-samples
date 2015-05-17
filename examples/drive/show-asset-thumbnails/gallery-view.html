@@ -16,7 +16,7 @@
 	<style>
 		.modal-header {
 			position: relative;
-			padding: 8px 20px;
+			padding: 10px 20px;
 		}
 
 		.modal-header .layouts {
@@ -24,6 +24,7 @@
 			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
+			top:9px;
 		}
 
 		.modal-header .layouts a {
@@ -61,14 +62,15 @@
 		.si-asset-icon {
 			margin-right: 8px;
 		}
+
+		#files{
+			margin-top:-14px;
+		}
+
 		#files-gallery{
 			padding-top: 20px;
 			overflow-y: auto;
-			height: 460px;
-		}
-		.box{
-			margin-bottom: 20px;
-			height: 190px;
+			height: 360px;
 		}
 
 	</style>
@@ -193,9 +195,9 @@
 	function loopGallery(index, item) {
 		var imgUrlThumb =  item.thumb_path_prefix + 'Medium.jpg';
 
-		var box = $('<div class="col-xs-3 box box-' + index + '"></div>');
+		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
-		var text = $('<div class="text"><i class="spark_icon si-asset-file-icon"></i>' + common.maxLength(item.caption,7) + '</div>');
+		var text = $('<div class="text"><i class="spark_icon si-asset-file-icon"></i>' + common.maxLength(item.caption,18) + '</div>');
 
 		$('#files-gallery').append(box);
 		box.append(view);
@@ -232,6 +234,9 @@
 				});
 			} else {
 				$('#empty-assets').removeClass('hidden');
+
+				//broadcast the state to the iframe - intended only for the storage UI
+				eventBroadCaster.broadcastEvent('emptyAssets');
 			}
 		});
 	}

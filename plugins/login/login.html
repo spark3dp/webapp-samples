@@ -31,8 +31,7 @@
 		.left-wrapper {
 			border-right: 1px solid lightgray;
 			background-color: #f9f8f8;
-			padding-top: 50px;
-			height: 600px;
+			height: 523px;
 
 		}
 
@@ -45,7 +44,7 @@
 			height: 600px;
 			background-color: #333333;
 			opacity: 0.8;
-
+			position: relative;
 		}
 
 		.login-img{
@@ -57,27 +56,27 @@
 		}
 
 		.login-container{
-			margin-top: 50px;
+			margin-top: -25px;
 		}
 
 		.logged-in-as{
 			text-transform: uppercase;
 			color: #888888;
-			font-size:15px;
+			font-size:13px;
 			letter-spacing: 1px;
-			margin-bottom: 30px;
+			margin-bottom: 5px;
 		}
 
 		.user-name
 		{
 			font-size: 22px;
-			margin-bottom: 30px;
+			margin-bottom: 20px;
 		}
 
 
 
 		#user{
-			margin-bottom: 30px;
+			margin-bottom: 25px;
 		}
 
 		#user img
@@ -97,12 +96,14 @@
 
 		.inner-logged-in-container
 		{
-			width: 400px;
-			height: 420px;
+			width: 353px;
+			height: 345px;
 			background-color: white;
 			padding: 20px;
-			margin-left: 130px;
-
+			margin: 0 auto;
+			position: absolute;
+			left: 0;
+			right:0;
 			border-bottom-left-radius: 3px;
 			border-bottom-right-radius: 3px;
 		}
@@ -177,6 +178,7 @@
 		else
 		{
 			$('#user').hide();
+			eventBroadCaster.broadcastEvent('manageIframe.loggedOutNoRefresh');
 		}
 	});
 </script>
