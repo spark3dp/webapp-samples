@@ -24,7 +24,23 @@ var statePlugin = function($){
 				$(selectedTab).addClass("verified");
 			}
 		}
-	}
+	};
+
+	var unVerifyAll = function(){
+
+		var statesNames = Object.keys(states);
+		for(var i in statesNames)
+		{
+			var stateName = statesNames[i];
+			if(states[stateName]!=undefined) {
+				console.log(states[stateName]);
+				var selectedTab = states[stateName].selectedTab;
+				if ($(selectedTab).length > 0 && $(selectedTab).hasClass("verified")) {
+					$(selectedTab).removeClass("verified");
+				}
+			}
+		}
+	};
 
 	var changeState = function(stateName,optionalParams){
 		if(states[stateName]!=undefined){
@@ -69,7 +85,8 @@ var statePlugin = function($){
 	return {
 		changeState:changeState,
 		getCurrentState:getCurrentState,
-		verifyState: verifyState
+		verifyState: verifyState,
+		unVerifyAll : unVerifyAll
 	}
 
 }(jQuery);

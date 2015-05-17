@@ -71,6 +71,15 @@
 			left:-52px !important;
 		}
 
+		.table tr.in-table:hover {
+			background-color: #F7F7F7;
+			cursor: default;
+		}
+
+		.table tr.in-table .actions {
+			cursor: pointer;
+		}
+
 	</style>
 
 
@@ -114,7 +123,7 @@
 
 
 		<br>
-	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Continue</a>
+	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Print job</a>
 	</div>
 
 <!-- /container -->

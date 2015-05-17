@@ -32,6 +32,7 @@ pre{
 a:hover, a:active, a.clicked, a:focus {
     text-decoration: none;
     outline: 0;
+    color: #eb5528;
 }
 
 a[disabled] {
@@ -251,10 +252,6 @@ input[type="checkbox"]:checked + label span.chk {
     opacity: 0.5;
 }
 
-.btn_link{
-
-}
-
 #assets-gallery{
     padding-top: 20px;
     overflow-y: scroll;
@@ -377,7 +374,7 @@ i.stooltip span {
     text-align: left;
     color: #333333;
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
-    max-width: 300px;
+    max-width: 400px;
     border: 1px solid #ccc;
     padding: 10px;
     font-size: 12px;

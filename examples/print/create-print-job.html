@@ -16,9 +16,6 @@
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Bootstrap core CSS -->
-	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
 	<!-- Custom styles -->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
@@ -73,44 +70,83 @@
 			border-bottom-left-radius: 3px;
 			border-bottom-right-radius: 3px;
 		}
+
+		.modal-dialog{
+			width: 300px;
+			text-align: center;
+			margin-left: 200px;
+			margin-top: 200px;
+		}
+		
+		.modal-footer
+		{
+			text-align:center !important;
+		}
+
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
+
+		.modal-header .layouts {
+			position: absolute;
+			right: 0;
+			background-color: #ffffff;
+			padding-left: 10px;
+		}
+
+		.modal-header .layouts a {
+			border-left: 1px solid lightgrey;
+			margin-left: 6px;
+			padding: 4px 0 0 10px;
+		}
+
 	</style>
 </head>
 
 <body>
 
 	<div class="container main-container">
-			<form id="print-job-form">
+			<form id="print-job-form" class="sample-app-form" novalidate="">
 				<div class="form-fields-container">
 				<div class="sample-title">Create a 3D print job</div>
 				<hr>
-				<div class="form-group pull-left">
+				<section class="form_field pull-left">
 					<label for="fileURL">
 						Choose file to print <span class="field-label">&nbsp;/&nbsp;printable_id</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;">The file id</span></i>
+						<i class="stooltip"><span style="display: none;width:400px;">Enter the URL of a printable 3D file, the Spark ID of a printable 3D file or browse to locate one on your desktop. Printable files can be STL, OBJ or BLT 3D files, or a printable file created by Spark.</span></i>
 					</label>
 					<div class="clearfix"></div>
 					<!--<input type="text" class="form-control" id="fileURL" placeholder="File URL" required value="http://cdn.spark.com/print/abcefg">-->
-					<div class="pull-left"><input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required></div>
+					<div class="pull-left">
+						<input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required>
+						<div class="field_error hidden">
+							<span>Required</span>
+						</div>
+					</div>
 					<div class="pull-left or-browse">OR</div><a class="spark_btn empty browse_btn pull-left" href="#" onclick="eventBroadCaster.broadcastEvent('printIframe.chooseAsset')"><i class="spark_print_icon print-si-browse"></i><span>Browse...</span></a>
-				</div>
+				</section>
 				<div class="spacer clearfix"></div>
-				<div class="form-group">
+				<section class="form_field">
 					<label for="printers-select">
 						Select a printer <span class="field-label">&nbsp;/&nbsp;printer_id</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;">The printer id</span></i>
+						<i class="stooltip"><span style="display: none;">Choose a 3D printer from the list.</span></i>
 					</label>
-					<select class="form-control" id="printers-select" required>
+					<select class="form-control" id="printers-select" required="required">
 						<option value="">Please select...</option>
 					</select>
-				</div>
+					<div class="field_error hidden">
+						<span>Required</span>
+					</div>
+				</section>
 				<div class="spacer clearfix"></div>
 				<div class="form-group">
 					<label for="printer-settings">
 						Change default settings <span class="field-label">&nbsp;/&nbsp;settings</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;">The print settings</span></i>
+						<i class="stooltip"><span style="display: none;">Enter initial values for the print in JSON format or use the displayed default settings.</span></i>
 					</label>
 					<textArea type="text" class="form-control" id="printer-settings" placeholder="">{ "FirstApproachRPM": 6, "FirstZLiftMicrons": 2000, "FirstSeparationMicronsPerSec": 5000, "FirstApproachMicronsPerSec": 5000, "FirstRotationMilliDegrees": 60000 }
 					</textArea>
@@ -119,9 +155,27 @@
 				</div>
 				<div class="pull-right">
 					<input class="spark_btn primary" type="submit" value="Print" id="print">
-					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">View Job status</a>
+					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">Job status</a>
 				</div>
 			</form>
+
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>WARNING</h4>
+					</div>
+					<div class="modal-body">
+						An error occurred.
+					</div>
+					<div class="modal-footer">
+						<a class="spark_btn small cancel" type="button">Close</a>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</div>
 <!-- /container -->
@@ -190,18 +244,27 @@
 
 		$("#print-job-form").on('submit', function (e) {
 			e.preventDefault();
+			if (common.validateInput($('#fileURL')) && common.validateInput($('#printers-select'))) {
 
-			var fileUrl = $('#fileURL').val();
-			var printerId = $('#printers-select option:selected').val();
-			var settings = JSON.parse($('#printer-settings').val());
+				var fileUrl = $('#fileURL').val();
+				var printerId = $('#printers-select option:selected').val();
+				var settings = JSON.parse($('#printer-settings').val());
 
-			sparkPrint.printJob(fileUrl,printerId,settings,function(response){
-						var printerId = response.printer_id;
-						eventBroadCaster.broadcastEvent('printIframe.jobExist');
-					},
-					function(response){
+				sparkPrint.printJob(fileUrl, printerId, settings, function (response) {
+							var printerId = response.printer_id;
+							eventBroadCaster.broadcastEvent('printIframe.jobExist');
+						},
+						function (response) {
+							$('#myModal').modal('show');
+						});
+			}
+		});
 
-					});
+
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
 		});
 	});
 

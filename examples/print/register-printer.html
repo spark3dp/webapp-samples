@@ -8,12 +8,16 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+	<title>Spark Sample Application - Print</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
 
 	<!-- Bootstrap core CSS -->
-	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles -->
+	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 
@@ -29,10 +33,11 @@
 			border-right: 1px silver solid;
 			padding-right: 10px;
 			margin-right: 20px;
+			margin-bottom: 20px;
 		}
 
 		#inputPrinterType{
-			min-width: 350px;
+			min-width: 320px;
 			height: 44px;
 		}
 
@@ -57,6 +62,11 @@
 			border-bottom-right-radius: 3px;
 		}
 
+		.form_field
+		{
+			margin-bottom: 30px;
+		}
+
    </style>
 </head>
 
@@ -66,45 +76,56 @@
 
 		<div class="tab-content">
 			<div class="tab-pane fade active in" id="register">
-				<form id="register-printer-form">
+				<form id="register-printer-form" class="sample-app-form" novalidate="">
 					<div class="sample-title">Add Printer</div>
 					<hr>
 					<label for="inputPrinterType">
 						Printer type <span class="field-label">&nbsp;/&nbsp;type</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;">The printer type</span></i>
+						<i class="stooltip"><span style="display: none;">Select the type of your attached 3D printer or 'Printer Simulator' if you have no 3D printer.</span></i>
 					</label>
-					<div class="form-group">
+					<section class="form_field">
 						<div class="pull-left printer_type_container">
 							<select id="inputPrinterType" class="form-control" required="required">
-							<option value="">Please select...</option>
-						    <option value="-1">Printer Simulator</option>
-						</select>
+								<option value="">Please select...</option>
+							    <option value="-1">Printer Simulator</option>
+							</select>
+							<div class="field_error hidden">
+								<span>Required</span>
+							</div>
 						</div>
 						<div class="pull-left">Use our Printer Simulator for a quick<br>demonstration.</div>
 						<div class="clearfix"></div>
-					</div>
-					<div class="form-group">
+					</section>
+					<section class="form_field">
 						<label for="inputName">
 							Printer nickname <span class="field-label">&nbsp;/&nbsp;printer_name</span><i class="required"></i>
 							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span style="display: none;">The printer name</span></i>
+							<i class="stooltip"><span style="display: none;">Enter a name for your printer.</span></i>
 						</label>
 						<input type="text" class="form-control" id="inputName" required>
-					</div>
-					<div class="form-group">
+						<div class="field_error hidden">
+							<span>Required</span>
+						</div>
+					</section>
+					<section class="form_field">
 						<label for="inputToken">
 							Token/IP address <span class="field-label">&nbsp;/&nbsp;registration_code</span><i class="required"></i>
 							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span style="display: none;">The printer token</span></i>
+							<i class="stooltip"><span style="display: none;">Enter the six letter code displayed in the LCD display of your printer or the printer simulator's display below.</span></i>
 						</label>
 						<input type="text" class="form-control" id="inputToken" required>
+						<div class="field_error hidden">
+							<span>Required</span>
+						</div>
 						<div class="form-control-tip">Find your printer's IP address/ token code in the Settings tab of your printer's LCD screen.</div>
-					</div>
-					<div>
-						<input class="btn spark_btn primary pull-right" type="submit" value="Add Printer" id="submit">
+					</section>
 
-						<a href="#" class="btn btn_link pull-right" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+					<div class="form-footer">
+						<div class="submit-wrapper">
+							<a href="#" onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+							<input class="spark_btn primary" type="submit" value="Add Printer" id="submit">
+						</div>
 					</div>
 				</form>
 			</div>
@@ -179,25 +200,28 @@
 		$("#register-printer-form").on('submit', function (e) {
 			e.preventDefault();
 
-			var printerName = $('#inputName').val();
+			if (common.validateInput($("#inputPrinterType")) && common.validateInput($('#inputName')) && common.validateInput($('#inputToken'))) {
 
-			var token =  $('#inputToken').val();
+				var printerName = $('#inputName').val();
 
-			var id = $("#inputPrinterType option:selected").val();
+				var token =  $('#inputToken').val();
 
-			if (id == -1) {
-				printerName = printerName + " ( simulator )";
+				var id = $("#inputPrinterType option:selected").val();
+
+				if (id == -1) {
+					printerName = printerName + " ( simulator )";
+				}
+
+				sparkPrint.registerPrinter(token, printerName, function (response) {
+							var printerId = response.printer_id;
+							//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
+							eventBroadCaster.broadcastEvent("registerIframe.add")
+						},
+						function (response) {
+							//logger("#register-printer-form #inputLog",response);
+
+						});
 			}
-
-			sparkPrint.registerPrinter(token, printerName, function (response) {
-						var printerId = response.printer_id;
-						//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
-						eventBroadCaster.broadcastEvent("registerIframe.add")
-					},
-					function (response) {
-						//logger("#register-printer-form #inputLog",response);
-
-					});
 		});
 
 	});

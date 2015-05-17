@@ -322,6 +322,7 @@
 		isLoggedIn = false;
 		$('#user img').hide();
 		statePlugin.changeState('login');
+		statePlugin.unVerifyAll();
 	};
 
 	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
