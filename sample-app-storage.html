@@ -9,7 +9,7 @@
 	<title>Spark Sample Application - My Drive</title>
 
 	<!-- fonts -->
-	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,523,400' rel='stylesheet' type='text/css'>
 
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -126,7 +126,7 @@
 			<iframe name="mainIframe"
 			        id="mainIframe"
 			        width="680px"
-			        height="600px"
+			        height="523px"
 			        frameborder="0"
 			        scrolling="no"
 			        src="examples/drive/show-my-assets/index.html"></iframe>
@@ -268,7 +268,7 @@
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
 			hideBreadcrumbs(['home', 'asset', 'file-type']);
-			$('#mainIframe').attr('height', '500px');
+			$('#mainIframe').attr('height', '400px');
 			$('#loginId').addClass('verified');
 		} else {
 			$('.menu-item[data-state=loggedIn]').data('state', 'login');
@@ -276,7 +276,7 @@
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
 			$('#breadcrumbs-section').hide();
-			$('#mainIframe').attr('height', '600px');
+			$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".sample-top-menu").on('click', '.menu-item', function (e) {
@@ -291,20 +291,22 @@
 
 	});
 
-	//States of the app
+	var loggedOutCallback = function(){
+		$('#breadcrumbs-section').hide();
+		$('#user').hide();
+		$('.menu-item[data-state=loggedIn]').data('state', 'login');
+		$('.sample-top-menu > li').removeClass('verified');
+		$('#requestLog').hide();
+	}
 
+	//States of the app
 	var states = {
 		login: {
 			src: 'plugins/login/login.html',
 			selectedTab: "#loginId",
 			enabledTabs: [],
 			disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section').hide();
-				$('#user').hide();
-				$('.menu-item[data-state=loggedIn]').data('state', 'login');
-				$('.sample-top-menu > li').removeClass('verified');
-			}
+			callbackFunc: loggedOutCallback
 		},
 
 		loggedIn: {
@@ -316,6 +318,8 @@
 				$('#breadcrumbs-section').hide();
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
+				$('#requestLog').show();
+				$('#mainIframe').attr('height', '400px');
 			}
 		},
 		myAssets: {
@@ -327,7 +331,7 @@
 				$('#breadcrumbs-section').css('display', 'inline-block');
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
-				$('#mainIframe').attr('height', '500px');
+				$('#mainIframe').attr('height', '400px');
 				$('#loginId').addClass('verified');
 			}
 		},
@@ -341,6 +345,7 @@
 				$('#breadcrumbs-section div#action-button div').hide();
 				$('#loginId').addClass('verified');
 				$('#myAssetsId').addClass('verified');
+				$('#mainIframe').attr('height', '400px');
 
 			}
 		},
@@ -355,6 +360,7 @@
 				$('#loginId').addClass('verified');
 				$('#myAssetsId').addClass('verified');
 				$('#createAssetId').addClass('verified');
+				$('#mainIframe').attr('height', '400px');
 			}
 		}
 	};
@@ -377,17 +383,23 @@
 				}
 			}
 
+			$('#requestLog').show();
+
 		},
 		redirectUserToLoginPage: function () {
 			isLoggedIn = false;
-			$('#mainIframe').attr('height', '600px');
+			$('#mainIframe').attr('height', '523px');
 			changeState('login');
+		},
+		showLoginPageOnly: function(){
+			loggedOutCallback();
 		},
 		myAssetsEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-file').hide();
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 			showBreadcramb('home');
 			hideBreadcrumbs(['asset', 'file-type']);
+			$('#mainIframe').attr('height', '400px');
 		},
 
 		showSpecificAssetEvent: function (optionalParams) {
@@ -400,6 +412,7 @@
 				showAssetBreadcrumb(currentAssetId);
 				hideBreadcrumbs(['file-type']);
 				showManageFileStep();
+				$('#mainIframe').attr('height', '400px');
 				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
 
@@ -407,6 +420,7 @@
 		createAssetEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').hide();
 			showBreadcramb('home');
+			$('#mainIframe').attr('height', '400px');
 		},
 		showAssetFilesEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
@@ -416,11 +430,15 @@
 			} else {
 				$('#breadcrumbs-section div#action-button #create-file').hide();
 				showBreadcramb('home');
+				$('#mainIframe').attr('height', '400px');
 				showAssetBreadcrumb(currentAssetId);
 				showAssetFilesBreadcrumb(optionalParams.fileType);
 				showManageFileStep();
 				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
+		},
+		shrinkIframe: function(){
+			$('#mainIframe').attr('height', '335px');
 		}
 	};
 
@@ -432,12 +450,14 @@
 
 	broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
 	broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
+	broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
 	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
 	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
 	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
 	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
 	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
 	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
+	broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
 
 
 </script>

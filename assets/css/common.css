@@ -198,7 +198,7 @@ input[type="checkbox"]:checked + label span.chk {
     /* medium size is default */
     height: 35px;
     line-height: 35px;
-    padding: 0px 25px;
+    padding: 0px 32px;
     font-size: 14px;
     position: relative;
 }
@@ -259,7 +259,7 @@ input[type="checkbox"]:checked + label span.chk {
 }
 
 .form_field{
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 .form_field .field_error {
     position: relative;
@@ -350,6 +350,11 @@ input[type="checkbox"]:checked + label span.chk {
 
 #welcome-wrapper{
     text-align: center;
+    height: 375px;
+    margin: auto;
+    position: absolute;
+    top:0;
+    bottom:0;
 }
 
 /***** TOOLTIP *****/
@@ -461,6 +466,7 @@ i.stooltip span {
     background-position: -286px -47px;
     width: 17px;
     height: 16px;
+    margin-left: 6px;
 }
 
 .si-help-hover {
@@ -687,13 +693,18 @@ i.stooltip span {
 
 /**** galleries ****/
 
+.box {
+    margin-bottom: 20px;
+    height: 231px;
+}
+
 .thumb{
     border-top: 1px solid lightgray;
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    height: 150px;
+    height: 191px;
     overflow: hidden;
     position: relative;
 }
@@ -724,7 +735,7 @@ i.stooltip span {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border: 1px solid #ccc;
-    padding: 8px;
+    padding: 9px;
 }
 
 .btn-github {
@@ -857,7 +868,7 @@ i.stooltip span {
 }
 
 #breadcrumbs-section #action-button #create-file > a{
-    padding: 0 32px;
+    padding: 0 40px;
 }
 
 #breadcrumbs-section #action-button #create-file i{
@@ -872,7 +883,7 @@ i.stooltip span {
 }
 
 #breadcrumbs-section #action-button #create-file i.si-add-item{
-    left:12px;
+    left:20px;
     top:11px;
 }
 
@@ -904,7 +915,7 @@ i.stooltip span {
     height: 61px;
     margin: auto;
     position: absolute;
-    top: 0;
+    top: 4px;
     left:30px;
 }
 
@@ -931,6 +942,7 @@ i.stooltip span {
     padding: 11px;
     display: inline-block;
     height: 39px;
+    color:#777777;
 }
 
 .bread-crumb.dark{
@@ -938,6 +950,10 @@ i.stooltip span {
 }
 .bread-crumb.dark span{
     background-color: #EBEBEB;
+    color:#333333;
+}
+.bread-crumb.dark span b{
+    font-weight: 400;
 }
 
 .bread-crumb.dark .bread-crumb-tail{
@@ -974,7 +990,7 @@ i.stooltip span {
 {
     background-color: #2b2f3e;
     color:#8c92a4;
-    min-height: 100px;
+    min-height: 86px;
     margin-bottom: 10px;
     border-bottom:1px solid #2b2f3e;
     border-left:1px solid #2b2f3e;
@@ -1080,7 +1096,7 @@ i.stooltip span {
 
 #requestLog{
     overflow-y: auto;
-    height: 150px;
+    height: 113px;
 }
 
 #requestLog pre{
