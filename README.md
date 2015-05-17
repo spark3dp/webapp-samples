@@ -22,12 +22,12 @@ This sample application provides an introduction to working with the Spark OAuth
 
 
 ### Quick Start
-You can use the lastest published version of the SDK [here](http://spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js)
+You can use the lastest published version of the SDK [here](https://code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js)
 
 To use the SDK you should include the SDK library in your HTML page right befory the closing </body>.
 
 ```HTML
-<script type="text/javascript" src="//spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js"></script>
+<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
 ```
 
 Then you would have to initialize the SDK client with your credentials and choose the environment between sandbox and production:
@@ -35,7 +35,8 @@ Then you would have to initialize the SDK client with your credentials and choos
 ```JavaScript
 	ADSKSpark.Client.initialize('',// Your app key
 			'',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			'',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+			'',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token),
+			'',// The refresh access token endpoint that is implemented by your server (i.e. http://example.com/refresh_token)
 			ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
 	);
 ```
@@ -57,11 +58,12 @@ so that your application will work. You can utilize one of the server implementa
 
     </div>
 
-    <script type="text/javascript" src="//spark-sdks.s3.amazonaws.com/autodesk-spark-sdk-latest.min.js"></script>
+    <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
     <script>
       ADSKSpark.Client.initialize('',// Your app key
               '',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
               '',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
+              '',// The refresh access token endpoint that is implemented by your server (i.e. http://example.com/refresh_token)
               ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
       );
 
@@ -97,4 +99,4 @@ so that your application will work. You can utilize one of the server implementa
 ```
 
 #### SDK reference
-Full SDK docs are available [here](http://spark-sdks.s3.amazonaws.com/doc/index.html)
+You can get the full SDK reference [here](http://code.spark.autodesk.com/autodesk-spark-sdk/docs/v1/index.html)
