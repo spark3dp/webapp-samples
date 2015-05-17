@@ -9,7 +9,7 @@
 	<title>Spark Sample Application - My Drive</title>
 
 	<!-- fonts -->
-	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,523,400' rel='stylesheet' type='text/css'>
 
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -126,7 +126,7 @@
 			<iframe name="mainIframe"
 			        id="mainIframe"
 			        width="680px"
-			        height="600px"
+			        height="523px"
 			        frameborder="0"
 			        scrolling="no"
 			        src="examples/drive/show-my-assets/index.html"></iframe>
@@ -268,7 +268,7 @@
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
 			hideBreadcrumbs(['home', 'asset', 'file-type']);
-			$('#mainIframe').attr('height', '500px');
+			$('#mainIframe').attr('height', '380px');
 			$('#loginId').addClass('verified');
 		} else {
 			$('.menu-item[data-state=loggedIn]').data('state', 'login');
@@ -276,7 +276,7 @@
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
 			$('#breadcrumbs-section').hide();
-			$('#mainIframe').attr('height', '600px');
+			$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".sample-top-menu").on('click', '.menu-item', function (e) {
@@ -304,6 +304,7 @@
 				$('#user').hide();
 				$('.menu-item[data-state=loggedIn]').data('state', 'login');
 				$('.sample-top-menu > li').removeClass('verified');
+				$('#requestLog').hide();
 			}
 		},
 
@@ -316,6 +317,7 @@
 				$('#breadcrumbs-section').hide();
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
+				$('#requestLog').show();
 			}
 		},
 		myAssets: {
@@ -327,7 +329,7 @@
 				$('#breadcrumbs-section').css('display', 'inline-block');
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
-				$('#mainIframe').attr('height', '500px');
+				$('#mainIframe').attr('height', '380px');
 				$('#loginId').addClass('verified');
 			}
 		},
@@ -377,10 +379,12 @@
 				}
 			}
 
+			$('#requestLog').show();
+
 		},
 		redirectUserToLoginPage: function () {
 			isLoggedIn = false;
-			$('#mainIframe').attr('height', '600px');
+			$('#mainIframe').attr('height', '523px');
 			changeState('login');
 		},
 		myAssetsEvent: function () {

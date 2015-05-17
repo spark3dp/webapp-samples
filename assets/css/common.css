@@ -350,6 +350,11 @@ input[type="checkbox"]:checked + label span.chk {
 
 #welcome-wrapper{
     text-align: center;
+    height: 375px;
+    margin: auto;
+    position: absolute;
+    top:0;
+    bottom:0;
 }
 
 /***** TOOLTIP *****/
@@ -974,7 +979,7 @@ i.stooltip span {
 {
     background-color: #2b2f3e;
     color:#8c92a4;
-    min-height: 100px;
+    min-height: 86px;
     margin-bottom: 10px;
     border-bottom:1px solid #2b2f3e;
     border-left:1px solid #2b2f3e;
@@ -1080,7 +1085,7 @@ i.stooltip span {
 
 #requestLog{
     overflow-y: auto;
-    height: 150px;
+    height: 133px;
 }
 
 #requestLog pre{
