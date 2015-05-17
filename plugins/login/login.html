@@ -184,6 +184,7 @@
 		else
 		{
 			$('#user').hide();
+			eventBroadCaster.broadcastEvent('manageIframe.loggedOutNoRefresh');
 		}
 	});
 </script>

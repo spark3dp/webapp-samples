@@ -190,6 +190,9 @@
 			} else {
 				$('#empty-files').removeClass('hidden');
 				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
+
+				//broadcast the state to the iframe - intended only for the storage UI
+				eventBroadCaster.broadcastEvent('emptyAssets');	
 			}
 		});
 
