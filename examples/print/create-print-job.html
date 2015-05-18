@@ -52,17 +52,12 @@
 		}
 
 		.main-container{
-			background-color: #333333;
-			background: rgba(51, 51, 51, 0.8);
 			height: 462px;
 		}
 
 		#print-job-form{
-			background-color:#ffffff;
-			padding: 20px;
-			height: 430px;
-			border-bottom-left-radius: 3px;
-			border-bottom-right-radius: 3px;
+
+			padding-top: 20px;
 		}
 
 		.modal-dialog{
@@ -153,8 +148,7 @@
 				<input type="hidden" id="assetId">
 				</div>
 				<div class="pull-right">
-					<input class="spark_btn primary" type="submit" value="Print" id="print">
-					<a class="spark_btn empty" onclick="eventBroadCaster.broadcastEvent('printIframe.next')">Job status</a>
+					<input class="spark_btn primary" type="submit" value="Print and continue" id="print">
 				</div>
 			</form>
 

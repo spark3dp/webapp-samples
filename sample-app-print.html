@@ -109,6 +109,7 @@
 		.cancel-print .spark_print_icon{
 			margin-left: 7px;
 		}
+
 		.new-token .spark_print_icon{
 			margin-left: 18px;
 		}
@@ -119,10 +120,6 @@
 			top:-28px;
 		}
 
-		.user-avatar
-		{
-			display: none;
-		}
 
 	</style>
 </head>
@@ -138,8 +135,8 @@
 		<div style="text-align: center;">
 		<ul class="nav nav-tabs sample-top-menu" role="tablist">
 			<li id="loginId">
-				<div id="user" class="pull-left">
-					<img class="user-avatar" src="" style="display: none;"/>
+				<div id="user" class="pull-left" style="display: none;">
+					<img class="user-avatar" src="" />
 				</div>
 				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
@@ -165,7 +162,7 @@
 			</li>
 		</ul>
 		</div>
-		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"  src="examples/print/register-printer.html"></iframe></div>
+		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"  src="examples/print/manage-printers.html"></iframe></div>
 
 
 		<div class="simulator-container">
@@ -245,6 +242,17 @@
 			statePlugin.changeState('manage');
 			statePlugin.verifyState("login");
 			$('#mainIframe').attr('height', '462px');
+
+			ADSKSpark.Members.getMyProfile().then(function(response){
+				if (response.member.profile.avatar_path) {
+					$('#user img').attr('src', response.member.profile.avatar_path);
+					$('#user').show();
+				}
+				else{
+					$('#user img').attr('src', "../../assets/img/default_avatar.png");
+					$('#user').show();
+				}
+			});
 		}
 		else{
 			isLoggedIn = false;
@@ -256,6 +264,7 @@
 			e.preventDefault();
 			var state = $(this).data("state");
 			statePlugin.changeState(state);
+			showSimulator(false);
 		});
 	});
 
@@ -277,7 +286,10 @@
 			"src":"examples/print/manage-printers.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId", "#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId"]
+			disabledTabs:["#printId","#statusId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '462px');
+			}
 		},
 
 		register:{
@@ -331,7 +343,7 @@
 
 	broadcastMapper['manageIframe.loggedOut']  = function(optionalParams){
 		isLoggedIn = false;
-		$('#user img').hide();
+		$('#user').hide();
 		statePlugin.changeState('login');
 		statePlugin.unVerifyAll();
 	};
@@ -342,11 +354,6 @@
 			statePlugin.changeState("manage", optionalParams);
 			statePlugin.verifyState("login");
 			isLoggedIn = true;
-		}
-		if (optionalParams.member) {
-			if (optionalParams.member.profile.avatar_path) {
-				$('#user img').attr('src', optionalParams.member.profile.avatar_path).show();
-			}
 		}
 	};
 	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
@@ -361,9 +368,11 @@
 	};
 	broadcastMapper["registerIframe.add"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["manageIframe.reload"] = function(optionalParams){
 		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
 	};
 	broadcastMapper["printIframe.next"] = function(optionalParams){
 		statePlugin.changeState("status",optionalParams);
@@ -371,6 +380,7 @@
 
 	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
 		statePlugin.changeState("choose_asset",optionalParams);
+		showSimulator(false);
 	};
 
 	broadcastMapper["showSimulator"] = function(show){
@@ -383,10 +393,9 @@
 	broadcastMapper["manageIframe.printerExist"] = function(){
 		statePlugin.verifyState("manage");
 	};
-	broadcastMapper["printIframe.jobExist"] = function(){
-		statePlugin.verifyState("print");
+	broadcastMapper["printIframe.jobExist"] = function(optionalParams){
+		statePlugin.changeState("status",optionalParams);
 	};
-
 
 </script>
 

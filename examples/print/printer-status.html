@@ -45,12 +45,19 @@
 		.choose-printer{
 			background-color: #F8F8F8;
 			text-align: center;
+			height: 310px;
+			padding: 50px;
+			display: none;
+		}
 
-			height: 350px;
+		.choose-printer img{
+			height: 129px;
+			width: 55px;
 		}
 
 		.choose-printer div {
-			padding-top: 175px;
+			padding-top: 20px;
+			padding-bottom: 20px;
 		}
 
 		#print-status-form{
@@ -90,7 +97,8 @@
 					</table>
 				</div>
 			   <div class="choose-printer">
-						<div>Choose printer above</div>
+				       <div>Choose printer above</div>
+				       <img src="../../assets/img/choose_printer_illustration.png">
 			   </div>
 	</form>
 
@@ -137,6 +145,10 @@
 				if(printers[i].printer_last_health == "online"){
 					$("#printers-select").val(printers[i].printer_id);
 					$("#printers-select").change();
+				}
+				else
+				{
+					$(".choose-printer").show();
 				}
 			}
 		});
@@ -211,6 +223,7 @@
 		}
 		else
 		{
+			$(".print-statuses-container").hide();
 			$("#empty-jobs").hide();
 			$(".choose-printer").show();
 			eventBroadCaster.broadcastEvent('showSimulator', false);

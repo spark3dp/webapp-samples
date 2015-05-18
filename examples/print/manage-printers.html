@@ -93,7 +93,7 @@
 			<hr>
 			<div class="pull-left">Manage your existing printers, or register a new printer.</div>
 			<a class="spark_btn empty pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
-				<i class="spark_print_icon print-si-plus"></i>  Add Printer
+				<i class="spark_print_icon print-si-plus"></i>  Register Printer
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
@@ -182,7 +182,9 @@
 
 			if (response.count) {
 				$(".printers-container").show();
-				$("#continue").prop("disabled", false);
+				$("#continue").show();
+
+				response.printers.reverse();
 
 				$.each(response.printers, function (index, item) {
 
@@ -213,7 +215,7 @@
 			else
 			{
 				$("#empty-printers").show();
-				$("#continue").attr("disabled", true);
+				$("#continue").hide();
 			}
 
 		}, function(response){
