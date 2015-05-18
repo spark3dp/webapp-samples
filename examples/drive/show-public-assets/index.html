@@ -128,11 +128,7 @@
 	 * @param item
 	 */
 	function loopGallery(index, item) {
-		var imgUrlRow, imgUrlThumb;
-		imgUrlRow = imgUrlThumb = item.thumb_path_prefix;
-		if (imgUrlRow.indexOf('FullPreview/') < 0) {
-			imgUrlThumb += 'Medium.jpg';
-		}
+		var imgUrlThumb =  item.thumb_path_prefix + 'Medium.jpg';
 
 		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
