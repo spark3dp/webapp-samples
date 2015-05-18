@@ -159,7 +159,7 @@
 				<div class="pull-left spark_icon si-status-right-arrow"></div>
 			</li>
 			<li id="statusId">
-				<a class="menu-item pull-left" data-state="status" role="tab">Jobs Status</a>
+				<a class="menu-item pull-left" data-state="status" role="tab">Job Status</a>
 				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 			</li>
@@ -244,10 +244,12 @@
 			isLoggedIn = true;
 			statePlugin.changeState('manage');
 			statePlugin.verifyState("login");
+			$('#mainIframe').attr('height', '462px');
 		}
 		else{
 			isLoggedIn = false;
 			statePlugin.changeState('login');
+			$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".menu-item").click(function(e){
@@ -258,12 +260,17 @@
 	});
 
 
+	var loggedOutCallback = function(){
+		$('#mainIframe').attr('height', '523px');
+	}
+
 	var states = {
 		login:{
 			"src":"plugins/login/login.html",
 			selectedTab:"#loginId",
 			enabledTabs:[],
-			disabledTabs:["#printId","#registerId","#statusId","#manageId"]
+			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
+			callbackFunc: loggedOutCallback
 		},
 
 		manage:{

@@ -58,13 +58,12 @@
 		.printers-container
 		{
 			overflow-y: auto;
-			height: 345px;
-			margin-bottom: 20px;
+			height: 230px;
 		}
 
-		#print-status-form{
+		#manage-printers-form{
 			padding-top: 20px;
-			height: 504px;
+			height: 390px;
 		}
 
 		.dropdown-menu{
@@ -89,7 +88,7 @@
 
 	<div class="container main-container">
 		<div class="spinner"></div>
-		<form id="print-status-form">
+		<form id="manage-printers-form">
 			<div class="sample-title">Manage your 3D Printers</div>
 			<hr>
 			<div class="pull-left">Manage your existing printers, or register a new printer.</div>
@@ -102,11 +101,10 @@
 				<table class="table" id="printers">
 					<thead>
 					<tr>
-						<!--<th>Printer ID<br><span>Printer ID</span></th>-->
 						<th>Printer Name<br><span>printer_name</span></th>
 						<th>Printer Type<br><span>type_id</span></th>
-						<!--<th>Registration Date<br><span>Registration Date</span></th>-->
 						<th>Firmware<br><span>firmware</span></th>
+						<th>Status<br><span>printer_last_health</span></th>
 						<th></th>
 					</tr>
 					</thead>
@@ -194,6 +192,7 @@
 						tr.append($('<td>' + item.printer_name + '</td>'));
 						tr.append($('<td>' + type.name + '</td>'));
 						tr.append($('<td>' + item.firmware + '</td>'));
+						tr.append($('<td>' + item.printer_last_health + '</td>'));
 
 						var actionsElem = '<div class="dropdown actions">' +
 								'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
