@@ -41,10 +41,13 @@
 			font-size: 16px;
 		}
 
-		#file-upload-result{
+		#file-upload-result,#file-upload-error{
 			display: none;
 			height: 50px;
 			text-align: center;
+		}
+		#file-upload-error{
+			height:30px;
 		}
 
 		#dropzone.drag-active {
@@ -83,6 +86,9 @@
 			margin-top: 20px;
 			color:#555555;
 		}
+		#file-upload-text p{
+			display: none;
+		}
 
 	</style>
 
@@ -98,6 +104,11 @@
 			</h4>
 		</div>
 		<div class="modal-body" id="upload-wrapper">
+			<div id="file-upload-error">
+				<div class="notification-bar">
+					<i class="spark_icon"></i> File size exceeds the allowed value
+				</div>
+			</div>
 			<div id="file-upload-result">
 				<div class="notification-bar">
 					<i class="spark_icon si-status-ok"></i> File successfuly uploaded
@@ -115,7 +126,7 @@
 
 				<div id="file-upload-text">
 					<span>Drop a file</span> or <a id="browse-file">Browse</a>
-					<p>Maximum file size of 100MB</p>
+					<p>Maximum file size of <b></b></p>
 				</div>
 			</div>
 
@@ -168,14 +179,23 @@
 			fileData //the file data
 			;
 
+	var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
+
 	/**
 	 * What happens when user selects file
 	 */
 	function handleFileDrop(file) {
-
 		fileData = file;
-		$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
-		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+		if (fileData.size <= allowedFileUploadSize) {
+			$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
+			$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+			$('#file-upload-text').hide();
+		}else{
+			$('#file-upload-error').show();
+			setTimeout(function(){
+				$('#file-upload-error').hide();
+			},3000);
+		}
 	}
 
 	/**
@@ -183,6 +203,10 @@
 	 * Attempt to use HTML5 file APIs to provide a nicer UI for file upload
 	 */
 	function setFileUploadUI() {
+
+		//set allowed file size
+		var fileSizeHumanReadable = allowedFileUploadSize.fileSize(1);
+		$('#file-upload-text p').show().find('b').text(fileSizeHumanReadable);
 
 		//make sure the upload form button is initially disabled
 		$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
