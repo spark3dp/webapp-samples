@@ -24,27 +24,41 @@
 			width: 50px;
 			left: 360px;
 			position: absolute;
-			top: 140px;
+			top: 150px;
 			cursor: pointer;
 			opacity: 0.0;
 		}
 
 		#dropzone {
 			display: none;
-			height: 200px;
+			height: 225px;
 			text-align: center;
 			border: 2px dashed #e5e5e5;
 			border-radius: 4px;
+			position: relative;
+		}
+		#dropzone-inner{
+			bottom: 0;
+			height: 165px;
+			left: 0;
+			margin: auto;
+			position: absolute;
+			right: 0;
+			top: 0;
 		}
 
-		#dropzone h4{
+		#dropzone h4 {
 			font-size: 16px;
 		}
 
-		#file-upload-result {
+
+		#file-upload-result,#file-upload-error {
 			display: none;
 			height: 50px;
 			text-align: center;
+		}
+		#file-upload-error{
+			height:30px;
 		}
 
 		#dropzone.drag-active {
@@ -53,19 +67,16 @@
 		}
 
 		#upload-icon {
-			margin-top: 26px;
-			margin-bottom: 5px;
+			margin-top: 15px;
 		}
 
 		.thumb-img {
-			position: absolute;
 			right: 16px;
 			top: 16px;
 		}
 
 		.thumb {
-			max-height: 195px;
-			max-width: 150px;
+			height: 100px;
 		}
 
 		.spinner {
@@ -80,19 +91,24 @@
 		.si-status-ok {
 			margin-right: 10px;
 		}
-		.uploaded-filename{
+
+		.uploaded-filename {
 			font-size: 16px;
 			margin: auto;
 			width: 350px;
 		}
 
-		.uploaded-filename b{
+		.uploaded-filename b {
 			font-weight: 600;
 		}
 
-		#file-upload-text{
+		#file-upload-text {
 			margin-top: 20px;
-			color:#555555;
+			color: #555555;
+		}
+
+		#file-upload-text p{
+			display: none;
 		}
 
 	</style>
@@ -109,6 +125,11 @@
 			</h4>
 		</div>
 		<div class="modal-body" id="upload-wrapper">
+			<div id="file-upload-error">
+				<div class="notification-bar">
+					<i class="spark_icon"></i> File size exceeds the allowed value
+				</div>
+			</div>
 			<div id="file-upload-result">
 				<div class="notification-bar">
 					<i class="spark_icon si-status-ok"></i> File successfully uploaded
@@ -121,13 +142,15 @@
 			</div>
 
 			<div id="dropzone" class="post-upload">
-				<div id="upload-icon" class="spark_icon si-upload-icon"></div>
-				<h4 id="file-name" class="post-upload">Upload Thumbnail Item</h4>
+				<div id="dropzone-inner">
+					<div id="upload-icon" class="spark_icon si-upload-icon"></div>
+					<h4 id="file-name" class="post-upload">Upload Thumbnail Item</h4>
 
-				<div id="file-upload-text">
-					<span>Drop an image</span> or <a id="browse-file">Browse</a>
+					<div id="file-upload-text">
+						<span>Drop an image</span> or <a id="browse-file">Browse</a>
 
-					<p>Maximum file size of 1MB</p>
+						<p>Maximum file size of <b></b></p>
+					</div>
 				</div>
 			</div>
 
@@ -190,6 +213,8 @@
 			fileData //the file data
 			;
 
+	var allowedFileUploadSize = 1000 * 1000; //1MB
+
 	/**
 	 * What happens when user selects file
 	 */
@@ -199,7 +224,7 @@
 		$('.thumb-img').remove();
 
 		fileData = file;
-		$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
+		$('#file-name').html('<p class="uploaded-filename">Your file is waiting for upload...</p>');
 		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 
 		// Only process image files.
@@ -209,13 +234,26 @@
 			// Closure to capture the file information.
 			reader.onload = (function (theFile) {
 				return function (e) {
-					// Render thumbnail.
-					var span = document.createElement('span');
-					span.innerHTML = ['<img class="thumb" src="', e.target.result,
-						'" title="', escape(theFile.name), '"/>'].join('');
+					if (theFile.size <= allowedFileUploadSize) {
+						// Render thumbnail.
+						var span = document.createElement('span');
 
-					var imgSpan = $('<span class="thumb-img post-upload"><img class="thumb" src="' + e.target.result + '" title="' + escape(theFile.name) + '"/></span>');
-					$('#dropzone').prepend(imgSpan);
+
+						span.innerHTML = ['<img class="thumb" src="', e.target.result,
+							'" title="', escape(theFile.name), '"/>'].join('');
+
+						var imgSpan = $('<span class="thumb-img post-upload"><img class="thumb" src="' + e.target.result + '" title="' + escape(theFile.name) + '"/></span>');
+						$('#file-upload-text').html(imgSpan);
+
+						//adjust height
+						$('#dropzone-inner').height('220px');
+					}else{
+						$('#file-upload-error').show();
+						setTimeout(function(){
+							$('#file-upload-error').hide();
+						},3000);
+					}
+
 				};
 			})(file);
 
@@ -232,6 +270,10 @@
 	 * Attempt to use HTML5 file APIs to provide a nicer UI for file upload
 	 */
 	function setFileUploadUI() {
+
+		//set allowed file size
+		var fileSizeHumanReadable = allowedFileUploadSize.fileSize(1);
+		$('#file-upload-text p').show().find('b').text(fileSizeHumanReadable);
 
 		//make sure the upload form button is initially disabled
 		$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
@@ -328,9 +370,9 @@
 				console.info('upload file response:', response);
 
 				var fileId = response.files[0].file_id,
-					fileName = response.files[0].name;
+						fileName = response.files[0].name;
 
-				console.info('fileId:', fileId,' | ', 'fileName:', fileName);
+				console.info('fileId:', fileId, ' | ', 'fileName:', fileName);
 
 				applyUIcallback(fileId, fileName, response.files);
 
@@ -368,7 +410,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'thumbnails',assetId:currentAssetId});
+		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'thumbnails', assetId: currentAssetId});
 	});
 
 </script>

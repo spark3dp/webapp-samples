@@ -297,6 +297,7 @@
 		$('.menu-item[data-state=loggedIn]').data('state', 'login');
 		$('.sample-top-menu > li').removeClass('verified');
 		$('#requestLog').hide();
+		$('#mainIframe').attr('height', '523px');
 	}
 
 	//States of the app
@@ -384,6 +385,7 @@
 			}
 
 			$('#requestLog').show();
+			$('#loginId').addClass('verified');
 
 		},
 		redirectUserToLoginPage: function () {

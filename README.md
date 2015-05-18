@@ -17,7 +17,7 @@ This sample application provides an introduction to working with the Spark OAuth
   $ npm install
   $ node server.js
   ```
-  * Now you have a server running on port 3000. You can check it by going to <your-server.com>:3000
+  * Now you have a server running on port 3000. You can check it by going to http://your-server.com:3000
 6. Initialize your app - see info in the "Quick Start" section
 
 

@@ -83,7 +83,7 @@ hr {
 }
 
 textarea {
-    resize: vertical;
+    resize: none;
 }
 
 #container {
