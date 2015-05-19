@@ -95,6 +95,17 @@
 			margin-bottom: 0px;
 		}
 
+		.footer-action
+		{
+			border-top: 1px solid #e5e5e5;
+			padding: 18px 0;
+		}
+
+		.form-group
+		{
+			margin-bottom: 19px;
+		}
+
 	</style>
 </head>
 
@@ -109,12 +120,12 @@
 					<label for="fileURL">
 						Choose file to print <span class="field-label">&nbsp;/&nbsp;printable_id</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;width:400px;">Enter the URL of a printable 3D file, the Spark ID of a printable 3D file or browse to locate one on your desktop. Printable files can be STL, OBJ or BLT 3D files, or a printable file created by Spark.</span></i>
+						<i class="stooltip"><span style="display: none;width:400px;">Enter the Spark ID of a printable 3D file or browse to select an existing file. Printable files can be gcode files, or a printable file created by Spark.</span></i>
 					</label>
 					<div class="clearfix"></div>
 					<!--<input type="text" class="form-control" id="fileURL" placeholder="File URL" required value="http://cdn.spark.com/print/abcefg">-->
 					<div class="pull-left">
-						<input type="text" class="form-control" id="fileURL" placeholder="Enter file URL" required>
+						<input type="text" class="form-control" id="fileURL" placeholder="Enter printable file id" required>
 						<div class="field_error hidden">
 							<span>Required</span>
 						</div>
@@ -147,8 +158,8 @@
 				</div>
 				<input type="hidden" id="assetId">
 				</div>
-				<div class="pull-right">
-					<input class="spark_btn primary" type="submit" value="Print and continue" id="print">
+				<div class="footer-action ">
+					<input class="spark_btn primary pull-right" type="submit" value="Print and continue" id="print">
 				</div>
 			</form>
 
@@ -158,10 +169,10 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>WARNING</h4>
+						<h4>ERROR</h4>
 					</div>
 					<div class="modal-body">
-						An error occurred.
+
 					</div>
 					<div class="modal-footer">
 						<a class="spark_btn small cancel" type="button">Close</a>
@@ -248,6 +259,9 @@
 							eventBroadCaster.broadcastEvent('printIframe.jobExist');
 						},
 						function (response) {
+							var res = JSON.parse(response);
+							var message = res.message != undefined && res.message != "" ? res.message : "An error occurred.";
+							$('#myModal').find(".modal-body").html("<span>" + message + "</span>");
 							$('#myModal').modal('show');
 						});
 			}

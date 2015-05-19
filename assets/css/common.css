@@ -196,8 +196,8 @@ input[type="checkbox"]:checked + label span.chk {
     text-decoration: none;
     cursor: pointer;
     /* medium size is default */
-    height: 35px;
-    line-height: 35px;
+    height: 40px;
+    line-height: 40px;
     padding: 0px 32px;
     font-size: 14px;
     position: relative;
@@ -600,7 +600,7 @@ i.stooltip span {
 }
 
 .print-si-close-light {
-    background-position: -35px -5px;
+    background-position: -34px -5px;
     width: 26px;
     height: 26px;
 }
@@ -612,7 +612,7 @@ i.stooltip span {
 }
 
 .print-si-pause-light {
-    background-position: -65px -5px;
+    background-position: -69px -5px;
     width: 26px;
     height: 26px;
 }

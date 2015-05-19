@@ -174,12 +174,12 @@
 							row.append("<td>" + printerJobs[i].job_status.job_status + "</td>");
 
 							if(printerJobs[i].job_status.job_status == "completed"){
-								row.append('<td><a  class="job-action cancel-print" style="margin-left: 26px;"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a></td>');
+								row.append('<td></td>');
 							}
 							else
 							{
 								row.append('<td><a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
-										'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+										       '<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
 										'</td>');
 							}
 

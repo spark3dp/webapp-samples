@@ -51,10 +51,6 @@
 			margin-top: 40px;
 		}
 
-		.login-container{
-			margin-top: -25px;
-		}
-
 		.logged-in-as{
 			text-transform: uppercase;
 			color: #888888;
@@ -88,7 +84,7 @@
 
 		#logout
 		{
-			margin-bottom: 10px;
+			margin-top: 10px;
 		}
 
 		.inner-logged-in-container
@@ -112,10 +108,11 @@
 		<div class="user-name"></div>
 		<img src=""/>
 	</div>
+    <a class="btn spark_btn empty"  href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
 	<div id="logout">
-		<a class="btn spark_btn empty" href="#" onclick="logout()">Logout</a>
+		<a style="display: inline;" href="#" onclick="logout()">Logout</a>
 	</div>
-	<a style="display: inline;" href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Cancel</a>
+
 	</div>
 </div>
 
