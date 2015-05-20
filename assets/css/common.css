@@ -606,7 +606,7 @@ i.stooltip span {
 }
 
 .print-si-close-light:hover, .btn-simulator-container:hover .print-si-close-light {
-    background-position: -35px -31px;
+    background-position: -34px -31px;
     width: 26px;
     height: 26px;
 }
@@ -618,7 +618,7 @@ i.stooltip span {
 }
 
 .print-si-pause-light:hover , .btn-simulator-container:hover .print-si-pause-light {
-    background-position: -65px -31px;
+    background-position: -69px -31px;
     width: 26px;
     height: 26px;
 }
