@@ -44,19 +44,17 @@
 			width: 680px;
 			margin-left: 1px;
 			padding-bottom: 10px;
-			padding-top: 10px;
+			padding-top: 25px;
 		
 		}
 
 
 		.simulator-container
 		{
-			padding-top: 30px;
-			position: relative;
-			top: -17px;
+
 			display: none;
 			width: 682px;
-			height: 136px;
+			height: 108px;
 			background:url('assets/img/simulator_panel_bg.png') no-repeat;
 		}
 
@@ -113,13 +111,6 @@
 		.create-new-token .spark_print_icon{
 			margin-left: 18px;
 		}
-
-		.logger-after-simulator
-		{
-			position: relative;
-			top:-28px;
-		}
-
 
 	</style>
 </head>
@@ -345,12 +336,13 @@
 			disabledTabs:[]
 		},
 
-		choose_asset:{
-			"src":"examples/print/choose-asset.html",
+		choose_file:{
+			"src":"examples/print/choose-file.html?assetId=1477563",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId", "#statusId"],
 			disabledTabs:[]
 		},
+
 
 		status:{
 			"src":"examples/print/printer-status.html",
@@ -363,14 +355,10 @@
 
 	var showSimulator = function(show){
 		if(show == true){
-			$('.simulator-container').animate({height: 'show'}, 290, function() {
-				$(".logger-container").addClass("logger-after-simulator");
-			});
+			$('.simulator-container').animate({height: 'show'}, 290);
 		}
 		else{
-			$('.simulator-container').animate({height: 'hide'}, 290, function() {
-				$(".logger-container").removeClass("logger-after-simulator");
-			});
+			$('.simulator-container').animate({height: 'hide'}, 290);
 		}
 	};
 
@@ -412,12 +400,9 @@
 		statePlugin.changeState("manage",optionalParams);
 		showSimulator(false);
 	};
-	broadcastMapper["printIframe.next"] = function(optionalParams){
-		statePlugin.changeState("status",optionalParams);
-	};
 
-	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
-		statePlugin.changeState("choose_asset",optionalParams);
+	broadcastMapper["printIframe.chooseFile"] = function(optionalParams){
+		statePlugin.changeState("choose_file",optionalParams);
 		showSimulator(false);
 	};
 
@@ -433,6 +418,7 @@
 	};
 	broadcastMapper["printIframe.jobExist"] = function(optionalParams){
 		statePlugin.changeState("status",optionalParams);
+		statePlugin.verifyState("print");
 	};
 
 </script>
