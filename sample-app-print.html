@@ -320,7 +320,9 @@
 			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
-			callbackFunc: loggedOutCallback
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '462px');
+			}
 		},
 
 		manage:{
@@ -432,6 +434,11 @@
 		statePlugin.changeState("status",optionalParams);
 		statePlugin.verifyState("print");
 	};
+
+	broadcastMapper['manageIframe.loggedOutNoRefresh']= function(optionalParams){
+		loggedOutCallback();
+	};
+
 
 </script>
 
