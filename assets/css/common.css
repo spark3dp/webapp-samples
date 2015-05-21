@@ -659,6 +659,18 @@ i.stooltip span {
     height: 26px;
 }
 
+.print-si-round-resume-light {
+    background-position: -41px -66px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-resume-light:hover {
+    background-position: -41px -95px;
+    width: 26px;
+    height: 26px;
+}
+
 
 .print-si-browse {
     background-position: -5px -30px;
