@@ -140,18 +140,20 @@
 
 	var getAllPrinters = function(){
 		sparkPrint.getAllPrinters(function(response){
-			var printers = response.printers;
-			$("#printers-select").find('option').remove()
+			var printers = response.printers.reverse();
+			$("#printers-select").find('option').remove();
 			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
+			var onlinePrinterFound = false;
 			if(printers.length >0) {
 				for (var i in printers) {
 					$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select");
-					if (printers[i].printer_last_health == "online") {
+
+					if (onlinePrinterFound == false && printers[i].printer_last_health == "online") {
+						onlinePrinterFound = true;
 						$("#printers-select").val(printers[i].printer_id);
 						$("#printers-select").change();
 					}
-
 				}
 			}
 			else
