@@ -22,22 +22,15 @@
 	<link href="../../assets/css/common.css" rel="stylesheet">
 
 	<style>
+
 		.modal-header {
 			position: relative;
 			padding: 8px 20px;
 		}
 
-		.modal-header .layouts {
-			position: absolute;
-			right: 0;
-			background-color: #ffffff;
-			padding-left: 10px;
-		}
-
-		.modal-header .layouts a {
-			border-left: 1px solid lightgrey;
-			margin-left: 6px;
-			padding: 4px 0 0 10px;
+		.modal-dialog{
+			width: 340px;
+			margin-left: 170px;
 		}
 
 		#empty-printers {
@@ -71,12 +64,23 @@
 		}
 
 		.table tr.in-table:hover {
-			background-color: #F7F7F7;
+			background-color: transparent;
 			cursor: default;
 		}
 
 		.table tr.in-table .actions {
 			cursor: pointer;
+		}
+
+		.sub-title
+		{
+			margin-top: 7px;
+		}
+
+		.footer-action
+		{
+			border-top: 1px solid #e5e5e5;
+			padding: 18px 0;
 		}
 
 	</style>
@@ -91,7 +95,7 @@
 		<form id="manage-printers-form">
 			<div class="sample-title">Manage your 3D Printers</div>
 			<hr>
-			<div class="pull-left">Manage your existing printers, or register a new printer.</div>
+			<div class="sub-title pull-left">Manage your existing printers, or register a new printer.</div>
 			<a class="spark_btn empty pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
 				<i class="spark_print_icon print-si-plus"></i>  Register Printer
 			</a>
@@ -120,8 +124,9 @@
 		</form>
 
 
-		<br>
+		<div class="footer-action">
 	    <a id="continue" class="spark_btn primary pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.continueClick')">Print job</a>
+	    </div>
 	</div>
 
 <!-- /container -->
