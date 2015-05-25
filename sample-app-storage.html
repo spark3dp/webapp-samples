@@ -320,7 +320,7 @@
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
 				$('#requestLog').show();
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 			}
 		},
 		myAssets: {
@@ -376,6 +376,8 @@
 			if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 				changeState('myAssets');
 				isLoggedIn = true;
+			}else{
+				$('#mainIframe').attr('height', '462px');
 			}
 			if (optionalParams.member) {
 				$('#user span').text(optionalParams.member.name);
