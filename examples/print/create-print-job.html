@@ -33,8 +33,8 @@
 			text-transform: uppercase;
 		}
 
-		#fileId{
-			width: 350px;
+		#fileUrl{
+			width: 425px;
 		}
 
 		.print-si-browse
@@ -117,15 +117,15 @@
 				<div class="sample-title">Create a 3D print job</div>
 				<hr>
 				<section class="form_field pull-left">
-					<label for="fileId">
-						Choose file to print <span class="field-label">&nbsp;/&nbsp;printable_id</span><i class="required"></i>
+					<label for="fileUrl">
+						Choose file to print <span class="field-label">&nbsp;/&nbsp;printable_url</span><i class="required"></i>
 						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span style="display: none;width:400px;">Enter the Spark ID of a printable 3D file or browse to select an existing file. Printable files can be gcode files, or a printable file created by Spark.</span></i>
+						<i class="stooltip"><span style="display: none;width:400px;">Enter a url of a printable 3D file or browse to select an existing file. Printable files can be gcode files, or a printable file created by Spark.</span></i>
 					</label>
 					<div class="clearfix"></div>
 					<!--<input type="text" class="form-control" id="fileURL" placeholder="File URL" required value="http://cdn.spark.com/print/abcefg">-->
 					<div class="pull-left">
-						<input type="text" class="form-control" id="fileId" placeholder="Enter printable file id" required>
+						<input type="text" class="form-control" id="fileUrl" placeholder="Enter printable file url" required>
 						<div class="field_error hidden">
 							<span>Required</span>
 						</div>
@@ -219,7 +219,8 @@
 		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
 		if (currentFileId != "") {
 			//sending a printable id from the tray since currently there is a bug and we cant print files from the drive
-			$("#fileId").val("17223875");
+			var url = "http://static.spark.autodesk.com/Public/Beta/" + currentFileId + ".gcode";
+			$("#fileUrl").val(url);
 		}
 
 		var getAllPrinters = function(){
