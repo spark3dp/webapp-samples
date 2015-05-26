@@ -28,7 +28,7 @@
 	<div class="container sample-app-container" id="container">
 
 		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="https://github.com/Spark-API/Sample-App-Auth-Drive-JS/tree/v0.1" target="_blank"></a>
+			<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
 			<!-- Navigation links at the top right of the screen -->
 			<h5 class="sample-title">Spark Storage Sample App</h5>
 		</div>
@@ -320,7 +320,7 @@
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
 				$('#requestLog').show();
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 			}
 		},
 		myAssets: {
@@ -376,6 +376,8 @@
 			if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 				changeState('myAssets');
 				isLoggedIn = true;
+			}else{
+				$('#mainIframe').attr('height', '462px');
 			}
 			if (optionalParams.member) {
 				$('#user span').text(optionalParams.member.name);
