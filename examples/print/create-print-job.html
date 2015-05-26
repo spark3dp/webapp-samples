@@ -218,7 +218,7 @@
 		var urlParams = spark.util.extractParamsFromURL();
 		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
 		if (currentFileId != "") {
-			//sending a printable id from the tray since currently there is a bug and we cant print files from the drive
+			//sending a printable url of a file that was created via the tray
 			var url = "http://static.spark.autodesk.com/Public/Beta/" + currentFileId + ".gcode";
 			$("#fileUrl").val(url);
 		}
@@ -250,14 +250,14 @@
 
 		$("#print-job-form").on('submit', function (e) {
 			e.preventDefault();
-			if (common.validateInput($('#fileId')) && common.validateInput($('#printers-select'))) {
+			if (common.validateInput($('#fileUrl')) && common.validateInput($('#printers-select'))) {
 
-				var fileId = $('#fileId').val();
+				var fileUrl = $('#fileUrl').val();
 				var printerId = $('#printers-select option:selected').val();
 
 				try{
 					var  settings = JSON.parse($('#printer-settings').val());
-					sparkPrint.printJob(fileId, printerId, settings, function (response) {
+					sparkPrint.printJob(fileUrl, printerId, settings, function (response) {
 								var printerId = response.printer_id;
 								eventBroadCaster.broadcastEvent('printIframe.jobExist');
 							},

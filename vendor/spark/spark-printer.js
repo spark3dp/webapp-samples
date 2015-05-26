@@ -136,11 +136,11 @@ var sparkPrint = function () {
 		 * @param callback
 		 * @param errorCallback
 		 */
-		printJob: function (printableId, printerId,settings,callback,errorCallback) {
+		printJob: function (printableUrl, printerId,settings,callback,errorCallback) {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
-				var params =JSON.stringify( {printable_url:printableId,settings:settings});
+				var params =JSON.stringify( {printable_url:printableUrl,settings:settings});
 
 				console.log(params);
 
