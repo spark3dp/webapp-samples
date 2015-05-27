@@ -1,7 +1,7 @@
 Web App Samples
 ========================
 ### Introduction
-This sample application provides an introduction to working with the Spark OAuth 2.0 process and examples of Spark APIs functionalities.
+These sample applications provides an introduction to working with the Spark OAuth 2.0 proces and with cloud based 3D model storing, preparing and printing.
 
 ### Required setup before running the sample code
 1. Clone the software repository (copy its files) to a folder on your web server. 
@@ -22,27 +22,25 @@ This sample application provides an introduction to working with the Spark OAuth
 
 
 ### Quick Start
-You can use the lastest published version of the SDK [here](https://code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js)
-
-To use the SDK you should include the SDK library in your HTML page right befory the closing </body>.
+* <b>Include the SDK library in your HTML page</b> just before closing the body section (`</body>`).
 
 ```HTML
 <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
 ```
 
-Then you would have to initialize the SDK client with your credentials and choose the environment between sandbox and production:
+* After including the SDK library, the method ADSKSpark.Client.initialize() must be used to initialize and setup the SDK:<br>
+The SDK requires that authentication API requests are called from a server. For example the guest token URL could be <i>http://example.com/guest_token</i>.
 
 ```JavaScript
-	ADSKSpark.Client.initialize('',// Your app key
-			'',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
-			'',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token),
-			'',// The refresh access token endpoint that is implemented by your server (i.e. http://example.com/refresh_token)
-			ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
-	);
+ADSKSpark.Client.initialize(
+  '<app key>', //A string containing your Spark app key, provided during registration.
+  '<guest token URL>', //The server URL to which guest token requests will be directed, for example http://example.com/guest_token. The SDK requires that authentication APIs are called from a server.
+  '<access token URL>', //The server URL to which access token requests will be directed, for example http://example.com/access_token.
+  '<refresh access token URL>', //The server URL to which refresh access token requests will be directed.
+  ADSKSpark.Constants.API_HOST_SANDBOX, // ADSKSpark.Constants.API_HOST_SANDBOX or ADSKSpark.Constants.API_HOST_PRODUCTION - A constant specifying whether the SDK is running in sandbox or production.
+  '<redirect uri>' // (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different than the one that was set for your app's Callback URL
+)
 ```
-
-The current authentication process is using a server side that handles the fetching of access_token and guest_token. These are required
-so that your application will work. You can utilize one of the server implementations that are supplied in this repository.
 
 #### Sample code
 
@@ -64,7 +62,8 @@ so that your application will work. You can utilize one of the server implementa
               '',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
               '',// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
               '',// The refresh access token endpoint that is implemented by your server (i.e. http://example.com/refresh_token)
-              ADSKSpark.Constants.API_HOST_SANDBOX // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
+              ADSKSpark.Constants.API_HOST_SANDBOX, // api host - API_HOST_PRODUCTION or API_HOST_SANDBOX
+              '' // (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different than the one that was set for your app's Callback URL
       );
 
       	/**
@@ -98,5 +97,5 @@ so that your application will work. You can utilize one of the server implementa
 </html>
 ```
 
-#### SDK reference
-You can get the full SDK reference [here](http://code.spark.autodesk.com/autodesk-spark-sdk/docs/v1/index.html)
+The current authentication process is using a server side that handles the fetching of access_token and guest_token. These are required
+so that your application will work. You can utilize one of the server implementations that are supplied in this repository.
