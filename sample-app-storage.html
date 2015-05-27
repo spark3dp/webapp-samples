@@ -169,6 +169,7 @@
 
 <script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/dom-animator.min.js"></script>
 
 
 <script>
@@ -462,6 +463,16 @@
 	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
 	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
 	broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
+
+
+	//Entertain the masses
+	var domAnimator = new DomAnimator();
+	domAnimator.addFrame('S');
+	domAnimator.addFrame('S-P');
+	domAnimator.addFrame('S-P-A');
+	domAnimator.addFrame('S-P-A-R');
+	domAnimator.addFrame('S-P-A-R-K');
+	domAnimator.animate();
 
 
 </script>
