@@ -178,6 +178,26 @@ var sparkPrint = function () {
 		},
 
 		/**
+		 * Returns job status
+		 * @param jobId
+		 * @param callback
+		 * @param errorCallback
+		 */
+		getJobStatus: function (jobId,callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+				spark.util.xhr(serverUrl + 'print/jobs/' + jobId, 'GET', '', headers, callback,errorCallback);
+			}else{
+				callback(false);
+			}
+
+		},
+
+		/**
 		 * Sends a command(resume/pause/cancel) to a specific printer with specific job
 		 * @param printerID
 		 * @param jobId

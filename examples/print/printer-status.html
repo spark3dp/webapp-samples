@@ -68,6 +68,28 @@
 		{
 			margin-right: 5px;
 		}
+
+		.cancel-print
+		{
+			margin-right: 5px;
+		}
+
+		.modal-dialog{
+			width: 300px;
+			text-align: center;
+			margin-left: 200px;
+			margin-top: 200px;
+		}
+
+		.modal-footer
+		{
+			text-align:center !important;
+		}
+
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
 	</style>
 </head>
 
@@ -94,7 +116,7 @@
 							<th><div>Job ID</div><span class="field-label">job_id</span></th>
 							<th><div>Submitted</div><span class="field-label">job_date_time</span></th>
 							<th><div>Status</div><span class="field-label">job_status</span></th>
-							<th style="width:120px;"></th>
+							<th style="width:150px;"></th>
 						</tr>
 					</thead>
 					<tbody id="printersStatusTbody">
@@ -109,6 +131,24 @@
 
 	</div>
 <!-- /container -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4>ERROR</h4>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<a class="spark_btn small cancel" type="button">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
@@ -136,6 +176,35 @@
 <script type="">
 	$(document).ready(function(){
 		ajaxCallListenerFromIframe();
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
+		});
+
+		$("#printers-select").on('change', function (e) {
+			e.preventDefault();
+
+			var printerId = $('#printers-select').val();
+			if(printerId!=0) {
+				getJobsStatusByPrinter(printerId);
+				$(".choose-printer").hide();
+				var printerName = $('#printers-select').text();
+				if(printerName.indexOf("( simulator )") != -1){
+					eventBroadCaster.broadcastEvent('showSimulator', true);
+				}
+				else
+				{
+					eventBroadCaster.broadcastEvent('showSimulator', false);
+				}
+			}
+			else {
+				$(".print-statuses-container").hide();
+				$("#empty-jobs").hide();
+				$(".choose-printer").show();
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+		});
 	});
 
 	var getAllPrinters = function(){
@@ -167,78 +236,41 @@
 	getAllPrinters();
 
 	var getJobsStatusByPrinter = function(printerId){
+
 		sparkPrint.getJobsStatusByPrinter(printerId,function(response){
 
-					console.log("getJobsStatusByPrinter");
-					$("#printersStatusTbody").empty();
+					console.log("getJobsStatusByPrinter: " + printerId);
 
-					var printerJobs = response.printer_jobs;
+					var selectedPrinterId = $("#printers-select").val();
 
-					if(printerJobs.length > 0) {
+					if(selectedPrinterId == printerId) {
 
-						console.log(printerJobs);
-						for (var i in printerJobs) {
+						$("#printersStatusTbody").empty();
 
-							var row = $("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'></tr>");
-							row.append("<td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td>");
-							row.append("<td>" + printerJobs[i].job_status.job_status + "</td>");
+						var printerJobs = response.printer_jobs;
 
-							if(printerJobs[i].job_status.job_status == "completed" || printerJobs[i].job_status.job_status == "failed" || printerJobs[i].job_status.job_status == "canceled"){
-								row.append('<td></td>');
-							}
-							else
-							{
-								row.append('<td>' +
-										       '<a  class="job-action resume-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
-										       '<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
-										       '<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
-										'</td>');
+						if (printerJobs.length > 0) {
+
+							for (var i in printerJobs) {
+
+								var row = createJobRow(printerJobs[i]);
+								row.appendTo("#printersStatusTbody");
 							}
 
-							row.appendTo("#printersStatusTbody");
+							$(".print-statuses-container").show();
+							$("#empty-jobs").hide();
+							eventBroadCaster.broadcastEvent('statusIframe.printerExist');
 						}
-
-						$(".print-statuses-container").show();
-						$("#empty-jobs").hide();
-						eventBroadCaster.broadcastEvent('statusIframe.printerExist');
-					}
-					else
-					{
-						$(".print-statuses-container").hide();
-						$("#empty-jobs").show();
+						else {
+							$(".print-statuses-container").hide();
+							$("#empty-jobs").show();
+						}
 					}
 				},
 				function(response){
 				});
 	};
 
-	$("#printers-select").on('change', function (e) {
-		e.preventDefault();
-
-		var printerId = $('#printers-select').val();
-		if(printerId!=0) {
-			getJobsStatusByPrinter(printerId);
-			$(".choose-printer").hide();
-			var printerName = $('#printers-select').text();
-			if(printerName.indexOf("( simulator )") != -1){
-				eventBroadCaster.broadcastEvent('showSimulator', true);
-			}
-			else
-			{
-				eventBroadCaster.broadcastEvent('showSimulator', false);
-			}
-		}
-		else
-		{
-			$(".print-statuses-container").hide();
-			$("#empty-jobs").hide();
-			$(".choose-printer").show();
-			eventBroadCaster.broadcastEvent('showSimulator', false);
-		}
-
-
-
-	});
 
 	var classMapper = {
 		"completed":"success",
@@ -248,18 +280,53 @@
 		"printing":"info"
 	};
 
+	var createJobRow = function(job){
+
+		var rowClass = classMapper[job.job_status.job_status];
+		rowClass = rowClass ? rowClass : "";
+
+		var row = $("<tr class='" + rowClass + "' data-jobid='" + job.job_id + "'></tr>");
+		row.append("<td>" + job.job_id + "</td><td>" + job.job_date_time + "</td>");
+		row.append("<td>" + job.job_status.job_status + "</td>");
+
+
+		if (job.job_status.job_status == "completed" || job.job_status.job_status == "failed" || job.job_status.job_status == "canceled") {
+			row.append('<td></td>');
+		}
+		else {
+			row.append('<td>' +
+					'<a  class="job-action resume-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+					'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + job.job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+					'<a  class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'</td>');
+		}
+
+		return row;
+	}
+
+	var refreshJobsStatus = function(jobId){
+		sparkPrint.getJobStatus(jobId, function(response){
+
+			var currentRow = $("#printersStatusTbody").find("tr[data-jobid='" + jobId + "']");
+
+			if(currentRow.length > 0) {
+
+				var newRow = createJobRow(response);
+				currentRow.replaceWith(newRow);
+			}
+
+		},function(response){} );
+	};
+
 	var sendPrinterCommand = function(jobId, command){
 
-		console.log(jobId);
-		console.log(command);
 		sparkPrint.sendPrintCommand($("#printers-select").val(),jobId,command,function(response){
-					var printerId = $('#printers-select').val();
-					if(printerId!=0) {
-						setTimeout(getJobsStatusByPrinter(printerId), 6000 );
-					}
 				}
 				,function(response){
-					console.log(response);
+					var res = JSON.parse(response);
+					$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
+					$('#myModal').modal('show');
 				});
 	}
 

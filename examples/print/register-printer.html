@@ -168,48 +168,48 @@
 
 				</div>
 				<div class="modal-footer">
-					<a class="spark_btn small cancel" type="button">CLOSE</a>
+					<a class="spark_btn small cancel" type="button">Close</a>
 				</div>
 			</div>
 		</div>
 	</div>
 
-<!--<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>-->
+	<!--<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>-->
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
-<!--script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-drive.js"></script-->
-<!--script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script-->
-<!--<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>-->
+	<!--script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-drive.js"></script-->
+	<!--script type="text/javascript" charset="utf-8" src="examples/drive/index.js"></script-->
+	<!--<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>-->
 
 
-<!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Paginated.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Paginated.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/PrintDB.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Printer.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Tasks.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/PrintDB.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Printer.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Tasks.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
 	<!-- OR use the minified version
 <script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
 -->
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <script>
 	jQuery(function ($) {
@@ -257,6 +257,10 @@
 						function (response) {
 							$('#myModal').find(".modal-body").html("<span>" + response.statusText + "</span>");
 							$('#myModal').modal('show');
+							var res = JSON.parse(response);
+							$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
+							$('#myModal').modal('show');
+
 						});
 			}
 		});
