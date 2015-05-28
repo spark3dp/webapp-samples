@@ -67,6 +67,23 @@
 			padding: 18px 0;
 		}
 
+		.modal-dialog{
+			width: 300px;
+			text-align: center;
+			margin-left: 200px;
+			margin-top: 150px;
+		}
+
+		.modal-footer
+		{
+			text-align:center !important;
+		}
+
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
+
    </style>
 </head>
 
@@ -138,6 +155,24 @@
 
 	</div>
 <!-- /container -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4>ERROR</h4>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<a class="spark_btn small cancel" type="button">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 
@@ -214,14 +249,21 @@
 
 				sparkPrint.registerPrinter(token, printerName, function (response) {
 							var printerId = response.printer_id;
-							//logger("#register-printer-form #inputLog","Registered Successfully! printerId="+printerId);
 							eventBroadCaster.broadcastEvent("registerIframe.add")
 						},
 						function (response) {
-							//logger("#register-printer-form #inputLog",response);
+							var res = JSON.parse(response);
+							$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
+							$('#myModal').modal('show');
 
 						});
 			}
+		});
+
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
 		});
 
 	});
