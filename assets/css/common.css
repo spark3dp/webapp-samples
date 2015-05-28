@@ -462,6 +462,16 @@ i.stooltip span {
     margin-bottom: -3px;
 }
 
+/** TODO: replace the above sprite with this sprite**/
+.new_spark_icon {
+    background: url(../img/sprite_sampleapp.png) no-repeat;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    margin-bottom: -3px;
+}
+
 .si-help {
     background-position: -286px -47px;
     width: 17px;
@@ -698,6 +708,20 @@ i.stooltip span {
     background-position: -69px -62px;
     width: 26px;
     height: 26px;
+}
+
+.print-si-round-refresh-light
+{
+    background-position: -284px -145px;
+    width: 29px;
+    height: 29px;
+}
+
+.print-si-round-refresh-light:hover
+{
+    background-position: -284px -173px;
+    width: 29px;
+    height: 29px;
 }
 
 
