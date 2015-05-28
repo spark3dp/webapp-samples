@@ -1,15 +1,15 @@
 Web App Samples
 ========================
 ### Introduction
-These sample applications provides an introduction to working with the Spark OAuth 2.0 proces and with cloud based 3D model storing, preparing and printing.
+These applications demonstrate Spark's cloud based 3D model storage, mesh preparation and 3D printing and can also provide an example of the Spark OAuth 2.0 procedure.
 
 ### Required setup before running the sample code
 1. Clone the software repository (copy its files) to a folder on your web server. 
-2. If you have not already done so, define an app on the Spark Developers portal at https://spark.autodesk.com/developers.
+2. If you have not already done so, define an app on the Spark Developers portal at https://spark.autodesk.com/developers/myApps.
 3. In the API Keys tab of the app registration, enter the fully qualified URL of the sample's plugins/login/login-callback.html file (do not use a relative path).
 4. Copy the app key and app secret for later use.
 5. You need to run a server. This repo is provided with a nodejs server. To run it you should:
-  * Copy server/nodejs/config.example.js to server/nodejs/config.js and set your app's key and secret there.
+  * Copy server/nodejs/config.example.js to server/nodejs/config.js and enter your app key and secret.
   * Install nodejs and then:
   ```sh
   $ sudo npm -g install grunt-cli
@@ -17,8 +17,8 @@ These sample applications provides an introduction to working with the Spark OAu
   $ npm install
   $ node server.js
   ```
-  * Now you have a server running on port 3000. You can check it by going to http://your-server.com:3000
-6. Initialize your app - see info in the "Quick Start" section
+  * Now you have a server running on port 3000. You can check it by going to http://your-server.com:3000.
+6. Initialize your app - see info in the "Quick Start" section.
 
 
 ### Quick Start
@@ -97,5 +97,5 @@ ADSKSpark.Client.initialize(
 </html>
 ```
 
-The current authentication process is using a server side that handles the fetching of access_token and guest_token. These are required
-so that your application will work. You can utilize one of the server implementations that are supplied in this repository.
+A sever side authentication process, fetching an access_token and guest_token, is required
+for your application to work. You can utilize one of the server implementations that are supplied in this repository.
