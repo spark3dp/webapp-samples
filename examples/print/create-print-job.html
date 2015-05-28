@@ -184,27 +184,41 @@
 	</div>
 <!-- /container -->
 
-<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<!--<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>-->
 
 <script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
 
-<!-- spark sdk -->
+	<!--<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>-->
+
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+
+	<!-- spark sdk -->
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Paginated.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 
-<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/PrintDB.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Printer.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Tasks.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
+	<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+-->
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 <script>
 
@@ -215,7 +229,7 @@
 		ajaxCallListenerFromIframe();
 		common.setUIFunctionality();
 
-		var urlParams = spark.util.extractParamsFromURL();
+		var urlParams =  ADSKSpark.Helpers.extractParamsFromURL();
 		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
 		if (currentFileId != "") {
 			//sending a printable url of a file that was created via the tray
@@ -224,11 +238,13 @@
 		}
 
 		var getAllPrinters = function(){
-			sparkPrint.getAllPrinters(function(response){
-				var printers = response.printers;
+			ADSKSpark.Printers.get().then(function(response){
+				var printers = response;
 
 				for(var i in printers){
-					$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select")
+					if(printers[i].printer_name != undefined) {
+						$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select")
+					}
 				}
 			});
 		};
@@ -257,7 +273,10 @@
 
 				try{
 					var  settings = JSON.parse($('#printer-settings').val());
-					sparkPrint.printJob(fileUrl, printerId, settings, function (response) {
+					var job = new ADSKSpark.Job(undefined);
+					console.log(job)
+					job.create(printerId, settings, "", fileUrl).then(function (response) {
+								console.log(response)
 								var printerId = response.printer_id;
 								eventBroadCaster.broadcastEvent('printIframe.jobExist');
 							},
@@ -268,6 +287,7 @@
 								$('#myModal').modal('show');
 							});
 				}catch(e){
+					console.log(e);
 					$('#myModal').find(".modal-body").html("<span>The Settings parameter must be in JSON format!</span>");
 					$('#myModal').modal('show');
 				}
