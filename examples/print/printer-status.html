@@ -181,6 +181,17 @@
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <script type="">
+
+	var printersArray = [];
+	var jobsArray = [];
+	var classMapper = {
+		"completed":"success",
+		"queued":"warning",
+		"started":"info",
+		"canceled":"danger",
+		"printing":"info"
+	};
+
 	$(document).ready(function(){
 		ajaxCallListenerFromIframe();
 
@@ -214,9 +225,6 @@
 		});
 	});
 
-	var printersArray = [];
-	var jobsArray = [];
-
 	var getAllPrinters = function(){
 		ADSKSpark.Printers.get().then(function(response){
 			var printers = response.reverse();
@@ -246,6 +254,8 @@
 		});
 	};
 
+	getAllPrinters();
+
 	function getJobById(job_id){
 		var result = undefined;
 		$.each(jobsArray, function (index, item) {
@@ -266,64 +276,47 @@
 		return result;
 	}
 
-	getAllPrinters();
+	var getJobsStatusByPrinter = function(printerId) {
 
-	var getJobsStatusByPrinter = function(printerId){
+		ADSKSpark.Jobs.getPrinter(printerId).then(function (response) {
 
-		if (ADSKSpark.Client.isAccessTokenValid()) {
-			var headers = {
-				"Authorization": "Bearer " + ADSKSpark.Client.getAccessToken(),
-				"Content-type": "application/x-www-form-urlencoded"
-			};
+					console.log("getJobsStatusByPrinter: " + printerId);
 
-		ADSKSpark.Jobs.getPrinter(printerId, headers).then(function(response) {
-			
-						console.log("getJobsStatusByPrinter: " + printerId);
+					var selectedPrinterId = $("#printers-select").val();
 
-						var selectedPrinterId = $("#printers-select").val();
+					if (selectedPrinterId == printerId) {
 
-						if (selectedPrinterId == printerId) {
+						$("#printersStatusTbody").empty();
 
-							$("#printersStatusTbody").empty();
+						var printerJobs = response;
 
-							var printerJobs = response;
+						console.log(printerJobs);
 
-							console.log(printerJobs);
+						if (printerJobs.length > 0) {
 
-							if (printerJobs.length > 0) {
+							for (var i in printerJobs) {
+								if (printerJobs[i].data != undefined) {
 
-								for (var i in printerJobs) {
-									if(printerJobs[i].data != undefined) {
+									jobsArray.push(new ADSKSpark.Job(printerJobs[i].data));
 
-										jobsArray.push(new ADSKSpark.Job(printerJobs[i].data));
-
-										var row = createJobRow(printerJobs[i].data);
-										row.appendTo("#printersStatusTbody");
-									}
+									var row = createJobRow(printerJobs[i].data);
+									row.appendTo("#printersStatusTbody");
 								}
+							}
 
-								$(".print-statuses-container").show();
-								$("#empty-jobs").hide();
-								eventBroadCaster.broadcastEvent('statusIframe.printerExist');
-							}
-							else {
-								$(".print-statuses-container").hide();
-								$("#empty-jobs").show();
-							}
+							$(".print-statuses-container").show();
+							$("#empty-jobs").hide();
+							eventBroadCaster.broadcastEvent('statusIframe.printerExist');
 						}
-					},
-					function (response) {
-					});
-		}
-	};
+						else {
+							$(".print-statuses-container").hide();
+							$("#empty-jobs").show();
+						}
+					}
+				},
+				function (response) {
+				});
 
-
-	var classMapper = {
-		"completed":"success",
-		"queued":"warning",
-		"started":"info",
-		"canceled":"danger",
-		"printing":"info"
 	};
 
 	var createJobRow = function(job){
@@ -369,11 +362,9 @@
 	};
 
 	var sendPrinterCommand = function(jobId, command){
-
-
 		var printer = getPrinterById($("#printers-select").val());
-        var params = { "job_id": jobId};
-		printer.sendCommand(command,params).then(function(response){
+        var params = { "job_id": jobId };
+		printer.sendCommand(command, params).then(function(response){
 				}
 				,function(response){
 					var res = JSON.parse(response);
@@ -383,14 +374,5 @@
 	}
 
 </script>
-
-
-
-
-
-
-
-
-
 </body>
 </html>

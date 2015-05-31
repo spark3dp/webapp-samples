@@ -249,12 +249,9 @@
 							eventBroadCaster.broadcastEvent("registerIframe.add")
 						},
 						function (response) {
-							$('#myModal').find(".modal-body").html("<span>" + response.statusText + "</span>");
-							$('#myModal').modal('show');
 							var res = JSON.parse(response);
 							$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
 							$('#myModal').modal('show');
-
 						});
 			}
 		});

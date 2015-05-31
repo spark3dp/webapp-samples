@@ -185,7 +185,7 @@
 
 	var printersArray = [];
 
-	function getAllPrinters(){
+	var getAllPrinters = function(){
 		ADSKSpark.Printers.get().then(function(response){
 
 			$('.spinner').hide();
@@ -250,7 +250,6 @@
 		return result;
 	}
 
-
 	$(document).ready(function() {
 
 		ajaxCallListenerFromIframe();
@@ -283,7 +282,6 @@
 			$('#myModal').attr("printer_id", $(this).attr("printer_id"));
 			$('#myModal').modal('show');
 		});
-
 
 		$('#myModal').on('click', '.cancel', function (e) {
 			e.preventDefault();

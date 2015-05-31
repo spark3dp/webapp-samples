@@ -218,6 +218,32 @@
 <script>
 
 	var currentFileId;
+	var printersArray = [];
+
+	var getAllPrinters = function(){
+		ADSKSpark.Printers.get().then(function(response){
+			var printers = response;
+
+			for(var i in printers){
+				if(printers[i].printer_name != undefined) {
+
+					printersArray.push(new ADSKSpark.Printer(printers[i]));
+
+					$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select")
+				}
+			}
+		});
+	};
+
+	function getPrinterById(printer_id){
+		var result = undefined;
+		$.each(printersArray, function (index, item) {
+			if(item.printer_id == printer_id) {
+				result = item;
+			}
+		});
+		return result;
+	};
 
 	$(document).ready(function(){
 
@@ -231,18 +257,6 @@
 			var url = "http://static.spark.autodesk.com/Public/Beta/" + currentFileId + ".gcode";
 			$("#fileUrl").val(url);
 		}
-
-		var getAllPrinters = function(){
-			ADSKSpark.Printers.get().then(function(response){
-				var printers = response;
-
-				for(var i in printers){
-					if(printers[i].printer_name != undefined) {
-						$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select")
-					}
-				}
-			});
-		};
 
 		getAllPrinters();
 
@@ -271,12 +285,13 @@
 
 					var job = new ADSKSpark.Job(undefined);
 
-					job.create(printerId, settings, "", fileUrl).then(function (response) {
-								console.log(response);
+					var printer = getPrinterById(printerId);
+					printer.createJob("", fileUrl, settings, "").then(function (response) {
 								eventBroadCaster.broadcastEvent('printIframe.jobExist');
 							},
 							function (response) {
-								$('#myModal').find(".modal-body").html("<span>An error occurred.</span>");
+								var res = JSON.parse(response);
+								$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
 								$('#myModal').modal('show');
 							});
 				}catch(e){
@@ -287,13 +302,13 @@
 			}
 		});
 
-
-
 		$('#myModal').on('click', '.cancel', function (e) {
 			e.preventDefault();
 			$('#myModal').modal('hide');
 		});
 	});
+
+
 
 </script>
 
