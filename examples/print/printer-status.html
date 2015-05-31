@@ -192,8 +192,39 @@
 		"printing":"info"
 	};
 
+	var getAllPrinters = function(){
+		ADSKSpark.Printers.get().then(function(response){
+			var printers = response.reverse();
+			$("#printers-select").find('option').remove();
+			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
+
+			var onlinePrinterFound = false;
+			if(printers.length >0) {
+				for (var i in printers) {
+					if (printers[i].printer_name != undefined) {
+						printersArray.push(new ADSKSpark.Printer(printers[i]));
+
+						$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select");
+
+						if (onlinePrinterFound == false && printers[i].printer_last_health == "online") {
+							onlinePrinterFound = true;
+							$("#printers-select").val(printers[i].printer_id);
+							$("#printers-select").change();
+						}
+					}
+				}
+			}
+			else
+			{
+				$(".choose-printer").show();
+			}
+		});
+	};
+
 	$(document).ready(function(){
 		ajaxCallListenerFromIframe();
+
+		getAllPrinters();
 
 		$('#myModal').on('click', '.cancel', function (e) {
 			e.preventDefault();
@@ -224,37 +255,6 @@
 			}
 		});
 	});
-
-	var getAllPrinters = function(){
-		ADSKSpark.Printers.get().then(function(response){
-			var printers = response.reverse();
-			$("#printers-select").find('option').remove();
-			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
-
-			var onlinePrinterFound = false;
-			if(printers.length >0) {
-				for (var i in printers) {
-					if (printers[i].printer_name != undefined) {
-						printersArray.push(new ADSKSpark.Printer(printers[i]));
-
-						$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select");
-
-						if (onlinePrinterFound == false && printers[i].printer_last_health == "online") {
-							onlinePrinterFound = true;
-							$("#printers-select").val(printers[i].printer_id);
-							$("#printers-select").change();
-						}
-					}
-				}
-			}
-			else
-			{
-				$(".choose-printer").show();
-			}
-		});
-	};
-
-	getAllPrinters();
 
 	function getJobById(job_id){
 		var result = undefined;
