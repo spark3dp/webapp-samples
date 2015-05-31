@@ -11,5 +11,6 @@ ADSKSpark.Client.initialize(APP_KEY,// Your app key
 	GUEST_TOKEN_URL,// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
 	ACCESS_TOKEN_URL,// The access token endpoint that is implemented by your server (i.e. http://example.com/access_token)
 	REFRESH_TOKEN_URL,// The refresh access token endpoint that is implemented by your server (i.e. http://example.com/refresh_token)
-	API_URL // api host
+	API_URL, // api host
+	REDIRECT_URI
 );
