@@ -367,8 +367,7 @@
 		printer.sendCommand(command, params).then(function(response){
 				}
 				,function(response){
-					var res = JSON.parse(response);
-					$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
+					$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
 					$('#myModal').modal('show');
 				});
 	}
