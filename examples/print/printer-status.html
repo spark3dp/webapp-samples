@@ -301,6 +301,7 @@
 
 									var row = createJobRow(printerJobs[i].data);
 									row.appendTo("#printersStatusTbody");
+									$("[data-toggle='tooltip']").tooltip();
 								}
 							}
 
@@ -332,12 +333,19 @@
 		if (job.job_status.job_status == "completed" || job.job_status.job_status == "failed" || job.job_status.job_status == "canceled") {
 			row.append('<td></td>');
 		}
+		else if(job.job_status.job_status == "queued")
+		{
+			row.append('<td>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Play" class="job-action resume-print" onclick="startQueuedJob(\'' + job.job_id + '\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Refresh" class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'</td>');
+		}
 		else {
 			row.append('<td>' +
-					'<a  class="job-action resume-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
-					'<a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
-					'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + job.job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
-					'<a  class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Resume" class="job-action resume-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Pause" class="job-action pause-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Cancel" class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + job.job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Refresh" class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
 					'</td>');
 		}
 
@@ -356,20 +364,32 @@
 
 				var newRow = createJobRow(response.data);
 				currentRow.replaceWith(newRow);
+				$("[data-toggle='tooltip']").tooltip();
 			}
 
 		},function(response){} );
 	};
+
 
 	var sendPrinterCommand = function(jobId, command){
 		var printer = getPrinterById($("#printers-select").val());
         var params = { "job_id": jobId };
 		printer.sendCommand(command, params).then(function(response){
 				}
-				,function(response){
+				,function(response) {
+					$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
+				});
+	}
+
+	var startQueuedJob = function(jobId) {
+		var printer = getPrinterById($("#printers-select").val());
+		printer.startJob(jobId).then(function (response) {
+				}
+				, function (response) {
 					$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
 					$('#myModal').modal('show');
 				});
+
 	}
 
 </script>
