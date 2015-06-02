@@ -158,6 +158,35 @@ var sparkPrint = function () {
 		},
 
 		/**
+		 * Start a queued print job
+		 * @param printableId
+		 * @param printerId
+		 * @param settings
+		 * @param callback
+		 * @param errorCallback
+		 */
+		startQueuedPrintJob: function (printerId,job_id,callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var params = JSON.stringify({job_id:job_id});
+
+				console.log(params);
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/json"
+				};
+				var url = serverUrl + 'print/printers/'+printerId+"/jobs";
+				spark.util.xhr(url, 'PUT', params, headers, callback,errorCallback);
+
+			}else{
+				callback(false);
+			}
+
+		},
+
+		/**
 		 * Returns all job statuses for printer specified by printerId
 		 * @param printerId
 		 * @param callback

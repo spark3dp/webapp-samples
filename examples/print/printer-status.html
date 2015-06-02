@@ -293,6 +293,13 @@
 		if (job.job_status.job_status == "completed" || job.job_status.job_status == "failed" || job.job_status.job_status == "canceled") {
 			row.append('<td></td>');
 		}
+		else if(job.job_status.job_status == "queued")
+		{
+			row.append('<td>' +
+					'<a  class="job-action resume-print"   onclick="startQueuedJob(\'' + job.job_id + '\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a  class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'</td>');
+		}
 		else {
 			row.append('<td>' +
 					'<a  class="job-action resume-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
@@ -319,11 +326,23 @@
 		},function(response){} );
 	};
 
-	var sendPrinterCommand = function(jobId, command){
+	var startQueuedJob = function(jobId) {
 
-		sparkPrint.sendPrintCommand($("#printers-select").val(),jobId,command,function(response){
+		sparkPrint.startQueuedPrintJob($("#printers-select").val(), jobId, function (response) {
 				}
-				,function(response){
+				, function (response) {
+					var res = JSON.parse(response);
+					$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
+					$('#myModal').modal('show');
+				});
+
+	}
+
+	var sendPrinterCommand = function(jobId, command) {
+
+		sparkPrint.sendPrintCommand($("#printers-select").val(), jobId, command, function (response) {
+				}
+				, function (response) {
 					var res = JSON.parse(response);
 					$('#myModal').find(".modal-body").html("<span>" + res.message + "</span>");
 					$('#myModal').modal('show');
