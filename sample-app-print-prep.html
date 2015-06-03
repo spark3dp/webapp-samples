@@ -1,0 +1,370 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - My Drive</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+	</style>
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container sample-app-container" id="container">
+
+		<div class="sample-app-header clearfix">
+			<a class="btn pull-right btn-github" href="https://github.com/Spark-API/Sample-App-Auth-Drive-JS/tree/v0.1" target="_blank"></a>
+			<!-- Navigation links at the top right of the screen -->
+			<h5 class="sample-title">Spark Storage Sample App</h5>
+		</div>
+		<div style="text-align: center;">
+			<ul class="nav nav-tabs sample-top-menu" role="tablist">
+				<li id="loginId">
+					<div id="user" class="pull-left">
+						<img class="user-avatar" src="" style="display: none"/>
+					</div>
+					<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li id="importId">
+					<a class="menu-item pull-left" data-state="import" role="tab">Import</a>
+
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li id="analyzeId">
+					<a class="menu-item pull-left" data-state="analyze" role="tab">Analyze & Repair</a>
+
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-right-arrow"></div>
+				</li>
+				<li id="prepareId">
+					<a class="menu-item pull-left" data-state="prepare" role="tab">Prepare</a>
+
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				</li>
+				<li id="generateId">
+					<a class="menu-item pull-left" data-state="generate" role="tab">Generate</a>
+
+					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="row">
+		<div class="mainIframe-container2 col-md-6">
+
+
+			<iframe name="mainIframe"
+			        id="mainIframe"
+			        width="340px"
+			        height="600px"
+			        frameborder="0"
+			        scrolling="no"
+			        src="examples/drive/show-my-assets/index.html"></iframe>
+		</div>
+		<div id="canvas" class="col-md-6"></div>
+		</div>
+		<div class="footer"></div>
+	</div>
+
+</div>
+
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/scripts/init.js"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//spark-dev-portal-stg.s3.amazonaws.com/sdk/autodesk-spark-sdk-latest.min.js"></script>
+-->
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/three.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/STLLoader.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/OBJLoader.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/threejs.OrbitControls.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/threecsg/ThreeCSG.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="examples/print/my-print-prep.js"></script>
+
+<script>
+
+var isLoggedIn = false, //Do we have access token
+		currentAssetId = 0, //the asset id we are referring to
+		currentFileId ////the file id we are referring to
+		;
+
+//functions
+
+/**
+ * Change state to 'state'
+ * @param state
+ */
+function changeState(state) {
+	statePlugin.changeState(state);
+}
+
+/**
+ * Show breadcrumb
+ */
+function showBreadcramb(breadcrumb) {
+	$('#breadcrumbs > div').removeClass('dark');
+	$('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
+
+}
+
+function hideBreadcrumbs(breadcrumbs) {
+	for (var i in breadcrumbs) {
+		$('#' + breadcrumbs[i]).addClass('hidden');
+	}
+}
+
+/**
+ * Show asset breadcrumb
+ */
+function showAssetBreadcrumb(assetId) {
+	showBreadcramb('asset');
+	$('#asset').find('.bread-crumb-inner').text('Asset ID: ' + assetId);
+
+	//hide the create asset button
+	$('#create-asset').hide();
+
+	//show the create file button
+	$('#create-file').show();
+}
+
+function showAssetFilesBreadcrumb(fileType) {
+	showBreadcramb('file-type');
+	$('#file-type').find('.bread-crumb-inner > b').text(fileType);
+}
+
+/**
+ * Load show my assets files page
+ * Shows my assets file groups
+ */
+function showMyAssetFiles() {
+	$('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
+	hideBreadcrumbs(['file-type']);
+	showAssetBreadcrumb(currentAssetId)
+
+}
+
+function openUploadFileMenu(elem) {
+	$(elem).next('i').click();
+}
+
+function goToUploadFilePage(page) {
+	var uploadPage = page === 'source' ? 'upload-source-file' : 'upload-thumbnail-file';
+
+	uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
+
+	$('#mainIframe').attr('src', uploadPage);
+}
+
+/**
+ * set manage asset as enabled
+ */
+
+function showManageFileStep() {
+	$('#createAssetId').addClass('verified disabled').removeClass('selected');
+	$('#manageFilesId').addClass('verified selected').removeClass('disabled');
+	$('#myAssetsId').removeClass('selected').addClass('verified');
+}
+
+
+//run onload
+jQuery(document).ready(function ($) {
+	ajaxCallLogger.createLoggerElement(".footer");
+	ajaxCallLogger.startIframeListener();
+	broadcastEventListener.startIframeBroadcastListener();
+
+	if (ADSKSpark.Client.isAccessTokenValid()) {
+		$('.menu-item[data-state=login]').data('state', 'loggedIn');
+		isLoggedIn = true;
+		statePlugin.changeState('loggedIn');
+		$('#user').show();
+		hideBreadcrumbs(['home', 'asset', 'file-type']);
+		$('#mainIframe').attr('height', '500px');
+		$('#loginId').addClass('verified');
+	} else {
+		$('.menu-item[data-state=loggedIn]').data('state', 'login');
+		isLoggedIn = false;
+		statePlugin.changeState('login');
+		$('.user-avatar').hide();
+		$('#breadcrumbs-section').hide();
+		$('#mainIframe').attr('height', '600px');
+	}
+
+	$(".sample-top-menu").on('click', '.menu-item', function (e) {
+		e.preventDefault();
+		var state = $(this).data("state");
+		statePlugin.changeState(state);
+		$(this).addClass("selected");
+	});
+
+
+	common.setUIFunctionality();
+
+});
+
+//States of the app
+
+var states = {
+	login: {
+		src: 'plugins/login/login.html',
+		selectedTab: "#loginId",
+		enabledTabs: [],
+		disabledTabs: ['#loginId', '#importId', '#analyzeId', '#prepareId', "#generateId"],
+		callbackFunc: function () {
+			$('#breadcrumbs-section').hide();
+			$('#user').hide();
+			$('.menu-item[data-state=loggedIn]').data('state', 'login');
+			$('.sample-top-menu > li').removeClass('verified');
+		}
+	},
+
+	loggedIn: {
+		src: 'plugins/login/login.html',
+		selectedTab: "#loginId",
+		enabledTabs: ['#loginId', '#importId'],
+		disabledTabs: ['#analyzeId', '#repairId'],
+		callbackFunc: function () {
+			$('#breadcrumbs-section').hide();
+			$('.menu-item[data-state=login]').data('state', 'loggedIn');
+			$('#loginId').addClass('verified');
+		}
+	},
+	import: {
+		src: 'examples/print-prep/import.html',
+		selectedTab: "#myAssetsId",
+		enabledTabs: ['#myAssetsId', '#loginId'],
+		disabledTabs: ['#manageFilesId', '#createAssetId'],
+		callbackFunc: function () {
+			$('#breadcrumbs-section').css('display', 'inline-block');
+			$('#breadcrumbs-section div#action-button div').hide();
+			showBreadcramb('home');
+			$('#mainIframe').attr('height', '500px');
+			$('#loginId').addClass('verified');
+		}
+	},
+
+	analyze: {
+		src: 'examples/drive/create-asset/index.html',
+		selectedTab: "#createAssetId",
+		enabledTabs: ['#loginId', '#myAssetsId', '#createAssetId'],
+		disabledTabs: ['#manageFilesId'],
+		callbackFunc: function () {
+			$('#breadcrumbs-section div#action-button div').hide();
+			$('#loginId').addClass('verified');
+			$('#myAssetsId').addClass('verified');
+
+		}
+	},
+
+	prepare: {
+		src: 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId,
+		selectedTab: "#manageFilesId",
+		enabledTabs: ['#loginId', '#myAssetsId', '#manageFilesId'],
+		disabledTabs: ['#createAssetId'],
+		callbackFunc: function () {
+			$('#breadcrumbs-section div#action-button div').hide();
+			$('#loginId').addClass('verified');
+			$('#myAssetsId').addClass('verified');
+			$('#createAssetId').addClass('verified');
+		}
+	}
+};
+
+
+/**
+ * Events that are called from the iframe
+ */
+var broadCastsCallbacks = {
+
+	redirectUserToDefaultPage: function (optionalParams) {
+		if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+			changeState('myAssets');
+			isLoggedIn = true;
+		}
+		if (optionalParams.member) {
+			$('#user span').text(optionalParams.member.name);
+			if (optionalParams.member.profile.avatar_path) {
+				$('#user img').attr('src', optionalParams.member.profile.avatar_path).show();
+			}
+		}
+
+	},
+	redirectUserToLoginPage: function () {
+		isLoggedIn = false;
+		$('#mainIframe').attr('height', '600px');
+		changeState('login');
+	},
+	loadAnalyzePage:function(){
+		changeState("analyze");
+	}
+};
+
+/**
+ * Map of all the possible broadcased events from the iframe
+ * @type {Array}
+ */
+var broadcastMapper = [];
+
+broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
+broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
+broadcastMapper['importIframe.continueClick'] = broadCastsCallbacks.loadAnalyzePage;
+
+
+
+</script>
+
+
+</body>
+</html>

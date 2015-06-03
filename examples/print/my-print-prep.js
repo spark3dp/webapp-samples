@@ -10,8 +10,8 @@ var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-var canvasHeight = 500;
-var canvasWidth = 650;
+var canvasHeight = 600;
+var canvasWidth =330;
 var manager = new THREE.LoadingManager();
 var loader = new THREE.OBJLoader( manager );
 
@@ -126,7 +126,7 @@ function showObjOnScene(downloadData){
 	//loader2.load('http://localhost:8888/mouse-tracking/models/cube.js', modelLoadedCallback);
 
 	if(lastObj!=undefined){
-		scene.remove( lastObj );
+		//scene.remove( lastObj );
 	}
 
 	lastObj = object;
@@ -166,8 +166,8 @@ function disableButtons(){
 	$("#btn-div").children().prop("disabled",true);
 	$("#btn-div").addClass("loader-print");
 }
-
-$( "#import" ).click(function() {
+/**
+$( "#importOld" ).click(function() {
 	disableButtons();
 	var fileSelect = document.getElementById('file-select');
 	var files = fileSelect.files;
@@ -176,7 +176,24 @@ $( "#import" ).click(function() {
 		document.getElementById('meshId').value = response.id;
 		EnableButtons();
 	});
+});*/
+
+$( "#import" ).click(function() {
+	disableButtons();
+	var fileSelect = document.getElementById('file-select');
+	var files = fileSelect.files;
+	ADSKSpark.MeshAPI.uploadFile(files[0]).then(function (response) {
+		if (response.files != undefined && response.files.length > 0) {
+			ADSKSpark.MeshAPI.importMesh(response.files[0].file_id).then(function (response) {
+				document.getElementById('meshId').value = response.id;
+				EnableButtons();
+			});
+		}
+	});
 });
+
+
+
 
 var analyzeAndRepairCallback = function(response){
 	document.getElementById('meshId').value = response.id;
@@ -193,14 +210,31 @@ var analyzeAndRepairCallback = function(response){
 	EnableButtons();
 };
 
-$( "#analyze" ).click(function() {
+/**
+$( "#analyzeOld" ).click(function() {
 	disableButtons();
 	sparkPrintPrep.analyzeMesh(document.getElementById('meshId').value, analyzeAndRepairCallback);
+});*/
+
+
+$( "#analyze" ).click(function() {
+	disableButtons();
+	ADSKSpark.MeshAPI.analyzeMesh(document.getElementById('meshId').value).then(function (response) {
+		analyzeAndRepairCallback(response);
+	});
 });
+/**
+$( "#repairOld" ).click(function() {
+	disableButtons();
+	sparkPrintPrep.repairMesh(document.getElementById('meshId').value,analyzeAndRepairCallback);
+});*/
 
 $( "#repair" ).click(function() {
 	disableButtons();
-	sparkPrintPrep.repairMesh(document.getElementById('meshId').value,analyzeAndRepairCallback);
+	ADSKSpark.MeshAPI.repairMesh(document.getElementById('meshId').value,true).then(function (response) {
+		analyzeAndRepairCallback(response);
+	});
+
 });
 
 $( "#export" ).click(function() {
@@ -221,8 +255,8 @@ $( "#load" ).click(function() {
 	});
 
 });
-
-$( "#createTray" ).click(function() {
+/**
+$( "#createTrayOld" ).click(function() {
 	disableButtons();
 	var meshId=document.getElementById('meshId').value;
 	//var downloadFileId = document.getElementById('downloadFileId').value;
@@ -237,9 +271,25 @@ $( "#createTray" ).click(function() {
 		EnableButtons();
 	});
 
-});
+});*/
 
-$( "#prepareTray" ).click(function() {
+
+$( "#createTray" ).click(function() {
+	disableButtons();
+	var meshId=document.getElementById('meshId').value;
+	//var downloadFileId = document.getElementById('downloadFileId').value;
+	//var printerTypeId= "7FAF097F-DB2E-45DC-9395-A30210E789AA";
+	var printerTypeId= "8D39294C-FA7A-40F4-AB79-19F506C64097"; // ultimaker
+	//var profileId="34F0E39A-9389-42BA-AB5A-4F2CD59C98E4";
+	var profileId="F3314255-711D-48A9-8CB2-C55CEACF58B7"; // ultimakerProfile
+	ADSKSpark.TrayAPI.createTray(printerTypeId,profileId,[meshId]).then(function (response) {
+		document.getElementById('trayId').value = response.id;
+		EnableButtons();
+	});
+
+});
+/**
+$( "#prepareTrayOld" ).click(function() {
 	disableButtons();
 	var trayId=document.getElementById('trayId').value;
 
@@ -250,7 +300,21 @@ $( "#prepareTray" ).click(function() {
 		EnableButtons();
 	});
 
+});*/
+
+$( "#prepareTray" ).click(function() {
+	disableButtons();
+	var trayId=document.getElementById('trayId').value;
+
+	ADSKSpark.TrayAPI.prepareTray(trayId,true).then(function (response) {
+		document.getElementById('trayId').value = response.id;
+		document.getElementById('meshId').value = response.meshes[0].id;
+
+		EnableButtons();
+	});
+
 });
+
 
 
 $( "#createSupport" ).click(function() {
@@ -270,10 +334,14 @@ $( "#generatePrintable" ).click(function() {
 	disableButtons();
 	var trayId=document.getElementById('trayId').value;
 
-	sparkPrintPrep.generatePrintable(trayId, function(response){
+	ADSKSpark.TrayAPI.generatePrintable(trayId).then(function(response){
 		document.getElementById('printableId').value = response.file_id;
 		EnableButtons();
 	});
+	/**sparkPrintPrep.generatePrintable(trayId, function(response){
+		document.getElementById('printableId').value = response.file_id;
+		EnableButtons();
+	});*/
 
 });
 
