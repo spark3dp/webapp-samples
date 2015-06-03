@@ -196,8 +196,8 @@ input[type="checkbox"]:checked + label span.chk {
     text-decoration: none;
     cursor: pointer;
     /* medium size is default */
-    height: 35px;
-    line-height: 35px;
+    height: 40px;
+    line-height: 40px;
     padding: 0px 32px;
     font-size: 14px;
     position: relative;
@@ -462,6 +462,16 @@ i.stooltip span {
     margin-bottom: -3px;
 }
 
+/** TODO: replace the above sprite with this sprite**/
+.new_spark_icon {
+    background: url(../img/sprite_sampleapp.png) no-repeat;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    text-align: left;
+    margin-bottom: -3px;
+}
+
 .si-help {
     background-position: -286px -47px;
     width: 17px;
@@ -600,25 +610,25 @@ i.stooltip span {
 }
 
 .print-si-close-light {
-    background-position: -35px -5px;
+    background-position: -34px -5px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-close-light:hover, .btn-simulator-container:hover .print-si-close-light {
-    background-position: -35px -31px;
+    background-position: -34px -31px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-pause-light {
-    background-position: -65px -5px;
+    background-position: -69px -5px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-pause-light:hover , .btn-simulator-container:hover .print-si-pause-light {
-    background-position: -65px -31px;
+    background-position: -69px -31px;
     width: 26px;
     height: 26px;
 }
@@ -659,6 +669,18 @@ i.stooltip span {
     height: 26px;
 }
 
+.print-si-round-resume-light {
+    background-position: -41px -66px;
+    width: 26px;
+    height: 26px;
+}
+
+.print-si-round-resume-light:hover {
+    background-position: -41px -95px;
+    width: 26px;
+    height: 26px;
+}
+
 
 .print-si-browse {
     background-position: -5px -30px;
@@ -686,6 +708,20 @@ i.stooltip span {
     background-position: -69px -62px;
     width: 26px;
     height: 26px;
+}
+
+.print-si-round-refresh-light
+{
+    background-position: -284px -145px;
+    width: 29px;
+    height: 29px;
+}
+
+.print-si-round-refresh-light:hover
+{
+    background-position: -284px -173px;
+    width: 29px;
+    height: 29px;
 }
 
 

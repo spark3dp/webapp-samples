@@ -44,19 +44,17 @@
 			width: 680px;
 			margin-left: 1px;
 			padding-bottom: 10px;
-			padding-top: 10px;
+			padding-top: 25px;
 		
 		}
 
 
 		.simulator-container
 		{
-			padding-top: 30px;
-			position: relative;
-			top: -28px;
+
 			display: none;
 			width: 682px;
-			height: 125px;
+			height: 108px;
 			background:url('assets/img/simulator_panel_bg.png') no-repeat;
 		}
 
@@ -110,16 +108,21 @@
 			margin-left: 7px;
 		}
 
-		.new-token .spark_print_icon{
+		.create-new-token .spark_print_icon{
 			margin-left: 18px;
 		}
 
-		.logger-after-simulator
-		{
-			position: relative;
-			top:-28px;
+		.tooltip.right {
+			padding: 0 5px;
+			margin-left: -75px;
+			margin-top: -40px;
 		}
 
+		.tooltip.left {
+			padding: 0 5px;
+			margin-left: 65px;
+			margin-top: -47px;
+		}
 
 	</style>
 </head>
@@ -169,7 +172,8 @@
 			<div class="row simulator-row">
 
 				<div class="col-xs-8 no-padding pull-left">
-					<div class="new-token btn-simulator-container btn-simulator-container-new-token pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
+					<div class="new-token" style="display: none;"></div>
+					<div class="create-new-token btn-simulator-container btn-simulator-container-new-token pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
 						<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div> New Token
 					</div>
 					<div class="lcd-container pull-right"><div class="center-block lcd "></div></div>
@@ -195,6 +199,26 @@
 			</div>
 		</div>
 		<div class="footer"></div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Generating a new token will disconnect your current printer simulator, are you sure?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small generate" type="button">Generate</a>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -260,6 +284,23 @@
 			statePlugin.changeState(state);
 			showSimulator(false);
 		});
+
+		$(".create-new-token").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('show');
+		});
+
+		$(".generate").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('hide');
+			$(".new-token").click();
+		});
+
+		$(".cancel").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('hide');
+		});
+
 	});
 
 
@@ -273,7 +314,9 @@
 			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
-			callbackFunc: loggedOutCallback
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '462px');
+			}
 		},
 
 		manage:{
@@ -301,12 +344,13 @@
 			disabledTabs:[]
 		},
 
-		choose_asset:{
-			"src":"examples/print/choose-asset.html",
+		choose_file:{
+			"src":"examples/print/choose-file.html?assetId=1478573",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId", "#statusId"],
 			disabledTabs:[]
 		},
+
 
 		status:{
 			"src":"examples/print/printer-status.html",
@@ -319,14 +363,10 @@
 
 	var showSimulator = function(show){
 		if(show == true){
-			$('.simulator-container').animate({height: 'show'}, 290, function() {
-				$(".logger-container").addClass("logger-after-simulator");
-			});
+			$('.simulator-container').animate({height: 'show'}, 290);
 		}
 		else{
-			$('.simulator-container').animate({height: 'hide'}, 290, function() {
-				$(".logger-container").removeClass("logger-after-simulator");
-			});
+			$('.simulator-container').animate({height: 'hide'}, 290);
 		}
 	};
 
@@ -368,12 +408,9 @@
 		statePlugin.changeState("manage",optionalParams);
 		showSimulator(false);
 	};
-	broadcastMapper["printIframe.next"] = function(optionalParams){
-		statePlugin.changeState("status",optionalParams);
-	};
 
-	broadcastMapper["printIframe.chooseAsset"] = function(optionalParams){
-		statePlugin.changeState("choose_asset",optionalParams);
+	broadcastMapper["printIframe.chooseFile"] = function(optionalParams){
+		statePlugin.changeState("choose_file",optionalParams);
 		showSimulator(false);
 	};
 
@@ -389,7 +426,13 @@
 	};
 	broadcastMapper["printIframe.jobExist"] = function(optionalParams){
 		statePlugin.changeState("status",optionalParams);
+		statePlugin.verifyState("print");
 	};
+
+	broadcastMapper['manageIframe.loggedOutNoRefresh']= function(optionalParams){
+		loggedOutCallback();
+	};
+
 
 </script>
 

@@ -136,14 +136,11 @@ var sparkPrint = function () {
 		 * @param callback
 		 * @param errorCallback
 		 */
-		printJob: function (printableId, printerId,settings,callback,errorCallback) {
+		printJob: function (printableUrl, printerId,settings,callback,errorCallback) {
 			//Make sure token is still valid
 			if (spark.auth.isAccessTokenValid()) {
 
-				var params =JSON.stringify( {printable_url:printableId,settings:settings});
-
-				//var params = {printable_id:fileUrl,settings:settings};
-				//var params = "printable_url="+printableId;
+				var params =JSON.stringify( {printable_url:printableUrl,settings:settings});
 
 				console.log(params);
 
@@ -153,6 +150,35 @@ var sparkPrint = function () {
 				};
 				var url = serverUrl + 'print/printers/'+printerId+"/jobs";
 				spark.util.xhr(url, 'POST', params, headers, callback,errorCallback);
+
+			}else{
+				callback(false);
+			}
+
+		},
+
+		/**
+		 * Start a queued print job
+		 * @param printableId
+		 * @param printerId
+		 * @param settings
+		 * @param callback
+		 * @param errorCallback
+		 */
+		startQueuedPrintJob: function (printerId,job_id,callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+
+				var params = JSON.stringify({job_id:job_id});
+
+				console.log(params);
+
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/json"
+				};
+				var url = serverUrl + 'print/printers/'+printerId+"/jobs";
+				spark.util.xhr(url, 'PUT', params, headers, callback,errorCallback);
 
 			}else{
 				callback(false);
@@ -174,6 +200,26 @@ var sparkPrint = function () {
 					"Content-type": "application/x-www-form-urlencoded"
 				};
 				spark.util.xhr(serverUrl + 'print/printers/' + printerId + "/jobs", 'GET', '', headers, callback,errorCallback);
+			}else{
+				callback(false);
+			}
+
+		},
+
+		/**
+		 * Returns job status
+		 * @param jobId
+		 * @param callback
+		 * @param errorCallback
+		 */
+		getJobStatus: function (jobId,callback,errorCallback) {
+			//Make sure token is still valid
+			if (spark.auth.isAccessTokenValid()) {
+				var headers = {
+					"Authorization": "Bearer " + spark.auth.accessToken(),
+					"Content-type": "application/x-www-form-urlencoded"
+				};
+				spark.util.xhr(serverUrl + 'print/jobs/' + jobId, 'GET', '', headers, callback,errorCallback);
 			}else{
 				callback(false);
 			}

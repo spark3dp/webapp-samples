@@ -37,7 +37,7 @@
 		.print-statuses-container
 		{
 			overflow-y: auto;
-			height: 250px;
+			height: 310px;
 			margin-bottom: 20px;
 			display: none;
 		}
@@ -64,6 +64,32 @@
 			margin-top: 20px;
 		}
 
+		.resume-print
+		{
+			margin-right: 5px;
+		}
+
+		.cancel-print
+		{
+			margin-right: 5px;
+		}
+
+		.modal-dialog{
+			width: 300px;
+			text-align: center;
+			margin-left: 200px;
+			margin-top: 200px;
+		}
+
+		.modal-footer
+		{
+			text-align:center !important;
+		}
+
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
 	</style>
 </head>
 
@@ -90,7 +116,7 @@
 							<th><div>Job ID</div><span class="field-label">job_id</span></th>
 							<th><div>Submitted</div><span class="field-label">job_date_time</span></th>
 							<th><div>Status</div><span class="field-label">job_status</span></th>
-							<th style="width:90px;"></th>
+							<th style="width:150px;"></th>
 						</tr>
 					</thead>
 					<tbody id="printersStatusTbody">
@@ -106,128 +132,42 @@
 	</div>
 <!-- /container -->
 
-	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-auth.js"></script>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4>ERROR</h4>
+				</div>
+				<div class="modal-body">
 
-	<script type="text/javascript" charset="utf-8" src="../../vendor/jquery/jquery.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/utilities.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark/spark-printer.js"></script>
+				</div>
+				<div class="modal-footer">
+					<a class="spark_btn small cancel" type="button">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
-	<!-- spark sdk -->
+	<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
 	<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
 
-	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
 
-	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <script type="">
-	$(document).ready(function(){
-		ajaxCallListenerFromIframe();
-	});
 
-	var getAllPrinters = function(){
-		sparkPrint.getAllPrinters(function(response){
-			var printers = response.printers;
-			$("#printers-select").find('option').remove()
-			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
-
-			for(var i in printers){
-				$("<option value='"+printers[i].printer_id+"'>"+printers[i].printer_name+"</option>").appendTo("#printers-select");
-				if(printers[i].printer_last_health == "online"){
-					$("#printers-select").val(printers[i].printer_id);
-					$("#printers-select").change();
-				}
-				else
-				{
-					$(".choose-printer").show();
-				}
-			}
-		});
-	};
-
-
-	getAllPrinters();
-
-	var getJobsStatusByPrinter = function(printerId){
-		sparkPrint.getJobsStatusByPrinter(printerId,function(response){
-
-					var printerJobs = response.printer_jobs;
-
-					if(printerJobs.length > 0) {
-
-
-						for (var i in printerJobs) {
-
-							//'<button type="button" class="btn btn-default resume-print" onclick="sendPrinterCommand(\''+printerJobs[i].job_id+'\',\'resume\')"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>	</button>'+
-
-							var row = $("<tr class='" + classMapper[printerJobs[i].job_status.job_status] + "'></tr>");
-							row.append("<td>" + printerJobs[i].job_id + "</td><td>" + printerJobs[i].job_date_time + "</td>");
-							row.append("<td>" + printerJobs[i].job_status.job_status + "</td>");
-
-							if(printerJobs[i].job_status.job_status == "completed"){
-								row.append('<td><a  class="job-action cancel-print" style="margin-left: 26px;"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a></td>');
-							}
-							else
-							{
-								row.append('<td><a  class="job-action pause-print"   onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
-										'<a  class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + printerJobs[i].job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
-										'</td>');
-							}
-
-							row.appendTo("#printersStatusTbody");
-						}
-
-						$(".print-statuses-container").show();
-						$("#empty-jobs").hide();
-						eventBroadCaster.broadcastEvent('statusIframe.printerExist');
-					}
-					else
-					{
-						$(".print-statuses-container").hide();
-						$("#empty-jobs").show();
-					}
-
-					//logger("#inputLogStatus","Got "+ printerJobs.length +" jobs!");
-
-				},
-				function(response){
-					//logger("#inputLogStatus",response);
-
-				});
-	};
-
-	$("#printers-select").on('change', function (e) {
-		e.preventDefault();
-
-		var printerId = $('#printers-select').val();
-		if(printerId!=0) {
-			getJobsStatusByPrinter(printerId);
-			$(".choose-printer").hide();
-			var printerName = $('#printers-select').text();
-			if(printerName.indexOf("( simulator )") != -1){
-				eventBroadCaster.broadcastEvent('showSimulator', true);
-			}
-			else
-			{
-				eventBroadCaster.broadcastEvent('showSimulator', false);
-			}
-		}
-		else
-		{
-			$(".print-statuses-container").hide();
-			$("#empty-jobs").hide();
-			$(".choose-printer").show();
-			eventBroadCaster.broadcastEvent('showSimulator', false);
-		}
-
-
-
-	});
-
+	var printersArray = [];
+	var jobsArray = [];
 	var classMapper = {
 		"completed":"success",
 		"queued":"warning",
@@ -236,26 +176,206 @@
 		"printing":"info"
 	};
 
-	var sendPrinterCommand = function(jobId, command){
-		sparkPrint.sendPrintCommand($("#printers-select").val(),jobId,command,function(response){
-					//logger("#inputLogStatus","Successfully sent " + command + " command to printer "+$("#printers-select").val());
+	var getAllPrinters = function(){
+		ADSKSpark.Printers.get().then(function(response){
+			var printers = response.reverse();
+			$("#printers-select").find('option').remove();
+			$("<option value='0'>Please choose a printer</option>").appendTo("#printers-select");
 
+			var onlinePrinterFound = false;
+			if(printers.length >0) {
+				for (var i in printers) {
+					if (printers[i].printer_name != undefined) {
+						printersArray.push(new ADSKSpark.Printer(printers[i]));
+
+						$("<option value='" + printers[i].printer_id + "'>" + printers[i].printer_name + "</option>").appendTo("#printers-select");
+
+						if (onlinePrinterFound == false && printers[i].printer_last_health == "online") {
+							onlinePrinterFound = true;
+							$("#printers-select").val(printers[i].printer_id);
+							$("#printers-select").change();
+						}
+					}
 				}
-				,function(response){
-					//logger("#inputLogStatus",response);
-					//logger("#inputLogStatus","Error sending " + command + " command to printer "+$("#printers-select").val());
+			}
+			else
+			{
+				$(".choose-printer").show();
+			}
+		});
+	};
+
+	$(document).ready(function(){
+		ajaxCallListenerFromIframe();
+
+		getAllPrinters();
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
+		});
+
+		$("#printers-select").on('change', function (e) {
+			e.preventDefault();
+
+			var printerId = $('#printers-select').val();
+			if(printerId!=0) {
+				getJobsStatusByPrinter(printerId);
+				$(".choose-printer").hide();
+				var printerName = $('#printers-select').text();
+				if(printerName.indexOf("( simulator )") != -1){
+					eventBroadCaster.broadcastEvent('showSimulator', true);
+				}
+				else
+				{
+					eventBroadCaster.broadcastEvent('showSimulator', false);
+				}
+			}
+			else {
+				$(".print-statuses-container").hide();
+				$("#empty-jobs").hide();
+				$(".choose-printer").show();
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+		});
+	});
+
+	function getJobById(job_id){
+		var result = undefined;
+		$.each(jobsArray, function (index, item) {
+			if(item.id == job_id) {
+				result = item;
+			}
+		});
+		return result;
+	}
+
+	function getPrinterById(printer_id){
+		var result = undefined;
+		$.each(printersArray, function (index, item) {
+			if(item.printer_id == printer_id) {
+				result = item;
+			}
+		});
+		return result;
+	}
+
+	var getJobsStatusByPrinter = function(printerId) {
+
+		ADSKSpark.Jobs.getPrinter(printerId).then(function (response) {
+
+					console.log("getJobsStatusByPrinter: " + printerId);
+
+					var selectedPrinterId = $("#printers-select").val();
+
+					if (selectedPrinterId == printerId) {
+
+						$("#printersStatusTbody").empty();
+
+						var printerJobs = response;
+
+						console.log(printerJobs);
+
+						if (printerJobs.length > 0) {
+
+							for (var i in printerJobs) {
+								if (printerJobs[i].data != undefined) {
+
+									jobsArray.push(new ADSKSpark.Job(printerJobs[i].data));
+
+									var row = createJobRow(printerJobs[i].data);
+									row.appendTo("#printersStatusTbody");
+									$("[data-toggle='tooltip']").tooltip();
+								}
+							}
+
+							$(".print-statuses-container").show();
+							$("#empty-jobs").hide();
+							eventBroadCaster.broadcastEvent('statusIframe.printerExist');
+						}
+						else {
+							$(".print-statuses-container").hide();
+							$("#empty-jobs").show();
+						}
+					}
+				},
+				function (response) {
+				});
+
+	};
+
+	var createJobRow = function(job){
+
+		var rowClass = classMapper[job.job_status.job_status];
+		rowClass = rowClass ? rowClass : "";
+
+		var row = $("<tr class='" + rowClass + "' data-jobid='" + job.job_id + "'></tr>");
+		row.append("<td>" + job.job_id + "</td><td>" + job.job_date_time + "</td>");
+		row.append("<td>" + job.job_status.job_status + "</td>");
+
+
+		if (job.job_status.job_status == "completed" || job.job_status.job_status == "failed" || job.job_status.job_status == "canceled") {
+			row.append('<td></td>');
+		}
+		else if(job.job_status.job_status == "queued")
+		{
+			row.append('<td>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Play" class="job-action resume-print" onclick="startQueuedJob(\'' + job.job_id + '\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Refresh" class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'</td>');
+		}
+		else {
+			row.append('<td>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Resume" class="job-action resume-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'resume\')"><span class="spark_print_icon print-si-round-resume-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Pause" class="job-action pause-print"   onclick="sendPrinterCommand(\'' + job.job_id + '\',\'pause\')"><span class="spark_print_icon print-si-round-pause-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Cancel" class="job-action cancel-print"  onclick="sendPrinterCommand(\'' + job.job_id + '\',\'cancel\')"><span class="spark_print_icon print-si-round-cancel-light" aria-hidden="true"></span></a>' +
+					'<a data-toggle="tooltip" data-placement="top" title="Refresh" class="job-action refresh-job"  onclick="refreshJobsStatus(\'' + job.job_id + '\')"><span class="new_spark_icon print-si-round-refresh-light" aria-hidden="true"></span></a>' +
+					'</td>');
+		}
+
+		return row;
+	}
+
+	var refreshJobsStatus = function(jobId){
+
+		var job = getJobById(jobId);
+
+		job.getStatus().then(function(response){
+
+			var currentRow = $("#printersStatusTbody").find("tr[data-jobid='" + jobId + "']");
+
+			if(currentRow.length > 0) {
+
+				var newRow = createJobRow(response.data);
+				currentRow.replaceWith(newRow);
+				$("[data-toggle='tooltip']").tooltip();
+			}
+
+		},function(response){} );
+	};
+
+
+	var sendPrinterCommand = function(jobId, command){
+		var printer = getPrinterById($("#printers-select").val());
+        var params = { "job_id": jobId };
+		printer.sendCommand(command, params).then(function(response){
+				}
+				,function(response) {
+					$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
 				});
 	}
 
+	var startQueuedJob = function(jobId) {
+		var printer = getPrinterById($("#printers-select").val());
+		printer.startJob(jobId).then(function (response) {
+				}
+				, function (response) {
+					$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
+					$('#myModal').modal('show');
+				});
+
+	}
+
 </script>
-
-
-
-
-
-
-
-
-
 </body>
 </html>

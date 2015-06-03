@@ -40,9 +40,8 @@ app.get('/access_token', function(req, res){
 
 	var code = req.query.code,
 		redirect_uri = req.query.redirect_uri,
-	 	url = API_SERVER + '/oauth/accesstoken',
+		url = API_SERVER + '/oauth/accesstoken',
 		params = "code=" + code + "&grant_type=authorization_code&response_type=code";
-
 
 	if (redirect_uri){
 		params += "&redirect_uri=" +  redirect_uri;
