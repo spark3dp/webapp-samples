@@ -1185,7 +1185,7 @@ i.stooltip span {
 
 #requestLog{
     overflow-y: auto;
-    height: 200px;
+    height: 120px;
 }
 
 .logger-container *{
@@ -1199,7 +1199,7 @@ i.stooltip span {
 
 #requestLog-details{
     overflow-y: auto;
-    height: 200px;
+    height: 300px;
     resize: vertical;
     overflow: auto;
 
