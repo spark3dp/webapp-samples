@@ -18,121 +18,123 @@
 	<link href="assets/css/common.css" rel="stylesheet">
 
 	<style>
-
 	</style>
 </head>
 
 <body>
 
 <div class="logged-in-container">
-	<div class="container sample-app-container" id="container">
+	<div class="container outer-container">
+		<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
 
-		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
-			<!-- Navigation links at the top right of the screen -->
-			<h5 class="sample-title">Spark Storage Sample App</h5>
-		</div>
-		<div style="text-align: center;">
-			<ul class="nav nav-tabs sample-top-menu" role="tablist">
-				<li id="loginId">
-					<div id="user" class="pull-left">
-						<img class="user-avatar" src="" style="display: none"/>
-					</div>
-					<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+		<div class="container sample-app-container" id="container">
+			<div class="sample-app-header clearfix">
+				<!-- Navigation links at the top right of the screen -->
+				<h5 class="sample-title">Spark Storage Sample App</h5>
+			</div>
+			<div style="text-align: center;">
+				<ul class="nav nav-tabs sample-top-menu" role="tablist">
+					<li id="loginId">
+						<div id="user" class="pull-left">
+							<img class="user-avatar" src="" style="display: none"/>
+						</div>
+						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
 
-					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-right-arrow"></div>
-				</li>
-				<li id="myAssetsId">
-					<a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="myAssetsId">
+						<a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
 
-					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-right-arrow"></div>
-				</li>
-				<li id="createAssetId">
-					<a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="createAssetId">
+						<a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
 
-					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-right-arrow"></div>
-				</li>
-				<li id="manageFilesId">
-					<a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="manageFilesId">
+						<a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
 
-					<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-					<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-				</li>
-			</ul>
-		</div>
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					</li>
+				</ul>
+			</div>
 
-		<div class="mainIframe-container">
-			<div id="breadcrumbs-section">
-				<div id="breadcrumbs">
-					<div class="bread-crumb" id="home">
-						<a onclick="changeState('myAssets')">
-							<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
-						</a>
-					</div>
+			<div class="mainIframe-container">
+				<div id="breadcrumbs-section">
+					<div id="breadcrumbs">
+						<div class="bread-crumb" id="home">
+							<a onclick="changeState('myAssets')">
+								<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
+							</a>
+						</div>
 
-					<div class="bread-crumb hidden" id="asset">
-						<p class="bread-crumb-tail"></p>
-						<a onclick="showMyAssetFiles()">
-							<span class="bread-crumb-inner"></span>
-						</a>
-					</div>
-					<div class="bread-crumb hidden" id="file-type">
-						<p class="bread-crumb-tail"></p>
-						<a disabled>
+						<div class="bread-crumb hidden" id="asset">
+							<p class="bread-crumb-tail"></p>
+							<a onclick="showMyAssetFiles()">
+								<span class="bread-crumb-inner"></span>
+							</a>
+						</div>
+						<div class="bread-crumb hidden" id="file-type">
+							<p class="bread-crumb-tail"></p>
+							<a disabled>
 						<span class="bread-crumb-inner">
 							<i class="spark_icon si-asset-file-icon"></i>
 							<b></b>
 						</span>
-						</a>
-					</div>
+							</a>
+						</div>
 
-				</div>
-				<div id="action-button">
-					<div id="create-asset">
-						<a onclick="changeState('createAsset')" class="spark_btn primary">
-							<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
-						</a>
 					</div>
-					<div id="create-file" class="dropdown actions">
-						<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
-						   data-toggle="dropdown"
-						   aria-expanded="true">
-							<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add File
-						</a>
-						<i class="spark_icon si-dropdown-open"></i>
+					<div id="action-button">
+						<div id="create-asset">
+							<a onclick="changeState('createAsset')" class="spark_btn primary">
+								<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
+							</a>
+						</div>
+						<div id="create-file" class="dropdown actions">
+							<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
+							   data-toggle="dropdown"
+							   aria-expanded="true">
+								<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add
+								File
+							</a>
+							<i class="spark_icon si-dropdown-open"></i>
 
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation">
-								<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
-								<i class="spark_icon si-help with_hover"></i>
-								<i class="stooltip"><span>Asset sources</span></i>
-							</li>
-							<li role="presentation">
-								<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
-								<i class="spark_icon si-help with_hover"></i>
-								<i class="stooltip"><span>Asset thumbnails</span></i>
-							</li>
-						</ul>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+								<li role="presentation">
+									<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
+									<i class="spark_icon si-help with_hover"></i>
+									<i class="stooltip"><span>Asset sources</span></i>
+								</li>
+								<li role="presentation">
+									<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
+									<i class="spark_icon si-help with_hover"></i>
+									<i class="stooltip"><span>Asset thumbnails</span></i>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
+
+				<iframe name="mainIframe"
+				        id="mainIframe"
+				        width="680px"
+				        height="523px"
+				        frameborder="0"
+				        scrolling="no"
+				        src="examples/drive/show-my-assets/index.html"></iframe>
 			</div>
 
-			<iframe name="mainIframe"
-			        id="mainIframe"
-			        width="680px"
-			        height="523px"
-			        frameborder="0"
-			        scrolling="no"
-			        src="examples/drive/show-my-assets/index.html"></iframe>
+			<div class="footer"></div>
 		</div>
-
-		<div class="footer"></div>
 	</div>
 
 </div>
@@ -292,7 +294,7 @@
 
 	});
 
-	var loggedOutCallback = function(){
+	var loggedOutCallback = function () {
 		$('#breadcrumbs-section').hide();
 		$('#user').hide();
 		$('.menu-item[data-state=loggedIn]').data('state', 'login');
@@ -377,7 +379,7 @@
 			if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
 				changeState('myAssets');
 				isLoggedIn = true;
-			}else{
+			} else {
 				$('#mainIframe').attr('height', '462px');
 			}
 			if (optionalParams.member) {
@@ -396,7 +398,7 @@
 			$('#mainIframe').attr('height', '523px');
 			changeState('login');
 		},
-		showLoginPageOnly: function(){
+		showLoginPageOnly: function () {
 			loggedOutCallback();
 		},
 		myAssetsEvent: function () {
@@ -442,7 +444,7 @@
 				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
 		},
-		shrinkIframe: function(){
+		shrinkIframe: function () {
 			$('#mainIframe').attr('height', '335px');
 		}
 	};
