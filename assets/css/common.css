@@ -95,7 +95,8 @@ textarea {
 }
 
 .outer-container{
-    width:750px;
+    width:716px;
+    padding:0;
 }
 
 .form_control {
@@ -802,7 +803,15 @@ i.stooltip span {
 
 #appModal .modal-dialog{
     width: 500px;
+    height: 300px;
+    margin: auto;
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
 }
+
 #appModal .modal-header h2{
     padding:0 50px;
 }
@@ -896,7 +905,7 @@ i.stooltip span {
 
 .sample-app-container
 {
-    margin-top: 50px;
+    margin-top: 10px;
     border: 1px solid #cccccc;
     border-radius: 3px;
     background-color: #f9f8f8;
