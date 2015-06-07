@@ -29,7 +29,7 @@ var ajaxCallLogger = function(){
 	var log = function (data) {
 		//console.log(data);
 		renderjson.set_show_to_level(3);
-
+		renderjson.set_icons('▸ ','▾ ');
 		var renderedRes = renderjson((data.res));
 		//console.log("rendered", rendered)
 
@@ -77,10 +77,10 @@ var ajaxCallLogger = function(){
 					'<div class="logger-container center">' +
 					'<div class="logger-header clearfix">' +
 					'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
-					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
+					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty();$(\'#'+loggerDeatilsId+'\').empty();">Clear</div>' +
 					'</div>' +
 					'<div id="'+loggerId+'"></div>' +
-					'<div id="drag">|||</div>' +
+					'<div id="drag">===</div>' +
 					'<div id="'+loggerDeatilsId+'">' +
 					'</div>');
 			$(parentSelector).append(div);

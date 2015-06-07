@@ -35,7 +35,8 @@ pre.headers{
 
 .logger-menu{
     border-bottom: 1px solid #3a3e4d;
-
+    text-align: left;
+    padding-bottom: 9px;
 }
 
 a:hover, a:active, a.clicked, a:focus {
@@ -1079,6 +1080,7 @@ i.stooltip span {
     border-radius: 4px;
     padding: 3px 8px;
     text-transform: uppercase;
+    margin-right: 15px;
 }
 .logger-container .method.method-get{
     border-color: greenyellow;
@@ -1102,17 +1104,19 @@ i.stooltip span {
 .logger-header .clear{
     margin-right: 15px;
     cursor: pointer;
+    font-size:13px;
 }
 .request > .renderjson{
 
 }
 
 .logger-menu-item{
-    color:white;
-    padding-right: 70px;
-    padding-left: 70px;
+    color: white;
+    margin-left: 33px;
+    margin-right: 0px;
     text-decoration: no-underline;
     text-align: left;
+    font-size: 12px;
 
 }
 .logger-menu-item:hover{
@@ -1120,11 +1124,12 @@ i.stooltip span {
 }
 
 .logger-menu-item.active{
-    text-decoration: underline;
+    /**text-decoration: underline;*/
+    border-bottom: 2px solid white;
 }
 
 .request.active{
-    background-color: rgb(43, 59, 77);;
+    background-color: #305B78;
 }
 
 .request > .renderjson > div.req-resp{
@@ -1136,7 +1141,22 @@ i.stooltip span {
     cursor: pointer;
     top:7px;
 }
-.renderjson a { text-decoration: none; }
+
+.request {
+    cursor: pointer;
+}
+.renderjson a { color: white; text-decoration: none; }
+.renderjson .disclosure { color: white;  font-size: 150%; }
+.renderjson .syntax { color: white; }
+.renderjson .string { color: #C7BDBD; }
+.renderjson .number { color: #C7BDBD; }
+.renderjson .boolean { color: #C7BDBD; }
+.renderjson .key    { color: white; font-weight: 400}
+.renderjson .keyword { color: white; }
+.renderjson .object.syntax { color: white; }
+.renderjson .array.syntax  { color: white; }
+
+/**
 .renderjson .disclosure { color: crimson;  font-size: 150%; }
 .renderjson .syntax { color: grey; }
 .renderjson .string { color: lightgreen; }
@@ -1146,6 +1166,7 @@ i.stooltip span {
 .renderjson .keyword { color: mediumpurple; }
 .renderjson .object.syntax { color: lightsalmon; }
 .renderjson .array.syntax  { color: orange; }
+*/
 
 .renderjson div{
     text-transform: lowercase;
@@ -1237,12 +1258,13 @@ i.stooltip span {
 }
 
 #drag {
-    cursor: w-resize;
+    cursor: ns-resize;
     color: white;
-    font-size: 8px;
+    font-size: 10px;
     border-bottom: 1px solid #3a3e4d;
     border-top: 1px solid #3a3e4d;
-    height:15px;
+    background-color: #363B4C;
+    margin-bottom: 10px;
 }
 
 
