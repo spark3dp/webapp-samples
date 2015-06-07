@@ -353,12 +353,7 @@ input[type="checkbox"]:checked + label span.chk {
 }
 
 #welcome-wrapper{
-    text-align: center;
-    height: 375px;
-    margin: auto;
-    position: absolute;
-    top:0;
-    bottom:0;
+    margin-top:35px;
 }
 
 /***** TOOLTIP *****/
@@ -803,6 +798,21 @@ i.stooltip span {
 .sample-app-header{
     margin-top: 10px;
     margin-bottom: 25px;
+}
+
+#appModal .modal-dialog{
+    width: 500px;
+}
+#appModal .modal-header h2{
+    padding:0 50px;
+}
+#appModal .modal-body{
+    padding: 10px 66px;
+}
+
+#appModal .modal-footer{
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .sample-title
