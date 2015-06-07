@@ -45,7 +45,7 @@
 			margin-left: 1px;
 			padding-bottom: 10px;
 			padding-top: 25px;
-		
+
 		}
 
 
@@ -130,75 +130,98 @@
 <body>
 
 <div class="logged-in-container">
-	<div id="container" class="container sample-app-container">
-		<div class="sample-app-header clearfix">
-			<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
-			<h5 class="sample-title">Spark Print Sample App</h5>
-		</div>
-		<div style="text-align: center;">
-		<ul class="nav nav-tabs sample-top-menu" role="tablist">
-			<li id="loginId">
-				<div id="user" class="pull-left" style="display: none;">
-					<img class="user-avatar" src="" />
-				</div>
-				<a class="menu-item pull-left" data-state="login" role="tab" >Log in</a>
-				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-right-arrow"></div>
-			</li>
-			<li id="manageId">
-				<a class="menu-item pull-left" data-state="manage" role="tab" >Manage Printers</a>
-				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-right-arrow"></div>
-			</li>
-			<li id="printId">
-				<a class="menu-item pull-left" data-state="print" role="tab" >Print Job</a>
-				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-right-arrow"></div>
-			</li>
-			<li id="statusId">
-				<a class="menu-item pull-left" data-state="status" role="tab">Job Status</a>
-				<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-				<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-			</li>
-		</ul>
-		</div>
-		<div class="mainIframe-container"><iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"  src="examples/print/manage-printers.html"></iframe></div>
+	<div class="container outer-container">
+		<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
+
+		<div id="container" class="container sample-app-container">
+			<div class="sample-app-header clearfix">
+				<h5 class="sample-title">Spark Print Sample App</h5>
+			</div>
+			<div style="text-align: center;">
+				<ul class="nav nav-tabs sample-top-menu" role="tablist">
+					<li id="loginId">
+						<div id="user" class="pull-left" style="display: none;">
+							<img class="user-avatar" src=""/>
+						</div>
+						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="manageId">
+						<a class="menu-item pull-left" data-state="manage" role="tab">Manage Printers</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="printId">
+						<a class="menu-item pull-left" data-state="print" role="tab">Print Job</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="statusId">
+						<a class="menu-item pull-left" data-state="status" role="tab">Job Status</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					</li>
+				</ul>
+			</div>
+			<div class="mainIframe-container">
+				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"
+				        src="examples/print/manage-printers.html"></iframe>
+			</div>
 
 
-		<div class="simulator-container">
-			<div class="row simulator-row">
+			<div class="simulator-container">
+				<div class="row simulator-row">
 
-				<div class="col-xs-8 no-padding pull-left">
-					<div class="new-token" style="display: none;"></div>
-					<div class="create-new-token btn-simulator-container btn-simulator-container-new-token pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="right" data-original-title="Shutdown current printer and get new registration token">
-						<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div> New Token
-					</div>
-					<div class="lcd-container pull-right"><div class="center-block lcd "></div></div>
-				</div>
-
-				<div class="col-xs-4 no-padding pull-right">
-
-					<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Resume Print Job">
-						<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div> Resume
-					</div>
-
-
-
-					<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="top" data-original-title="Pause Print Job">
-						<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div> Pause
-					</div>
-
-					<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-left" aria-label="Left Align" data-toggle="tooltip" data-placement="left" data-original-title="Cancel Print Job">
-						<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div> Cancel
+					<div class="col-xs-8 no-padding pull-left">
+						<div class="new-token" style="display: none;"></div>
+						<div class="create-new-token btn-simulator-container btn-simulator-container-new-token pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="right"
+						     data-original-title="Shutdown current printer and get new registration token">
+							<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div>
+							New Token
+						</div>
+						<div class="lcd-container pull-right">
+							<div class="center-block lcd "></div>
+						</div>
 					</div>
 
+					<div class="col-xs-4 no-padding pull-right">
+
+						<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
+						     data-original-title="Resume Print Job">
+							<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div>
+							Resume
+						</div>
+
+
+						<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
+						     data-original-title="Pause Print Job">
+							<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div>
+							Pause
+						</div>
+
+						<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="left"
+						     data-original-title="Cancel Print Job">
+							<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div>
+							Cancel
+						</div>
+
+					</div>
 				</div>
 			</div>
+			<div class="footer"></div>
 		</div>
-		<div class="footer"></div>
 	</div>
 </div>
 
