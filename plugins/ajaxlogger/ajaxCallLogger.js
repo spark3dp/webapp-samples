@@ -11,7 +11,7 @@
 var ajaxCallLogger = function(){
 
 	var loggerId = "requestLog";
-
+	var loggerDeatilsId = loggerId+"-details";
 	/**
 	 *  Adjsut string length to desired length
 	 */
@@ -28,27 +28,40 @@ var ajaxCallLogger = function(){
 	 */
 	var log = function (data) {
 		//console.log(data);
-		renderjson.set_show_to_level(1);
+		renderjson.set_show_to_level(3);
 
-		var rendered = renderjson((data.res));
+		var renderedRes = renderjson((data.res));
 		//console.log("rendered", rendered)
 
-		var div = $('<div class="request"></div>');
 		var txt = $(document.getElementById(loggerId));
 		var id = "response" + txt.children().size();
 
-		var on = "$('#" + id + "').toggle()";
+		var on = "$('#" + loggerDeatilsId + "').children().hide();$('#requestLog').children().removeClass('active');"+"$('#" + id + "').show();$(this).addClass('active');";
+
 		var onclick = "onclick=" + on;
-		div.append("<pre class='renderjson' " + onclick + "><div class='req-resp' id='" + "req" + id + "'>" +
+		var div = $('<div class="request"'+onclick+'></div>');
+
+		div.append("<pre class='renderjson' " + "><div class='req-resp' id='" + "req" + id + "'>" +
 					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
 			maxLength(data.req.URL,90) + "<span class='open-full-request'><i class='spark_icon si-dropdown-open'></i></span></div></pre>");
+
 		var response = $("<div id='" + id + "' style='display:none'></div>");
 		var renderedReq = renderjson(data.req);
 
 		var request = $("<div>data" + data.req.data + "</div>");
-		response.append(renderedReq);
-		response.append(rendered);
-		div.append(response);
+
+		var requestId = id+"-request";
+		var responseId = id+"-response";
+		var requestOnClick = "$('#"+requestId+"').show();$('#"+responseId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
+		var responseOnClick = "$('#"+responseId+"').show();$('#"+requestId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
+
+		var responseMenu = $("<div class='logger-menu'><a class='logger-menu-item active ' onclick=" +requestOnClick + ">REQUEST</a> <a class='logger-menu-item' onclick="+responseOnClick+">RESPONSE</a></div><div class=''>&nbsp;</div>");
+
+		response.append(responseMenu);
+		response.append($("<div id=" +requestId + "></div>").append(renderedReq));
+		response.append($("<div id=" +responseId + "></div>").append(renderedRes).hide());
+
+		$("#"+loggerDeatilsId).append(response);
 		txt.prepend(div);
 	};
 
@@ -61,15 +74,67 @@ var ajaxCallLogger = function(){
 		 */
 		createLoggerElement: function (parentSelector) {
 			var div = $(
-				'<div class="logger-container center">' +
+					'<div class="logger-container center">' +
 					'<div class="logger-header clearfix">' +
-						'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
-						'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
+					'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
+					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty()">Clear</div>' +
 					'</div>' +
 					'<div id="'+loggerId+'"></div>' +
-				'</div>');
+					'<div id="drag">|||</div>' +
+					'<div id="'+loggerDeatilsId+'">' +
+					'</div>');
 			$(parentSelector).append(div);
 
+
+			var isResizing = false,
+				lastDownX = 0;
+
+			$(function () {
+
+				var container = $('.logger-container'),
+					top = $('#' + loggerId),
+					bottom = $('#' + loggerDeatilsId),
+					handle = $('#drag');
+
+
+				var startX, startY, startWidth, startHeight;
+				var bottomStartHeight;
+
+				handle.on('mousedown', function (e) {
+					isResizing = true;
+					startY = e.clientY;
+					startHeight = parseInt(document.defaultView.getComputedStyle(top.get(0)).height, 10);
+					bottomStartHeight = parseInt(document.defaultView.getComputedStyle(bottom.get(0)).height, 10);
+
+					console.log("mouseDOWN:"+isResizing);
+
+				});
+
+				$(document).on('mousemove', function (e) {
+
+					console.log("*****mouseMOVE:"+isResizing);
+
+					if (!isResizing)
+						return;
+
+					var offsetBottom = lastDownX - e.clientY;
+					console.log("container.height():"+container.height() + ", e.clientY:" + e.clientY + ", container.offset().top" + container.offset().top + ", offset:"+offsetBottom);
+
+					console.log("startHeight + e.clientY - startY:" + startHeight +" " + e.clientY + " -" + startY);
+					var change= (e.clientY - startY);
+					top.height (startHeight + change + 'px');
+					bottom.height (bottomStartHeight - change + 'px');
+
+
+				});
+
+				$(document).on('mouseup', function (e) {
+					// stop resizing
+					isResizing = false;
+					console.log("mouseup:"+isResizing);
+
+				});
+			});
 
 		},
 

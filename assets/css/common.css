@@ -24,9 +24,18 @@ pre{
     border-radius: 0;
     background-color: transparent;
     border: 0;
-    border-bottom: 1px solid #3a3e4d;
+    /**border-bottom: 1px solid #3a3e4d;*/
     font-size: 12px;
     color:#ffffff;
+}
+
+pre.headers{
+    border-bottom: 1px solid #3a3e4d;
+}
+
+.logger-menu{
+    border-bottom: 1px solid #3a3e4d;
+
 }
 
 a:hover, a:active, a.clicked, a:focus {
@@ -1098,6 +1107,26 @@ i.stooltip span {
 
 }
 
+.logger-menu-item{
+    color:white;
+    padding-right: 70px;
+    padding-left: 70px;
+    text-decoration: no-underline;
+    text-align: left;
+
+}
+.logger-menu-item:hover{
+    color:grey;
+}
+
+.logger-menu-item.active{
+    text-decoration: underline;
+}
+
+.request.active{
+    background-color: rgb(43, 59, 77);;
+}
+
 .request > .renderjson > div.req-resp{
     position: relative;
 }
@@ -1156,8 +1185,26 @@ i.stooltip span {
 
 #requestLog{
     overflow-y: auto;
-    height: 113px;
+    height: 200px;
 }
+
+.logger-container *{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#requestLog-details{
+    overflow-y: auto;
+    height: 200px;
+    resize: vertical;
+    overflow: auto;
+
+}
+
 
 #requestLog pre{
     font-family: 'Open Sans';
@@ -1165,16 +1212,16 @@ i.stooltip span {
     font-weight: 300;
 }
 
-#requestLog::-webkit-scrollbar {
+#requestLog::-webkit-scrollbar,#requestLog-details::-webkit-scrollbar{
     width: 12px;
 }
 
-#requestLog::-webkit-scrollbar-track {
+#requestLog::-webkit-scrollbar-track,#requestLog-details::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
 }
 
-#requestLog::-webkit-scrollbar-thumb {
+#requestLog::-webkit-scrollbar-thumb,#requestLog-details::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     background-color: darkgrey;
@@ -1187,6 +1234,15 @@ i.stooltip span {
     width:144px;
     height: 100px;
     margin-left: 250px;
+}
+
+#drag {
+    cursor: w-resize;
+    color: white;
+    font-size: 8px;
+    border-bottom: 1px solid #3a3e4d;
+    border-top: 1px solid #3a3e4d;
+    height:15px;
 }
 
 
