@@ -10,6 +10,7 @@
  */
 var ajaxCallLogger = function(){
 
+	var loggerHeight = 460;
 	var loggerId = "requestLog";
 	var loggerDeatilsId = loggerId+"-details";
 	var urlToHide = "https://sandbox.spark.autodesk.com/api/v1/";
@@ -41,15 +42,14 @@ var ajaxCallLogger = function(){
 			$('#'+id).show();
 		};
 
-
 		var id = "response" + txt.children().size();
 
 		var div = $('<div class="request"></div>');
 
-
 		div.on("click",function(){
 			if($("#"+loggerDeatilsId).css('display')=='none'){
 				$("#"+loggerId).height('160px');
+				$("#"+loggerDeatilsId).height(loggerHeight - $("#"+loggerId).height() -60);
 				showElement("drag");
 			}
 
@@ -63,7 +63,7 @@ var ajaxCallLogger = function(){
 
 		div.append("<pre class='renderjson' " + "><div class='req-resp' id='" + "req" + id + "'>" +
 					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
-			maxLength(data.req.URL.replace(urlToHide,"../"),90) + "<span class='open-full-request'><!--i class='spark_icon si-dropdown-open'></i--></span></div></pre>");
+			maxLength(data.req.URL.replace(urlToHide,"../"),90) + "</div></pre>");
 
 		var response = $("<div id='" + id + "' style='display:none'></div>");
 		var renderedReq = renderjson(data.req);
@@ -129,6 +129,7 @@ var ajaxCallLogger = function(){
 					'<div id="drag">===</div>' +
 					'<div id="'+loggerDeatilsId+'">' +
 					'</div>');
+			div.height(loggerHeight + "px");
 			$(parentSelector).append(div);
 
 
