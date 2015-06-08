@@ -489,6 +489,15 @@ i.stooltip span {
     margin-left: 6px;
 }
 
+.si-close{
+    background-position: -70px -204px;
+    width: 17px;
+    height: 16px;
+    padding-right: 30px;
+    cursor: pointer;
+
+}
+
 .si-help-hover {
     background-position: -286px -73px;
     width: 17px;
@@ -1060,12 +1069,15 @@ i.stooltip span {
 {
     background-color: #2b2f3e;
     color:#8c92a4;
-    min-height: 86px;
     margin-bottom: 10px;
     border-bottom:1px solid #2b2f3e;
     border-left:1px solid #2b2f3e;
     border-right:1px solid #2b2f3e;
     width: 682px;
+    min-height: 500px;
+
+    overflow: auto;
+
 }
 
 .logger-container .logger-header
@@ -1145,16 +1157,16 @@ i.stooltip span {
 .request {
     cursor: pointer;
 }
-.renderjson a { color: white; text-decoration: none; }
-.renderjson .disclosure { color: white;  font-size: 150%; }
-.renderjson .syntax { color: white; }
-.renderjson .string { color: #C7BDBD; }
-.renderjson .number { color: #C7BDBD; }
-.renderjson .boolean { color: #C7BDBD; }
-.renderjson .key    { color: white; font-weight: 400}
+.renderjson a { color: #B1EDEC; text-decoration: none; }
+.renderjson .disclosure { color: #B1EDEC;  font-size: 150%; }
+.renderjson .syntax { color: #B1EDEC; }
+.renderjson .string { color:  #B1EDB5; }
+.renderjson .number { color: #EDC2B5; }
+.renderjson .boolean { color: #EDC2B5; }
+.renderjson .key    { color: #D3B1ED; font-weight: 400}
 .renderjson .keyword { color: white; }
-.renderjson .object.syntax { color: white; }
-.renderjson .array.syntax  { color: white; }
+.renderjson .object.syntax { color: #B1EDEC; }
+.renderjson .array.syntax  { color: #B1EDEC; }
 
 /**
 .renderjson .disclosure { color: crimson;  font-size: 150%; }
@@ -1206,7 +1218,7 @@ i.stooltip span {
 
 #requestLog{
     overflow-y: auto;
-    height: 120px;
+    height: 400px;
 }
 
 .logger-container *{
@@ -1216,14 +1228,18 @@ i.stooltip span {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
 }
 
 #requestLog-details{
-    overflow-y: auto;
+
     height: 300px;
+
+    overflow-y: auto;
+    /**height: 300px;*/
     resize: vertical;
     overflow: auto;
-
+    display: none;
 }
 
 
@@ -1265,6 +1281,7 @@ i.stooltip span {
     border-top: 1px solid #3a3e4d;
     background-color: #363B4C;
     margin-bottom: 10px;
+    display: none;
 }
 
 

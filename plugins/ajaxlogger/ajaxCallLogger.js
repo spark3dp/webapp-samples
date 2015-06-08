@@ -36,9 +36,9 @@ var ajaxCallLogger = function(){
 		var txt = $(document.getElementById(loggerId));
 		var id = "response" + txt.children().size();
 
-		var on = "$('#" + loggerDeatilsId + "').children().hide();$('#requestLog').children().removeClass('active');"+"$('#" + id + "').show();$(this).addClass('active');";
+		var on = "$('#"+loggerDeatilsId+"').show();$('#" + loggerDeatilsId + "').children().hide();$('#requestLog').children().removeClass('active');"+"$('#" + id + "').show();$(this).addClass('active');";
 
-		var onclick = "onclick=" + on;
+		var onclick = "onclick=" +  "if($('#"+loggerDeatilsId+"').css('display')=='none'){$('#"+loggerId+"').height('160px');$('#drag').show();}" + on;
 		var div = $('<div class="request"'+onclick+'></div>');
 
 		div.append("<pre class='renderjson' " + "><div class='req-resp' id='" + "req" + id + "'>" +
@@ -52,10 +52,12 @@ var ajaxCallLogger = function(){
 
 		var requestId = id+"-request";
 		var responseId = id+"-response";
+
 		var requestOnClick = "$('#"+requestId+"').show();$('#"+responseId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
 		var responseOnClick = "$('#"+responseId+"').show();$('#"+requestId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
+		var closeOnClick = "$('#"+loggerDeatilsId+"').hide();$('#drag').hide();$('#"+loggerId+"').height($('.logger-container').height()-50)";
 
-		var responseMenu = $("<div class='logger-menu'><a class='logger-menu-item active ' onclick=" +requestOnClick + ">REQUEST</a> <a class='logger-menu-item' onclick="+responseOnClick+">RESPONSE</a></div><div class=''>&nbsp;</div>");
+		var responseMenu = $("<div class='logger-menu'><a class='logger-menu-item active ' onclick=" +requestOnClick + ">REQUEST</a> <a class='logger-menu-item' onclick="+responseOnClick+">RESPONSE</a><div class='new_spark_icon si-close pull-right' onclick="+ closeOnClick+ "></div></div>");
 
 		response.append(responseMenu);
 		response.append($("<div id=" +requestId + "></div>").append(renderedReq));
@@ -63,6 +65,7 @@ var ajaxCallLogger = function(){
 
 		$("#"+loggerDeatilsId).append(response);
 		txt.prepend(div);
+
 	};
 
 	return{
