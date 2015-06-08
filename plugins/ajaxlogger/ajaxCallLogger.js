@@ -11,6 +11,7 @@
 var ajaxCallLogger = function(){
 
 	var loggerHeight = 460;
+	var loggerElementsHeight = 60;
 	var loggerId = "requestLog";
 	var loggerDeatilsId = loggerId+"-details";
 	var urlToHide = "https://sandbox.spark.autodesk.com/api/v1/";
@@ -49,7 +50,7 @@ var ajaxCallLogger = function(){
 		div.on("click",function(){
 			if($("#"+loggerDeatilsId).css('display')=='none'){
 				$("#"+loggerId).height('160px');
-				$("#"+loggerDeatilsId).height(loggerHeight - $("#"+loggerId).height() -60);
+				$("#"+loggerDeatilsId).height(loggerHeight - $("#"+loggerId).height() -loggerElementsHeight);
 				showElement("drag");
 			}
 
@@ -161,9 +162,13 @@ var ajaxCallLogger = function(){
 					var offsetBottom = lastDownX - e.clientY;
 
 					var change= (e.clientY - startY);
-					top.height (startHeight + change + 'px');
-					bottom.height (bottomStartHeight - change + 'px');
+					var newTopHeight = startHeight + change;
+					if(newTopHeight>=0 && newTopHeight < (loggerHeight - loggerElementsHeight)) {
 
+						top.height(newTopHeight + 'px');
+						bottom.height(bottomStartHeight - change + 'px');
+
+					}
 				});
 
 				$(document).on('mouseup', function (e) {
