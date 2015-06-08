@@ -170,7 +170,7 @@
 				</ul>
 			</div>
 			<div class="mainIframe-container">
-				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"
+				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="523px" frameborder="0"
 				        src="examples/print/manage-printers.html"></iframe>
 			</div>
 
@@ -308,7 +308,7 @@
 			isLoggedIn = true;
 			statePlugin.changeState('manage');
 			statePlugin.verifyState("login");
-			$('#mainIframe').attr('height', '462px');
+			//$('#mainIframe').attr('height', '462px');
 
 			ADSKSpark.Members.getMyProfile().then(function(response){
 				if (response.member.profile.avatar_path) {
@@ -325,7 +325,7 @@
 			$('#appModal').modal('show');
 			isLoggedIn = false;
 			statePlugin.changeState('login');
-			$('#mainIframe').attr('height', '523px');
+			//$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".menu-item").click(function(e){
@@ -355,7 +355,7 @@
 
 
 	var loggedOutCallback = function(){
-		$('#mainIframe').attr('height', '523px');
+		//$('#mainIframe').attr('height', '523px');
 	}
 
 	var states = {
@@ -365,7 +365,7 @@
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
 			callbackFunc: function () {
-				$('#mainIframe').attr('height', '462px');
+				//$('#mainIframe').attr('height', '462px');
 			}
 		},
 
@@ -375,7 +375,7 @@
 			enabledTabs:["#loginId", "#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"],
 			callbackFunc: function () {
-				$('#mainIframe').attr('height', '462px');
+				//$('#mainIframe').attr('height', '462px');
 			}
 		},
 
