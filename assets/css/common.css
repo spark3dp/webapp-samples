@@ -1075,8 +1075,7 @@ i.stooltip span {
     border-right:1px solid #2b2f3e;
     width: 682px;
 
-
-    overflow: auto;
+    overflow: hidden;
 
 }
 
