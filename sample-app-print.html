@@ -131,8 +131,6 @@
 
 <div class="logged-in-container">
 	<div class="container outer-container">
-		<a class="btn pull-right btn-github" href="https://github.com/spark3dp/webapp-samples" target="_blank"></a>
-
 		<div id="container" class="container sample-app-container">
 			<div class="sample-app-header clearfix">
 				<h5 class="sample-title">Spark Print Sample App</h5>
@@ -246,6 +244,28 @@
 </div>
 
 <!-- /container -->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h2>Spark Sample App</h2>
+			</div>
+			<div class="modal-body">
+				This is an open source Print API demo sample app.
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn primary large" type="button" onclick="$('#appModal').modal('hide')">Run the sample code</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 <!-- spark sdk -->
 <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
@@ -291,6 +311,7 @@
 			});
 		}
 		else{
+			$('#appModal').modal('show');
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			$('#mainIframe').attr('height', '523px');
