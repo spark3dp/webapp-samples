@@ -28,11 +28,9 @@ var ajaxCallLogger = function(){
 	 * @param data - the data to log
 	 */
 	var log = function (data) {
-		//console.log(data);
 		renderjson.set_show_to_level(3);
 		renderjson.set_icons('▸ ','▾ ');
 		var renderedRes = renderjson((data.res));
-		//console.log("rendered", rendered)
 
 		var txt = $(document.getElementById(loggerId));
 		var id = "response" + txt.children().size();
@@ -81,7 +79,7 @@ var ajaxCallLogger = function(){
 					'<div class="logger-container center">' +
 					'<div class="logger-header clearfix">' +
 					'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
-					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty();$(\'#'+loggerDeatilsId+'\').empty();">Clear</div>' +
+					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty();$(\'#'+loggerDeatilsId+'\').empty();'+"$('#"+loggerDeatilsId+"').hide();$('#drag').hide();$('#"+loggerId+"').height($('.logger-container').height()-50)\""+'>Clear</div>' +
 					'</div>' +
 					'<div id="'+loggerId+'"></div>' +
 					'<div id="drag">===</div>' +
@@ -110,33 +108,22 @@ var ajaxCallLogger = function(){
 					startHeight = parseInt(document.defaultView.getComputedStyle(top.get(0)).height, 10);
 					bottomStartHeight = parseInt(document.defaultView.getComputedStyle(bottom.get(0)).height, 10);
 
-					console.log("mouseDOWN:"+isResizing);
-
 				});
 
 				$(document).on('mousemove', function (e) {
-
-					console.log("*****mouseMOVE:"+isResizing);
-
 					if (!isResizing)
 						return;
-
 					var offsetBottom = lastDownX - e.clientY;
-					console.log("container.height():"+container.height() + ", e.clientY:" + e.clientY + ", container.offset().top" + container.offset().top + ", offset:"+offsetBottom);
 
-					console.log("startHeight + e.clientY - startY:" + startHeight +" " + e.clientY + " -" + startY);
 					var change= (e.clientY - startY);
 					top.height (startHeight + change + 'px');
 					bottom.height (bottomStartHeight - change + 'px');
-
 
 				});
 
 				$(document).on('mouseup', function (e) {
 					// stop resizing
 					isResizing = false;
-					console.log("mouseup:"+isResizing);
-
 				});
 			});
 
