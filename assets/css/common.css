@@ -1074,7 +1074,7 @@ i.stooltip span {
     border-left:1px solid #2b2f3e;
     border-right:1px solid #2b2f3e;
     width: 682px;
-    min-height: 460px;
+
 
     overflow: auto;
 
@@ -1233,7 +1233,6 @@ i.stooltip span {
 
 #requestLog-details{
 
-    height: 240px;
     overflow-y: auto;
     /**resize: vertical;*/
     overflow: auto;
