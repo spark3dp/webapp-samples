@@ -23,9 +23,9 @@ var broadcastEventListener = function($){
 		};
 
 		if (window.addEventListener) {
-			addEventListener("message", iframeBroadCastListener, false)
+			window.addEventListener("message", iframeBroadCastListener, false);
 		} else {
-			attachEvent("onmessage", iframeBroadCastListener)
+			window.attachEvent("onmessage", iframeBroadCastListener);
 		}
 	};
 
