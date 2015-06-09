@@ -90,7 +90,7 @@
 		}
 
 
-		.btn-simulator-container .spark_print_icon
+		.btn-simulator-container .spark_icon
 		{
 			display: block;
 			text-align: center;
@@ -98,17 +98,17 @@
 
 		}
 
-		.resume-print .spark_print_icon{
+		.resume-print .spark_icon{
 			margin-left: 10px;
 		}
-		.pause-print .spark_print_icon{
+		.pause-print .spark_icon{
 			margin-left: 5px;
 		}
-		.cancel-print .spark_print_icon{
+		.cancel-print .spark_icon{
 			margin-left: 7px;
 		}
 
-		.create-new-token .spark_print_icon{
+		.create-new-token .spark_icon{
 			margin-left: 18px;
 		}
 
@@ -170,7 +170,7 @@
 				</ul>
 			</div>
 			<div class="mainIframe-container">
-				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="600px" frameborder="0"
+				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="523px" frameborder="0"
 				        src="examples/print/manage-printers.html"></iframe>
 			</div>
 
@@ -183,7 +183,7 @@
 						<div class="create-new-token btn-simulator-container btn-simulator-container-new-token pull-left"
 						     aria-label="Left Align" data-toggle="tooltip" data-placement="right"
 						     data-original-title="Shutdown current printer and get new registration token">
-							<div class="spark_print_icon print-si-new-token-light" aria-hidden="true"></div>
+							<div class="spark_icon print-si-new-token-light" aria-hidden="true"></div>
 							New Token
 						</div>
 						<div class="lcd-container pull-right">
@@ -196,7 +196,7 @@
 						<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-left"
 						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
 						     data-original-title="Resume Print Job">
-							<div class="spark_print_icon print-si-play-light" aria-hidden="true"></div>
+							<div class="spark_icon print-si-play-light" aria-hidden="true"></div>
 							Resume
 						</div>
 
@@ -204,14 +204,14 @@
 						<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-left"
 						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
 						     data-original-title="Pause Print Job">
-							<div class="spark_print_icon print-si-pause-light" aria-hidden="true"></div>
+							<div class="spark_icon print-si-pause-light" aria-hidden="true"></div>
 							Pause
 						</div>
 
 						<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-left"
 						     aria-label="Left Align" data-toggle="tooltip" data-placement="left"
 						     data-original-title="Cancel Print Job">
-							<div class="spark_print_icon print-si-close-light" aria-hidden="true"></div>
+							<div class="spark_icon print-si-close-light" aria-hidden="true"></div>
 							Cancel
 						</div>
 
@@ -297,7 +297,7 @@
 			isLoggedIn = true;
 			statePlugin.changeState('manage');
 			statePlugin.verifyState("login");
-			$('#mainIframe').attr('height', '462px');
+			//$('#mainIframe').attr('height', '462px');
 
 			ADSKSpark.Members.getMyProfile().then(function(response){
 				if (response.member.profile.avatar_path) {
@@ -314,7 +314,7 @@
 			$('#appModal').modal('show');
 			isLoggedIn = false;
 			statePlugin.changeState('login');
-			$('#mainIframe').attr('height', '523px');
+			//$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".menu-item").click(function(e){
@@ -344,7 +344,7 @@
 
 
 	var loggedOutCallback = function(){
-		$('#mainIframe').attr('height', '523px');
+		//$('#mainIframe').attr('height', '523px');
 	}
 
 	var states = {
@@ -354,7 +354,7 @@
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
 			callbackFunc: function () {
-				$('#mainIframe').attr('height', '462px');
+				//$('#mainIframe').attr('height', '462px');
 			}
 		},
 
@@ -364,7 +364,7 @@
 			enabledTabs:["#loginId", "#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"],
 			callbackFunc: function () {
-				$('#mainIframe').attr('height', '462px');
+				//$('#mainIframe').attr('height', '462px');
 			}
 		},
 

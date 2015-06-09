@@ -464,16 +464,6 @@ i.stooltip span {
 
 /***** SPRITE ******/
 .spark_icon {
-    background: url(../img/sprite.png) no-repeat;
-    display: inline-block;
-    overflow: hidden;
-    text-indent: -9999px;
-    text-align: left;
-    margin-bottom: -3px;
-}
-
-/** TODO: replace the above sprite with this sprite**/
-.new_spark_icon {
     background: url(../img/sprite_sampleapp.png) no-repeat;
     display: inline-block;
     overflow: hidden;
@@ -564,7 +554,7 @@ i.stooltip span {
 }
 
 .si-upload-icon{
-    background-position: -21px -82px;
+    background-position: -16px -82px;
     height: 42px;
     width:48px;
 }
@@ -607,21 +597,6 @@ i.stooltip span {
     width: 18px;
 }
 
-
-
-/***** END SPRITE *****/
-
-
-/***** PRINT SPRITE ******/
-.spark_print_icon {
-    background: url(../img/print_sprite.png) no-repeat;
-    display: inline-block;
-    overflow: hidden;
-    text-indent: -9999px;
-    text-align: left;
-    margin-bottom: -3px;
-}
-
 .print-si-printer {
     background-position: -5px -5px;
     width: 26px;
@@ -629,80 +604,80 @@ i.stooltip span {
 }
 
 .print-si-close-light {
-    background-position: -34px -5px;
+    background-position: -168px -74px;;
     width: 26px;
     height: 26px;
 }
 
 .print-si-close-light:hover, .btn-simulator-container:hover .print-si-close-light {
-    background-position: -34px -31px;
+    background-position: -168px -100px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-pause-light {
-    background-position: -69px -5px;
+    background-position: -191px -73px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-pause-light:hover , .btn-simulator-container:hover .print-si-pause-light {
-    background-position: -69px -31px;
+    background-position: -191px -99px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-play-light {
-    background-position: -100px -5px;
+    background-position: -213px -74px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-play-light:hover, .btn-simulator-container:hover .print-si-play-light {
-    background-position: -100px -31px;
+    background-position: -213px -100px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-cancel-light {
-    background-position: -162px -67px;
+    background-position: -105px -75px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-cancel-light:hover {
-    background-position: -162px -97px;
+    background-position: -105px -101px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-pause-light {
-    background-position: -132px -66px;
+    background-position:-75px -75px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-pause-light:hover {
-    background-position: -132px -96px;
+    background-position: -75px -101px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-resume-light {
-    background-position: -41px -66px;
+    background-position: -91px -198px;
     width: 26px;
     height: 26px;
 }
 
 .print-si-round-resume-light:hover {
-    background-position: -41px -95px;
+    background-position: -123px -198px;
     width: 26px;
     height: 26px;
 }
 
 
 .print-si-browse {
-    background-position: -5px -30px;
+    background-position: -136px -102px;
     width: 29px;
     height: 29px;
 }
@@ -710,35 +685,35 @@ i.stooltip span {
 
 .print-si-new-token-light
 {
-    background-position: -100px -66px;
+    background-position: -246px -109px;
     width: 29px;
     height: 29px;
 }
 
 .print-si-new-token-light:hover, .btn-simulator-container:hover .print-si-new-token-light
 {
-    background-position: -100px -95px;
+    background-position: -246px -140px;
     width: 29px;
     height: 29px;
 }
 
 .print-si-plus
 {
-    background-position: -69px -62px;
-    width: 26px;
-    height: 26px;
+    background-position: -284px -90px;
+    width: 22px;
+    height: 22px;
 }
 
 .print-si-round-refresh-light
 {
-    background-position: -284px -145px;
+    background-position: -286px -145px;
     width: 29px;
     height: 29px;
 }
 
 .print-si-round-refresh-light:hover
 {
-    background-position: -284px -173px;
+    background-position: -286px -173px;
     width: 29px;
     height: 29px;
 }
@@ -1074,9 +1049,8 @@ i.stooltip span {
     border-left:1px solid #2b2f3e;
     border-right:1px solid #2b2f3e;
     width: 682px;
-    min-height: 460px;
 
-    overflow: auto;
+    overflow: hidden;
 
 }
 
@@ -1138,6 +1112,9 @@ i.stooltip span {
 .logger-menu-item.active{
     /**text-decoration: underline;*/
     border-bottom: 2px solid white;
+}
+.logger-menu-item.active:hover{
+    border-bottom: 2px solid grey;
 }
 
 .request.active{
@@ -1233,10 +1210,7 @@ i.stooltip span {
 
 #requestLog-details{
 
-    height: 300px;
-
     overflow-y: auto;
-    /**height: 300px;*/
     /**resize: vertical;*/
     overflow: auto;
     display: none;

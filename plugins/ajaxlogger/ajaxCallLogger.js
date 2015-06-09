@@ -10,6 +10,8 @@
  */
 var ajaxCallLogger = function(){
 
+	var loggerHeight = 460;
+	var loggerElementsHeight = 60;
 	var loggerId = "requestLog";
 	var loggerDeatilsId = loggerId+"-details";
 	var urlToHide = "https://sandbox.spark.autodesk.com/api/v1/";
@@ -28,23 +30,41 @@ var ajaxCallLogger = function(){
 	 * @param data - the data to log
 	 */
 	var log = function (data) {
-		//console.log(data);
 		renderjson.set_show_to_level(3);
 		renderjson.set_icons('▸ ','▾ ');
 		var renderedRes = renderjson((data.res));
-		//console.log("rendered", rendered)
 
 		var txt = $(document.getElementById(loggerId));
+
+		var hideElement = function(id){
+			$('#'+id).hide();
+		};
+		var showElement = function(id){
+			$('#'+id).show();
+		};
+
 		var id = "response" + txt.children().size();
 
-		var on = "$('#"+loggerDeatilsId+"').show();$('#" + loggerDeatilsId + "').children().hide();$('#requestLog').children().removeClass('active');"+"$('#" + id + "').show();$(this).addClass('active');";
+		var div = $('<div class="request"></div>');
 
-		var onclick = "onclick=" +  "if($('#"+loggerDeatilsId+"').css('display')=='none'){$('#"+loggerId+"').height('160px');$('#drag').show();}" + on;
-		var div = $('<div class="request"'+onclick+'></div>');
+		div.on("click",function(){
+			if($("#"+loggerDeatilsId).css('display')=='none'){
+				$("#"+loggerId).height('160px');
+				$("#"+loggerDeatilsId).height(loggerHeight - $("#"+loggerId).height() -loggerElementsHeight);
+				showElement("drag");
+			}
+
+			showElement(loggerDeatilsId);
+			$("#" + loggerDeatilsId).children().hide();
+			$('#requestLog').children().removeClass('active');
+			//$("#" + id).show();
+			showElement(id);
+			$(this).addClass('active');
+		});
 
 		div.append("<pre class='renderjson' " + "><div class='req-resp' id='" + "req" + id + "'>" +
 					"<span class='method method-" + data.req.METHOD.toLowerCase() + "'>" + data.req.METHOD + "</span> " +
-			maxLength(data.req.URL.replace(urlToHide,"../"),90) + "<span class='open-full-request'><!--i class='spark_icon si-dropdown-open'></i--></span></div></pre>");
+			maxLength(data.req.URL.replace(urlToHide,"../"),90) + "</div></pre>");
 
 		var response = $("<div id='" + id + "' style='display:none'></div>");
 		var renderedReq = renderjson(data.req);
@@ -54,13 +74,36 @@ var ajaxCallLogger = function(){
 		var requestId = id+"-request";
 		var responseId = id+"-response";
 
-		var requestOnClick = "$('#"+requestId+"').show();$('#"+responseId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
-		var responseOnClick = "$('#"+responseId+"').show();$('#"+requestId+"').hide();$(this).addClass('active').siblings('a').removeClass('active');";
-		var closeOnClick = "$('#"+loggerDeatilsId+"').hide();$('#drag').hide();$('#"+loggerId+"').height($('.logger-container').height()-50)";
 
-		var responseMenu = $("<div class='logger-menu'><a class='logger-menu-item active ' onclick=" +requestOnClick + ">REQUEST</a> <a class='logger-menu-item' onclick="+responseOnClick+">RESPONSE</a><div class='new_spark_icon si-close pull-right' onclick="+ closeOnClick+ "></div></div>");
+		var requestLink = $("<a class='logger-menu-item active'>REQUEST</a>");
+		var responseLink = $(" <a class='logger-menu-item'>RESPONSE</a>");
+		var closeLink = $("<div class='new_spark_icon si-close pull-right'></div>");
+
+		requestLink.on("click",function(){
+			showElement(requestId);
+			hideElement(responseId);
+			$(this).addClass('active').siblings('a').removeClass('active');
+		});
+
+		responseLink.on("click",function(){
+			showElement(responseId);
+			hideElement(requestId);
+			$(this).addClass('active').siblings('a').removeClass('active');
+		});
+
+		closeLink.on("click",function(){
+			hideElement(loggerDeatilsId);
+			hideElement("drag");
+			$("#"+loggerId).height($('.logger-container').height()-50)
+		});
+
+		var responseMenu = $("<div class='logger-menu'></div>");
+		responseMenu.append(requestLink);
+		responseMenu.append(responseLink);
+		responseMenu.append(closeLink);
 
 		response.append(responseMenu);
+
 		response.append($("<div id=" +requestId + "></div>").append(renderedReq));
 		response.append($("<div id=" +responseId + "></div>").append(renderedRes).hide());
 
@@ -81,12 +124,13 @@ var ajaxCallLogger = function(){
 					'<div class="logger-container center">' +
 					'<div class="logger-header clearfix">' +
 					'<div class="title pull-left" for="'+loggerId+'">Network Log</div>' +
-					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty();$(\'#'+loggerDeatilsId+'\').empty();">Clear</div>' +
+					'<div class="pull-right clear" onClick="$(\'#'+loggerId+'\').empty();$(\'#'+loggerDeatilsId+'\').empty();'+"$('#"+loggerDeatilsId+"').hide();$('#drag').hide();$('#"+loggerId+"').height($('.logger-container').height()-50)\""+'>Clear</div>' +
 					'</div>' +
 					'<div id="'+loggerId+'"></div>' +
 					'<div id="drag">===</div>' +
 					'<div id="'+loggerDeatilsId+'">' +
 					'</div>');
+			div.height(loggerHeight + "px");
 			$(parentSelector).append(div);
 
 
@@ -110,33 +154,26 @@ var ajaxCallLogger = function(){
 					startHeight = parseInt(document.defaultView.getComputedStyle(top.get(0)).height, 10);
 					bottomStartHeight = parseInt(document.defaultView.getComputedStyle(bottom.get(0)).height, 10);
 
-					console.log("mouseDOWN:"+isResizing);
-
 				});
 
 				$(document).on('mousemove', function (e) {
-
-					console.log("*****mouseMOVE:"+isResizing);
-
 					if (!isResizing)
 						return;
-
 					var offsetBottom = lastDownX - e.clientY;
-					console.log("container.height():"+container.height() + ", e.clientY:" + e.clientY + ", container.offset().top" + container.offset().top + ", offset:"+offsetBottom);
 
-					console.log("startHeight + e.clientY - startY:" + startHeight +" " + e.clientY + " -" + startY);
 					var change= (e.clientY - startY);
-					top.height (startHeight + change + 'px');
-					bottom.height (bottomStartHeight - change + 'px');
+					var newTopHeight = startHeight + change;
+					if(newTopHeight>=0 && newTopHeight < (loggerHeight - loggerElementsHeight)) {
 
+						top.height(newTopHeight + 'px');
+						bottom.height(bottomStartHeight - change + 'px');
 
+					}
 				});
 
 				$(document).on('mouseup', function (e) {
 					// stop resizing
 					isResizing = false;
-					console.log("mouseup:"+isResizing);
-
 				});
 			});
 

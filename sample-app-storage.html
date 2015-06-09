@@ -282,7 +282,6 @@
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
 			hideBreadcrumbs(['home', 'asset', 'file-type']);
-			$('#mainIframe').attr('height', '400px');
 			$('#loginId').addClass('verified');
 		} else {
 			$('#appModal').modal('show');
@@ -291,7 +290,6 @@
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
 			$('#breadcrumbs-section').hide();
-			$('#mainIframe').attr('height', '523px');
 		}
 
 		$(".sample-top-menu").on('click', '.menu-item', function (e) {
@@ -335,7 +333,7 @@
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
 				$('#requestLog').show();
-				$('#mainIframe').attr('height', '462px');
+				$('#mainIframe').attr('height', '523px');
 			}
 		},
 		myAssets: {
@@ -347,7 +345,7 @@
 				$('#breadcrumbs-section').css('display', 'inline-block');
 				$('#breadcrumbs-section div#action-button div').hide();
 				showBreadcramb('home');
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 				$('#loginId').addClass('verified');
 			}
 		},
@@ -361,7 +359,7 @@
 				$('#breadcrumbs-section div#action-button div').hide();
 				$('#loginId').addClass('verified');
 				$('#myAssetsId').addClass('verified');
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 
 			}
 		},
@@ -376,7 +374,7 @@
 				$('#loginId').addClass('verified');
 				$('#myAssetsId').addClass('verified');
 				$('#createAssetId').addClass('verified');
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 			}
 		}
 	};
@@ -392,7 +390,7 @@
 				changeState('myAssets');
 				isLoggedIn = true;
 			} else {
-				$('#mainIframe').attr('height', '462px');
+				$('#mainIframe').attr('height', '523px');
 			}
 			if (optionalParams.member) {
 				$('#user span').text(optionalParams.member.name);
@@ -418,7 +416,7 @@
 			$('#breadcrumbs-section div#action-button #create-asset').show();
 			showBreadcramb('home');
 			hideBreadcrumbs(['asset', 'file-type']);
-			$('#mainIframe').attr('height', '400px');
+			$('#mainIframe').attr('height', '462px');
 		},
 
 		showSpecificAssetEvent: function (optionalParams) {
@@ -431,7 +429,7 @@
 				showAssetBreadcrumb(currentAssetId);
 				hideBreadcrumbs(['file-type']);
 				showManageFileStep();
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
 			}
 
@@ -439,7 +437,7 @@
 		createAssetEvent: function () {
 			$('#breadcrumbs-section div#action-button #create-asset').hide();
 			showBreadcramb('home');
-			$('#mainIframe').attr('height', '400px');
+			$('#mainIframe').attr('height', '462px');
 		},
 		showAssetFilesEvent: function (optionalParams) {
 			currentAssetId = optionalParams.assetId;
@@ -449,7 +447,7 @@
 			} else {
 				$('#breadcrumbs-section div#action-button #create-file').hide();
 				showBreadcramb('home');
-				$('#mainIframe').attr('height', '400px');
+				$('#mainIframe').attr('height', '462px');
 				showAssetBreadcrumb(currentAssetId);
 				showAssetFilesBreadcrumb(optionalParams.fileType);
 				showManageFileStep();
@@ -457,7 +455,7 @@
 			}
 		},
 		shrinkIframe: function () {
-			$('#mainIframe').attr('height', '335px');
+			$('#mainIframe').attr('height', '462px');
 		}
 	};
 

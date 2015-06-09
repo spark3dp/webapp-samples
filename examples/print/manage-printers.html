@@ -51,12 +51,12 @@
 		.printers-container
 		{
 			overflow-y: auto;
-			height: 230px;
+			height: 286px;
 		}
 
 		#manage-printers-form{
 			padding-top: 20px;
-			height: 390px;
+			height: 450px;
 		}
 
 		.dropdown-menu{
@@ -97,7 +97,7 @@
 			<hr>
 			<div class="sub-title pull-left">Manage your existing printers, or register a new printer.</div>
 			<a class="spark_btn empty pull-right" onclick="eventBroadCaster.broadcastEvent('manageIframe.addClick')">
-				<i class="spark_print_icon print-si-plus"></i>  Register Printer
+				<i class="spark_icon print-si-plus"></i>  Register Printer
 			</a>
 			<div class="spacer clearfix"></div>
 			<hr>
@@ -105,11 +105,11 @@
 				<table class="table" id="printers">
 					<thead>
 					<tr>
-						<th>Printer Name<br><span>printer_name</span></th>
-						<th>Printer Type<br><span>type_id</span></th>
-						<th>Firmware<br><span>firmware</span></th>
-						<th>Status<br><span>printer_last_health</span></th>
-						<th></th>
+						<th style="width:60%">Printer Name<br><span>printer_name</span></th>
+						<th style="width:29%">Printer Type<br><span>type_id</span></th>
+						<th style="width:5%">Firmware<br><span>firmware</span></th>
+						<th style="width:5%">Status<br><span>printer_last_health</span></th>
+						<th style="width:1%"></th>
 					</tr>
 					</thead>
 					<tbody id="printersTbody">
