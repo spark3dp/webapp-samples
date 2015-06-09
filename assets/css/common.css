@@ -1050,8 +1050,7 @@ i.stooltip span {
     border-right:1px solid #2b2f3e;
     width: 682px;
 
-
-    overflow: auto;
+    overflow: hidden;
 
 }
 
@@ -1113,6 +1112,9 @@ i.stooltip span {
 .logger-menu-item.active{
     /**text-decoration: underline;*/
     border-bottom: 2px solid white;
+}
+.logger-menu-item.active:hover{
+    border-bottom: 2px solid grey;
 }
 
 .request.active{
