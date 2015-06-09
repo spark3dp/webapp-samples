@@ -20,6 +20,9 @@ var eventBroadCaster = function($){
 				optionalParams:optionalParams
 			}
 		};
+
+		console.log("broadcasting event:"+JSON.stringify(data));
+
 		parent.postMessage(data,"*");
 
 	};

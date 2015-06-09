@@ -11,7 +11,7 @@ var broadcastEventListener = function($){
 		var iframeBroadCastListener = function(event){
 			if (event.origin === window.location.origin) {
 				if(event.data!=undefined && event.data.type=="eventBroadcast") {
-
+					console.log("got eventBroadcast event:"+JSON.stringify(event.data));
 					if (broadcastMapper[event.data.data.event] != undefined) {
 						broadcastMapper[event.data.data.event](event.data.data.optionalParams);
 					}
