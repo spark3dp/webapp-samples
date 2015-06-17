@@ -230,7 +230,7 @@
 					$('#img-placeholder').addClass('col-xs-5');
 					$('#form-fields').addClass('col-xs-7');
 
-					var img = $('<img src="' + response.public_url + '" alt="' + response.name + '">');
+					var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
 					$('#img-placeholder').append(img);
 				}
 			} else {
