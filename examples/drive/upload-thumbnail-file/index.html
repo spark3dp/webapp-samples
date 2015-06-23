@@ -232,7 +232,7 @@
 						span.innerHTML = ['<img class="thumb" src="', e.target.result,
 							'" title="', escape(theFile.name), '"/>'].join('');
 
-						var imgSpan = $('<span class="thumb-img post-upload"><img class="thumb" src="' + e.target.result + '" title="' + escape(theFile.name) + '"/></span>');
+						var imgSpan = $('<span class="thumb-img post-upload"><img class="thumb" src="' + ADSKSpark.Helpers.changeHttpToHttps(e.target.result) + '" title="' + escape(theFile.name) + '"/></span>');
 						$('#file-upload-text').html(imgSpan);
 
 						//adjust height

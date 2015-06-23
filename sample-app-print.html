@@ -301,11 +301,11 @@
 
 			ADSKSpark.Members.getMyProfile().then(function(response){
 				if (response.member.profile.avatar_path) {
-					$('#user img').attr('src', response.member.profile.avatar_path);
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(response.member.profile.avatar_path));
 					$('#user').show();
 				}
 				else{
-					$('#user img').attr('src', "../../assets/img/default_avatar.png");
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps("../../assets/img/default_avatar.png"));
 					$('#user').show();
 				}
 			});

@@ -395,7 +395,7 @@
 			if (optionalParams.member) {
 				$('#user span').text(optionalParams.member.name);
 				if (optionalParams.member.profile.avatar_path) {
-					$('#user img').attr('src', optionalParams.member.profile.avatar_path).show();
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(optionalParams.member.profile.avatar_path)).show();
 				}
 			}
 

@@ -155,7 +155,7 @@
 				$('#user .user-name').text(response.member.name);
 
 				if (response.member.profile.avatar_path) {
-					$('#user img').attr('src', response.member.profile.avatar_path);
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(response.member.profile.avatar_path));
 				}
 				else{
 					$('#user img').attr('src', "../../assets/img/default_avatar.png");
