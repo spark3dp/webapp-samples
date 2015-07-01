@@ -460,6 +460,34 @@ i.stooltip span {
     }
 }
 
+
+.spinner-with-text > .spinner {
+    display: none;
+    left: -55px;
+}
+
+.spinner-with-text {
+    display: none;
+
+    height: 20px;
+    width: 20px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+
+}
+
+#spinner-text{
+    /**left: 30px;*/
+    position: absolute;
+    font-size: 16px;
+    color: #333333;
+    font-weight: 400;
+}
+
 /******* END SPINNER **********/
 
 /***** SPRITE ******/
@@ -564,6 +592,13 @@ i.stooltip span {
     height: 18px;
     width: 18px;
 }
+
+.si-status-error {
+    background-position: -105px -75px;
+    width: 26px;
+    height: 26px;
+}
+
 
 .si-home{
     background-position: -188px -52px;
@@ -702,6 +737,10 @@ i.stooltip span {
     background-position: -284px -90px;
     width: 22px;
     height: 22px;
+}
+
+.notification_icon{
+    margin-right: 15px;
 }
 
 .print-si-round-refresh-light

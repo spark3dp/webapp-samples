@@ -62,37 +62,18 @@
 			margin-top:-14px;
 		}
 
-		.assets-container{
-			margin-top: 20px;
+		.problems-container{
+			margin-top: 60px;
 			overflow-y: scroll;
-			height: 435px;
+			height: 370px;
 		}
 
 
-		.spinner {
+		.notification-bar{
+			/**position: relative;*/
 			display: none;
-			left: -55px;
 		}
-
-		.spinner-with-text {
-			display: none;
-
-			height: 20px;
-			width: 20px;
-			margin: auto;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			position: absolute;
-
-		}
-
-		#spinner-text{
-			/**left: 30px;*/
-			position: absolute;
-		}
-
+		/**
 
 		.notification-bar {
 			font-size: 14px;
@@ -106,6 +87,7 @@
 		}
 
 		.notification-bar.fixed {
+			display: none;
 			position: fixed;
 			width: 100%;
 			top: 86px;
@@ -133,7 +115,7 @@
 			position: relative;
 			top: -47px;
 			margin-bottom: -41px;
-		}
+		}*/
 
 	</style>
 
@@ -146,21 +128,22 @@
 		<div class="spinner"></div>
 	</div>
 
-	<div class="notification-bar fixed saved-notification ng-scope" style="top: 85px; display: block;">
-		<i class="notification_icon spark_icon si-status-ok-large"></i>App details saved successfully. </div>
+	<div id="messageSuccess" class="notification-bar fixed saved-notification ng-scope">
+		<i class="notification_icon spark_icon si-status-ok"></i><span></span></div>
 
-	<div class="notification-bar fixed" data-ng-show="errorMessage">
-		<i class="notification_icon spark_icon si-status-note-large"></i>
-		{{errorMessage}}
+	<div id="messageError" class="notification-bar fixed">
+		<i class="notification_icon spark_icon si-status-error"></i>
+		Error!
 	</div>
 
 	<div class="hidden" id="problems-table">
-		<div class="assets-container" id="assets-container">
+		<div class="problems-container" id="problems-container">
 			<table class="table">
 				<thead>
 				<tr>
-					<th>Problem<br/></th>
-					<th>Solved?<br/></th>
+					<th>Issues<br/></th>
+					<th>Found<br/></th>
+					<th>Repaired<br/></th>
 				</tr>
 				</thead>
 				<tbody id="problemsTbody" >
@@ -170,7 +153,9 @@
 		</div>
 	</div>
 
-	<div id="downloadMesh" class="spark_btn primary post-upload hidden" >Download</div>
+	<div style="margin: 0 auto;width: 25%;">
+		<div id="downloadMesh" class="btn spark_btn primary post-upload hidden" >Download</div>
+	</div>
 
 	<!--<a class="btn spark_btn primary" href="#" id="downloadMesh" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Download</a>
 -->
@@ -210,16 +195,6 @@
 
 <script>
 
-//log http requests
-//ajaxCallListenerFromIframe();
-
-var currentAssetId, //the asset id we are referring to
-		fileData //the file data
-		;
-
-var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
-
-
 
 
 /**
@@ -227,6 +202,15 @@ var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
  * The spark object already exists in this point
  */
 jQuery(function ($) {
+
+	var problemsNamesArray = {
+		holes:"Holes",
+		degenerate_triangles:"Degenerate Triangles",
+		duplicate_triangles:"Duplicate Trinagles",
+		nonmanifold_vertices:"Nonmanifold Triangles",
+		inconsistently_oriented_triangles:"Inconsistently Oriented Triangles"
+	};
+
 	eventBroadCaster.broadcastEvent('repairIframe.analyze');
 
 	//First let's see if we have a valid access token
@@ -252,6 +236,13 @@ jQuery(function ($) {
 				eventBroadCaster.broadcastEvent('repairIframe.repair');
 
 				var analyzedProblems = payloadAnalyze.problems;
+				if(analyzedProblems.length==0){
+					$("#messageSuccess > span").text("Your model doesn't need a repair.");
+					$("#messageSuccess").show();
+					$('.spinner-with-text').hide();
+
+					return;
+				}
 				var problemsArray = {};
 				for (var i = 0; i < analyzedProblems.length; i++) {
 					problemsArray[analyzedProblems[i].type] = true;
@@ -272,30 +263,54 @@ jQuery(function ($) {
 					$('#problems-table').removeClass('hidden');
 					$('#downloadMesh').removeClass('hidden');
 
-					$.each(problemsArray, function (index, item) {
+					var problemsLeft = 0;
+
+					$.each(problemsNamesArray, function (index, item) {
 						var tr = $('<tr class="in-table"></tr>')
-						var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
-						tr.append($('<td>' + index + '</td>'));
+						//var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
 						tr.append($('<td>' + item + '</td>'));
+
+						debugger;
+
+						if(problemsArray[index]!=undefined){
+
+							tr.append($('<td>' +"Yes" + '</td>'));
+
+							if(problemsArray[index]==true){
+								tr.append($('<td>' +  "Yes"  + '</td>'));
+							}
+							else{
+								tr.append($('<td>' +  "No"  + '</td>'));
+								problemsLeft += 1;
+							}
+						}
+						else{
+							tr.append($('<td>' + "-" + '</td>'));
+							tr.append($('<td>' + "-" + '</td>'));
+
+						}
+
 						$('#problemsTbody').append(tr);
 
 					});
+
+					var successMessage = "";
+
+					if(problemsLeft>0){
+						successMessage = "There are still some problems.";
+					}
+					else{
+						successMessage = "File successfully repaired";
+					}
+
+					$("#messageSuccess > span").text(successMessage);
+					$("#messageSuccess").show();
 
 					var newMeshId = payloadRepair.id
 					$("#downloadMesh").on("click", (function(){
 						exportAndDownload(newMeshId)
 					}));
-					/**
-					var newMeshId = payloadRepair.id
-					ADSKSpark.MeshAPI.exportMesh(newMeshId).then(function (payloadExport) {
-						console.log(payloadExport);
-						var fileId = payloadExport.file_id;
-						ADSKSpark.Files.downloadFileByURL(fileId).then(function (downloadPayload){
-							console.log(downloadPayload);
-							var downloadUrl = downloadPayload.download_url;
-							window.location.href = downloadUrl;
-						});
-					});*/
+
 				});
 			})
 		}
@@ -315,8 +330,6 @@ jQuery(function ($) {
 		});
 	};
 
-	//broadcast the state to the iframe - intended only for the storage UI
-	eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'sources',assetId:currentAssetId});
 });
 
 </script>

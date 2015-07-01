@@ -18,111 +18,10 @@
 	<link href="assets/css/common.css" rel="stylesheet">
 
 	<style>
-		@font-face {
-			font-family:"digital";
-			src: url("plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
-		}
-
-		.lcd{
-			font-family: 'digital', sans-serif;
-			color: #00C6FF;
-			font-size: 20px;
-			letter-spacing: 20px;
-
-		}
-
-		.lcd-container{
-			width: 362px;
-			height: 76px;
-			background:url('assets/img/simulator_panel.png') no-repeat;
-			border-radius: 3px;
-			padding: 15px 30px 15px 30px;
-			text-align: center;
-		}
-
-		.simulator-row{
-			width: 680px;
-			margin-left: 1px;
-			padding-bottom: 10px;
-			padding-top: 25px;
-
-		}
-
-
-		.simulator-container
-		{
-
-			display: none;
-			width: 682px;
-			height: 108px;
-			background:url('assets/img/simulator_panel_bg.png') no-repeat;
-		}
-
-		.btn-simulator-container
-		{
-			margin-top: 10px;
-			color: #333333;
-			cursor: pointer;
-
-		}
-		.btn-simulator-container-center{
-			padding-right: 17px;
-			padding-left: 17px;
-		}
-
-		.btn-simulator-container-right{
-
-			padding-left: 17px;
-		}
-
-		.btn-simulator-container-left{
-			padding-right: 17px;
-			padding-left: 7px;
-		}
-
-		.btn-simulator-container-new-token{
-			padding-left: 14px;
-
-		}
-
-		.btn-simulator-container-border{
-			border-right: 1px solid #cccccc;
-		}
-
-
-		.btn-simulator-container .spark_icon
-		{
-			display: block;
-			text-align: center;
-			margin-bottom: 10px;
-
-		}
-
-		.resume-print .spark_icon{
-			margin-left: 10px;
-		}
-		.pause-print .spark_icon{
-			margin-left: 5px;
-		}
-		.cancel-print .spark_icon{
-			margin-left: 7px;
-		}
-
-		.create-new-token .spark_icon{
-			margin-left: 18px;
-		}
-
-		.tooltip.right {
-			padding: 0 5px;
-			margin-left: -75px;
-			margin-top: -40px;
-		}
-
-		.tooltip.left {
-			padding: 0 5px;
-			margin-left: 65px;
-			margin-top: -47px;
-		}
+	.mainIframe-container{
+		margin-bottom: 15px;
+		border: 1px solid #cccccc;
+	}
 
 	</style>
 </head>
@@ -141,14 +40,14 @@
 						<div id="user" class="pull-left" style="display: none;">
 							<img class="user-avatar" src=""/>
 						</div>
-						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+						<a class="menu-item pull-left" data-state="login" role="tab" onclick='statePlugin.changeState("login");'>Log in</a>
 
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
 					<li id="uploadId">
-						<a class="menu-item pull-left" data-state="upload" role="tab">Upload</a>
+						<a class="menu-item pull-left" data-state="upload" role="tab" onclick='statePlugin.changeState("upload");'>Upload</a>
 
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
@@ -171,7 +70,7 @@
 			</div>
 			<div class="mainIframe-container">
 				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="523px" frameborder="0"
-				        src="examples/print/manage-printers.html"></iframe>
+				        src=""></iframe>
 			</div>
 
 
@@ -187,6 +86,7 @@
 
 
 <!-- Modal -->
+<!--
 <div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -204,7 +104,7 @@
 		</div>
 	</div>
 </div>
-
+-->
 <script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
@@ -270,29 +170,6 @@
 			//$('#mainIframe').attr('height', '523px');
 		}
 
-		$(".menu-item").click(function(e){
-			e.preventDefault();
-			var state = $(this).data("state");
-			statePlugin.changeState(state);
-			showSimulator(false);
-		});
-
-		$(".create-new-token").click(function(e){
-			e.preventDefault();
-			$("#myModal").modal('show');
-		});
-
-		$(".generate").click(function(e){
-			e.preventDefault();
-			$("#myModal").modal('hide');
-			$(".new-token").click();
-		});
-
-		$(".cancel").click(function(e){
-			e.preventDefault();
-			$("#myModal").modal('hide');
-		});
-
 	});
 
 
@@ -302,22 +179,26 @@
 
 	var states = {
 		login:{
-			"src":"plugins/login/login.html",
+			src:"plugins/login/login.html",
 			selectedTab:"#loginId",
 			enabledTabs:[],
 			disabledTabs:["#loginId", "#uploadId","#analyzeId", "#repairId"],
 			callbackFunc: function () {
-				//$('#mainIframe').attr('height', '462px');
+				$('#uploadId').removeClass("verified");
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
+
 			}
 		},
 
 		upload:{
-			"src":"examples/healing/upload.html",
+			src:"examples/healing/upload.html",
 			selectedTab:"#uploadId",
 			enabledTabs:["#loginId", "#uploadId"],
 			disabledTabs:["#analyzeId","#repairId"],
 			callbackFunc: function () {
-				//$('#mainIframe').attr('height', '462px');
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
 			}
 		},
 
