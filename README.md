@@ -1,7 +1,7 @@
 Web App Samples
 ========================
 ### Introduction
-These applications demonstrate Spark's cloud based 3D model storage, mesh preparation and 3D printing and can also provide an example of the Spark OAuth 2.0 procedure.
+These applications demonstrate Spark's cloud based 3D model storage, mesh preparation and 3D printing and also provide an example of the Spark OAuth 2.0 procedure.
 
 ### Required setup before running the sample code
 1. Clone the software repository (copy its files) to a folder on your web server. 
