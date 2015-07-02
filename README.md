@@ -3,10 +3,10 @@ Web App Samples
 ### Introduction
 These applications demonstrate Spark's cloud based 3D model storage, mesh preparation and 3D printing and also provide an example of the Spark OAuth 2.0 procedure.
 
-### Required setup before running the sample code
+### Setting up the sample code
 1. Clone the software repository (copy its files) to a folder on your web server. 
 2. If you have not already done so, define an app on the Spark Developers portal at https://spark.autodesk.com/developers/myApps.
-3. In the API Keys tab of the app registration, enter the fully qualified URL of the sample's plugins/login/login-callback.html file (do not use a relative path).
+3. In the API Keys tab of the app registration, in the Callback URL field, enter the fully qualified URL of the sample's plugins/login/login-callback.html file (enter the full http path).
 4. Copy the app key and app secret for later use.
 5. You need to run a server. This repo is provided with a nodejs server. To run it you should:
   * Copy server/nodejs/config.example.js to server/nodejs/config.js and enter your app key and secret.
