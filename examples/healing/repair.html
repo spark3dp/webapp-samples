@@ -206,9 +206,108 @@ jQuery(function ($) {
 	var problemsNamesArray = {
 		holes:"Holes",
 		degenerate_triangles:"Degenerate Triangles",
-		duplicate_triangles:"Duplicate Trinagles",
-		nonmanifold_vertices:"Nonmanifold Triangles",
+		duplicate_triangles:"Duplicate Triangles",
+		nonmanifold_vertices:"Nonmanifold Vertices",
 		inconsistently_oriented_triangles:"Inconsistently Oriented Triangles"
+	};
+
+	var problemsArrayIsEqual = function(arr1,arr2){
+		if(arr1.length!=arr2.length){
+			return false;
+		}
+		else{
+			for(var i=0;i<arr1.length;i++){
+				if(arr1[i].type != arr2[i].type){
+					return false;
+				}
+			}
+			return true;
+		}
+	};
+
+	var addProblemsToArray = function(problemsArray, repairResponse){
+		for (var i = 0; i < repairResponse.length; i++) {
+			problemsArray[repairResponse[i].type] = true;
+		}
+	};
+
+	var recursivePromise = function(meshId,problemsBefore,problemsArray, callbackFunc){
+
+		ADSKSpark.MeshAPI.repairMesh(meshId, false).then(function (payloadRepair) {
+
+			var problemsAfter = payloadRepair.problems;
+
+			addProblemsToArray(problemsArray, problemsAfter);
+
+			if(problemsArrayIsEqual(problemsBefore, problemsAfter)){
+
+				for (var i = 0; i < problemsAfter.length; i++) {
+					problemsArray[problemsAfter[i].type] = false;
+				}
+
+				callbackFunc(problemsArray,payloadRepair.id);
+			}
+			else{
+				recursivePromise(payloadRepair.id,problemsAfter,problemsArray,callbackFunc);
+			}
+		});
+	};
+
+	var allRepairCallback = function(problemsArray,newMeshId){
+
+		console.log(problemsArray);
+
+		eventBroadCaster.broadcastEvent('repairIframe.repaired');
+
+		$('.spinner-with-text').hide();
+		$('#problems-table').removeClass('hidden');
+		$('#downloadMesh').removeClass('hidden');
+
+		var problemsLeft = 0;
+
+		$.each(problemsNamesArray, function (index, item) {
+			var tr = $('<tr class="in-table"></tr>')
+			//var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
+			tr.append($('<td>' + item + '</td>'));
+
+
+			if(problemsArray[index]!=undefined){
+
+				tr.append($('<td>' +"Yes" + '</td>'));
+
+				if(problemsArray[index]==true){
+					tr.append($('<td>' +  "Yes"  + '</td>'));
+				}
+				else{
+					tr.append($('<td>' +  "No"  + '</td>'));
+					problemsLeft += 1;
+				}
+			}
+			else{
+				tr.append($('<td>' + "-" + '</td>'));
+				tr.append($('<td>' + "-" + '</td>'));
+
+			}
+
+			$('#problemsTbody').append(tr);
+
+		});
+
+		var successMessage = "";
+
+		if(problemsLeft>0){
+			successMessage = "There are still some problems.";
+		}
+		else{
+			successMessage = "File successfully repaired";
+		}
+
+		$("#messageSuccess > span").text(successMessage);
+		$("#messageSuccess").show();
+
+		$("#downloadMesh").on("click", (function(){
+			exportAndDownload(newMeshId)
+		}));
 	};
 
 	eventBroadCaster.broadcastEvent('repairIframe.analyze');
@@ -223,7 +322,6 @@ jQuery(function ($) {
 
 		//var importResponse = ADSKSpark.MeshAPI.importMesh(fileId,fileName);
 
-		debugger;
 		if(meshId!=0) {
 			$('.spinner-with-text').show();
 			$('.spinner').show();
@@ -236,6 +334,7 @@ jQuery(function ($) {
 				eventBroadCaster.broadcastEvent('repairIframe.repair');
 
 				var analyzedProblems = payloadAnalyze.problems;
+
 				if(analyzedProblems.length==0){
 					$("#messageSuccess > span").text("Your model doesn't need a repair.");
 					$("#messageSuccess").show();
@@ -243,75 +342,14 @@ jQuery(function ($) {
 
 					return;
 				}
+
 				var problemsArray = {};
-				for (var i = 0; i < analyzedProblems.length; i++) {
-					problemsArray[analyzedProblems[i].type] = true;
-				}
 
-				ADSKSpark.MeshAPI.repairMesh(meshId).then(function (payloadRepair) {
-					console.log(payloadRepair);
-					eventBroadCaster.broadcastEvent('repairIframe.repaired');
-					var problemsAfterRepair = payloadRepair.problems;
+				addProblemsToArray(problemsArray,analyzedProblems);
 
-					for (var i = 0; i < problemsAfterRepair.length; i++) {
-						problemsArray[problemsAfterRepair[i].type] = false;
-					}
+				recursivePromise(meshId,analyzedProblems,problemsArray, allRepairCallback);
 
-					console.log(problemsArray);
 
-					$('.spinner-with-text').hide();
-					$('#problems-table').removeClass('hidden');
-					$('#downloadMesh').removeClass('hidden');
-
-					var problemsLeft = 0;
-
-					$.each(problemsNamesArray, function (index, item) {
-						var tr = $('<tr class="in-table"></tr>')
-						//var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
-						tr.append($('<td>' + item + '</td>'));
-
-						debugger;
-
-						if(problemsArray[index]!=undefined){
-
-							tr.append($('<td>' +"Yes" + '</td>'));
-
-							if(problemsArray[index]==true){
-								tr.append($('<td>' +  "Yes"  + '</td>'));
-							}
-							else{
-								tr.append($('<td>' +  "No"  + '</td>'));
-								problemsLeft += 1;
-							}
-						}
-						else{
-							tr.append($('<td>' + "-" + '</td>'));
-							tr.append($('<td>' + "-" + '</td>'));
-
-						}
-
-						$('#problemsTbody').append(tr);
-
-					});
-
-					var successMessage = "";
-
-					if(problemsLeft>0){
-						successMessage = "There are still some problems.";
-					}
-					else{
-						successMessage = "File successfully repaired";
-					}
-
-					$("#messageSuccess > span").text(successMessage);
-					$("#messageSuccess").show();
-
-					var newMeshId = payloadRepair.id
-					$("#downloadMesh").on("click", (function(){
-						exportAndDownload(newMeshId)
-					}));
-
-				});
 			})
 		}
 
