@@ -129,11 +129,11 @@
 	</div>
 
 	<div id="messageSuccess" class="notification-bar fixed saved-notification ng-scope">
-		<i class="notification_icon spark_icon si-status-ok"></i><span></span></div>
+		<i class="notification_icon spark_icon si-notification-ok"></i><span></span></div>
 
 	<div id="messageError" class="notification-bar fixed">
-		<i class="notification_icon spark_icon si-status-error"></i>
-		Error!
+		<i class="notification_icon spark_icon si-notification-error"></i>
+		<span>We apologise but there seems to be temporary problem with the service.</span>
 	</div>
 
 	<div class="hidden" id="problems-table">
@@ -239,7 +239,7 @@ jQuery(function ($) {
 
 			addProblemsToArray(problemsArray, problemsAfter);
 
-			if(problemsArrayIsEqual(problemsBefore, problemsAfter)){
+			if(problemsAfter.length==0 || problemsArrayIsEqual(problemsBefore, problemsAfter)){
 
 				for (var i = 0; i < problemsAfter.length; i++) {
 					problemsArray[problemsAfter[i].type] = false;
@@ -250,24 +250,33 @@ jQuery(function ($) {
 			else{
 				recursivePromise(payloadRepair.id,problemsAfter,problemsArray,callbackFunc);
 			}
+		},function(error){
+			$("#messageError").show();
 		});
 	};
 
-	var allRepairCallback = function(problemsArray,newMeshId){
-
-		console.log(problemsArray);
+	var repairCallback = function (problemsArray,newMeshId){
 
 		eventBroadCaster.broadcastEvent('repairIframe.repaired');
 
+		analyzeRepairCallback(problemsArray,newMeshId);
+
+	};
+
+	var analyzeRepairCallback = function(problemsArray,newMeshId){
+
+		console.log(problemsArray);
+
+		//eventBroadCaster.broadcastEvent('repairIframe.repaired');
+
 		$('.spinner-with-text').hide();
 		$('#problems-table').removeClass('hidden');
-		$('#downloadMesh').removeClass('hidden');
 
 		var problemsLeft = 0;
 
 		$.each(problemsNamesArray, function (index, item) {
-			var tr = $('<tr class="in-table"></tr>')
-			//var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
+			var tr = $('<tr class="in-table"></tr>');
+
 			tr.append($('<td>' + item + '</td>'));
 
 
@@ -295,7 +304,12 @@ jQuery(function ($) {
 
 		var successMessage = "";
 
-		if(problemsLeft>0){
+		if(newMeshId==undefined){
+			successMessage = "Your model doesn't need a repair.";
+			//$("#messageSuccess").show();
+			//$('.spinner-with-text').hide();
+		}
+		else if(problemsLeft>0){
 			successMessage = "There are still some problems.";
 		}
 		else{
@@ -305,9 +319,13 @@ jQuery(function ($) {
 		$("#messageSuccess > span").text(successMessage);
 		$("#messageSuccess").show();
 
-		$("#downloadMesh").on("click", (function(){
-			exportAndDownload(newMeshId)
-		}));
+		if(newMeshId!=undefined) {
+			$('#downloadMesh').removeClass('hidden');
+
+			$("#downloadMesh").on("click", (function () {
+				exportAndDownload(newMeshId)
+			}));
+		}
 	};
 
 	eventBroadCaster.broadcastEvent('repairIframe.analyze');
@@ -336,10 +354,8 @@ jQuery(function ($) {
 				var analyzedProblems = payloadAnalyze.problems;
 
 				if(analyzedProblems.length==0){
-					$("#messageSuccess > span").text("Your model doesn't need a repair.");
-					$("#messageSuccess").show();
-					$('.spinner-with-text').hide();
 
+					analyzeRepairCallback([],undefined);
 					return;
 				}
 
@@ -347,10 +363,13 @@ jQuery(function ($) {
 
 				addProblemsToArray(problemsArray,analyzedProblems);
 
-				recursivePromise(meshId,analyzedProblems,problemsArray, allRepairCallback);
+				recursivePromise(meshId,analyzedProblems,problemsArray, repairCallback);
 
 
-			})
+			},function(error){
+				console.log(error);
+				$("#messageError").show();
+			});
 		}
 
 	}

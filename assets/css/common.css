@@ -612,6 +612,18 @@ i.stooltip span {
     width: 11px;
 }
 
+.si-notification-error {
+    background-position: -279px -202px;
+    width: 26px;
+    height: 26px;
+}
+
+.si-notification-ok {
+    background-position: -303px -202px;
+    width: 26px;
+    height: 26px;
+}
+
 .si-add-item{
     background-position: -47px -53px;
     height: 12px;
