@@ -93,6 +93,10 @@
 			border-bottom: 0px;
 		}
 
+		#dropzone {
+			cursor: pointer;
+		}
+
 	</style>
 
 </head>
@@ -140,7 +144,7 @@
 
 			<form id="file-form" novalidate="">
 				<section class="form_field post-upload" id="file-input-section">
-					<input type="file" id="file-input" placeholder="file data" class="field hidden-upload" required>
+					<input type="file" id="file-input" placeholder="file data" class="field hidden-upload" style="display: none" required>
 				</section>
 
 
@@ -191,7 +195,7 @@
 			fileData //the file data
 			;
 
-	var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
+	var allowedFileUploadSize = 1000 * 1000 * 1000; //100MB
 
 	/**
 	 * What happens when user selects file
@@ -250,6 +254,7 @@
 	 */
 	function setFileUploadUI() {
 
+		$("#dropzone").on('click', function(){$('#file-input').click();})
 		//set allowed file size
 		var fileSizeHumanReadable = allowedFileUploadSize.fileSize(1);
 		$('#file-upload-text p').show().find('b').text(fileSizeHumanReadable);
