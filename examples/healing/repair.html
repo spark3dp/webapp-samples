@@ -323,6 +323,8 @@ jQuery(function ($) {
 			$('#downloadMesh').removeClass('hidden');
 
 			$("#downloadMesh").on("click", (function () {
+
+				$("#downloadMesh").text("Downloading...");
 				exportAndDownload(newMeshId)
 			}));
 		}
@@ -377,13 +379,12 @@ jQuery(function ($) {
 	var exportAndDownload = function(newMeshId){
 
 		ADSKSpark.MeshAPI.exportMesh(newMeshId,"obj").then(function (payloadExport) {
-			$("#downloadMesh").text("Downloading");
 			console.log(payloadExport);
 			var fileId = payloadExport.file_id;
 			ADSKSpark.Files.downloadFileByURL(fileId).then(function (downloadPayload){
 				console.log(downloadPayload);
 				var downloadUrl = downloadPayload.download_url;
-				window.location.href = downloadUrl;
+				window.location.href = ADSKSpark.Helpers.changeHttpToHttps(downloadUrl);
 			});
 		});
 	};
