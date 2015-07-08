@@ -70,14 +70,14 @@
 		.user-name
 		{
 			font-size: 22px;
-			margin-bottom: 20px;
+			margin-bottom: 13px;
 		}
 
 
 
 		#user{
-			margin-bottom: 25px;
-			height: 190px;
+			margin-bottom: 32px;
+			/**height: 190px;*/
 		}
 
 		#user img
@@ -93,6 +93,13 @@
 		#logout
 		{
 			margin-top: 10px;
+			margin-bottom: 50px;
+		}
+
+		#logout a
+		{
+			color: #888888;
+
 		}
 
 		.inner-logged-in-container
@@ -117,12 +124,13 @@
 	<div class="logged-in-as">Logged in as:</div>
 	<div id="user">
 		<div class="user-name"></div>
+		<div id="logout">
+			<a style="display: inline;" href="#" onclick="logout()">Logout</a>
+		</div>
 		<img src=""/>
 	</div>
     <a class="btn spark_btn empty"  href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
-	<div id="logout">
-		<a style="display: inline;" href="#" onclick="logout()">Logout</a>
-	</div>
+
 
 	</div>
 </div>

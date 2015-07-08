@@ -80,6 +80,10 @@
 			cursor: default;
 		}
 
+		.si-download{
+			margin-right: 10px;
+		}
+
 		/**
 
 		.notification-bar {
@@ -161,7 +165,7 @@
 	</div>
 
 	<div style="margin: 0 auto;width: 25%;">
-		<div id="downloadMesh" class="btn spark_btn primary post-upload hidden" >Download</div>
+		<div id="downloadMesh" class="btn spark_btn primary post-upload hidden" ><div class="spark_icon si-download"> </div><span>Download</span></div>
 	</div>
 
 	<!--<a class="btn spark_btn primary" href="#" id="downloadMesh" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Download</a>
@@ -331,7 +335,7 @@ jQuery(function ($) {
 
 			$("#downloadMesh").on("click", (function () {
 
-				$("#downloadMesh").text("Downloading...");
+				$("#downloadMesh span").text("Downloading...");
 				exportAndDownload(newMeshId)
 			}));
 		}

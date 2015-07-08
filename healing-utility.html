@@ -23,6 +23,66 @@
 		border: 1px solid #cccccc;
 	}
 
+
+	.si-healing-login{
+		background-position: -186px -294px;
+		height: 58px;
+		width: 58px;
+	}
+
+	.si-healing-login-disabled{
+		background-position: -186px -231px;
+		height: 58px;
+		width: 58px;
+	}
+
+	.arrow-container{
+		height: 60px;
+		width: 60px;
+	}
+
+	.verified .arrow{
+		background-color: #008C8D;
+	}
+
+	.arrow{
+		height: 2px;
+		width: 60px;
+		background-color: #B7B7B7;
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.sample-top-menu li a:hover, .sample-top-menu li.selected a{
+		border-bottom: 0px;
+	}
+
+	.sample-top-menu li .si-status-ok-filled,.sample-top-menu li .si-status-disabled {
+
+		position: absolute;
+		left: 47px;
+	}
+
+	.menu-link-text{
+		margin-top: 10px;
+		margin-left: -8px;
+	}
+
+	.selected .menu-link-text{
+		font-weight: 800;
+		color: #008C8D;
+	}
+
+	.verified .menu-link-text{
+		font-weight: 400;
+		color: #008C8D;
+	}
+
+	.disabled .verified-icon{
+		display: none;
+	}
+
 	</style>
 </head>
 
@@ -32,38 +92,58 @@
 	<div class="container outer-container">
 		<div id="container" class="container sample-app-container">
 			<div class="sample-app-header clearfix">
-				<h5 class="sample-title">Object Repair Tool</h5>
+				<h5 class="sample-title">Mesh Healing For Printing Tool</h5>
 			</div>
 			<div style="text-align: center;">
 				<ul class="nav nav-tabs sample-top-menu" role="tablist">
-					<li id="loginId">
-						<div id="user" class="pull-left" style="display: none;">
-							<img class="user-avatar" src=""/>
+
+					<!--
+					<li id="loginId" class="disabled">
+
+						<div class = "pull-left">
+							<a class="spark_icon menu-item verified-icon si-healing-login" data-state="login" role="tab" onclick='statePlugin.changeState("loggedin");'></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-login-disabled" data-state="login" role="tab" onclick='statePlugin.changeState("loggedin");'></a>
+							<div class="menu-link-text">Log in</div>
 						</div>
-						<a class="menu-item pull-left" data-state="login" role="tab" onclick='statePlugin.changeState("login");'>Log in</a>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
-					</li>
-					<li id="uploadId">
-						<a class="menu-item pull-left" data-state="upload" role="tab" onclick='statePlugin.changeState("upload");'>Upload</a>
+						<div class="pull-left spark_icon pull-left si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container pull-left"><div class="arrow"></div></div>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
-					<li id="analyzeId">
-						<a class="menu-item pull-left" data-state="analyze" role="tab">Analyze</a>
+					-->
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					<li id="uploadId" class="disabled">
+						<div class = "pull-left">
+							<a class="spark_icon menu-item verified-icon si-healing-upload " data-state="upload" role="tab" onclick='statePlugin.changeState("upload");' ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-upload-disabled " data-state="upload" role="tab" ></a>
+							<div class="menu-link-text">Upload</div>
+
+						</div>
+
+
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container"><div class="arrow"></div></div>
 					</li>
-					<li id="repairId">
-						<a class="menu-item pull-left" data-state="repair" role="tab">Repair</a>
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					<li id="analyzeId" class="disabled">
+						<div class = "pull-left">
+
+							<a class="spark_icon menu-item verified-icon si-healing-analyze" data-state="analyze" role="tab" ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-analyze-disabled" data-state="analyze" role="tab"></a>
+							<div class="menu-link-text">Analyze</div>
+
+						</div>
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container"><div class="arrow"></div></div>
+					</li>
+					<li id="repairId" class="disabled">
+						<div class = "pull-left">
+
+							<a class="spark_icon menu-item verified-icon si-healing-repair" data-state="repair" role="tab" ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-repair-disabled" data-state="repair" role="tab"></a>
+							<div class="menu-link-text">Repair</div>
+
+						</div>
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
 
 					</li>
 				</ul>
@@ -182,7 +262,20 @@
 			src:"plugins/login/login.html",
 			selectedTab:"#loginId",
 			enabledTabs:[],
-			disabledTabs:["#loginId", "#uploadId","#analyzeId", "#repairId"],
+			disabledTabs:[ "#uploadId","#analyzeId", "#repairId"],
+			callbackFunc: function () {
+				$('#uploadId').removeClass("verified");
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
+
+			}
+		},
+
+		loggedin:{
+			src:"plugins/login/login.html",
+			selectedTab:"#loginId",
+			enabledTabs:[],
+			disabledTabs:["#uploadId","#analyzeId", "#repairId"],
 			callbackFunc: function () {
 				$('#uploadId').removeClass("verified");
 				$('#analyzeId').removeClass("verified");
@@ -199,6 +292,8 @@
 			callbackFunc: function () {
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
+				$('#uploadId').removeClass("verified");
+
 			}
 		},
 
@@ -237,6 +332,8 @@
 		statePlugin.changeState('login');
 		statePlugin.unVerifyAll();
 	};
+
+
 
 	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
 

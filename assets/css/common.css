@@ -354,13 +354,15 @@ input[type="checkbox"]:checked + label span.chk {
 .notification-bar {
     background: none repeat scroll 0 0 #fefae6;
     border-bottom: 1px solid #ebeae7;
-    font-size: 13px;
-    padding: 8px;
+    font-size: 14px;
+    color: #333333;
+    padding: 4px;
     position: absolute;
     width: 100%;
     left:0;
     top:0;
     text-align: center;
+    line-height: 30px;
 }
 
 #welcome-wrapper{
@@ -507,6 +509,13 @@ i.stooltip span {
     margin-left: 6px;
 }
 
+.si-download {
+    background-position: -181px -204px;
+    height: 19px;
+    width: 20px;
+    margin-right: 10px;
+}
+
 .si-close{
     background-position: -70px -204px;
     width: 17px;
@@ -644,6 +653,49 @@ i.stooltip span {
     width: 18px;
 }
 
+.si-healing-upload {
+    background-position: -7px -294px;
+    height: 58px;
+    width: 58px;
+}
+
+.si-status-ok-filled {
+    background-position: -157px -204px;
+    height: 18px;
+    width: 18px;
+}
+
+.si-healing-upload-disabled {
+    background-position: -7px -231px;
+    height: 58px;
+    width: 58px;
+}
+
+.si-healing-analyze {
+    background-position: -67px -294px;
+    height: 58px;
+    width: 58px;
+}
+
+.si-healing-analyze-disabled {
+    background-position: -67px -231px;
+    height: 58px;
+    width: 58px;
+}
+
+.si-healing-repair {
+    background-position: -127px -294px;
+    height: 58px;
+    width: 58px;
+}
+
+.si-healing-repair-disabled {
+    background-position: -127px -231px;
+    height: 58px;
+    width: 58px;
+}
+
+
 .print-si-printer {
     background-position: -5px -5px;
     width: 26px;
@@ -752,7 +804,7 @@ i.stooltip span {
 }
 
 .notification_icon{
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .print-si-round-refresh-light
@@ -923,8 +975,24 @@ i.stooltip span {
     display:block;
 }
 
-.sample-top-menu li.verified .si-status-ok{
+.si-status-ok-filled{
+    display: none;
+}
+.sample-top-menu li.verified .si-status-ok-filled{
     display:block;
+}
+
+li.disabled .verified-icon{
+    display:none;
+}
+li.disabled .not-verified-icon{
+    display: block;
+}
+.sample-top-menu li.verified .verified-icon{
+    display:block;
+}
+.sample-top-menu li.verified .not-verified-icon,.sample-top-menu li.selected .not-verified-icon{
+    display:none;
 }
 
 .sample-top-menu li.verified .si-status-disabled{
