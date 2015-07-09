@@ -142,11 +142,19 @@
 				</div>
 			</div>
 
+
 			<form id="file-form" novalidate="">
 				<section class="form_field post-upload" id="file-input-section">
 					<input type="file" id="file-input" placeholder="file data" class="field hidden-upload" style="display: none" required>
 				</section>
 
+				<div class="form-footer">
+					<div class="publish-wrapper post-upload">
+						<input type="checkbox" id="isQuick">
+						<label for="isQuick"><span class="chk"></span>Quick Mode</label>
+					</div>
+
+				</div>
 
 			</form>
 		</div>
@@ -191,11 +199,10 @@
 	//log http requests
 	//ajaxCallListenerFromIframe();
 
-	var currentAssetId, //the asset id we are referring to
-			fileData //the file data
-			;
 
-	var allowedFileUploadSize = 1000 * 1000 * 1000; //100MB
+	var fileData;
+
+	var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
 
 	/**
 	 * What happens when user selects file
@@ -233,6 +240,8 @@
 
 		ADSKSpark.MeshAPI.uploadFile(fileData).then(function(result) {
 			var upload = result.files[0];
+			var isQuick = $("#isQuick").is(':checked');
+
 			$("#spinner-text").text("Importing...");
 
 
@@ -240,7 +249,7 @@
 
 					function(mesh) {
 						var meshId = mesh.id;
-						window.location.href="repair.html?meshId=" + meshId;
+						window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
 
 					});
 

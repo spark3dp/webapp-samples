@@ -84,6 +84,10 @@
 			margin-right: 10px;
 		}
 
+		.text-centered{
+			text-align: center;
+		}
+
 		/**
 
 		.notification-bar {
@@ -153,8 +157,8 @@
 				<thead>
 				<tr>
 					<th>Issues<br/></th>
-					<th>Found<br/></th>
-					<th>Repaired<br/></th>
+					<th class="text-centered">Found<br/></th>
+					<th class="text-centered">Repaired<br/></th>
 				</tr>
 				</thead>
 				<tbody id="problemsTbody" >
@@ -163,6 +167,7 @@
 			</table>
 		</div>
 	</div>
+
 
 	<div style="margin: 0 auto;width: 25%;">
 		<div id="downloadMesh" class="btn spark_btn primary post-upload hidden" ><div class="spark_icon si-download"> </div><span>Download</span></div>
@@ -218,7 +223,7 @@ jQuery(function ($) {
 		holes:"Holes",
 		degenerate_triangles:"Degenerate Triangles",
 		duplicate_triangles:"Duplicate Triangles",
-		nonmanifold_vertices:"Nonmanifold Vertices",
+		nonmanifold_vertices:"Non manifold Vertices",
 		inconsistently_oriented_triangles:"Inconsistently Oriented Triangles"
 	};
 
@@ -236,9 +241,26 @@ jQuery(function ($) {
 		}
 	};
 
+	var getNumOfProblems = function(repairResponse){
+		if(repairResponse.boundaries){
+			return repairResponse.boundaries.length;
+		}
+		else if(repairResponse.triangles){
+			return repairResponse.triangles.length;
+		}
+		else if(repairResponse.vertices){
+			return repairResponse.vertices.length;
+		}
+		else{
+			console.error("Unknown type of problems");
+			return 0;
+		}
+	};
+
 	var addProblemsToArray = function(problemsArray, repairResponse){
 		for (var i = 0; i < repairResponse.length; i++) {
-			problemsArray[repairResponse[i].type] = true;
+			var numFound = getNumOfProblems(repairResponse[i]);
+			problemsArray[repairResponse[i].type] = {isHealed:true, numFound:numFound, numLeft:0};
 		}
 	};
 
@@ -253,7 +275,7 @@ jQuery(function ($) {
 			if(problemsAfter.length==0 || problemsArrayIsEqual(problemsBefore, problemsAfter)){
 
 				for (var i = 0; i < problemsAfter.length; i++) {
-					problemsArray[problemsAfter[i].type] = false;
+					problemsArray[problemsAfter[i].type] = {isHealed:false,numFound:problemsArray[problemsAfter[i].type].numFound, numLeft:getNumOfProblems(problemsAfter[i])};
 				}
 
 				callbackFunc(problemsArray,payloadRepair.id);
@@ -270,48 +292,73 @@ jQuery(function ($) {
 
 		eventBroadCaster.broadcastEvent('repairIframe.repaired');
 
-		analyzeRepairCallback(problemsArray,newMeshId);
+		analyzeRepairCallback(newMeshId,problemsArray);
 
 	};
 
-	var analyzeRepairCallback = function(problemsArray,newMeshId){
+	var analyzeRepairCallback = function(newMeshId,problemsArray){
 
 		console.log(problemsArray);
 
 		//eventBroadCaster.broadcastEvent('repairIframe.repaired');
 
 		$('.spinner-with-text').hide();
-		$('#problems-table').removeClass('hidden');
 
 		var problemsLeft = 0;
 
-		$.each(problemsNamesArray, function (index, item) {
-			var tr = $('<tr class="in-table"></tr>');
 
-			tr.append($('<td>' + item + '</td>'));
+		$('#problems-table').removeClass('hidden');
 
+		if(problemsArray != undefined) {
 
-			if(problemsArray[index]!=undefined){
+			$.each(problemsNamesArray, function (index, item) {
+				var tr = $('<tr class="in-table"></tr>');
 
-				tr.append($('<td>' +"Yes" + '</td>'));
+				tr.append($('<td>' + item + '</td>'));
 
-				if(problemsArray[index]==true){
+				if (problemsArray[index] != undefined) {
+
+					/**
+					 tr.append($('<td>' +"Yes" + '</td>'));
+
+					 if(problemsArray[index]==true){
 					tr.append($('<td>' +  "Yes"  + '</td>'));
 				}
-				else{
+					 else{
 					tr.append($('<td>' +  "No"  + '</td>'));
 					problemsLeft += 1;
+				}*/
+
+					tr.append($('<td class="text-centered">' + problemsArray[index].numFound + '</td>'));
+					tr.append($('<td class="text-centered">' + (problemsArray[index].numFound - problemsArray[index].numLeft) + '</td>'));
+
+					/**
+					if (problemsArray[index].isHealed == true) {
+						//tr.append($('<td>' +  "Yes"  + '</td>'));
+					}
+					else {
+						//tr.append($('<td>' +  "No"  + '</td>'));
+						problemsLeft += 1;
+					}*/
+
+					if(problemsArray[index].isHealed != true){
+						problemsLeft += 1;
+					}
 				}
-			}
-			else{
-				tr.append($('<td>' + "-" + '</td>'));
-				tr.append($('<td>' + "-" + '</td>'));
+				else {
+					tr.append($('<td class="text-centered">' + "-" + '</td>'));
+					tr.append($('<td class="text-centered">' + "-" + '</td>'));
 
-			}
+				}
 
-			$('#problemsTbody').append(tr);
+				$('#problemsTbody').append(tr);
 
-		});
+			});
+		}
+		else{
+			$('#problems-table thead').addClass('hidden');
+
+		}
 
 		var successMessage = "";
 
@@ -350,6 +397,7 @@ jQuery(function ($) {
 		//Assume we provided assetId in URL
 		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
 		var meshId = urlParams['meshId'] ? urlParams['meshId'] : 0;
+		var isQuick = (urlParams['isQuick'] == "true");
 
 		//var importResponse = ADSKSpark.MeshAPI.importMesh(fileId,fileName);
 
@@ -358,31 +406,42 @@ jQuery(function ($) {
 			$('.spinner').show();
 			$("#spinner-text").text("Analyzing...");
 
-			ADSKSpark.MeshAPI.analyzeMesh(meshId).then(function (payloadAnalyze) {
-				$("#spinner-text").text("Repairing...");
 
-				console.log(payloadAnalyze);
-				eventBroadCaster.broadcastEvent('repairIframe.repair');
+				ADSKSpark.MeshAPI.analyzeMesh(meshId).then(function (payloadAnalyze) {
+					$("#spinner-text").text("Repairing...");
 
-				var analyzedProblems = payloadAnalyze.problems;
+					console.log(payloadAnalyze);
+					eventBroadCaster.broadcastEvent('repairIframe.repair');
 
-				if(analyzedProblems.length==0){
+					var analyzedProblems = payloadAnalyze.problems;
 
-					analyzeRepairCallback([],undefined);
-					return;
-				}
+					if(analyzedProblems.length==0){
 
-				var problemsArray = {};
+						analyzeRepairCallback(undefined,[]);
+						return;
+					}
 
-				addProblemsToArray(problemsArray,analyzedProblems);
+					if(!isQuick) {
+						var problemsArray = {};
 
-				recursivePromise(meshId,analyzedProblems,problemsArray, repairCallback);
+						addProblemsToArray(problemsArray, analyzedProblems);
+
+						recursivePromise(meshId, analyzedProblems, problemsArray, repairCallback);
+					}
+					else{
+						ADSKSpark.MeshAPI.repairMesh(meshId, true).then(function (payloadRepair) {
+							analyzeRepairCallback(payloadRepair.id);
+						},function(error){
+							$("#messageError").show(error);
+						});
+					}
+				},function(error){
+					console.log(error);
+					$("#messageError").show();
+				});
 
 
-			},function(error){
-				console.log(error);
-				$("#messageError").show();
-			});
+
 		}
 
 	}
