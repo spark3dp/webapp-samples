@@ -97,6 +97,10 @@
 			cursor: pointer;
 		}
 
+		.notification-bar{
+			display: none;
+		}
+
 	</style>
 
 </head>
@@ -109,6 +113,10 @@
 		<div class="spinner"></div>
 	</div>
 
+	<div id="messageError" class="notification-bar fixed">
+		<i class="notification_icon spark_icon si-notification-error"></i>
+		<span>We apologise but there seems to be temporary problem with the service.</span>
+	</div>
 
 	<div id="uploadFile">
 		<div class="modal-header healing-header">
@@ -251,8 +259,14 @@
 						var meshId = mesh.id;
 						window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
 
+					},function(error){
+						console.log(error);
+						$("#messageError").show();
 					});
 
+		},function(error){
+			console.log(error);
+			$("#messageError").show();
 		});
 	}
 
