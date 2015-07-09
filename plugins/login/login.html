@@ -164,6 +164,26 @@
 	}
 
 	jQuery(document).ready(function ($) {
+		var isServerLogin = (window.location.search.indexOf('code') != -1);
+
+		ADSKSpark.Client.completeLogin(isServerLogin).then(function (token) {
+			console.log('Completed login with token: ' + token);
+			if (token) {
+				if (window.opener){
+
+					window.opener.location.reload(true);
+					//close the login window
+					window.close();
+				}else {
+					window.parent.location.reload();
+				}
+			} else {
+				console.error('Problem with fetching token');
+			}
+
+		}, function (error) {
+			console.error(error.message);
+		});
 
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 

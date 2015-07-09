@@ -56,6 +56,7 @@
 				</p>
 
 				<p class="token-wrapper">Refresh Token: <b id="refresh-token-span">none</b></p>
+				<a onclick="implicitLogin()" id="login-implicit" class="spark_btn primary">Implicit Login</a>
 
 				<a onclick="login()" id="login" class="spark_btn primary">Login to Get an Access Token</a>
 				<a onclick="logout()" id="logout" class="spark_btn primary">Logout</a>
@@ -103,6 +104,13 @@
 	}
 
 	/**
+	* Open implicit login window
+	*/
+	function implicitLogin() {
+		ADSKSpark.Client.openLoginWindow();
+	}
+
+	/**
 	 * Logout and reload the page
 	 */
 	function logout() {
@@ -147,6 +155,7 @@
 		accessTokenObj = ADSKSpark.Client.getAccessTokenObject();
 		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
 		$('#login').hide();
+		$('#login-implicit').hide();
 		$('#logout').css('display', 'inline-block');
 
 		//Also show the refresh token options and the time that left for the access token

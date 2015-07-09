@@ -34,7 +34,9 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	ADSKSpark.Client.completeLogin(true).then(function (token) {
+	var isServerLogin = (window.location.search.indexOf('code') != -1);
+
+	ADSKSpark.Client.completeLogin(isServerLogin).then(function (token) {
 		console.log('Completed login with token: ' + token);
 
 		if (token) {
