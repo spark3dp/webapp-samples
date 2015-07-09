@@ -34,36 +34,23 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
+	ADSKSpark.Client.completeLogin(true).then(function (token) {
+		console.log('Completed login with token: ' + token);
 
-	/**
-	 * Get the code param in URL after returning from Spark Auth flow
-	 */
-	function extractRedirectionCode() {
-		var getParams = ADSKSpark.Helpers.extractParamsFromURL();
-		return getParams['code'] ? getParams['code'] : null;
-	}
-
-
-	var code = extractRedirectionCode();
-
-	if (code) {
-		ADSKSpark.Client.completeLogin(code).then(function (token) {
-			if (token) {
-				if (window.opener){
-
-					window.opener.location.reload(true);
-					//close the login window
-					window.close();
-				}else {
-					window.parent.location.reload();
-				}
-			} else {
-				console.error('Problem with fetching token');
+		if (token) {
+			if (window.opener){
+				window.opener.location.reload(true);
+				//close the login window
+				window.close();
+			}else {
+				window.parent.location.reload();
 			}
-		}, function (error) {
-			console.error(error);
-		});
-	}
+		} else {
+			console.error('Problem with fetching token');
+		}
+	});
+
+
 </script>
 </body>
 </html>
