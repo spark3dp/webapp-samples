@@ -25,7 +25,7 @@ These applications demonstrate Spark's cloud based 3D model storage, mesh prepar
 * <b>Include the SDK library in your HTML page</b> just before closing the body section (`</body>`).
 
 ```HTML
-<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
+<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
 ```
 
 * After including the SDK library, the method ADSKSpark.Client.initialize() must be used to initialize and setup the SDK:<br>
@@ -56,7 +56,7 @@ ADSKSpark.Client.initialize(
 
     </div>
 
-    <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-latest.min.js"></script>
+    <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
     <script>
       ADSKSpark.Client.initialize('',// Your app key
               '',// The guest token endpoint that is implemented by your server (i.e. http://example.com/guest_token)
