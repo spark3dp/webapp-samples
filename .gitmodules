@@ -1,4 +1,4 @@
 [submodule "vendor/spark-js-sdk"]
 	path = vendor/spark-js-sdk
-	url = git@github.com:spark3dp/spark-js-sdk.git
+	url = git@github.com:spark3dp/spark-js-SDK.git
 	branch = master

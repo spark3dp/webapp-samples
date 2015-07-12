@@ -1,0 +1,378 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Object Repair Tool</title>
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href="assets/css/common.css" rel="stylesheet">
+
+	<style>
+	.mainIframe-container{
+		margin-bottom: 15px;
+		border: 1px solid #cccccc;
+	}
+
+
+	.si-healing-login{
+		background-position: -186px -294px;
+		height: 58px;
+		width: 58px;
+	}
+
+	.si-healing-login-disabled{
+		background-position: -186px -231px;
+		height: 58px;
+		width: 58px;
+	}
+
+	.arrow-container{
+		height: 60px;
+		width: 60px;
+	}
+
+	.verified .arrow{
+		background-color: #008C8D;
+	}
+
+	.arrow{
+		height: 2px;
+		width: 60px;
+		background-color: #B7B7B7;
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.sample-top-menu li a:hover, .sample-top-menu li.selected a{
+		border-bottom: 0px;
+	}
+
+	.sample-top-menu li .si-status-ok-filled,.sample-top-menu li .si-status-disabled {
+
+		position: absolute;
+		left: 47px;
+	}
+
+	.menu-link-text{
+		margin-top: 10px;
+		margin-left: -8px;
+	}
+
+	.selected .menu-link-text{
+		font-weight: 800;
+		color: #008C8D;
+	}
+
+	.verified .menu-link-text{
+		font-weight: 400;
+		color: #008C8D;
+	}
+
+	.disabled .verified-icon{
+		display: none;
+	}
+
+	</style>
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container outer-container">
+		<div id="container" class="container sample-app-container">
+			<div class="sample-app-header clearfix">
+				<h5 class="sample-title">Mesh Healing For Printing Tool</h5>
+			</div>
+			<div style="text-align: center;">
+				<ul class="nav nav-tabs sample-top-menu" role="tablist">
+
+					<!--
+					<li id="loginId" class="disabled">
+
+						<div class = "pull-left">
+							<a class="spark_icon menu-item verified-icon si-healing-login" data-state="login" role="tab" onclick='statePlugin.changeState("loggedin");'></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-login-disabled" data-state="login" role="tab" onclick='statePlugin.changeState("loggedin");'></a>
+							<div class="menu-link-text">Log in</div>
+						</div>
+
+						<div class="pull-left spark_icon pull-left si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container pull-left"><div class="arrow"></div></div>
+
+					</li>
+					-->
+
+					<li id="uploadId" class="disabled">
+						<div class = "pull-left">
+							<a class="spark_icon menu-item verified-icon si-healing-upload " data-state="upload" role="tab" onclick='statePlugin.changeState("upload");' ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-upload-disabled " data-state="upload" role="tab" ></a>
+							<div class="menu-link-text">Upload</div>
+
+						</div>
+
+
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container"><div class="arrow"></div></div>
+					</li>
+					<li id="analyzeId" class="disabled">
+						<div class = "pull-left">
+
+							<a class="spark_icon menu-item verified-icon si-healing-analyze" data-state="analyze" role="tab" ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-analyze-disabled" data-state="analyze" role="tab"></a>
+							<div class="menu-link-text">Analyze</div>
+
+						</div>
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
+						<div class="pull-left arrow-container"><div class="arrow"></div></div>
+					</li>
+					<li id="repairId" class="disabled">
+						<div class = "pull-left">
+
+							<a class="spark_icon menu-item verified-icon si-healing-repair" data-state="repair" role="tab" ></a>
+							<a class="spark_icon menu-item not-verified-icon si-healing-repair-disabled" data-state="repair" role="tab"></a>
+							<div class="menu-link-text">Repair</div>
+
+						</div>
+						<div class="pull-left spark_icon si-status-ok-filled">&nbsp;</div>
+
+					</li>
+				</ul>
+			</div>
+			<div class="mainIframe-container">
+				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="523px" frameborder="0"
+				        src=""></iframe>
+			</div>
+
+
+
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
+
+
+<!-- /container -->
+
+
+
+<!-- Modal -->
+<!--
+<div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h2>Spark Sample App</h2>
+			</div>
+			<div class="modal-body">
+				This is an open source Print API demo sample app.
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn primary large" type="button" onclick="$('#appModal').modal('hide')">Run the sample code</a>
+			</div>
+		</div>
+	</div>
+</div>
+-->
+<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-config.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>-->
+
+<script type="text/javascript" charset="utf-8" src="vendor/spark/utilities.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark/spark-printer.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="assets/scripts/init.js"></script>
+
+<script>
+
+	$(document).ready(function(){
+		//ajaxCallLogger.createLoggerElement(".footer");
+		//ajaxCallLogger.startIframeListener();
+
+		broadcastEventListener.startIframeBroadcastListener();
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+			isLoggedIn = true;
+			statePlugin.changeState('upload');
+			statePlugin.verifyState("login");
+			//$('#mainIframe').attr('height', '462px');
+
+			ADSKSpark.Members.getMyProfile().then(function(response){
+				if (response.member.profile.avatar_path) {
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(response.member.profile.avatar_path));
+					$('#user').show();
+				}
+				else{
+					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps("../../assets/img/default_avatar.png"));
+					$('#user').show();
+				}
+			});
+		}
+		else{
+			$('#appModal').modal('show');
+			isLoggedIn = false;
+			statePlugin.changeState('login');
+			//$('#mainIframe').attr('height', '523px');
+		}
+
+	});
+
+
+	var loggedOutCallback = function(){
+		//$('#mainIframe').attr('height', '523px');
+	}
+
+	var states = {
+		login:{
+			src:"plugins/login/login.html",
+			selectedTab:"#loginId",
+			enabledTabs:[],
+			disabledTabs:[ "#uploadId","#analyzeId", "#repairId"],
+			callbackFunc: function () {
+				$('#uploadId').removeClass("verified");
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
+
+			}
+		},
+
+		loggedin:{
+			src:"plugins/login/login.html",
+			selectedTab:"#loginId",
+			enabledTabs:[],
+			disabledTabs:["#uploadId","#analyzeId", "#repairId"],
+			callbackFunc: function () {
+				$('#uploadId').removeClass("verified");
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
+
+			}
+		},
+
+		upload:{
+			src:"examples/healing/upload.html",
+			selectedTab:"#uploadId",
+			enabledTabs:["#loginId", "#uploadId"],
+			disabledTabs:["#analyzeId","#repairId"],
+			callbackFunc: function () {
+				$('#analyzeId').removeClass("verified");
+				$('#repairId').removeClass("verified");
+				$('#uploadId').removeClass("verified");
+
+			}
+		},
+
+		analyze:{
+			selectedTab:"#analyzeId",
+			enabledTabs:["#loginId", "#uploadId","#analyzeId"],
+			disabledTabs:["#repairId"]
+		},
+
+
+		repair:{
+			selectedTab:"#repairId",
+			enabledTabs:["#loginId", "#uploadId","#analyzeId", "#repairId"],
+			disabledTabs:[]
+		}
+
+	};
+
+	/**
+	var showSimulator = function(show){
+		if(show == true){
+			$('.simulator-container').animate({height: 'show'}, 290);
+		}
+		else{
+			$('.simulator-container').animate({height: 'hide'}, 290);
+		}
+	};*/
+
+	var isLoggedIn = false;
+
+	var broadcastMapper = [];
+
+	broadcastMapper['manageIframe.loggedOut']  = function(optionalParams){
+		isLoggedIn = false;
+		$('#user').hide();
+		statePlugin.changeState('login');
+		statePlugin.unVerifyAll();
+	};
+
+
+
+	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
+
+		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+			statePlugin.changeState("upload", optionalParams);
+			statePlugin.verifyState("login");
+			isLoggedIn = true;
+		}
+	};
+
+	broadcastMapper["repairIframe.analyze"] = function(optionalParams){
+		statePlugin.changeState("analyze", optionalParams);
+		statePlugin.verifyState("upload");
+		//statePlugin.verifyState("analyze");
+
+	};
+
+
+	broadcastMapper["repairIframe.repair"] = function(optionalParams){
+		statePlugin.changeState("repair", optionalParams);
+		statePlugin.verifyState("analyze");
+		//statePlugin.verifyState("analyze");
+
+	};
+
+	broadcastMapper["repairIframe.repaired"] = function(optionalParams){
+		console.log("in repairedrepairedrepairedrepaired")
+		statePlugin.changeState("repair", optionalParams);
+
+		statePlugin.verifyState("repair");
+		//statePlugin.verifyState("analyze");
+
+	};
+
+</script>
+
+
+
+
+
+</body>
+</html>

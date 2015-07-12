@@ -30,7 +30,7 @@
 			height: auto;
 		}
 
-		#logout,#refresh_token {
+		#logout,#refresh_token,#refresh_token_wrapper {
 			display: none;
 		}
 
@@ -55,9 +55,10 @@
 					<span class="hidden"> | Expires in: <b id="access-token-expired-span">none</b></span>
 				</p>
 
-				<p class="token-wrapper">Refresh Token: <b id="refresh-token-span">none</b></p>
+				<p class="token-wrapper" id="refresh_token_wrapper">Refresh Token: <b id="refresh-token-span">none</b></p>
+				<a onclick="implicitLogin()" id="login-implicit" class="spark_btn primary">Implicit Login</a>
 
-				<a onclick="login()" id="login" class="spark_btn primary">Login to Get an Access Token</a>
+				<a onclick="login()" id="login" class="spark_btn primary">Explicit Login</a>
 				<a onclick="logout()" id="logout" class="spark_btn primary">Logout</a>
 				<a onclick="refreshToken()" id="refresh_token" class="spark_btn">Refresh access token</a>
 				<a onclick="getGuestToken()" class="spark_btn">Get Guest Token</a>
@@ -90,6 +91,13 @@
 	 * Open login window
 	 */
 	function login() {
+		ADSKSpark.Client.openLoginWindow(false,true);
+	}
+
+	/**
+	* Open implicit login window
+	*/
+	function implicitLogin() {
 		ADSKSpark.Client.openLoginWindow();
 	}
 
@@ -116,8 +124,11 @@
 	function refreshToken(){
 		ADSKSpark.Client.refreshAccessToken().then(function (tokenObj) {
 			accessTokenObj = tokenObj;
-			$('#access-token-span').text(tokenObj.access_token);
-			$('#refresh-token-span').text(tokenObj.refresh_token);
+			if (tokenObj.refresh_token) {
+				$('#refresh_token_wrapper').show();
+				$('#access-token-span').text(tokenObj.access_token);
+				$('#refresh-token-span').text(tokenObj.refresh_token);
+			}
 		});
 	}
 
@@ -138,10 +149,13 @@
 		accessTokenObj = ADSKSpark.Client.getAccessTokenObject();
 		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
 		$('#login').hide();
+		$('#login-implicit').hide();
 		$('#logout').css('display', 'inline-block');
 
 		//Also show the refresh token options and the time that left for the access token
-		$('#refresh_token').css('display', 'inline-block');
+		if (accessTokenObj.grant_type && accessTokenObj.grant_type === 'authorization_code') {
+			$('#refresh_token').css('display', 'inline-block');
+		}
 		$('#refresh-token-span').text(accessTokenObj.refresh_token);
 		$('#access-token').find('span.hidden').removeClass('hidden');
 		setRemainingTime(accessTokenObj);

@@ -62,14 +62,14 @@
 		.user-name
 		{
 			font-size: 22px;
-			margin-bottom: 20px;
+			margin-bottom: 13px;
 		}
 
 
 
 		#user{
-			margin-bottom: 25px;
-			height: 190px;
+			margin-bottom: 32px;
+			/**height: 190px;*/
 		}
 
 		#user img
@@ -85,6 +85,14 @@
 		#logout
 		{
 			margin-top: 10px;
+			margin-bottom: 50px;
+		}
+
+		#logout a
+		{
+			color: #888888;
+			text-decoration: underline;
+
 		}
 
 		.inner-logged-in-container
@@ -109,12 +117,13 @@
 	<div class="logged-in-as">Logged in as:</div>
 	<div id="user">
 		<div class="user-name"></div>
+		<div id="logout">
+			<a style="display: inline;" href="#" onclick="logout()">Logout</a>
+		</div>
 		<img src=""/>
 	</div>
     <a class="btn spark_btn empty"  href="#" id="continue" onclick="eventBroadCaster.broadcastEvent('manageIframe.loggedIn',{forceRedirect:true})">Continue</a>
-	<div id="logout">
-		<a style="display: inline;" href="#" onclick="logout()">Logout</a>
-	</div>
+
 
 	</div>
 </div>
@@ -148,6 +157,26 @@
 	}
 
 	jQuery(document).ready(function ($) {
+		var isServerLogin = (window.location.search.indexOf('code') != -1);
+
+		ADSKSpark.Client.completeLogin(isServerLogin).then(function (token) {
+			console.log('Completed login with token: ' + token);
+			if (token) {
+				if (window.opener){
+
+					window.opener.location.reload(true);
+					//close the login window
+					window.close();
+				}else {
+					window.parent.location.reload();
+				}
+			} else {
+				console.error('Problem with fetching token');
+			}
+
+		}, function (error) {
+			console.error(error.message);
+		});
 
 		if (ADSKSpark.Client.isAccessTokenValid()) {
 
