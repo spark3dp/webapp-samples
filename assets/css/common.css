@@ -981,6 +981,9 @@ i.stooltip span {
 .sample-top-menu li.verified .si-status-ok-filled{
     display:block;
 }
+.sample-top-menu li.verified .si-status-ok{
+    display:block;
+}
 
 li.disabled .verified-icon{
     display:none;
