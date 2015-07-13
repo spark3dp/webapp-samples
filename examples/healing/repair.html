@@ -251,6 +251,9 @@ jQuery(function ($) {
 		else if(repairResponse.vertices){
 			return repairResponse.vertices.length;
 		}
+		else if(repairResponse.edges){
+			return repairResponse.edges.length;
+		}
 		else{
 			console.error("Unknown type of problems");
 			return 0;
