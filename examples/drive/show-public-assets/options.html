@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - Create asset</title>
+	<meta charset="utf-8">
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles-->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+	<div id="manageAsset">
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">LIST ASSETS</h4>
+		</div>
+		<div class="modal-body">
+			<form id="asset-form" novalidate="">
+				<section class="form_field col-sm-6">
+					<label for="results-per-page">
+						Results per page
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>How many assets will be on a single page</span></i>
+					</label>
+					<select id="results-per-page" class="form-control">
+						<option>12</option>
+						<option>24</option>
+						<option>36</option>
+						<option>48</option>
+					</select>
+				</section>
+				<section class="form_field col-sm-6">
+					<label for="thumbnail-size">
+						Thumbnail size
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>This will be generated on the fly by the server</span></i>
+					</label>
+					<select id="thumbnail-size" class="form-control">
+						<option value="Small">Small (64 px)</option>
+						<option value="Petite">Petite (90 px)</option>
+						<option value="Medium">Medium (128 px)</option>
+						<option value="Medium2">Medium2 (256 px)</option>
+						<option value="Large">Large (600 px)</option>
+						<option value="HD">HD (1200 px)</option>
+					</select>
+				</section>
+
+				<div class="push push20"></div>
+
+				<section class="form_field col-sm-6">
+					<label>
+						Filtering
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Filter parameters</span></i>
+					</label>
+					<div class="cb-options">
+						<span class="publish-wrapper">
+							<input type="checkbox" id="filter[featured]">
+							<label for="filter[featured]"><span class="chk"></span>Featured</label>
+						</span>
+					</div>
+
+				</section>
+
+				<section class="form_field col-sm-6">
+					<label>
+						Order by
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Order by parameters</span></i>
+					</label>
+					<div class="cb-options">
+						<span class="publish-wrapper">
+							<input type="checkbox" id="orderby[name]">
+							<label for="orderby[name]"><span class="chk"></span>Name</label>
+						</span>
+						<span class="publish-wrapper">
+							<input type="checkbox" id="orderby[date]">
+							<label for="orderby[date]"><span class="chk"></span>Date</label>
+						</span>						
+					</div>
+
+				</section>
+				<div class="push"></div>
+				<div class="form-footer">
+					<div class="submit-wrapper">
+						<a href="../show-my-assets/">Cancel</a>
+						<input class="spark_btn primary" type="submit" value="LIST ASSETS">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//Set listener to form submit
+		$('#asset-form').on('submit', function (e) {
+			e.preventDefault();
+			createAsset();
+		});
+
+		common.setUIFunctionality();
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('setAssetsOptions');
+
+
+
+	});
+
+</script>
+
+</body>
+</html>
