@@ -34,14 +34,7 @@ These applications demonstrate Spark's cloud based 3D model storage, mesh prepar
 For the 3-legged authentication flow, the SDK requires that authentication API requests are called from a server. For example the guest token URL could be <i>http://example.com/guest_token</i>.
 
 ```JavaScript
-ADSKSpark.Client.initialize(
-  '<app key>', //A string containing your Spark app key, provided during registration.
-  '<is production>', //(Optional - true/false) Whether we work in production or sandbox environment - default is sandbox
-  '<redirect uri>', // (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different than the one that was set for your app's Callback URL
-  '<guest token URL>', //(Optional) The server URL to which guest token requests will be directed, for example http://example.com/guest_token. The SDK requires that authentication APIs are called from a server.
-  '<access token URL>', //(Optional) The server URL to which access token requests will be directed, for example http://example.com/access_token.
-  '<refresh access token URL>' //(Optional) The server URL to which refresh access token requests will be directed.
-);
+Client.initialize(APP_KEY); //APP_KEY is a string containing your Spark app key, provided during registration.
 ```
 
 #### Sample code
@@ -62,14 +55,17 @@ ADSKSpark.Client.initialize(
 
     <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
     <script>
-      ADSKSpark.Client.initialize(
-              '',// Your app key
-              false,
-              'http://localhost/webapp-samples/plugins/login/login-callback.html', // (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), if it is different to the one that was set for your app's Callback URL
-              'http://localhost:3000/guest_token',// The guest token endpoint implemented by your server (i.e. http://example.com/guest_token)
-              'http://localhost:3000/access_token',// The access token endpoint implemented by your server (i.e. http://example.com/access_token)
-              'http://localhost:3000/refresh_token'// The refresh access token endpoint implemented by your server (i.e. http://example.com/refresh_token)
-      );
+        //Optional - Provide options
+        var options = {
+            isProduction:false, //(Optional - true/false) Whether we work in production or sandbox environment - default is sandbox
+            redirectUri: 'http://localhost/webapp-samples/plugins/login/login-callback.html',// (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different than the one that was set for your app's Callback URL
+            guestTokenUrl: '',//(Optional) The server URL to which guest token requests will be directed, for example http://example.com/guest_token.
+            accessTokenUrl: '',//(Optional) The server URL to which access token requests will be directed, for example http://example.com/access_token.
+            refreshTokenUrl: ''//(Optional) The server URL to which refresh access token requests will be directed.
+        };
+
+
+        ADSKSpark.Client.initialize('<your app key>',options);
 
       	/**
       	 * Open login window
