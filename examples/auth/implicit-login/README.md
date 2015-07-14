@@ -39,7 +39,7 @@ We need to call the login dialog window to allow user to enter his credentials.
 ```
 
 ##### Step 3 - Handle Login access token callback
-The access token will be returned to:
+The access token will be returned to:<br>
 1. The page you are calling the login window from (<b>this is the way the sample code uses by default</b>).<br>
 2. The redirect URL you supplied when initialize (see Additional Configuration section).<br>
 3. The  callback URL you defined when registered your app.<br>
