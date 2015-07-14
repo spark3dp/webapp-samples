@@ -40,9 +40,9 @@ We need to call the login dialog window to allow user to enter his credentials.
 
 ##### Step 3 - Handle Login access token callback
 The access token will be returned to:
-1. The page you are calling the login window from (<b>this is the way the sample code uses by default</b>).
-2. The redirect URL you supplied when initialize (see Additional Configuration section).
-3. The  callback URL you defined when registered your app.
+1. The page you are calling the login window from (<b>this is the way the sample code uses by default</b>).<br>
+2. The redirect URL you supplied when initialize (see Additional Configuration section).<br>
+3. The  callback URL you defined when registered your app.<br>
 
 ```JavaScript
 
@@ -98,15 +98,15 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 </head>
 
 <body>
+
 <div class="container">
 	<div class="col-md-12">
 		<p class="token-wrapper" id="access-token">Access Token: <b id="access-token-span">none</b></p>
 		<a onclick="login()" id="login" class="btn btn-primary">Login to Get an Access Token (Implicit)</a>
 		<a onclick="logout()" id="logout" class="btn btn-primary">Logout</a>
-
 	</div>
-
 </div>
+
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <!-- include the SPARK JS SDK -->
 <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
@@ -114,7 +114,6 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 
 	// Initialize Spark client
 	ADSKSpark.Client.initialize('<your-app-key>');
-
 
 	/**
 	 * Open login window
@@ -130,7 +129,6 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 		ADSKSpark.Client.logout();
 		location.reload();
 	}
-
 
 	/**
 	 * Complete the login flow after the redirect from Authentication.
@@ -160,9 +158,7 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 		$('#login').hide();
 		$('#logout').css('display', 'inline-block');
 	}
-
 </script>
-
 </body>
 </html>
 
