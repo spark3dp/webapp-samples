@@ -61,7 +61,7 @@ ADSKSpark.Client.completeLogin(false).then(function (token) {
 		}
 
 	});
-	```
+```
 
 ### Additional Configuration
 ##### Adding an Options configuration
