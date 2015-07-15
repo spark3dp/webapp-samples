@@ -57,12 +57,12 @@ ADSKSpark.Client.completeLogin(false).then(function (token) {
 
 ### Additional Configuration
 ##### Adding an Options Configuration
-We can add additional optional parameters to our initialization method
+You can send optional parameters to the initialization method:
 
 ```JavaScript
  var options = {
-isProduction:false, //(Optional - true/false) Whether we work in production or sandbox environment default to sandbox
-redirectUri: '',// (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different than the one that was set for your app's Callback URL
+isProduction:false, //(Optional - true/false) Whether your app runs in production or the sandbox test environment. The default is sandbox.
+redirectUri: '',// (Optional) The redirect URI for the auth service (i.e. http://example.com/callback), in cases where it is different to the Callback URL you defined in the app registration screen.
 guestTokenUrl: '',//(Optional) The server URL to which guest token requests will be directed, for example http://example.com/guest_token.
 accessTokenUrl: '',//(Optional) The server URL to which access token requests will be directed, for example http://example.com/access_token.
 refreshTokenUrl: ''//(Optional) The server URL to which refresh access token requests will be directed.
@@ -70,20 +70,19 @@ refreshTokenUrl: ''//(Optional) The server URL to which refresh access token req
 
 ADSKSpark.Client.initialize('<your-app-key>',options);
 ```
-<b>isProduction</b> - We can have an Application on Sandbox environment or on Production environment, this parameter sets the init of the Client to the desired environment.<br>
-<i>Note!</i>  each environment needs different APP_KEY.
+<b>isProduction</b> - isSandbox or isProduction, this parameter initializes the client for the desired environment.<br>
+<i>Note!</i>  Each environment uses a different APP_KEY.
 
-<b>redirectUri</b> - This is the redirect uri we set for the authentication access_token to return to.
-it should match the registered URL we set for the Application.
-If no redirectUri supplied we calculate by default the URL of the page we got from to the login dialog.
+<b>redirectUri</b> - The redirect URI to which the access_token is returned.
+The redirect URI must match the callback URL defined during app registration.
+If no redirectUri is entered, the access token is retured to the page that loaded the login dialog.
 
 ### Complete Sample Code
 ```HTML
-
  <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Implicit login</title>
+	<title>Spark Sample Application - Implicit Login</title>
 	<meta charset="utf-8">
 	<!-- Bootstrap core CSS -->
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -107,24 +106,18 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 	// Initialize Spark client
 	ADSKSpark.Client.initialize('<your-app-key>');
 
-	/**
-	 * Open login window
-	 */
+	//Open login window
 	function login() {
 		ADSKSpark.Client.openLoginWindow();
 	}
 
-	/**
-	 * Logout button function
-	 */
+	//Logout button function
 	function logout() {
 		ADSKSpark.Client.logout();
 		location.reload();
 	}
 
-	/**
-	 * Complete the login flow after the redirect from Authentication.
- 	 */
+	//Complete the login flow after the redirect from Authentication.
 	ADSKSpark.Client.completeLogin(false).then(function (token) {
 		// Get the access_token
 		if (token) {
@@ -144,7 +137,7 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 		console.error(error);
 	});
 
-	// Checks on load/reload if the Access_token exist at the local storage.
+	// Checks on load/reload if the Access_token exists in local storage.
 	if (ADSKSpark.Client.isAccessTokenValid()) {
 		$('#access-token-span').text(ADSKSpark.Client.getAccessToken());
 		$('#login').hide();
@@ -153,9 +146,4 @@ If no redirectUri supplied we calculate by default the URL of the page we got fr
 </script>
 </body>
 </html>
-
 ```
-
-
-
-
