@@ -34,10 +34,10 @@ You load the Login Dialog window for the user to login.
 ```
 
 ##### Step 3 - Handle Login / Access Token Callback
-The access token will be returned to:<br>
+The access token will be returned to one of the following:<br>
 1. The page that loaded the login window (<b>the sample code's default setting</b>).<br>
-2. The redirect URL you supplied when initialize (see Additional Configuration section).<br>
-3. The callback URL you defined in app registeration.<br>
+2. The (optional) redirect URI you supplied in initialize (see Additional Configuration section).<br>
+3. The callback URL you defined in app registration.<br>
 
 ```JavaScript
 ADSKSpark.Client.completeLogin(false).then(function (token) {
