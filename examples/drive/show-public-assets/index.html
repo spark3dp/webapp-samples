@@ -85,14 +85,13 @@
 	</div>
 
 	<div class="hidden" id="empty-assets">
-		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
-			They are equivelent to a project or a folder with metadata.
-		</p>
+		<p>No assets match these search criteria. Try to broaden your search conditions</p>
 
 		<div class="img">
 			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
 		</div>
-		<a class="spark_btn" href="../create-asset/">Create your first Asset</a>
+		<div class="push push20"></div>
+		<div class="push push20"></div>
 	</div>
 
 </div>
@@ -200,6 +199,7 @@
 		}
 		if (urlParams.limit) {
 			conditions.limit = urlParams.limit;
+			listDefaultLimit = conditions.limit;
 		}
 		if (urlParams.offset) {
 			conditions.offset = urlParams.offset;
@@ -215,6 +215,9 @@
 		}
 		if (urlParams.display_filter) {
 			conditions.display_filter = urlParams.display_filter;
+		}
+		if (urlParams.app_only) {
+			conditions.app_only = urlParams.app_only;
 		}
 
 		//Get my assets and append to table in DOM

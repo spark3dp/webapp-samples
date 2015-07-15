@@ -1382,8 +1382,15 @@ li.disabled .not-verified-icon{
 .push{
     clear:both;
 }
+.push10{
+    height:10px;
+}
 .push20{
     height:20px;
+}
+
+.cb-options .wrapper{
+    margin-right: 40px;
 }
 
 

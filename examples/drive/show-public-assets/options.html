@@ -14,7 +14,9 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-
+		#term-search {
+			height: 35px;
+		}
 	</style>
 
 </head>
@@ -26,14 +28,14 @@
 			<h4 class="modal-title" id="manageTitle">LIST ASSETS</h4>
 		</div>
 		<div class="modal-body">
-			<form id="asset-form" novalidate="">
+			<form name="searchForm" id="search-form" novalidate="">
 				<section class="form_field col-sm-6">
 					<label for="results-per-page">
 						Results per page
 						<i class="spark_icon si-help with_hover"></i>
 						<i class="stooltip"><span>How many assets will be on a single page</span></i>
 					</label>
-					<select id="results-per-page" class="form-control">
+					<select name="limit" id="results-per-page" class="form-control">
 						<option>12</option>
 						<option>24</option>
 						<option>36</option>
@@ -46,7 +48,7 @@
 						<i class="spark_icon si-help with_hover"></i>
 						<i class="stooltip"><span>This will be generated on the fly by the server</span></i>
 					</label>
-					<select id="thumbnail-size" class="form-control">
+					<select id="thumbnail-size" name="thumbnail_size" class="form-control">
 						<option value="Small">Small (64 px)</option>
 						<option value="Petite">Petite (90 px)</option>
 						<option value="Medium">Medium (128 px)</option>
@@ -59,42 +61,71 @@
 				<div class="push push20"></div>
 
 				<section class="form_field col-sm-6">
+					<label for="term-search">
+						Query search
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>List of keywords to search against.
+							Any keywords entered will be used to search the title, the description and the asset tags</span></i>
+					</label>
+					<input type="text" name="q" id="term-search" class="form-control">
+				</section>
+
+				<section class="form_field col-sm-6">
+					<label for="sort_by">
+						Sort by
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span>Order search results based on a specific attribute</span></i>
+					</label>
+
+					<div class="cb-options">
+						<select name="sort_by" id="sort_by" class="form-control">
+							<option value="asset_name">Asset Name</option>
+							<option value="artist">Artist</option>
+							<option value="favorite_count">Popularity</option>
+							<option value="likes_count">Likes Count</option>
+							<option value="download_count">Download Count</option>
+							<option value="format">Format</option>
+							<option value="price">Price</option>
+						</select>
+					</div>
+				</section>
+
+				<div class="push push20"></div>
+
+				<section class="form_field col-sm-12">
 					<label>
 						Filtering
 						<i class="spark_icon si-help with_hover"></i>
 						<i class="stooltip"><span>Filter parameters</span></i>
 					</label>
+
+					<div class="push push10"></div>
 					<div class="cb-options">
-						<span class="publish-wrapper">
-							<input type="checkbox" id="filter[featured]">
-							<label for="filter[featured]"><span class="chk"></span>Featured</label>
+						<span class="wrapper">
+							<input type="checkbox" id="filter-featured">
+							<label for="filter-featured"><span class="chk"></span>Featured</label>
+						</span>
+						<span class="wrapper">
+							<input type="checkbox" id="filter-downloadable">
+							<label for="filter-downloadable"><span class="chk"></span>Downloadable</label>
+						</span>
+						<span class="wrapper">
+							<input type="checkbox" id="filter-app-only">
+							<label for="filter-app-only"><span class="chk"></span>From this app only</label>
+						</span>
+						<span class="wrapper">
+							<input type="checkbox" id="filter-recent">
+							<label for="filter-recent"><span class="chk"></span>Recent</label>
 						</span>
 					</div>
-
-				</section>
-
-				<section class="form_field col-sm-6">
-					<label>
-						Order by
-						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span>Order by parameters</span></i>
-					</label>
-					<div class="cb-options">
-						<span class="publish-wrapper">
-							<input type="checkbox" id="orderby[name]">
-							<label for="orderby[name]"><span class="chk"></span>Name</label>
-						</span>
-						<span class="publish-wrapper">
-							<input type="checkbox" id="orderby[date]">
-							<label for="orderby[date]"><span class="chk"></span>Date</label>
-						</span>						
-					</div>
-
+					<input type="hidden" name="display_filter">
+					<input type="hidden" name="start_date">
+					<input type="hidden" name="app_only" value="false">
 				</section>
 				<div class="push"></div>
 				<div class="form-footer">
 					<div class="submit-wrapper">
-						<a href="../show-my-assets/">Cancel</a>
+						<a href="#">Cancel</a>
 						<input class="spark_btn primary" type="submit" value="LIST ASSETS">
 					</div>
 				</div>
@@ -119,24 +150,72 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
+
+	function getDateMonthAgo(){
+		var dt = new Date();
+		dt.setMonth(dt.getMonth()-1);
+
+		var monthAgo = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+		return common.formatDate(monthAgo);
+	}
+
 	/**
 	 * Run when DOM is ready.
 	 * The spark object already exists in this point
 	 */
 	jQuery(function ($) {
 
+		//reset form on load
+		$('#search-form')[0].reset();
+
+		//filters
+		$('#filter-recent').on('change', function () {
+			if ($('#filter-recent:checked').length) {
+				$('input[name=start_date]').val(getDateMonthAgo());
+			} else {
+				$('input[name=start_date]').val('');
+			}
+		});
+		$('#filter-downloadable').on('change', function () {
+			var featured = ($('#filter-featured:checked')) ? 'f' : '';
+			if ($('#filter-downloadable:checked').length) {
+				$('input[name=display_filter]').val('d' + featured);
+			} else {
+				$('input[name=display_filter]').val(featured);
+			}
+		});
+
+		$('#filter-app-only').on('change', function(){
+			if ($('#filter-app-only:checked').length) {
+				$('input[name=app_only]').val('true');
+			} else {
+				$('input[name=app_only]').val('false');
+			}
+		});
+
+
+		$('#filter-featured').on('change', function () {
+			var downloadable = ($('#filter-downloadable:checked')) ? 'd' : '';
+			if ($('#filter-featured:checked')) {
+				$('input[name=display_filter]').val(downloadable + 'f');
+			} else {
+				$('input[name=display_filter]').val(downloadable);
+			}
+		});
+
 		//Set listener to form submit
-		$('#asset-form').on('submit', function (e) {
+		$('#search-form').on('submit', function (e) {
 			e.preventDefault();
-			createAsset();
+			var $form = $(this);
+			var params = $form.serialize();
+			console.log(params);
+			//location.href = 'index.html?' + params;
 		});
 
 		common.setUIFunctionality();
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('setAssetsOptions');
-
-
 
 	});
 
