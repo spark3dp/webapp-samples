@@ -334,7 +334,7 @@ input[type="checkbox"]:checked + label span.chk {
 .dropdown-menu{
     min-width: 100px;
     top:22px;
-    left:-82px;
+    left:-85px;
 }
 
 .dropdown-menu li{
@@ -903,8 +903,7 @@ i.stooltip span {
     height: 300px;
     margin: auto;
     position: absolute;
-    top:0;
-    bottom:0;
+    top:40px;
     left:0;
     right:0;
 }
@@ -1378,6 +1377,13 @@ li.disabled .not-verified-icon{
     background-color: #363B4C;
     margin-bottom: 10px;
     display: none;
+}
+
+.push{
+    clear:both;
+}
+.push20{
+    height:20px;
 }
 
 

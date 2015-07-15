@@ -119,6 +119,10 @@
 
 <script>
 
+	var listDefaultLimit = 12,
+			page = 1;
+
+
 	//log http requests
 	ajaxCallListenerFromIframe();
 
@@ -128,12 +132,12 @@
 	 * @param item
 	 */
 	function loopGallery(index, item) {
-		var imgUrlThumb =  ADSKSpark.Helpers.changeHttpToHttps(item.thumb_path_prefix + 'Medium.jpg');
+		var imgUrlThumb = ADSKSpark.Helpers.changeHttpToHttps(item.thumb_path_prefix + 'Medium.jpg');
 
 		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
-		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 18) + '</a></div>');
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 17) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
@@ -142,10 +146,10 @@
 		box.append(text);
 	}
 
-	function loadAssets(page,conditions){
+	function loadAssets(page, conditions) {
 		conditions = conditions || {};
-		conditions.limit = 48;
-		conditions.offset = 48*(page-1);
+		conditions.limit = conditions.limit ? conditions.limit : listDefaultLimit;
+		conditions.offset = conditions.offset ? conditions.offset : listDefaultLimit * (page - 1);
 
 		return ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
 			console.info('my assets:', response);
@@ -173,23 +177,48 @@
 	 * The spark object already exists in this point
 	 */
 	jQuery(function ($) {
-		var currentPage = 1;
+
+		//See all conditions - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fassets%2Flist
+		var conditions = {};
+		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+
+
+		if (urlParams.q) {
+			conditions.q = urlParams.q;
+		}
+		if (urlParams.limit) {
+			conditions.limit = urlParams.limit;
+		}
+		if (urlParams.offset) {
+			conditions.offset = urlParams.offset;
+		}
+		if (urlParams.sort_by) {
+			conditions.sort_by = urlParams.sort_by;
+		}
+		if (urlParams.start_date) {
+			conditions.start_date = urlParams.start_date;
+		}
+		if (urlParams.end_date) {
+			conditions.end_date = urlParams.end_date;
+		}
+		if (urlParams.display_filter) {
+			conditions.display_filter = urlParams.display_filter;
+		}
 
 		//Get my assets and append to table in DOM
-		loadAssets(currentPage).then(function(response) {
+		loadAssets(page, conditions).then(function (response) {
 			$('.spinner').hide();
 			if (!response._link_next) {
 				hasMoreAssets = false;
 			}
 		});
 
-
 		//load more on scroll
-		$('#assets-gallery').scroll(function() {
-			if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
-				currentPage++;
+		$('#assets-gallery').scroll(function () {
+			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+				page++;
 				$('.spinner').show();
-				loadAssets(currentPage).then(function(response){
+				loadAssets(page, conditions).then(function (response) {
 					$('.spinner').hide();
 					if (!response._link_next) {
 						hasMoreAssets = false;

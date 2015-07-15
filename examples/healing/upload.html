@@ -97,7 +97,7 @@
 			cursor: pointer;
 		}
 
-		.notification-bar{
+		#messageError{
 			display: none;
 		}
 
@@ -120,7 +120,7 @@
 
 	<div id="uploadFile">
 		<div class="modal-header healing-header">
-			Improve your 3D printing results: Upload your 3D model and this tool will find and heal flaws that affect 3D printing.
+			Upload your 3D model and this tool will find and heal flaws that affect 3D printing.<br/>
 			Supports OBJ and STL 3D objects.
 		</div>
 		<div class="modal-body" id="upload-wrapper">
@@ -153,16 +153,18 @@
 
 			<form id="file-form" novalidate="">
 				<section class="form_field post-upload" id="file-input-section">
-					<input type="file" id="file-input" placeholder="file data" class="field hidden-upload" style="display: none" required>
+					<input type="file" id="file-input" accept=".stl,.obj" placeholder="file data" class="field hidden-upload" style="display: none" required>
 				</section>
 
 				<div class="form-footer">
 					<div class="publish-wrapper post-upload">
 						<input type="checkbox" id="isQuick">
-						<label for="isQuick"><span class="chk"></span>Quick Mode</label>
+						<label for="isQuick"><span class="chk"></span>Quick Mode<i class="spark_icon si-help with_hover"></i><i class="stooltip"><span>Quick Mode automatically repairs the model. Uncheck this box to see the analysis results.</span></i></label>
 					</div>
 
 				</div>
+
+
 
 			</form>
 		</div>
@@ -317,7 +319,14 @@
 				e.stopPropagation();
 				e.preventDefault();
 				var files = e.originalEvent.dataTransfer.files;
-				handleFileDrop(files[0]);
+
+				var file = files[0];
+				var fileExtension = file.name.substring(file.name.length-3,file.name.length);
+
+				if(fileExtension != "obj" && fileExtension!="stl"){
+					return;
+				}
+				handleFileDrop(file);
 			});
 
 

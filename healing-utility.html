@@ -127,8 +127,8 @@
 					<li id="analyzeId" class="disabled">
 						<div class = "pull-left">
 
-							<a class="spark_icon menu-item verified-icon si-healing-analyze" data-state="analyze" role="tab" ></a>
-							<a class="spark_icon menu-item not-verified-icon si-healing-analyze-disabled" data-state="analyze" role="tab"></a>
+							<div class="spark_icon menu-item verified-icon si-healing-analyze" data-state="analyze" role="tab" ></div>
+							<div class="spark_icon menu-item not-verified-icon si-healing-analyze-disabled" data-state="analyze" role="tab"></div>
 							<div class="menu-link-text">Analyze</div>
 
 						</div>
@@ -138,8 +138,8 @@
 					<li id="repairId" class="disabled">
 						<div class = "pull-left">
 
-							<a class="spark_icon menu-item verified-icon si-healing-repair" data-state="repair" role="tab" ></a>
-							<a class="spark_icon menu-item not-verified-icon si-healing-repair-disabled" data-state="repair" role="tab"></a>
+							<div class="spark_icon menu-item verified-icon si-healing-repair" data-state="repair" role="tab" ></div>
+							<div class="spark_icon menu-item not-verified-icon si-healing-repair-disabled" data-state="repair" role="tab"></div>
 							<div class="menu-link-text">Repair</div>
 
 						</div>
@@ -360,11 +360,17 @@
 	};
 
 	broadcastMapper["repairIframe.repaired"] = function(optionalParams){
-		console.log("in repairedrepairedrepairedrepaired")
 		statePlugin.changeState("repair", optionalParams);
 
 		statePlugin.verifyState("repair");
 		//statePlugin.verifyState("analyze");
+
+	};
+
+	broadcastMapper["repairIframe.uploadClick"] = function(optionalParams){
+		console.log("in uploadClick")
+
+		statePlugin.changeState("upload", optionalParams);
 
 	};
 
