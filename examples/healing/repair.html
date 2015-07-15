@@ -227,6 +227,14 @@ jQuery(function ($) {
 		inconsistently_oriented_triangles:"Inconsistently Oriented Triangles"
 	};
 
+	var problemsTooltip = {
+		holes:"The mesh doesn't represent a solid.",
+		degenerate_triangles:"Triangles with zero area.",
+		duplicate_triangles:"Triangles with the same vertices.",
+		nonmanifold_vertices:"A vertex adjacent to more than two untwinned edges, or a vertex adjacent to more than two triangles at the same edge.",
+		inconsistently_oriented_triangles:"A triangle edge adjacent to another triangle with the opposite orientation."
+	};
+
 	var problemsArrayIsEqual = function(arr1,arr2){
 		if(arr1.length!=arr2.length){
 			return false;
@@ -317,32 +325,14 @@ jQuery(function ($) {
 			$.each(problemsNamesArray, function (index, item) {
 				var tr = $('<tr class="in-table"></tr>');
 
-				tr.append($('<td>' + item + '</td>'));
+				tr.append($('<td><div>' + item + '<i class="spark_icon si-help with_hover"></i><i class="stooltip"><span>'+problemsTooltip[index]+'</span></i></div></td>'));
 
 				if (problemsArray[index] != undefined) {
 
-					/**
-					 tr.append($('<td>' +"Yes" + '</td>'));
-
-					 if(problemsArray[index]==true){
-					tr.append($('<td>' +  "Yes"  + '</td>'));
-				}
-					 else{
-					tr.append($('<td>' +  "No"  + '</td>'));
-					problemsLeft += 1;
-				}*/
 
 					tr.append($('<td class="text-centered">' + problemsArray[index].numFound + '</td>'));
 					tr.append($('<td class="text-centered">' + (problemsArray[index].numFound - problemsArray[index].numLeft) + '</td>'));
 
-					/**
-					if (problemsArray[index].isHealed == true) {
-						//tr.append($('<td>' +  "Yes"  + '</td>'));
-					}
-					else {
-						//tr.append($('<td>' +  "No"  + '</td>'));
-						problemsLeft += 1;
-					}*/
 
 					if(problemsArray[index].isHealed != true){
 						problemsLeft += 1;
@@ -357,6 +347,9 @@ jQuery(function ($) {
 				$('#problemsTbody').append(tr);
 
 			});
+
+			common.setUIFunctionality();
+
 		}
 		else{
 			$('#problems-table thead').addClass('hidden');
@@ -367,8 +360,8 @@ jQuery(function ($) {
 
 		if(newMeshId==undefined){
 			successMessage = "Your model doesn't need a repair.";
-			//$("#messageSuccess").show();
-			//$('.spinner-with-text').hide();
+
+			$('#healing-buttons').removeClass('hidden');
 		}
 		else if(problemsLeft>0){
 			successMessage = "There are still some problems.";
@@ -377,12 +370,15 @@ jQuery(function ($) {
 			successMessage = "File successfully repaired";
 		}
 
+		eventBroadCaster.broadcastEvent('repairIframe.repaired');
+
 		$("#messageSuccess > span").text(successMessage);
 		$("#messageSuccess").show();
 
 		if(newMeshId!=undefined) {
-			$('#downloadMesh').removeClass('hidden');
+			$('#healing-buttons').removeClass('hidden');
 
+			$("#downloadMesh").removeAttr("disabled");
 			$("#downloadMesh").on("click", (function () {
 
 				$("#downloadMesh span").text("Downloading...");
@@ -454,6 +450,7 @@ jQuery(function ($) {
 		ADSKSpark.MeshAPI.exportMesh(newMeshId,"obj").then(function (payloadExport) {
 			console.log(payloadExport);
 			var fileId = payloadExport.file_id;
+			$("#downloadMesh span").text("Download");
 			ADSKSpark.Files.downloadFileByURL(fileId).then(function (downloadPayload){
 				console.log(downloadPayload);
 				var downloadUrl = downloadPayload.download_url;
@@ -464,6 +461,29 @@ jQuery(function ($) {
 
 });
 
+
+
+
+
+
+jQuery(function ($) {
+
+	//First let's see if we have a valid access token
+	if (!ADSKSpark.Client.isAccessTokenValid()) {
+		location.href = '../../../plugins/login/login.html';
+	} else {
+		//Assume we provided assetId in URL
+		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+
+		common.setUIFunctionality();
+
+		$("#uploadAnother").on("click", function(){
+			eventBroadCaster.broadcastEvent('repairIframe.uploadClick');
+		});
+	}
+
+
+});
 </script>
 
 </body>
