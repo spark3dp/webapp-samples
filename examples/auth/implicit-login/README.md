@@ -1,7 +1,7 @@
  Implicit Login flow
 ========================
 ### Introduction
-This sample code demonstrates Spark's "Implicit Login": App and user authentication based on the OAuth2 protocol.
+This sample code demonstrates Spark's _Implicit Login_: App and user authentication based on the OAuth2 protocol.
 
 ### Prerequisites
 * A registered app on the <a href="https://spark.autodesk.com/developers/" target="_blank">Spark Developers' Portal</a>. For more information see the <a href="https://spark.autodesk.com/developers/reference/introduction/tutorials/register-an-app" target="_blank">tutorial</a>.
