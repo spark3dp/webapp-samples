@@ -1,14 +1,14 @@
  Implicit Login flow
 ========================
 ### Introduction
-These sample code demonstrate Spark's Implicit login authentication based on OAuth2 protocol.
+This sample code demonstrates Spark's "Implicit Login": App and user authentication based on the OAuth2 protocol.
 
 ### Prerequisites
-* A registered application on <a href="https://spark.autodesk.com/developers/" target="_blank">Spark Developer Portal</a>. For more information see the <a href="https://spark.autodesk.com/developers/reference/introduction/tutorials/register-an-app" target="_blank">tutorial</a>.
+* A registered app on the <a href="https://spark.autodesk.com/developers/" target="_blank">Spark Developers' Portal</a>. For more information see the <a href="https://spark.autodesk.com/developers/reference/introduction/tutorials/register-an-app" target="_blank">tutorial</a>.
 
 
 ### Installation
-* Include the SDK library in your HTML page just before closing the body section (`</body>`).
+* Include the SDK library in your HTML page, just before closing the body section (`</body>`).
 
 ```HTML
 <script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
@@ -17,39 +17,32 @@ These sample code demonstrate Spark's Implicit login authentication based on OAu
 
 ### Quick Start
 ##### Step 1 - Initialize Client
-We need to initialize the SDK JS Client with the APP_KEY that was provided during registration.
+You initialize the SDK JS Client with the APP_KEY that was provided during app registration.
 
 ```JavaScript
-
 ADSKSpark.Client.initialize('<your-app-key>'));
 ```
 
-##### Step 2 - Login dialog
-We need to call the login dialog window to allow user to enter his credentials.
+##### Step 2 - Login Dialog
+You load the Login Dialog window for the user to login.
 
 ```JavaScript
-
-
-	/**
-	 * Open login window
-	 */
+	//Open login window
 	function login() {
 		ADSKSpark.Client.openLoginWindow();
 	}
 ```
 
-##### Step 3 - Handle Login access token callback
+##### Step 3 - Handle Login / Access Token Callback
 The access token will be returned to:<br>
-1. The page you are calling the login window from (<b>this is the way the sample code uses by default</b>).<br>
+1. The page that loaded the login window (<b>the sample code's default setting</b>).<br>
 2. The redirect URL you supplied when initialize (see Additional Configuration section).<br>
-3. The  callback URL you defined when registered your app.<br>
+3. The callback URL you defined in app registeration.<br>
 
 ```JavaScript
-
 ADSKSpark.Client.completeLogin(false).then(function (token) {
 		if (token) {
 			if (window.opener) {
-
 				window.opener.location.reload(true);
 				//close the login window
 				window.close();
@@ -59,12 +52,11 @@ ADSKSpark.Client.completeLogin(false).then(function (token) {
 		} else {
 			console.error('Problem with fetching token');
 		}
-
 	});
 ```
 
 ### Additional Configuration
-##### Adding an Options configuration
+##### Adding an Options Configuration
 We can add additional optional parameters to our initialization method
 
 ```JavaScript
