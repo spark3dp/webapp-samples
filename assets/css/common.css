@@ -424,6 +424,7 @@ i.stooltip span {
     border-bottom: 6px solid rgba(238, 96, 45, .15);
     border-top: 6px solid rgba(238, 96, 45, 1);
     border-radius: 100%;
+    z-index: 10;
 }
 
 @-webkit-keyframes rotation {
@@ -1394,3 +1395,6 @@ li.disabled .not-verified-icon{
 }
 
 
+.img img{
+    max-width: 100%;
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - View Asset</title>
+	<meta charset="utf-8">
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles-->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+		.fileid-label {
+			color: lightgray;
+			font-size: 14px;
+			line-height: 29px;
+		}
+
+		.form-body {
+			display: inline-block;
+			width: 100%;
+			margin: 10px 0;
+		}
+
+		.publish-wrapper .field-label {
+			display: block;
+			margin-left: 40px;
+			margin-top: -5px;
+		}
+
+		#primary-placeholder {
+			color: lightgray;
+			font-size: 14px;
+		}
+
+		#img-placeholder{
+			height: 180px;
+			position: relative;
+		}
+
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+	<div id="manageAsset">
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">VIEW ASSET</h4>
+		</div>
+		<div class="modal-body">
+			<div class="form-body">
+				<div class="left col-xs-4">
+					<div class="img" id="img-placeholder">
+						<div class="spinner"></div>
+					</div>
+					<a class="spark_btn">LIKE THIS</a>
+				</div>
+
+				<div id="form-fields" class="col-xs-8">
+					<section class="form_field">
+						<label for="thumbnail-caption">
+							Edit caption <span class="field-label">&nbsp;/&nbsp;caption</span>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span>Caption for this thumbnail</span></i>
+						</label>
+						<input type="text" id="thumbnail-caption" class="form-control">
+
+					</section>
+					<section class="form_field">
+						<label for="thumbnail-description">
+							Edit description <span class="field-label">&nbsp;/&nbsp;description</span>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span>The description of this thumbnail</span></i>
+						</label>
+						<textarea class="form-control field"
+						          id="thumbnail-description"
+								></textarea>
+					</section>
+
+					<section class="form_field">
+						<div class="publish-wrapper">
+							<input type="checkbox" id="c1">
+							<label for="c1">
+								<span class="chk"></span>
+								Make Primary <span id="primary-placeholder"></span>
+								<br>
+								<span class="field-label">is_primary</span>
+							</label>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="../../../vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+-->
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/init.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	var currentAssetId; //the asset id we are referring to
+
+
+	/**
+	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
+	 */
+	function getAssetDataAndSetDataIntoForm() {
+
+		//get the asset
+		ADSKSpark.Assets.getPublicAsset(currentAssetId).then(function (response) {
+			if (response) {
+				console.info('response from getPublicAsset:', response);
+				//get the primary thumbnail
+				if (response.thumbnails.length) {
+					var imgHtml = '';
+					for (var i in response.thumbnails) {
+						imgHtml = '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.jpg" ' +
+									'alt="' + response.thumbnails[i].caption + '"/>';
+					}
+
+					$('#img-placeholder').html(imgHtml);
+				}
+			} else {
+				console.log('The requested asset is not available');
+			}
+		});
+
+
+		/*
+		 ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+		 if (response) {
+		 console.info('response from getFileDetails:', response);
+		 $('#filename-placeholder').text(common.maxLength(response.name, 30));
+		 if (response.public_url.length) {
+
+		 //apply bootstrap classes to align the form
+		 $('#img-placeholder').addClass('col-xs-5');
+		 $('#form-fields').addClass('col-xs-7');
+
+		 var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
+		 $('#img-placeholder').append(img);
+		 }
+		 } else {
+		 console.log('The requested file is not available');
+		 }
+		 });
+		 */
+	}
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+
+		//Assume we provided assetId in URL
+		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+		currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+		if (!currentAssetId) {
+			location.href = '../show-public-assets/';
+		} else {
+			getAssetDataAndSetDataIntoForm();
+		}
+
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
+
+
+	});
+
+</script>
+
+</body>
+</html>
