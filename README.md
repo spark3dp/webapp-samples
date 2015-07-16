@@ -98,5 +98,5 @@ Client.initialize(APP_KEY); //APP_KEY is a string containing your Spark app key,
 </html>
 ```
 
-A sever side authentication process, fetching an access_token and guest_token, is required
+A server side authentication process, fetching an access_token and guest_token, is required
 for your application to work. You can utilize one of the server implementations that are supplied in this repository.
