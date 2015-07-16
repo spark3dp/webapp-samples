@@ -15,32 +15,134 @@
 
 	<style>
 
-		.fileid-label {
-			color: lightgray;
-			font-size: 14px;
-			line-height: 29px;
-		}
-
 		.form-body {
 			display: inline-block;
 			width: 100%;
 			margin: 10px 0;
 		}
 
-		.publish-wrapper .field-label {
-			display: block;
-			margin-left: 40px;
-			margin-top: -5px;
+		#form-fields {
+			padding-right: 0;
 		}
 
-		#primary-placeholder {
-			color: lightgray;
-			font-size: 14px;
+		.left {
+			text-align: center;
 		}
 
-		#img-placeholder{
+		#img-placeholder {
 			height: 180px;
 			position: relative;
+		}
+
+		.like-btn .si-like {
+			margin-right: 10px;
+		}
+
+		.item-row {
+			padding: 10px 0;
+			border-bottom: 1px solid #cccccc;
+		}
+
+		.item-row > div {
+			padding-left: 0;
+		}
+
+		.tab-content {
+			padding-top: 10px;
+		}
+
+		#overview {
+			padding-left: 15px;
+		}
+
+		#social {
+			padding: 0;
+		}
+
+		#social > div {
+			text-align: center;
+			margin-top: 25px;
+			border-right: 1px solid #cccccc;
+		}
+
+		#social > div.last {
+			border-right: none;
+		}
+
+		#social > div p {
+			margin: 10px;
+			font-weight: bold;
+		}
+
+		#social > div p.social-label {
+			color: #cccccc;
+			margin-bottom: 0;
+		}
+
+		.artist-img {
+			border-radius: 10px;
+			margin-right: 5px;
+			width: 20px;
+		}
+
+		#comments-wrapper{
+			height:133px;
+			overflow: scroll;
+		}
+
+		#comments-wrapper .comment-row {
+			border-bottom: 1px solid #cccccc;
+			display: inline-block;
+			width: 96%;
+		}
+		#comments-wrapper .comment-row.last{
+			border-bottom: none;
+		}
+
+		#comments-wrapper .comment-row .comment-body {
+			padding-right: 5px;
+		}
+
+		#comments-wrapper .comment-row .comment-body h4 {
+			margin-top: 0;
+			font-size: 12px;
+			font-weight: bold;
+			margin-bottom: 2px;
+		}
+
+		#comments-wrapper .comment-row .comment-body p {
+			font-size: 12px;
+		}
+
+		#comments-wrapper .comment-row .comment-time {
+			color: #cccccc;
+			font-size: 12px;
+			padding-right: 0;
+			padding-left: 10px;
+		}
+
+		#comment-input-wrapper{
+			border-top: 2px solid #cccccc;
+			display: none;
+		}
+		#comment-input-wrapper #comment-input{
+			display: inline;
+			width:82%;
+			height: 30px;
+			margin-top: 15px;
+			font-size: 12px;
+			padding: 0 10px;
+		}
+		#comment-input-wrapper img{
+			width: 24px;
+			border-radius: 12px;
+		}
+
+		#comment-login{
+			border-top: 2px solid #cccccc;
+			display: none;
+			text-align: center;
+			padding-top: 20px;
 		}
 
 	</style>
@@ -53,48 +155,87 @@
 		<div class="modal-header">
 			<h4 class="modal-title" id="manageTitle">VIEW ASSET</h4>
 		</div>
-		<div class="modal-body">
-			<div class="form-body">
-				<div class="left col-xs-4">
-					<div class="img" id="img-placeholder">
-						<div class="spinner"></div>
-					</div>
-					<a class="spark_btn">LIKE THIS</a>
+		<div class="form-body">
+			<div class="left col-xs-4">
+				<div class="img" id="img-placeholder">
+					<div class="spinner"></div>
 				</div>
+				<div class="push push40"></div>
+				<a class="spark_btn small like-btn" onclick="toggleLikeAsset()">
+					<i class="spark_icon si-like"></i>
+					<span class="span-text">LIKE THIS</span>
+				</a>
+			</div>
 
-				<div id="form-fields" class="col-xs-8">
-					<section class="form_field">
-						<label for="thumbnail-caption">
-							Edit caption <span class="field-label">&nbsp;/&nbsp;caption</span>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>Caption for this thumbnail</span></i>
-						</label>
-						<input type="text" id="thumbnail-caption" class="form-control">
+			<div id="form-fields" class="col-xs-8">
 
-					</section>
-					<section class="form_field">
-						<label for="thumbnail-description">
-							Edit description <span class="field-label">&nbsp;/&nbsp;description</span>
-							<i class="spark_icon si-help with_hover"></i>
-							<i class="stooltip"><span>The description of this thumbnail</span></i>
-						</label>
-						<textarea class="form-control field"
-						          id="thumbnail-description"
-								></textarea>
-					</section>
-
-					<section class="form_field">
-						<div class="publish-wrapper">
-							<input type="checkbox" id="c1">
-							<label for="c1">
-								<span class="chk"></span>
-								Make Primary <span id="primary-placeholder"></span>
-								<br>
-								<span class="field-label">is_primary</span>
-							</label>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active">
+						<a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">OVERVIEW</a>
+					</li>
+					<li role="presentation">
+						<a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">COMMENTS</a>
+					</li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="overview">
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Title:</div>
+							<div class="col-xs-8 end-line" id="asset-title"></div>
 						</div>
-					</section>
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Author:</div>
+							<div class="col-xs-8" id="asset-author"><img class="artist-img" src=""/><span
+									class="name"></span></div>
+						</div>
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Submitted:</div>
+							<div class="col-xs-8" id="asset-submitted"></div>
+						</div>
+
+						<div id="social" class="col-xs-11">
+							<div class="col-xs-4" id="social-likes">
+								<i class="spark_icon si-likes"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Likes</p>
+							</div>
+							<div class="col-xs-4" id="social-comments">
+								<i class="spark_icon si-comments"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Comments</p>
+							</div>
+							<div class="col-xs-4 last" id="social-views">
+								<i class="spark_icon si-views"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Views</p>
+							</div>
+						</div>
+
+					</div>
+					<div role="tabpanel" class="tab-pane" id="comments">
+						<div id="comments-wrapper">
+							<!-- Comments -->
+						</div>
+						<div id="comment-input-wrapper">
+							<img src="" class="artist-img large"/>
+							<input type="text" id="comment-input" placeholder="Type and hit Enter to comment..." class="form-control"/>
+							<a class="spark_icon si-arrow"></a>
+						</div>
+						<div class="not-logged-in" id="comment-login">
+							<a class="spark_btn small primary" onclick="login()">Log in to comment</a>
+						</div>
+					</div>
 				</div>
+
+
 			</div>
 		</div>
 	</div>
@@ -103,6 +244,7 @@
 <!-- /container -->
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="utf-8"
         src="../../../vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
 
@@ -134,24 +276,59 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	var currentAssetId; //the asset id we are referring to
+	var     currentMember,//the connected user
+			currentAssetId, //the asset id we are referring to
+			comments; //comments of the asset
 
+
+	function toggleLikeAsset() {
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+			ADSKSpark.Assets.updateLikeStatusForMember(currentAssetId).then(function (response) {
+				if (response.is_member_like) {
+					$('.like-btn').addClass('primary').find('.span-text').text('UNLIKE THIS');
+					$('.like-btn').find('.si-like').hide();
+					$('#social-likes .count').text(parseInt($('#social-likes .count').text()) + 1);
+				} else {
+					$('.like-btn').removeClass('primary').find('.span-text').text('LIKE THIS');
+					$('.like-btn').find('.si-like').show();
+					$('#social-likes .count').text(parseInt($('#social-likes .count').text()) - 1);
+				}
+			});
+		} else {
+			localStorage.setItem('userClickedLike', true);
+			ADSKSpark.Client.openLoginWindow(false, true);
+		}
+	}
 
 	/**
 	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
 	 */
-	function getAssetDataAndSetDataIntoForm() {
+	function getAssetDataAndSetInDOM(loggedInUser) {
+
+		var assetsPromise = loggedInUser ? ADSKSpark.Assets.getAsset(currentAssetId) : ADSKSpark.Assets.getPublicAsset(currentAssetId);
 
 		//get the asset
-		ADSKSpark.Assets.getPublicAsset(currentAssetId).then(function (response) {
+		assetsPromise.then(function (response) {
 			if (response) {
 				console.info('response from getPublicAsset:', response);
-				//get the primary thumbnail
+				$('#asset-title').text(common.maxLength(response.asset_name, 20))
+				$('#asset-author .name').text(common.maxLength(response.artist.artist_name, 20));
+				$('#asset-author .artist-img').attr('src', response.artist.avatar);
+				$('#asset-submitted').text(common.formatDateHuman(response.date_submitted));
+				$('#social-likes .count').text(response.favorite_count);
+				$('#social-views .count').text(response.view_count);
+
+				if (response.is_member_favorite) {
+					$('.like-btn').addClass('primary').find('.span-text').text('UNLIKE THIS');
+					$('.like-btn').find('.si-like').hide();
+				}
+
 				if (response.thumbnails.length) {
 					var imgHtml = '';
 					for (var i in response.thumbnails) {
-						imgHtml = '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.jpg" ' +
-									'alt="' + response.thumbnails[i].caption + '"/>';
+						imgHtml += '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.jpg" ' +
+						'alt="' + response.thumbnails[i].caption + '"/>';
 					}
 
 					$('#img-placeholder').html(imgHtml);
@@ -160,27 +337,118 @@
 				console.log('The requested asset is not available');
 			}
 		});
+	}
+
+	function login(){
+		ADSKSpark.Client.openLoginWindow(false, true);
+	}
+
+	function formatTime(time){
+		switch (typeof time) {
+			case 'number': break;
+			case 'string': time = +new Date(time); break;
+			case 'object': if (time.constructor === Date) time = time.getTime(); break;
+			default: time = +new Date();
+		}
+		var time_formats = [
+			[60, 'seconds', 1], // 60
+			[120, '1 minute ago', '1 minute from now'], // 60*2
+			[3600, 'minutes', 60], // 60*60, 60
+			[7200, '1 hour ago', '1 hour from now'], // 60*60*2
+			[86400, 'hours', 3600], // 60*60*24, 60*60
+			[172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+			[604800, 'days', 86400], // 60*60*24*7, 60*60*24
+			[1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+			[2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+			[4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+			[29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+			[58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+			[2903040000, 'years', 29030400] // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+		];
+
+		//localize
+		var d = new Date()
+		var n = d.getTimezoneOffset();
+		time = time - n*60*1000;
+		//console.log(time,time + n*1000);
+
+		var seconds = (+new Date() - time) / 1000,
+				token = 'ago', list_choice = 1;
+
+		if (seconds == 0) {
+			return 'Just now'
+		}
+		if (seconds < 0) {
+			seconds = Math.abs(seconds);
+			token = 'from now';
+			list_choice = 2;
+		}
+		var i = 0, format;
+		while (format = time_formats[i++])
+			if (seconds < format[0]) {
+				if (typeof format[2] == 'string')
+					return format[list_choice];
+				else
+					return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+			}
+		return time;
+	}
+
+	function getAssetComments() {
+		ADSKSpark.Assets.getPublicAssetComments(currentAssetId).then(function (response) {
+			$('#social-comments .count').text(response.count);
+			comments = response.comments;
+			for (var i in comments) {
+				var commentData = {
+					authorName: comments[i].member_name,
+					authorImage: comments[i].member_small_avatar,
+					commentText: comments[i].body,
+					commentTime: formatTime(comments[i].timestamp),
+					isLast: parseInt(i) === 0
+				}
+				$('#comments-wrapper').prepend(getCommentHtml(commentData));
+			}
+		});
+	}
+	function getCommentHtml(commentData){
+
+		var lastClass = commentData.isLast ? 'last' : '';
+
+		var htmlElem = '<div class="comment-row ' + lastClass + '">' +
+							'<div class="comment-img col-xs-1">' +
+								'<img class="artist-img" src="' + commentData.authorImage + '" alt="' + commentData.authorName + '" />' +
+							'</div>' +
+							'<div class="comment-body col-xs-8">' +
+								'<h4>' + commentData.authorName + '</h4>' +
+								'<p>' + commentData.commentText + '</p>' +
+							'</div>' +
+							'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>' +
+						'</div>';
+
+		return htmlElem;
 
 
-		/*
-		 ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-		 if (response) {
-		 console.info('response from getFileDetails:', response);
-		 $('#filename-placeholder').text(common.maxLength(response.name, 30));
-		 if (response.public_url.length) {
+	}
 
-		 //apply bootstrap classes to align the form
-		 $('#img-placeholder').addClass('col-xs-5');
-		 $('#form-fields').addClass('col-xs-7');
+	function commentOnAssetAndSetInDom(){
+		var comment = $('#comment-input').val();
+		if (comment.length > 0) {
+			ADSKSpark.Assets.createAssetComment(currentAssetId, comment).then(function (response) {
+				if (response.comment_id){
 
-		 var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
-		 $('#img-placeholder').append(img);
-		 }
-		 } else {
-		 console.log('The requested file is not available');
-		 }
-		 });
-		 */
+					//comments.push(newComment);
+					var commentData = {
+						authorName: currentMember.first_name + ' ' + currentMember.last_name,
+						authorImage: currentMember.profile.avatar_path,
+						commentText: comment,
+						commentTime: 'just now'
+					}
+					$('#comments-wrapper').prepend(getCommentHtml(commentData));
+					$('#comment-input').val('');
+
+				}
+			});
+		}
 	}
 
 	/**
@@ -189,6 +457,15 @@
 	 */
 	jQuery(function ($) {
 
+		if (ADSKSpark.Client.isAccessTokenValid()){
+			$('#comment-input-wrapper').show();
+			ADSKSpark.Members.getMyProfile().then(function(response) {
+				currentMember = response.member;
+				$('#comment-input-wrapper').find('img').attr('src',currentMember.profile.avatar_path);
+			});
+		}else{
+			$('#comment-login').show();
+		}
 
 		//Assume we provided assetId in URL
 		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
@@ -197,12 +474,32 @@
 		if (!currentAssetId) {
 			location.href = '../show-public-assets/';
 		} else {
-			getAssetDataAndSetDataIntoForm();
+			getAssetDataAndSetInDOM(ADSKSpark.Client.isAccessTokenValid());
+			getAssetComments();
 		}
 
+		//if user clicked previously on like and the asset is not liked yet, call like
+		if (localStorage.getItem('userClickedLike', true)) {
+			localStorage.removeItem('userClickedLike');
+			ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
+				if (!response.is_member_favorite) {
+					toggleLikeAsset();
+				}
+			});
+		}
 
-		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
+		$('#comment-input-wrapper a').on('click', function () {
+			commentOnAssetAndSetInDom();
+		});
+
+		$('#comment-input-wrapper input').keydown(function (e){
+			if(e.keyCode == 13){
+				commentOnAssetAndSetInDom();
+			}
+		})
+
+		//broadcast the state to the iframe
+		eventBroadCaster.broadcastEvent('showPublicAsset');
 
 
 	});

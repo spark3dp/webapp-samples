@@ -822,6 +822,36 @@ i.stooltip span {
     height: 29px;
 }
 
+.si-like{
+    background-position: -56px -149px;
+    height: 13px;
+    width: 16px;
+}
+
+.si-likes{
+    background-position: -25px -180px;
+    height: 16px;
+    width: 19px;
+}
+
+.si-comments{
+    background-position: -60px -179px;
+    height: 17px;
+    width: 19px;
+}
+
+.si-views{
+    background-position: -94px -179px;
+    height: 17px;
+    width: 25px;
+}
+
+.si-arrow{
+    background-position: -115px -149px;
+    height: 12px;
+    width: 14px;
+}
+
 
 /***** END SPRITE ******/
 
@@ -1389,6 +1419,12 @@ li.disabled .not-verified-icon{
 .push20{
     height:20px;
 }
+.push30{
+    height:30px;
+}
+.push40{
+    height:40px;
+}
 
 .cb-options .wrapper{
     margin-right: 40px;
@@ -1397,4 +1433,8 @@ li.disabled .not-verified-icon{
 
 .img img{
     max-width: 100%;
+}
+
+.nav-tabs > li > a{
+    color:#cccccc;
 }

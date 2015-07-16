@@ -89,7 +89,16 @@ var common = function ($) {
 			var mm = (myDate.getMonth()+1).toString(); // getMonth() is zero-based
 			var dd  = myDate.getDate().toString();
 			return (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + '-' + yyyy;
-		}
+		},
+		formatDateHuman: function(myDateString){
+			var myDate = new Date(myDateString);
+			var formatter = new Intl.DateTimeFormat("en", { month: "short" }),
+				day = myDate.getDate().toString(),
+				month = formatter.format(myDate),
+			 	yyyy = myDate.getFullYear().toString();
+
+			return month + ' ' + day + ', ' + yyyy;
+		},
 
 	}
 
