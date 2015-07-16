@@ -82,7 +82,7 @@
 							<option value="asset_name">Asset Name</option>
 							<option value="artist">Artist</option>
 							<option value="favorite_count">Popularity</option>
-							<option value="likes_count">Likes Count</option>
+							<option value="favorite_count_strict">Likes Count</option>
 							<option value="download_count">Download Count</option>
 							<option value="format">Format</option>
 							<option value="price">Price</option>
@@ -167,6 +167,9 @@
 
 		//reset form on load
 		$('#search-form')[0].reset();
+		$('input[name=display_filter]').val('');
+		$('input[name=app_only]').val('');
+		$('input[name=start_date]').val('');
 
 		//filters
 		$('#filter-recent').on('change', function () {
@@ -174,14 +177,6 @@
 				$('input[name=start_date]').val(getDateMonthAgo());
 			} else {
 				$('input[name=start_date]').val('');
-			}
-		});
-		$('#filter-downloadable').on('change', function () {
-			var featured = ($('#filter-featured:checked')) ? 'f' : '';
-			if ($('#filter-downloadable:checked').length) {
-				$('input[name=display_filter]').val('d' + featured);
-			} else {
-				$('input[name=display_filter]').val(featured);
 			}
 		});
 
@@ -193,10 +188,18 @@
 			}
 		});
 
+		$('#filter-downloadable').on('change', function () {
+			var featured = ($('#filter-featured:checked').length) ? 'f' : '';
+			if ($('#filter-downloadable:checked').length) {
+				$('input[name=display_filter]').val('d' + featured);
+			} else {
+				$('input[name=display_filter]').val(featured);
+			}
+		});
 
 		$('#filter-featured').on('change', function () {
-			var downloadable = ($('#filter-downloadable:checked')) ? 'd' : '';
-			if ($('#filter-featured:checked')) {
+			var downloadable = ($('#filter-downloadable:checked').length) ? 'd' : '';
+			if ($('#filter-featured:checked').length) {
 				$('input[name=display_filter]').val(downloadable + 'f');
 			} else {
 				$('input[name=display_filter]').val(downloadable);
@@ -208,8 +211,9 @@
 			e.preventDefault();
 			var $form = $(this);
 			var params = $form.serialize();
-			console.log(params);
-			//location.href = 'index.html?' + params;
+			//console.log(params);
+
+			location.href = 'index.html?' + params;
 		});
 
 		common.setUIFunctionality();
