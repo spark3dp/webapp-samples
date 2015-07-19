@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show My Assets - gallery view</title>
+	<title>Spark Sample Application - Show Public Assets</title>
 	<meta charset="utf-8">
 
 	<!-- fonts -->
@@ -14,9 +14,25 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
+
+		.modal-title {
+
+		}
+
+		.modal-title span {
+			font-size: 14px;
+			width: 55%;
+		}
+
+		.modal-header #sort_by {
+			width: 82%;
+			float: right;
+			margin-top: -7px;
+		}
+
 		.modal-header {
 			position: relative;
-			padding: 8px 20px;
+			padding: 15px 0 10px;
 		}
 
 		.modal-header .layouts {
@@ -69,6 +85,31 @@
 			height: 435px;
 		}
 
+		#pagination {
+			text-align: center;
+			margin-top: 15px;
+		}
+
+		#pagination a, #pagination span {
+			margin-right: 10px;
+		}
+
+		.box.Small {
+			height: 115px;
+		}
+
+		.box.Small .thumb {
+			height: 80px;
+		}
+
+		.box.Petite {
+			height: 160px;
+		}
+
+		.box.Petite .thumb {
+			height: 132px;
+		}
+
 	</style>
 
 </head>
@@ -77,22 +118,36 @@
 <div class="container">
 
 	<div class="spinner"></div>
-
+	<div class="modal-header">
+		<h4 class="modal-title">
+			SPARK 3D GALLERY
+			<span class="pull-right cb-options">Sort by:
+				<select name="sort_by" id="sort_by" class="form-control">
+					<option value="asset_name">Asset Name</option>
+					<option value="artist">Artist</option>
+					<option value="favorite_count">Popularity</option>
+					<option value="favorite_count_strict">Likes Count</option>
+					<option value="download_count">Download Count</option>
+					<option value="format">Format</option>
+					<option value="price">Price</option>
+				</select>
+			</span>
+		</h4>
+	</div>
 	<div class="hidden" id="assets">
 		<div id="assets-gallery">
-
+		</div>
+		<div id="pagination">
 		</div>
 	</div>
 
 	<div class="hidden" id="empty-assets">
-		<p>Assets are objects referencing all the files and data related to a 3D model.<br/>
-			They are equivelent to a project or a folder with metadata.
-		</p>
+		<p>No assets match these search criteria. Try to broaden your search conditions</p>
 
 		<div class="img">
 			<img src="../../../assets/img/my_assets_illustration.png" alt="my assets illustrations"/>
 		</div>
-		<a class="spark_btn" href="../create-asset/">Create your first Asset</a>
+		<div class="push push40"></div>
 	</div>
 
 </div>
@@ -132,7 +187,12 @@
 <script>
 
 	var listDefaultLimit = 12,
-			page = 1;
+			page = 1,
+			urlParams = ADSKSpark.Helpers.extractParamsFromURL(),
+			imageSize = 'Medium2';
+
+	//See all conditions - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fassets%2Flist
+	var conditions = {};
 
 
 	//log http requests
@@ -144,12 +204,34 @@
 	 * @param item
 	 */
 	function loopGallery(index, item) {
-		var imgUrlThumb = ADSKSpark.Helpers.changeHttpToHttps(item.thumb_path_prefix + 'Medium.jpg');
+		var imgUrlThumb = ADSKSpark.Helpers.changeHttpToHttps(item.thumb_path_prefix + imageSize + '.jpg');
 
-		var box = $('<div class="col-xs-4 box box-' + index + '"></div>');
+		var divClass,
+				trimTitleLength;
+		switch(imageSize) {
+			case 'Small':
+				divClass = 'col-xs-2';
+				trimTitleLength = 2;
+				break;
+			case 'Petite':
+				divClass = 'col-xs-3';
+				trimTitleLength = 9;
+				break;
+			case 'Large':
+			case 'HD':
+				divClass = 'col-xs-6';
+				trimTitleLength = 24;
+				break;
+			default:
+				divClass = 'col-xs-4';
+				trimTitleLength = 16;
+				break;
+		}
+
+		var box = $('<div class="' + divClass + ' ' + imageSize + ' box box-' + index + '"></div>');
 		var view = $('<div class="view thumb"></div>');
 		var text = $('<div class="text"><a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
-		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, 17) + '</a></div>');
+		'<i class="spark_icon si-asset-icon"></i>' + common.maxLength(item.asset_name, trimTitleLength) + '</a></div>');
 
 		$('#assets-gallery').append(box);
 		box.append(view);
@@ -158,8 +240,7 @@
 		box.append(text);
 	}
 
-	function loadAssets(page, conditions) {
-		conditions = conditions || {};
+	function loadAssets(page) {
 		conditions.limit = conditions.limit ? conditions.limit : listDefaultLimit;
 		conditions.offset = conditions.offset ? conditions.offset : listDefaultLimit * (page - 1);
 
@@ -181,6 +262,78 @@
 		});
 	}
 
+	function jsonToParams(jsonObj) {
+		var str = '';
+		for (var key in jsonObj) {
+			str += key + '=' + jsonObj[key] + '&';
+		}
+
+		return str;
+	}
+
+	/**
+	 * Build pagination HTML. Yep.
+	 */
+
+	function buildPagination(count, currentPage) {
+
+		currentPage = currentPage || 1;
+
+		var pageLinksHtml = '',
+				defaultLimitPagesDisplay = 10,
+				pagesCount = count / listDefaultLimit,
+				disabledClass;
+
+		if (currentPage === 1) {
+			pageLinksHtml += '<a class="mono disabled">&lt;</a>';
+		} else {
+			conditions.offset = listDefaultLimit * (currentPage-2);
+			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&lt;</a>';
+		}
+
+		var displayPagesCount = currentPage > defaultLimitPagesDisplay/2 ? defaultLimitPagesDisplay/2+currentPage-1 : defaultLimitPagesDisplay;
+
+		var limitPagesDisplay = pagesCount > defaultLimitPagesDisplay ? displayPagesCount : pagesCount;
+		limitPagesDisplay = limitPagesDisplay > pagesCount ? pagesCount : limitPagesDisplay;
+
+		if (currentPage - 1 > defaultLimitPagesDisplay/2){
+			conditions.offset = 0;
+			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">1</a>';
+		}
+
+		if (currentPage - 2 > defaultLimitPagesDisplay/2){
+			pageLinksHtml += '<span>...</span>';
+		}
+
+		var startPageFrom = currentPage - 1 > defaultLimitPagesDisplay/2 ? currentPage - defaultLimitPagesDisplay/2 - 1 : 0;
+
+		for (var i = startPageFrom; i < limitPagesDisplay; i++) {
+			disabledClass = (currentPage === i + 1) ? 'disabled' : '';
+			conditions.offset = i * listDefaultLimit;
+			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono ' + disabledClass + '">' + (i + 1) + '</a>';
+		}
+
+		if (Math.ceil(pagesCount) - defaultLimitPagesDisplay/2 > currentPage){
+			pageLinksHtml += '<span>...</span>';
+		}
+
+
+		if (pagesCount > limitPagesDisplay) {
+			conditions.offset = (pagesCount-1) * listDefaultLimit;
+			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">' + Math.ceil(pagesCount) + '</a>';
+		}
+
+		if (currentPage === Math.ceil(pagesCount)) {
+			pageLinksHtml += '<a class="mono disabled">&gt;</a>';
+		} else {
+			conditions.offset = listDefaultLimit * currentPage;
+			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&gt;</a>';
+		}
+
+		$('#pagination').html(pageLinksHtml);
+
+	}
+
 	//pagination
 	var hasMoreAssets = true;
 
@@ -190,19 +343,16 @@
 	 */
 	jQuery(function ($) {
 
-		//See all conditions - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fassets%2Flist
-		var conditions = {};
-		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-
-
 		if (urlParams.q) {
 			conditions.q = urlParams.q;
 		}
 		if (urlParams.limit) {
 			conditions.limit = urlParams.limit;
+			listDefaultLimit = conditions.limit;
 		}
 		if (urlParams.offset) {
 			conditions.offset = urlParams.offset;
+			page = Math.ceil(urlParams.offset / listDefaultLimit) + 1;
 		}
 		if (urlParams.sort_by) {
 			conditions.sort_by = urlParams.sort_by;
@@ -216,29 +366,47 @@
 		if (urlParams.display_filter) {
 			conditions.display_filter = urlParams.display_filter;
 		}
+		if (urlParams.app_only) {
+			conditions.app_only = urlParams.app_only;
+		}
+		if (urlParams.thumbnail_size) {
+			imageSize = urlParams.thumbnail_size;
+		}
 
 		//Get my assets and append to table in DOM
-		loadAssets(page, conditions).then(function (response) {
+		loadAssets(page).then(function (response) {
 			$('.spinner').hide();
-			if (!response._link_next) {
-				hasMoreAssets = false;
-			}
+			buildPagination(response.count,page);
 		});
 
-		//load more on scroll
-		$('#assets-gallery').scroll(function () {
-			if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
-				page++;
-				$('.spinner').show();
-				loadAssets(page, conditions).then(function (response) {
-					$('.spinner').hide();
-					if (!response._link_next) {
-						hasMoreAssets = false;
-					}
-				});
-
-			}
+		$('#sort_by').on('change', function () {
+			$('.spinner').show();
+			$('#assets-gallery').html('');
+			conditions.sort_by = $(this).val();
+			location.href = 'index.html?' + jsonToParams(conditions);
 		});
+
+		//set the correct selected
+		if (urlParams.sort_by){
+			$('#sort_by').find('option[value=' + urlParams.sort_by + ']').attr('selected','selected');
+		}
+
+		/*
+		 //load more on scroll
+		 $('#assets-gallery').scroll(function () {
+		 if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
+		 page++;
+		 $('.spinner').show();
+		 loadAssets(page).then(function (response) {
+		 $('.spinner').hide();
+		 if (!response._link_next) {
+		 hasMoreAssets = false;
+		 }
+		 });
+
+		 }
+		 });
+		 */
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('showPublicAssets.index');
