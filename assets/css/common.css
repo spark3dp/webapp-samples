@@ -852,6 +852,18 @@ i.stooltip span {
     width: 14px;
 }
 
+.si-control{
+    background-position: -164px -149px;
+    height: 11px;
+    width: 10px;
+}
+
+.si-control.active{
+    background-position: -144px -149px;
+    height: 11px;
+    width: 11px;
+}
+
 
 /***** END SPRITE ******/
 

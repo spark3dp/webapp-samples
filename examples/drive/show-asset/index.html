@@ -29,9 +29,30 @@
 			text-align: center;
 		}
 
-		#img-placeholder {
-			height: 180px;
+		.left > div {
+			width: 200px;
+		}
+
+		#images-wrapper {
+			width: 200px;
+			height: 200px;
+			overflow: hidden;
 			position: relative;
+		}
+
+		#img-placeholder {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+
+		#img-placeholder img {
+			width: 200px;
+			vertical-align: top;
+		}
+
+		#controls-placeholder a {
+			margin-right: 7px;
 		}
 
 		.like-btn .si-like {
@@ -85,8 +106,8 @@
 			width: 20px;
 		}
 
-		#comments-wrapper{
-			height:133px;
+		#comments-wrapper {
+			height: 133px;
 			overflow: scroll;
 		}
 
@@ -95,7 +116,8 @@
 			display: inline-block;
 			width: 96%;
 		}
-		#comments-wrapper .comment-row.last{
+
+		#comments-wrapper .comment-row.last {
 			border-bottom: none;
 		}
 
@@ -121,24 +143,26 @@
 			padding-left: 10px;
 		}
 
-		#comment-input-wrapper{
+		#comment-input-wrapper {
 			border-top: 2px solid #cccccc;
 			display: none;
 		}
-		#comment-input-wrapper #comment-input{
+
+		#comment-input-wrapper #comment-input {
 			display: inline;
-			width:82%;
+			width: 82%;
 			height: 30px;
 			margin-top: 15px;
 			font-size: 12px;
 			padding: 0 10px;
 		}
-		#comment-input-wrapper img{
+
+		#comment-input-wrapper img {
 			width: 24px;
 			border-radius: 12px;
 		}
 
-		#comment-login{
+		#comment-login {
 			border-top: 2px solid #cccccc;
 			display: none;
 			text-align: center;
@@ -157,14 +181,19 @@
 		</div>
 		<div class="form-body">
 			<div class="left col-xs-4">
-				<div class="img" id="img-placeholder">
-					<div class="spinner"></div>
+				<div id="images-wrapper">
+					<div class="img" id="img-placeholder">
+						<div class="spinner"></div>
+					</div>
 				</div>
-				<div class="push push40"></div>
-				<a class="spark_btn small like-btn" onclick="toggleLikeAsset()">
-					<i class="spark_icon si-like"></i>
-					<span class="span-text">LIKE THIS</span>
-				</a>
+				<div id="controls-placeholder"></div>
+				<div class="push push20"></div>
+				<div>
+					<a class="spark_btn small like-btn" onclick="toggleLikeAsset()">
+						<i class="spark_icon si-like"></i>
+						<span class="span-text">LIKE THIS</span>
+					</a>
+				</div>
 			</div>
 
 			<div id="form-fields" class="col-xs-8">
@@ -222,11 +251,13 @@
 					</div>
 					<div role="tabpanel" class="tab-pane" id="comments">
 						<div id="comments-wrapper">
+							<div class="spinner"></div>
 							<!-- Comments -->
 						</div>
 						<div id="comment-input-wrapper">
 							<img src="" class="artist-img large"/>
-							<input type="text" id="comment-input" placeholder="Type and hit Enter to comment..." class="form-control"/>
+							<input type="text" id="comment-input" placeholder="Type and hit Enter to comment..."
+							       class="form-control"/>
 							<a class="spark_icon si-arrow"></a>
 						</div>
 						<div class="not-logged-in" id="comment-login">
@@ -276,9 +307,72 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	var     currentMember,//the connected user
+	var currentMember,//the connected user
 			currentAssetId, //the asset id we are referring to
 			comments; //comments of the asset
+
+
+	var imgBaseWidth = 200;//the width of an image in a gallery
+
+	function login() {
+		ADSKSpark.Client.openLoginWindow(false, true);
+	}
+
+	function formatTime(time) {
+		switch(typeof time) {
+			case 'number':
+				break;
+			case 'string':
+				time = +new Date(time);
+				break;
+			case 'object':
+				if (time.constructor === Date) time = time.getTime();
+				break;
+			default:
+				time = +new Date();
+		}
+		var time_formats = [
+			[60, 'seconds', 1], // 60
+			[120, '1 minute ago', '1 minute from now'], // 60*2
+			[3600, 'minutes', 60], // 60*60, 60
+			[7200, '1 hour ago', '1 hour from now'], // 60*60*2
+			[86400, 'hours', 3600], // 60*60*24, 60*60
+			[172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+			[604800, 'days', 86400], // 60*60*24*7, 60*60*24
+			[1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+			[2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+			[4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+			[29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+			[58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+			[2903040000, 'years', 29030400] // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+		];
+
+		//localize
+		var d = new Date()
+		var n = d.getTimezoneOffset();
+		time = time - n * 60 * 1000;
+
+		var seconds = (+new Date() - time) / 1000,
+				token = 'ago', list_choice = 1;
+
+		if (seconds == 0) {
+			return 'Just now'
+		}
+		if (seconds < 0) {
+			seconds = Math.abs(seconds);
+			token = 'from now';
+			list_choice = 2;
+		}
+		var i = 0, format;
+		while(format = time_formats[i++])
+			if (seconds < format[0]) {
+				if (typeof format[2] == 'string')
+					return format[list_choice];
+				else
+					return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+			}
+		return time;
+	}
 
 
 	function toggleLikeAsset() {
@@ -318,20 +412,32 @@
 				$('#asset-submitted').text(common.formatDateHuman(response.date_submitted));
 				$('#social-likes .count').text(response.favorite_count);
 				$('#social-views .count').text(response.view_count);
+				$('#social-comments .count').text(response.comment_count);
 
 				if (response.is_member_favorite) {
 					$('.like-btn').addClass('primary').find('.span-text').text('UNLIKE THIS');
 					$('.like-btn').find('.si-like').hide();
 				}
 
+
 				if (response.thumbnails.length) {
-					var imgHtml = '';
+					var imgHtml = '',
+							controlsHtml = '';
+
 					for (var i in response.thumbnails) {
-						imgHtml += '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.jpg" ' +
+						//images
+						imgHtml += '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.png" ' +
 						'alt="' + response.thumbnails[i].caption + '"/>';
+
+						//controls
+						var active = !parseInt(i) ? 'active' : '';
+						controlsHtml += '<a class="img-control spark_icon si-control ' + active + '"></a>';
 					}
 
-					$('#img-placeholder').html(imgHtml);
+					$('#img-placeholder').width(response.thumbnails.length * imgBaseWidth).html(imgHtml);
+					if (response.thumbnails.length > 1) {
+						$('#controls-placeholder').html(controlsHtml);
+					}
 				}
 			} else {
 				console.log('The requested asset is not available');
@@ -339,64 +445,10 @@
 		});
 	}
 
-	function login(){
-		ADSKSpark.Client.openLoginWindow(false, true);
-	}
-
-	function formatTime(time){
-		switch (typeof time) {
-			case 'number': break;
-			case 'string': time = +new Date(time); break;
-			case 'object': if (time.constructor === Date) time = time.getTime(); break;
-			default: time = +new Date();
-		}
-		var time_formats = [
-			[60, 'seconds', 1], // 60
-			[120, '1 minute ago', '1 minute from now'], // 60*2
-			[3600, 'minutes', 60], // 60*60, 60
-			[7200, '1 hour ago', '1 hour from now'], // 60*60*2
-			[86400, 'hours', 3600], // 60*60*24, 60*60
-			[172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
-			[604800, 'days', 86400], // 60*60*24*7, 60*60*24
-			[1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
-			[2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
-			[4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
-			[29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
-			[58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
-			[2903040000, 'years', 29030400] // 60*60*24*7*4*12*100, 60*60*24*7*4*12
-		];
-
-		//localize
-		var d = new Date()
-		var n = d.getTimezoneOffset();
-		time = time - n*60*1000;
-		//console.log(time,time + n*1000);
-
-		var seconds = (+new Date() - time) / 1000,
-				token = 'ago', list_choice = 1;
-
-		if (seconds == 0) {
-			return 'Just now'
-		}
-		if (seconds < 0) {
-			seconds = Math.abs(seconds);
-			token = 'from now';
-			list_choice = 2;
-		}
-		var i = 0, format;
-		while (format = time_formats[i++])
-			if (seconds < format[0]) {
-				if (typeof format[2] == 'string')
-					return format[list_choice];
-				else
-					return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
-			}
-		return time;
-	}
 
 	function getAssetComments() {
 		ADSKSpark.Assets.getPublicAssetComments(currentAssetId).then(function (response) {
-			$('#social-comments .count').text(response.count);
+
 			comments = response.comments;
 			for (var i in comments) {
 				var commentData = {
@@ -408,33 +460,36 @@
 				}
 				$('#comments-wrapper').prepend(getCommentHtml(commentData));
 			}
+
+			$('#comments-wrapper').find('.spinner').remove();
 		});
 	}
-	function getCommentHtml(commentData){
+	function getCommentHtml(commentData) {
 
 		var lastClass = commentData.isLast ? 'last' : '';
 
 		var htmlElem = '<div class="comment-row ' + lastClass + '">' +
-							'<div class="comment-img col-xs-1">' +
-								'<img class="artist-img" src="' + commentData.authorImage + '" alt="' + commentData.authorName + '" />' +
-							'</div>' +
-							'<div class="comment-body col-xs-8">' +
-								'<h4>' + commentData.authorName + '</h4>' +
-								'<p>' + commentData.commentText + '</p>' +
-							'</div>' +
-							'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>' +
-						'</div>';
+				'<div class="comment-img col-xs-1">' +
+				'<img class="artist-img" src="' + commentData.authorImage + '" alt="' + commentData.authorName + '" />' +
+				'</div>' +
+				'<div class="comment-body col-xs-8">' +
+				'<h4>' + commentData.authorName + '</h4>' +
+				'<p>' + commentData.commentText + '</p>' +
+				'</div>' +
+				'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>' +
+				'</div>';
 
 		return htmlElem;
 
 
 	}
 
-	function commentOnAssetAndSetInDom(){
+	function commentOnAssetAndSetInDom() {
 		var comment = $('#comment-input').val();
 		if (comment.length > 0) {
+			$('#comment-input-wrapper input').attr('disabled', 'disabled');
 			ADSKSpark.Assets.createAssetComment(currentAssetId, comment).then(function (response) {
-				if (response.comment_id){
+				if (response.comment_id) {
 
 					//comments.push(newComment);
 					var commentData = {
@@ -446,7 +501,13 @@
 					$('#comments-wrapper').prepend(getCommentHtml(commentData));
 					$('#comment-input').val('');
 
+
+					//update comments count
+					$('#social-comments .count').text(parseInt($('#social-comments .count').text()) + 1);
+
 				}
+
+				$('#comment-input-wrapper input').removeAttr('disabled');
 			});
 		}
 	}
@@ -457,13 +518,13 @@
 	 */
 	jQuery(function ($) {
 
-		if (ADSKSpark.Client.isAccessTokenValid()){
+		if (ADSKSpark.Client.isAccessTokenValid()) {
 			$('#comment-input-wrapper').show();
-			ADSKSpark.Members.getMyProfile().then(function(response) {
+			ADSKSpark.Members.getMyProfile().then(function (response) {
 				currentMember = response.member;
-				$('#comment-input-wrapper').find('img').attr('src',currentMember.profile.avatar_path);
+				$('#comment-input-wrapper').find('img').attr('src', currentMember.profile.avatar_path);
 			});
-		}else{
+		} else {
 			$('#comment-login').show();
 		}
 
@@ -475,7 +536,6 @@
 			location.href = '../show-public-assets/';
 		} else {
 			getAssetDataAndSetInDOM(ADSKSpark.Client.isAccessTokenValid());
-			getAssetComments();
 		}
 
 		//if user clicked previously on like and the asset is not liked yet, call like
@@ -488,15 +548,32 @@
 			});
 		}
 
+		//comments
+		$('a[aria-controls=comments]').one('click', function () {
+			getAssetComments();
+		});
+
 		$('#comment-input-wrapper a').on('click', function () {
 			commentOnAssetAndSetInDom();
 		});
 
-		$('#comment-input-wrapper input').keydown(function (e){
-			if(e.keyCode == 13){
+		$('#comment-input-wrapper input').keydown(function (e) {
+			if (e.keyCode == 13) {
 				commentOnAssetAndSetInDom();
 			}
-		})
+		});
+
+		$('#controls-placeholder').on('click', '.img-control:not(.active)', function () {
+			var _this = $(this);
+			var elemIndex = $("a.img-control").index($(this)[0]);
+			var pos = -1 * elemIndex * imgBaseWidth;
+			$('#img-placeholder').animate({left: pos},500, function(){
+				_this.siblings().removeClass('active');
+				_this.addClass('active');
+			});
+
+		});
+
 
 		//broadcast the state to the iframe
 		eventBroadCaster.broadcastEvent('showPublicAsset');
