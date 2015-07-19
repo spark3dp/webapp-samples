@@ -108,7 +108,8 @@
 
 		#comments-wrapper {
 			height: 133px;
-			overflow: scroll;
+			overflow-y: scroll;
+			overflow-x: hidden;
 		}
 
 		#comments-wrapper .comment-row {
@@ -454,6 +455,9 @@
 					var noCommentsHtml = '<p id="no-comments">No comments here. Be the first one to add a comment</p>';
 					$('#comments-wrapper').html(noCommentsHtml);
 				}
+
+				//update comments count
+				$('#social-comments .count').text(parseInt($('#social-comments .count').text()) - 1);
 			});
 		});
 
@@ -473,7 +477,7 @@
 				console.info('response from getPublicAsset:', response);
 				$('#asset-title').text(common.maxLength(response.asset_name, 20))
 				$('#asset-author .name').text(common.maxLength(response.artist.artist_name, 20));
-				$('#asset-author .artist-img').attr('src', response.artist.avatar);
+				$('#asset-author .artist-img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(response.artist.avatar));
 				$('#asset-submitted').text(common.formatDateHuman(response.date_submitted));
 				$('#social-likes .count').text(response.favorite_count);
 				$('#social-views .count').text(response.view_count);
@@ -521,7 +525,7 @@
 						commentId: comments[i].comment_id,
 						authorId: comments[i].member_id,
 						authorName: comments[i].member_name,
-						authorImage: comments[i].member_small_avatar,
+						authorImage: ADSKSpark.Helpers.changeHttpToHttps(comments[i].member_small_avatar),
 						commentText: comments[i].body,
 						commentTime: formatTime(comments[i].timestamp),
 						isLast: parseInt(i) === 0
@@ -542,7 +546,7 @@
 
 		var htmlElem = '<div class="comment-row ' + lastClass + '">' +
 				'<div class="comment-img col-xs-1">' +
-				'<img class="artist-img" src="' + commentData.authorImage + '" alt="' + commentData.authorName + '" />' +
+				'<img class="artist-img" src="' + ADSKSpark.Helpers.changeHttpToHttps(commentData.authorImage) + '" alt="' + commentData.authorName + '" />' +
 				'</div>' +
 				'<div class="comment-body col-xs-8">' +
 				'<h4>' + commentData.authorName + '</h4>' +
@@ -576,14 +580,13 @@
 						commentId: response.comment_id,
 						authorId: currentMember.id,
 						authorName: currentMember.first_name + ' ' + currentMember.last_name,
-						authorImage: currentMember.profile.avatar_path,
+						authorImage: ADSKSpark.Helpers.changeHttpToHttps(currentMember.profile.avatar_path),
 						commentText: comment,
 						commentTime: 'just now'
 					}
 					$('#no-comments').remove();
 					$('#comments-wrapper').prepend(getCommentHtml(commentData));
 					$('#comment-input').val('');
-
 
 					//update comments count
 					$('#social-comments .count').text(parseInt($('#social-comments .count').text()) + 1);
@@ -617,7 +620,7 @@
 			$('#comment-input-wrapper').show();
 			ADSKSpark.Members.getMyProfile().then(function (response) {
 				currentMember = response.member;
-				$('#comment-input-wrapper').find('img').attr('src', currentMember.profile.avatar_path);
+				$('#comment-input-wrapper').find('img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(currentMember.profile.avatar_path));
 			});
 		} else {
 			$('#comment-login').show();

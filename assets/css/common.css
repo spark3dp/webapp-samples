@@ -1447,6 +1447,10 @@ li.disabled .not-verified-icon{
     max-width: 100%;
 }
 
-.nav-tabs > li > a{
+#form-fields .nav-tabs > li > a{
     color:#cccccc;
+}
+
+#form-fields .nav-tabs > li.active > a{
+    color:#555555;
 }
