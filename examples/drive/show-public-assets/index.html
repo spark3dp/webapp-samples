@@ -376,7 +376,9 @@
 		//Get my assets and append to table in DOM
 		loadAssets(page).then(function (response) {
 			$('.spinner').hide();
-			buildPagination(response.count,page);
+			if (response.count > listDefaultLimit) {
+				buildPagination(response.count, page);
+			}
 		});
 
 		$('#sort_by').on('change', function () {
@@ -390,23 +392,6 @@
 		if (urlParams.sort_by){
 			$('#sort_by').find('option[value=' + urlParams.sort_by + ']').attr('selected','selected');
 		}
-
-		/*
-		 //load more on scroll
-		 $('#assets-gallery').scroll(function () {
-		 if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && hasMoreAssets) {
-		 page++;
-		 $('.spinner').show();
-		 loadAssets(page).then(function (response) {
-		 $('.spinner').hide();
-		 if (!response._link_next) {
-		 hasMoreAssets = false;
-		 }
-		 });
-
-		 }
-		 });
-		 */
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('showPublicAssets.index');
