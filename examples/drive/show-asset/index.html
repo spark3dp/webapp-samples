@@ -115,6 +115,20 @@
 			border-bottom: 1px solid #cccccc;
 			display: inline-block;
 			width: 96%;
+			position: relative;
+		}
+
+		#comments-wrapper .comment-row .actions{
+			position: absolute;
+			right: 0;
+			top: 16px;
+		}
+		#comments-wrapper .comment-row .actions a{
+			margin-right: 10px;
+			opacity: 0.5;
+		}
+		#comments-wrapper .comment-row .actions a:hover{
+			opacity: 1;
 		}
 
 		#comments-wrapper .comment-row.last {
@@ -274,6 +288,26 @@
 </div>
 <!-- /container -->
 
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this comment?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small delete" type="button">DELETE COMMENT</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="utf-8"
@@ -396,6 +430,37 @@
 	}
 
 	/**
+	 * Deletes a comment
+	 */
+	function deleteComment(commentId, assetElem) {
+
+		$('#myModal').modal('show');
+
+		//cancel events
+		$('.cancel').off();
+		$('.cancel').on('click', function () {
+			$('#myModal').modal('hide');
+		})
+
+		//delete events
+		$('.delete').off();
+		$('.delete').on('click', function () {
+			ADSKSpark.Assets.deleteAssetComment(currentAssetId,commentId).then(function () {
+				$('#myModal').modal('hide');
+				assetElem.remove();
+
+				//make sure comments still left
+				if (!$('#comments-wrapper .comment-row').length) {
+					var noCommentsHtml = '<p id="no-comments">No comments here. Be the first one to add a comment</p>';
+					$('#comments-wrapper').html(noCommentsHtml);
+				}
+			});
+		});
+
+
+	}
+
+	/**
 	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
 	 */
 	function getAssetDataAndSetInDOM(loggedInUser) {
@@ -450,15 +515,22 @@
 		ADSKSpark.Assets.getPublicAssetComments(currentAssetId).then(function (response) {
 
 			comments = response.comments;
-			for (var i in comments) {
-				var commentData = {
-					authorName: comments[i].member_name,
-					authorImage: comments[i].member_small_avatar,
-					commentText: comments[i].body,
-					commentTime: formatTime(comments[i].timestamp),
-					isLast: parseInt(i) === 0
+			if (comments.length) {
+				for (var i in comments) {
+					var commentData = {
+						commentId: comments[i].comment_id,
+						authorId: comments[i].member_id,
+						authorName: comments[i].member_name,
+						authorImage: comments[i].member_small_avatar,
+						commentText: comments[i].body,
+						commentTime: formatTime(comments[i].timestamp),
+						isLast: parseInt(i) === 0
+					}
+					$('#comments-wrapper').prepend(getCommentHtml(commentData));
 				}
-				$('#comments-wrapper').prepend(getCommentHtml(commentData));
+			}else{
+				var noCommentsHtml = '<p id="no-comments">No comments here. Be the first one to add a comment</p>';
+				$('#comments-wrapper').html(noCommentsHtml);
 			}
 
 			$('#comments-wrapper').find('.spinner').remove();
@@ -476,8 +548,17 @@
 				'<h4>' + commentData.authorName + '</h4>' +
 				'<p>' + commentData.commentText + '</p>' +
 				'</div>' +
-				'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>' +
-				'</div>';
+				'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>';
+
+		if (currentMember && commentData.authorId === currentMember.id){
+			htmlElem += '<div class="actions">' +
+			'<a class="glyphicon glyphicon-pencil"></a>' +
+			'<a class="glyphicon glyphicon-remove"></a>' +
+			'<input type="hidden" value="' + commentData.commentId + '">' +
+			'</div>';
+		}
+
+		htmlElem += '</div>';
 
 		return htmlElem;
 
@@ -491,13 +572,15 @@
 			ADSKSpark.Assets.createAssetComment(currentAssetId, comment).then(function (response) {
 				if (response.comment_id) {
 
-					//comments.push(newComment);
 					var commentData = {
+						commentId: response.comment_id,
+						authorId: currentMember.id,
 						authorName: currentMember.first_name + ' ' + currentMember.last_name,
 						authorImage: currentMember.profile.avatar_path,
 						commentText: comment,
 						commentTime: 'just now'
 					}
+					$('#no-comments').remove();
 					$('#comments-wrapper').prepend(getCommentHtml(commentData));
 					$('#comment-input').val('');
 
@@ -507,6 +590,18 @@
 
 				}
 
+				$('#comment-input-wrapper input').removeAttr('disabled');
+			});
+		}
+	}
+
+	function updateAssetComment(commentId,commentElem){
+		var comment = commentElem.find('textarea').val();
+		if (comment.length > 0) {
+			$('#comment-input-wrapper input').attr('disabled', 'disabled');
+			commentElem.find('textarea').attr('disabled', 'disabled');
+			ADSKSpark.Assets.updateAssetComment(currentAssetId, commentId, comment).then(function (response) {
+				commentElem.find('.comment-body p').text(comment);
 				$('#comment-input-wrapper input').removeAttr('disabled');
 			});
 		}
@@ -571,9 +666,32 @@
 				_this.siblings().removeClass('active');
 				_this.addClass('active');
 			});
-
 		});
 
+		$('#comments-wrapper').on('click','.glyphicon-remove', function(){
+			var commentId = $(this).siblings('input').val();
+			deleteComment(commentId, $(this).parents('.comment-row'));
+		});
+
+		$('#comments-wrapper').on('click','.glyphicon-pencil', function(){
+			var commentId = $(this).siblings('input').val();
+			var commentText = $(this).parents('.comment-row').find('.comment-body p').text();
+			$(this).parents('.comment-row').find('.comment-body p')
+					.html('<textarea class="form-control" data-value="' + commentId + '">' + commentText + '</textarea>');
+			$(this).parents('.comment-row').find('textarea').focus();
+		});
+
+		$('#comments-wrapper').on('keydown','.comment-row textarea',function (e) {
+			if (e.keyCode == 13) {
+				var commentId = $(this).data('value');
+				updateAssetComment(commentId, $(this).parents('.comment-row'));
+			}
+		});
+
+		$('#comments-wrapper').on('blur','.comment-row textarea',function (e) {
+			var commentId = $(this).data('value');
+			updateAssetComment(commentId, $(this).parents('.comment-row'));
+		});
 
 		//broadcast the state to the iframe
 		eventBroadCaster.broadcastEvent('showPublicAsset');
