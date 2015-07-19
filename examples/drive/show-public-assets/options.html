@@ -51,7 +51,7 @@
 					<select id="thumbnail-size" name="thumbnail_size" class="form-control">
 						<option value="Small">Small (64 px)</option>
 						<option value="Petite">Petite (90 px)</option>
-						<option value="Medium">Medium (128 px)</option>
+						<option value="Medium" selected="selected">Medium (128 px)</option>
 						<option value="Medium2">Medium2 (256 px)</option>
 						<option value="Large">Large (600 px)</option>
 						<option value="HD">HD (1200 px)</option>
@@ -219,7 +219,7 @@
 		common.setUIFunctionality();
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('setAssetsOptions');
+		eventBroadCaster.broadcastEvent('showPublicAssets.setAssetsOptions');
 
 	});
 
