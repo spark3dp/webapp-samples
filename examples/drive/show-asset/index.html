@@ -707,7 +707,7 @@
 		});
 
 		$('#comments-wrapper').on('blur','.comment-row textarea',function (e) {
-			//$(this).parents('.comment-row').find('.comment-body p').text(commentText);
+			$(this).parents('.comment-row').find('.comment-body p').text(commentText);
 		});
 
 		//broadcast the state to the iframe
