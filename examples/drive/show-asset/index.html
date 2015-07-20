@@ -139,6 +139,12 @@
 
 		#comments-wrapper .comment-row .comment-body {
 			padding-right: 5px;
+			position: relative;
+		}
+		#comments-wrapper .comment-row .comment-body a.si-arrow{
+			position: absolute;
+			top:20px;
+			right:-15px;
 		}
 
 		#comments-wrapper .comment-row .comment-body h4 {
@@ -678,24 +684,30 @@
 			deleteComment(commentId, $(this).parents('.comment-row'));
 		});
 
+		var commentText;
 		$('#comments-wrapper').on('click','.glyphicon-pencil', function(){
 			var commentId = $(this).siblings('input').val();
-			var commentText = $(this).parents('.comment-row').find('.comment-body p').text();
+			commentText = $(this).parents('.comment-row').find('.comment-body p').text();
 			$(this).parents('.comment-row').find('.comment-body p')
-					.html('<textarea class="form-control" data-value="' + commentId + '">' + commentText + '</textarea>');
+					.html('<textarea class="form-control" data-value="' + commentId + '">' + commentText + '</textarea>' +
+					'<a class="spark_icon si-arrow"></a>');
 			$(this).parents('.comment-row').find('textarea').focus();
 		});
 
-		$('#comments-wrapper').on('keydown','.comment-row textarea',function (e) {
-			if (e.keyCode == 13) {
+		$('#comments-wrapper').on('keydown', '.comment-row textarea', function (e) {
+			if (e.keyCode === 13) {
 				var commentId = $(this).data('value');
 				updateAssetComment(commentId, $(this).parents('.comment-row'));
 			}
 		});
 
-		$('#comments-wrapper').on('blur','.comment-row textarea',function (e) {
-			var commentId = $(this).data('value');
+		$('#comments-wrapper').on('click', '.comment-row .si-arrow', function (e) {
+			var commentId = $(this).prev('textarea').data('value');
 			updateAssetComment(commentId, $(this).parents('.comment-row'));
+		});
+
+		$('#comments-wrapper').on('blur','.comment-row textarea',function (e) {
+			//$(this).parents('.comment-row').find('.comment-body p').text(commentText);
 		});
 
 		//broadcast the state to the iframe
