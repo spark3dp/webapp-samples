@@ -104,6 +104,7 @@
 			border-radius: 10px;
 			margin-right: 5px;
 			width: 20px;
+			height: 20px;
 		}
 
 		#comments-wrapper {
@@ -173,8 +174,9 @@
 		}
 
 		#comment-input-wrapper img {
-			width: 24px;
-			border-radius: 12px;
+			width: 28px;
+			height:28px;
+			border-radius: 14px;
 		}
 
 		#comment-login {
@@ -697,7 +699,7 @@
 		});
 
 		//broadcast the state to the iframe
-		eventBroadCaster.broadcastEvent('showPublicAsset');
+		eventBroadCaster.broadcastEvent('showPublicAsset',currentAssetId);
 
 
 	});

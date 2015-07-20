@@ -99,6 +99,14 @@ var common = function ($) {
 
 			return month + ' ' + day + ', ' + yyyy;
 		},
+		jsonToParams: function (jsonObj) {
+			var str = '';
+			for (var key in jsonObj) {
+				str += key + '=' + jsonObj[key] + '&';
+			}
+
+			return str;
+		}
 
 	}
 

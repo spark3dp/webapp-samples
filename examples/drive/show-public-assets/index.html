@@ -267,15 +267,6 @@
 		});
 	}
 
-	function jsonToParams(jsonObj) {
-		var str = '';
-		for (var key in jsonObj) {
-			str += key + '=' + jsonObj[key] + '&';
-		}
-
-		return str;
-	}
-
 	/**
 	 * Build pagination HTML. Yep.
 	 */
@@ -291,7 +282,7 @@
 			pageLinksHtml += '<a class="mono disabled">&lt;</a>';
 		} else {
 			conditions.offset = listDefaultLimit * (page-2);
-			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&lt;</a>';
+			pageLinksHtml += '<a class="mono" href="index.html?' + common.jsonToParams(conditions) + '">&lt;</a>';
 		}
 
 		var displayPagesCount = page > defaultLimitPagesDisplay/2 ? defaultLimitPagesDisplay/2+page-1 : defaultLimitPagesDisplay;
@@ -302,7 +293,7 @@
 		//first page if the current page is far ahead
 		if (page - 1 > defaultLimitPagesDisplay/2){
 			conditions.offset = 0;
-			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">1</a>';
+			pageLinksHtml += '<a href="index.html?' + common.jsonToParams(conditions) + '" class="mono">1</a>';
 		}
 
 		if (page - 2 > defaultLimitPagesDisplay/2){
@@ -317,7 +308,7 @@
 			var disabledClass = '';
 			disabledClass = (page === i + 1) ? 'disabled' : '';
 			conditions.offset = i * listDefaultLimit;
-			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono ' + disabledClass + '">' + (i + 1) + '</a>';
+			pageLinksHtml += '<a href="index.html?' + common.jsonToParams(conditions) + '" class="mono ' + disabledClass + '">' + (i + 1) + '</a>';
 		}
 
 		if (Math.ceil(pagesCount) - defaultLimitPagesDisplay/2 > page){
@@ -328,7 +319,7 @@
 		//last page
 		if (pagesCount > limitPagesDisplay) {
 			conditions.offset = Math.ceil(pagesCount-1) * listDefaultLimit;
-			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">' + Math.ceil(pagesCount) + '</a>';
+			pageLinksHtml += '<a href="index.html?' + common.jsonToParams(conditions) + '" class="mono">' + Math.ceil(pagesCount) + '</a>';
 		}
 
 		//next page
@@ -336,7 +327,7 @@
 			pageLinksHtml += '<a class="mono disabled">&gt;</a>';
 		} else {
 			conditions.offset = listDefaultLimit * page;
-			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&gt;</a>';
+			pageLinksHtml += '<a class="mono" href="index.html?' + common.jsonToParams(conditions) + '">&gt;</a>';
 		}
 
 		$('#pagination').html(pageLinksHtml);
@@ -367,6 +358,11 @@
 		}
 		if (urlParams.sort_by) {
 			conditions.sort_by = urlParams.sort_by;
+			var descSortByKeys = ['favorite_count_strict','download_count'];
+
+			if (descSortByKeys.indexOf(conditions.sort_by) > -1){
+				conditions.sort_order = 'desc';
+			}
 		}
 		if (urlParams.start_date) {
 			conditions.start_date = urlParams.start_date;
@@ -402,7 +398,7 @@
 			$('.spinner').show();
 			$('#assets-gallery').html('');
 			conditions.sort_by = $(this).val();
-			location.href = 'index.html?' + jsonToParams(conditions);
+			location.href = 'index.html?' + common.jsonToParams(conditions);
 		});
 
 		//set the correct selected
@@ -411,7 +407,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showPublicAssets.index');
+		eventBroadCaster.broadcastEvent('showPublicAssets.index', conditions);
 
 	});
 

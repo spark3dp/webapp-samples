@@ -37,20 +37,24 @@
 							<img class="user-avatar" src="" style="display: none"/>
 						</div>
 						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
-
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
 					<li id="listAssetsId">
 						<a class="menu-item pull-left" data-state="listAssets" role="tab">List Assets</a>
-
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
 					<li id="resultId">
-						<a class="menu-item pull-left" data-state="result" role="tab">Result</a>
+						<a class="menu-item pull-left" data-state="result" role="tab">Results</a>
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="singleAssetId">
+						<a class="menu-item pull-left" data-state="singleAsset" role="tab">Single Asset</a>
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					</li>
@@ -194,7 +198,7 @@
 			src: 'plugins/login/login.html',
 			selectedTab: "#loginId",
 			enabledTabs: [],
-			disabledTabs: ['#loginId', '#listAssetsId', '#resultId'],
+			disabledTabs: ['#loginId', '#listAssetsId', '#resultId','#singleAssetId'],
 			callbackFunc: loggedOutCallback
 		},
 
@@ -202,7 +206,7 @@
 			src: 'plugins/login/login.html',
 			selectedTab: "#loginId",
 			enabledTabs: ['#loginId', '#listAssetsId'],
-			disabledTabs: ['#resultId'],
+			disabledTabs: ['#resultId','#singleAssetId'],
 			callbackFunc: function () {
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
@@ -212,9 +216,9 @@
 		},
 		listAssets: {
 			src: 'examples/drive/show-public-assets/options.html',
-			selectedTab: "#myAssetsId",
+			selectedTab: "#listAssetsId",
 			enabledTabs: ['#loginId', '#listAssetsId'],
-			disabledTabs: ['#resultId'],
+			disabledTabs: ['#resultId','#singleAssetId'],
 			callbackFunc: function () {
 				$('#mainIframe').attr('height', '462px');
 				$('#loginId').addClass('verified');
@@ -223,16 +227,30 @@
 
 		result: {
 			src: 'examples/drive/show-public-assets/index.html',
-			selectedTab: "#createAssetId",
+			selectedTab: "#resultId",
 			enabledTabs: ['#loginId', '#listAssetsId', '#resultId'],
-			disabledTabs: [],
+			disabledTabs: ['#singleAssetId'],
 			callbackFunc: function () {
 				$('#loginId').addClass('verified');
 				$('#listAssetsId').addClass('verified');
 				$('#mainIframe').attr('height', '462px');
 
 			}
-		}
+		},
+		singleAsset: {
+			src: 'examples/drive/show-assets/index.html',
+			selectedTab: "#singleAssetId",
+			enabledTabs: ['#loginId', '#listAssetsId', '#resultId','#singleAssetId'],
+			disabledTabs: [],
+			callbackFunc: function () {
+				$('#loginId').addClass('verified');
+				$('#listAssetsId').addClass('verified');
+				$('#resultId').addClass('verified');
+				$('#mainIframe').attr('height', '462px');
+
+			}
+		},
+
 	};
 
 
@@ -256,7 +274,7 @@
 			}
 
 			$('#requestLog').show();
-			$('#loginId').addClass('verified');
+			//$('#loginId').addClass('verified');
 
 		},
 		redirectUserToLoginPage: function () {
@@ -268,17 +286,21 @@
 			loggedOutCallback();
 		},
 		setAssetsOptions: function(){
-			$('#loginId').addClass('verified');
-			$('#listAssetsId').addClass('selected');
 			$('#mainIframe').attr('height', '560px');
 		},
-		showPublicAssets: function () {
+		showPublicAssets: function (conditions) {
+			states.result.src = 'examples/drive/show-public-assets/index.html?' + common.jsonToParams(conditions);
 			$('#mainIframe').attr('height', '535px');
 			$('#listAssetsId').removeClass('selected').addClass('verified');
 			$('#resultId').removeClass('disabled').addClass('selected');
 		},
-		showPublicAsset: function(){
-			$('#resultId').addClass('verified');
+		showPublicAsset: function(assetId){
+			states.singleAsset.src = 'examples/drive/show-asset/index.html?assetId=' + assetId;
+			console.log(states);
+			$('#mainIframe').attr('height', '462px');
+			$('#resultId').removeClass('selected').addClass('verified');
+			$('#singleAssetId').removeClass('disabled').addClass('selected').addClass('verified');
+
 		}
 	};
 
