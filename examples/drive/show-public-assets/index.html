@@ -198,6 +198,8 @@
 
 	//See all conditions - https://spark.autodesk.com/developers/reference/drive?deeplink=%2Freference%2Fassets%2Flist
 	var conditions = {};
+	conditions.limit = listDefaultLimit;
+	conditions.offset = listDefaultLimit * (page - 1);
 
 
 	//log http requests
@@ -245,9 +247,7 @@
 		box.append(text);
 	}
 
-	function loadAssets(page) {
-		conditions.limit = conditions.limit ? conditions.limit : listDefaultLimit;
-		conditions.offset = conditions.offset ? conditions.offset : listDefaultLimit * (page - 1);
+	function loadAssets() {
 
 		return ADSKSpark.Assets.getPublicAssetsByConditions(conditions).then(function (response) {
 			console.info('my assets:', response);
@@ -280,58 +280,62 @@
 	 * Build pagination HTML. Yep.
 	 */
 
-	function buildPagination(count, currentPage) {
-
-		currentPage = currentPage || 1;
+	function buildPagination(count) {
 
 		var pageLinksHtml = '',
 				defaultLimitPagesDisplay = 10,
-				pagesCount = count / listDefaultLimit,
-				disabledClass;
+				pagesCount = count / listDefaultLimit;
 
-		if (currentPage === 1) {
+		//previous page
+		if (page === 1) {
 			pageLinksHtml += '<a class="mono disabled">&lt;</a>';
 		} else {
-			conditions.offset = listDefaultLimit * (currentPage-2);
+			conditions.offset = listDefaultLimit * (page-2);
 			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&lt;</a>';
 		}
 
-		var displayPagesCount = currentPage > defaultLimitPagesDisplay/2 ? defaultLimitPagesDisplay/2+currentPage-1 : defaultLimitPagesDisplay;
+		var displayPagesCount = page > defaultLimitPagesDisplay/2 ? defaultLimitPagesDisplay/2+page-1 : defaultLimitPagesDisplay;
 
 		var limitPagesDisplay = pagesCount > defaultLimitPagesDisplay ? displayPagesCount : pagesCount;
 		limitPagesDisplay = limitPagesDisplay > pagesCount ? pagesCount : limitPagesDisplay;
 
-		if (currentPage - 1 > defaultLimitPagesDisplay/2){
+		//first page if the current page is far ahead
+		if (page - 1 > defaultLimitPagesDisplay/2){
 			conditions.offset = 0;
 			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">1</a>';
 		}
 
-		if (currentPage - 2 > defaultLimitPagesDisplay/2){
+		if (page - 2 > defaultLimitPagesDisplay/2){
 			pageLinksHtml += '<span>...</span>';
 		}
 
-		var startPageFrom = currentPage - 1 > defaultLimitPagesDisplay/2 ? currentPage - defaultLimitPagesDisplay/2 - 1 : 0;
+		var startPageFrom = page - 1 > defaultLimitPagesDisplay/2 ? page - defaultLimitPagesDisplay/2 - 1 : 0;
 
+		//middle pagination body
 		for (var i = startPageFrom; i < limitPagesDisplay; i++) {
-			disabledClass = (currentPage === i + 1) ? 'disabled' : '';
+			//console.log(i, page);
+			var disabledClass = '';
+			disabledClass = (page === i + 1) ? 'disabled' : '';
 			conditions.offset = i * listDefaultLimit;
 			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono ' + disabledClass + '">' + (i + 1) + '</a>';
 		}
 
-		if (Math.ceil(pagesCount) - defaultLimitPagesDisplay/2 > currentPage){
+		if (Math.ceil(pagesCount) - defaultLimitPagesDisplay/2 > page){
 			pageLinksHtml += '<span>...</span>';
 		}
 
 
+		//last page
 		if (pagesCount > limitPagesDisplay) {
-			conditions.offset = (pagesCount-1) * listDefaultLimit;
+			conditions.offset = Math.ceil(pagesCount-1) * listDefaultLimit;
 			pageLinksHtml += '<a href="index.html?' + jsonToParams(conditions) + '" class="mono">' + Math.ceil(pagesCount) + '</a>';
 		}
 
-		if (currentPage === Math.ceil(pagesCount)) {
+		//next page
+		if (page === Math.ceil(pagesCount)) {
 			pageLinksHtml += '<a class="mono disabled">&gt;</a>';
 		} else {
-			conditions.offset = listDefaultLimit * currentPage;
+			conditions.offset = listDefaultLimit * page;
 			pageLinksHtml += '<a class="mono" href="index.html?' + jsonToParams(conditions) + '">&gt;</a>';
 		}
 
@@ -348,15 +352,17 @@
 	 */
 	jQuery(function ($) {
 
+		var totalPages;
+
 		if (urlParams.q) {
 			conditions.q = urlParams.q;
 		}
 		if (urlParams.limit) {
-			conditions.limit = urlParams.limit;
+			conditions.limit = parseInt(urlParams.limit);
 			listDefaultLimit = conditions.limit;
 		}
 		if (urlParams.offset) {
-			conditions.offset = urlParams.offset;
+			conditions.offset = parseInt(urlParams.offset);
 			page = Math.ceil(urlParams.offset / listDefaultLimit) + 1;
 		}
 		if (urlParams.sort_by) {
@@ -379,14 +385,20 @@
 		}
 
 		//Get my assets and append to table in DOM
-		loadAssets(page).then(function (response) {
+		loadAssets().then(function (response) {
 			$('.spinner').hide();
 			if (response.count > listDefaultLimit) {
-				buildPagination(response.count, page);
+				totalPages = Math.ceil(response.count / listDefaultLimit);
+				buildPagination(response.count);
 			}
 		});
 
 		$('#sort_by').on('change', function () {
+
+			//workaround for pagination issue
+			if (page < totalPages){
+				conditions.offset = conditions.offset - listDefaultLimit;
+			}
 			$('.spinner').show();
 			$('#assets-gallery').html('');
 			conditions.sort_by = $(this).val();
