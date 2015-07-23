@@ -18,7 +18,7 @@ var express = require('express'),
 
 app.use(cookieParser());
 app.use(session({
-		cookie: {maxAge: 720000},
+		cookie: {maxAge: 720000000},
 		resave: false,
 		saveUninitialized: false,
 		secret: 'spark secret string'
