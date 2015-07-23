@@ -34,7 +34,7 @@ These applications demonstrate Spark's cloud based 3D model storage, mesh prepar
 For the 3-legged authentication flow, the SDK requires that authentication API requests are called from a server. For example the guest token URL could be <i>http://example.com/guest_token</i>.
 
 ```JavaScript
-Client.initialize(APP_KEY); //APP_KEY is a string containing your Spark app key, provided during registration.
+ADSKSpark.Client.initialize('<your app key>'); //<your app key> is a string containing your Spark app key, provided during registration.
 ```
 
 #### Sample code
