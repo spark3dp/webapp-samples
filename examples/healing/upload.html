@@ -164,6 +164,8 @@
 
 				</div>
 
+				<a href="show-my-assets/index.html">Upload From Drive</a> <br/>
+				<a href="show-predefined-files/index.html">Choose predefined files</a>
 
 
 			</form>
@@ -232,6 +234,21 @@
 		}
 	}
 
+
+	function importMesh(fileId, name,isQuick){
+		ADSKSpark.MeshAPI.importMesh(fileId, name, true, null, undefined).then(
+
+				function(mesh) {
+					var meshId = mesh.id;
+					window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
+
+				},function(error){
+					console.log(error);
+					$("#messageError").show();
+				}
+		);
+	};
+
 	function upload() {
 		//nice UI
 		$('.spinner-with-text').show();
@@ -248,23 +265,19 @@
 		//};
 
 
-		ADSKSpark.MeshAPI.uploadFile(fileData).then(function(result) {
+
+
+		var uploadCallback = function(result){
 			var upload = result.files[0];
 			var isQuick = $("#isQuick").is(':checked');
-
 			$("#spinner-text").text("Importing...");
 
+			importMesh(upload.file_id, upload.name,isQuick);
+		};
 
-			ADSKSpark.MeshAPI.importMesh(upload.file_id, upload.name, true, null, undefined).then(
+		ADSKSpark.MeshAPI.uploadFile(fileData).then(function(result) {
 
-					function(mesh) {
-						var meshId = mesh.id;
-						window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
-
-					},function(error){
-						console.log(error);
-						$("#messageError").show();
-					});
+			uploadCallback(result)
 
 		},function(error){
 			console.log(error);
@@ -350,12 +363,22 @@
 		} else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+			var fileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+			var isQuick = (urlParams['isQuick'] == "true");
 
+			if(fileId!=0){
+				$('.spinner-with-text').show();
+				$('.spinner').show();
 
+				$('#uploadFile').hide();
+
+				$("#spinner-text").text("Importing...");
+
+				importMesh(fileId,"",false);
+			}
 				setFileUploadUI();
 				//setUpUploadFileFlow();
 				common.setUIFunctionality();
-
 
 		}
 
