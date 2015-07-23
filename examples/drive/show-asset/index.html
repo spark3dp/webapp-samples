@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - View Asset</title>
+	<meta charset="utf-8">
+
+	<!-- fonts -->
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600,400' rel='stylesheet' type='text/css'>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles-->
+	<link href="../../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+		.form-body {
+			display: inline-block;
+			width: 100%;
+			margin: 10px 0;
+		}
+
+		#form-fields {
+			padding-right: 0;
+		}
+
+		.left {
+			text-align: center;
+		}
+
+		.left > div {
+			width: 200px;
+		}
+
+		#images-wrapper {
+			width: 200px;
+			height: 200px;
+			overflow: hidden;
+			position: relative;
+		}
+
+		#img-placeholder {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+
+		#img-placeholder img {
+			width: 200px;
+			vertical-align: top;
+		}
+
+		#controls-placeholder a {
+			margin-right: 7px;
+		}
+
+		.like-btn .si-like {
+			margin-right: 10px;
+		}
+
+		.item-row {
+			padding: 10px 0;
+			border-bottom: 1px solid #cccccc;
+		}
+
+		.item-row > div {
+			padding-left: 0;
+		}
+
+		.tab-content {
+			padding-top: 10px;
+		}
+
+		#overview {
+			padding-left: 15px;
+		}
+
+		#social {
+			padding: 0;
+		}
+
+		#social > div {
+			text-align: center;
+			margin-top: 25px;
+			border-right: 1px solid #cccccc;
+		}
+
+		#social > div.last {
+			border-right: none;
+		}
+
+		#social > div p {
+			margin: 10px;
+			font-weight: bold;
+		}
+
+		#social > div p.social-label {
+			color: #cccccc;
+			margin-bottom: 0;
+		}
+
+		.artist-img {
+			border-radius: 10px;
+			margin-right: 5px;
+			width: 20px;
+			height: 20px;
+		}
+
+		#comments-wrapper {
+			height: 133px;
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		#comments-wrapper .comment-row {
+			border-bottom: 1px solid #cccccc;
+			display: inline-block;
+			width: 96%;
+			position: relative;
+		}
+
+		#comments-wrapper .comment-row .actions{
+			position: absolute;
+			right: 0;
+			top: 16px;
+		}
+		#comments-wrapper .comment-row .actions a{
+			margin-right: 10px;
+			opacity: 0.5;
+		}
+		#comments-wrapper .comment-row .actions a:hover{
+			opacity: 1;
+		}
+
+		#comments-wrapper .comment-row.last {
+			border-bottom: none;
+		}
+
+		#comments-wrapper .comment-row .comment-body {
+			padding-right: 5px;
+			position: relative;
+		}
+		#comments-wrapper .comment-row .comment-body a.si-arrow{
+			position: absolute;
+			top:20px;
+			right:-15px;
+		}
+
+		#comments-wrapper .comment-row .comment-body h4 {
+			margin-top: 0;
+			font-size: 12px;
+			font-weight: bold;
+			margin-bottom: 2px;
+		}
+
+		#comments-wrapper .comment-row .comment-body p {
+			font-size: 12px;
+		}
+
+		#comments-wrapper .comment-row .comment-time {
+			color: #cccccc;
+			font-size: 12px;
+			padding-right: 0;
+			padding-left: 10px;
+		}
+
+		#comment-input-wrapper {
+			border-top: 2px solid #cccccc;
+			display: none;
+		}
+
+		#comment-input-wrapper #comment-input {
+			display: inline;
+			width: 82%;
+			height: 30px;
+			margin-top: 15px;
+			font-size: 12px;
+			padding: 0 10px;
+		}
+
+		#comment-input-wrapper img {
+			width: 28px;
+			height:28px;
+			border-radius: 14px;
+		}
+
+		#comment-login {
+			border-top: 2px solid #cccccc;
+			display: none;
+			text-align: center;
+			padding-top: 20px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+	<div id="manageAsset">
+		<div class="modal-header">
+			<h4 class="modal-title" id="manageTitle">VIEW ASSET</h4>
+		</div>
+		<div class="form-body">
+			<div class="left col-xs-4">
+				<div id="images-wrapper">
+					<div class="img" id="img-placeholder">
+						<div class="spinner"></div>
+					</div>
+				</div>
+				<div id="controls-placeholder"></div>
+				<div class="push push20"></div>
+				<div>
+					<a class="spark_btn small like-btn" onclick="toggleLikeAsset()">
+						<i class="spark_icon si-like"></i>
+						<span class="span-text">LIKE THIS</span>
+					</a>
+				</div>
+			</div>
+
+			<div id="form-fields" class="col-xs-8">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active">
+						<a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">OVERVIEW</a>
+					</li>
+					<li role="presentation">
+						<a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">COMMENTS</a>
+					</li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="overview">
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Title:</div>
+							<div class="col-xs-8 end-line" id="asset-title"></div>
+						</div>
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Author:</div>
+							<div class="col-xs-8" id="asset-author"><img class="artist-img" src=""/><span
+									class="name"></span></div>
+						</div>
+						<div class="col-xs-11 item-row">
+							<div class="col-xs-4">Submitted:</div>
+							<div class="col-xs-8" id="asset-submitted"></div>
+						</div>
+
+						<div id="social" class="col-xs-11">
+							<div class="col-xs-4" id="social-likes">
+								<i class="spark_icon si-likes"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Likes</p>
+							</div>
+							<div class="col-xs-4" id="social-comments">
+								<i class="spark_icon si-comments"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Comments</p>
+							</div>
+							<div class="col-xs-4 last" id="social-views">
+								<i class="spark_icon si-views"></i>
+
+								<p class="count">&nbsp;</p>
+
+								<p class="social-label">Views</p>
+							</div>
+						</div>
+
+					</div>
+					<div role="tabpanel" class="tab-pane" id="comments">
+						<div id="comments-wrapper">
+							<div class="spinner"></div>
+							<!-- Comments -->
+						</div>
+						<div id="comment-input-wrapper">
+							<img src="" class="artist-img large"/>
+							<input type="text" id="comment-input" placeholder="Type and hit Enter to comment..."
+							       class="form-control"/>
+							<a class="spark_icon si-arrow"></a>
+						</div>
+						<div class="not-logged-in" id="comment-login">
+							<a class="spark_btn small primary" onclick="login()">Log in to comment</a>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- /container -->
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to delete this comment?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small delete" type="button">DELETE COMMENT</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="../../../vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+-->
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../assets/scripts/init.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	var currentMember,//the connected user
+			currentAssetId, //the asset id we are referring to
+			comments; //comments of the asset
+
+
+	var imgBaseWidth = 200;//the width of an image in a gallery
+
+	function login() {
+		ADSKSpark.Client.openLoginWindow(false, true);
+	}
+
+	function formatTime(time) {
+		switch(typeof time) {
+			case 'number':
+				break;
+			case 'string':
+				time = +new Date(time);
+				break;
+			case 'object':
+				if (time.constructor === Date) time = time.getTime();
+				break;
+			default:
+				time = +new Date();
+		}
+		var time_formats = [
+			[60, 'seconds', 1], // 60
+			[120, '1 minute ago', '1 minute from now'], // 60*2
+			[3600, 'minutes', 60], // 60*60, 60
+			[7200, '1 hour ago', '1 hour from now'], // 60*60*2
+			[86400, 'hours', 3600], // 60*60*24, 60*60
+			[172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+			[604800, 'days', 86400], // 60*60*24*7, 60*60*24
+			[1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+			[2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+			[4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+			[29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+			[58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+			[2903040000, 'years', 29030400] // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+		];
+
+		//localize
+		var d = new Date()
+		var n = d.getTimezoneOffset();
+		time = time - n * 60 * 1000;
+
+		var seconds = (+new Date() - time) / 1000,
+				token = 'ago', list_choice = 1;
+
+		if (seconds == 0) {
+			return 'Just now'
+		}
+		if (seconds < 0) {
+			seconds = Math.abs(seconds);
+			token = 'from now';
+			list_choice = 2;
+		}
+		var i = 0, format;
+		while(format = time_formats[i++])
+			if (seconds < format[0]) {
+				if (typeof format[2] == 'string')
+					return format[list_choice];
+				else
+					return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+			}
+		return time;
+	}
+
+
+	function toggleLikeAsset() {
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+			ADSKSpark.Assets.updateLikeStatusForMember(currentAssetId).then(function (response) {
+				if (response.is_member_like) {
+					$('.like-btn').addClass('primary').find('.span-text').text('UNLIKE THIS');
+					$('.like-btn').find('.si-like').hide();
+					$('#social-likes .count').text(parseInt($('#social-likes .count').text()) + 1);
+				} else {
+					$('.like-btn').removeClass('primary').find('.span-text').text('LIKE THIS');
+					$('.like-btn').find('.si-like').show();
+					$('#social-likes .count').text(parseInt($('#social-likes .count').text()) - 1);
+				}
+			});
+		} else {
+			localStorage.setItem('userClickedLike', true);
+			ADSKSpark.Client.openLoginWindow(false, true);
+		}
+	}
+
+	/**
+	 * Deletes a comment
+	 */
+	function deleteComment(commentId, assetElem) {
+
+		$('#myModal').modal('show');
+
+		//cancel events
+		$('.cancel').off();
+		$('.cancel').on('click', function () {
+			$('#myModal').modal('hide');
+		})
+
+		//delete events
+		$('.delete').off();
+		$('.delete').on('click', function () {
+			ADSKSpark.Assets.deleteAssetComment(currentAssetId,commentId).then(function () {
+				$('#myModal').modal('hide');
+				assetElem.remove();
+
+				//make sure comments still left
+				if (!$('#comments-wrapper .comment-row').length) {
+					var noCommentsHtml = '<p id="no-comments">No comments here. Be the first one to add a comment</p>';
+					$('#comments-wrapper').html(noCommentsHtml);
+				}
+
+				//update comments count
+				$('#social-comments .count').text(parseInt($('#social-comments .count').text()) - 1);
+			});
+		});
+
+
+	}
+
+	/**
+	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
+	 */
+	function getAssetDataAndSetInDOM(loggedInUser) {
+
+		var assetsPromise = loggedInUser ? ADSKSpark.Assets.getAsset(currentAssetId) : ADSKSpark.Assets.getPublicAsset(currentAssetId);
+
+		//get the asset
+		assetsPromise.then(function (response) {
+			if (response) {
+				console.info('response from getPublicAsset:', response);
+				$('#asset-title').text(common.maxLength(response.asset_name, 20))
+				$('#asset-author .name').text(common.maxLength(response.artist.artist_name, 20));
+				$('#asset-author .artist-img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(response.artist.avatar));
+				$('#asset-submitted').text(common.formatDateHuman(response.date_submitted));
+				$('#social-likes .count').text(response.favorite_count);
+				$('#social-views .count').text(response.view_count);
+				$('#social-comments .count').text(response.comment_count);
+
+				if (response.is_member_favorite) {
+					$('.like-btn').addClass('primary').find('.span-text').text('UNLIKE THIS');
+					$('.like-btn').find('.si-like').hide();
+				}
+
+
+				if (response.thumbnails.length) {
+					var imgHtml = '',
+							controlsHtml = '';
+
+					for (var i in response.thumbnails) {
+						//images
+						imgHtml += '<img src="' + response.thumbnails[i].thumb_path_prefix + 'Medium2.png" ' +
+						'alt="' + response.thumbnails[i].caption + '"/>';
+
+						//controls
+						var active = !parseInt(i) ? 'active' : '';
+						controlsHtml += '<a class="img-control spark_icon si-control ' + active + '"></a>';
+					}
+
+					$('#img-placeholder').width(response.thumbnails.length * imgBaseWidth).html(imgHtml);
+					if (response.thumbnails.length > 1) {
+						$('#controls-placeholder').html(controlsHtml);
+					}
+				}
+			} else {
+				console.log('The requested asset is not available');
+			}
+		});
+	}
+
+
+	function getAssetComments() {
+		ADSKSpark.Assets.getPublicAssetComments(currentAssetId).then(function (response) {
+
+			comments = response.comments;
+			if (comments.length) {
+				for (var i in comments) {
+					var commentData = {
+						commentId: comments[i].comment_id,
+						authorId: comments[i].member_id,
+						authorName: comments[i].member_name,
+						authorImage: ADSKSpark.Helpers.changeHttpToHttps(comments[i].member_small_avatar),
+						commentText: comments[i].body,
+						commentTime: formatTime(comments[i].timestamp),
+						isLast: parseInt(i) === 0
+					}
+					$('#comments-wrapper').prepend(getCommentHtml(commentData));
+				}
+			}else{
+				var noCommentsHtml = '<p id="no-comments">No comments here. Be the first one to add a comment</p>';
+				$('#comments-wrapper').html(noCommentsHtml);
+			}
+
+			$('#comments-wrapper').find('.spinner').remove();
+		});
+	}
+	function getCommentHtml(commentData) {
+
+		var lastClass = commentData.isLast ? 'last' : '';
+
+		var htmlElem = '<div class="comment-row ' + lastClass + '">' +
+				'<div class="comment-img col-xs-1">' +
+				'<img class="artist-img" src="' + ADSKSpark.Helpers.changeHttpToHttps(commentData.authorImage) + '" alt="' + commentData.authorName + '" />' +
+				'</div>' +
+				'<div class="comment-body col-xs-8">' +
+				'<h4>' + commentData.authorName + '</h4>' +
+				'<p>' + commentData.commentText + '</p>' +
+				'</div>' +
+				'<div class="comment-time col-xs-3">' + commentData.commentTime + '</div>';
+
+		if (currentMember && commentData.authorId === currentMember.id){
+			htmlElem += '<div class="actions">' +
+			'<a class="glyphicon glyphicon-pencil"></a>' +
+			'<a class="glyphicon glyphicon-remove"></a>' +
+			'<input type="hidden" value="' + commentData.commentId + '">' +
+			'</div>';
+		}
+
+		htmlElem += '</div>';
+
+		return htmlElem;
+
+
+	}
+
+	function commentOnAssetAndSetInDom() {
+		var comment = $('#comment-input').val();
+		if (comment.length > 0) {
+			$('#comment-input-wrapper input').attr('disabled', 'disabled');
+			ADSKSpark.Assets.createAssetComment(currentAssetId, comment).then(function (response) {
+				if (response.comment_id) {
+
+					var commentData = {
+						commentId: response.comment_id,
+						authorId: currentMember.id,
+						authorName: currentMember.first_name + ' ' + currentMember.last_name,
+						authorImage: ADSKSpark.Helpers.changeHttpToHttps(currentMember.profile.avatar_path),
+						commentText: comment,
+						commentTime: 'just now'
+					}
+					$('#no-comments').remove();
+					$('#comments-wrapper').prepend(getCommentHtml(commentData));
+					$('#comment-input').val('');
+
+					//update comments count
+					$('#social-comments .count').text(parseInt($('#social-comments .count').text()) + 1);
+
+				}
+
+				$('#comment-input-wrapper input').removeAttr('disabled');
+			});
+		}
+	}
+
+	function updateAssetComment(commentId,commentElem){
+		var comment = commentElem.find('textarea').val();
+		if (comment.length > 0) {
+			$('#comment-input-wrapper input').attr('disabled', 'disabled');
+			commentElem.find('textarea').attr('disabled', 'disabled');
+			ADSKSpark.Assets.updateAssetComment(currentAssetId, commentId, comment).then(function (response) {
+				commentElem.find('.comment-body p').text(comment);
+				$('#comment-input-wrapper input').removeAttr('disabled');
+			});
+		}
+	}
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		if (ADSKSpark.Client.isAccessTokenValid()) {
+			$('#comment-input-wrapper').show();
+			ADSKSpark.Members.getMyProfile().then(function (response) {
+				currentMember = response.member;
+				$('#comment-input-wrapper').find('img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(currentMember.profile.avatar_path));
+			});
+		} else {
+			$('#comment-login').show();
+		}
+
+		//Assume we provided assetId in URL
+		var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+		currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+		if (!currentAssetId) {
+			location.href = '../show-public-assets/';
+		} else {
+			getAssetDataAndSetInDOM(ADSKSpark.Client.isAccessTokenValid());
+		}
+
+		//if user clicked previously on like and the asset is not liked yet, call like
+		if (localStorage.getItem('userClickedLike', true)) {
+			localStorage.removeItem('userClickedLike');
+			ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
+				if (!response.is_member_favorite) {
+					toggleLikeAsset();
+				}
+			});
+		}
+
+		//comments
+		$('a[aria-controls=comments]').one('click', function () {
+			getAssetComments();
+		});
+
+		$('#comment-input-wrapper a').on('click', function () {
+			commentOnAssetAndSetInDom();
+		});
+
+		$('#comment-input-wrapper input').keydown(function (e) {
+			if (e.keyCode == 13) {
+				commentOnAssetAndSetInDom();
+			}
+		});
+
+		$('#controls-placeholder').on('click', '.img-control:not(.active)', function () {
+			var _this = $(this);
+			var elemIndex = $("a.img-control").index($(this)[0]);
+			var pos = -1 * elemIndex * imgBaseWidth;
+			$('#img-placeholder').animate({left: pos},500, function(){
+				_this.siblings().removeClass('active');
+				_this.addClass('active');
+			});
+		});
+
+		$('#comments-wrapper').on('click','.glyphicon-remove', function(){
+			var commentId = $(this).siblings('input').val();
+			deleteComment(commentId, $(this).parents('.comment-row'));
+		});
+
+		var commentText;
+		$('#comments-wrapper').on('click','.glyphicon-pencil', function(){
+			var commentId = $(this).siblings('input').val();
+			commentText = $(this).parents('.comment-row').find('.comment-body p').text();
+			$(this).parents('.comment-row').find('.comment-body p')
+					.html('<textarea class="form-control" data-value="' + commentId + '">' + commentText + '</textarea>' +
+					'<a class="spark_icon si-arrow"></a>');
+			$(this).parents('.comment-row').find('textarea').focus();
+		});
+
+		$('#comments-wrapper').on('keydown', '.comment-row textarea', function (e) {
+			if (e.keyCode === 13) {
+				var commentId = $(this).data('value');
+				updateAssetComment(commentId, $(this).parents('.comment-row'));
+			}
+		});
+
+		$('#comments-wrapper').on('click', '.comment-row .si-arrow', function (e) {
+			var commentId = $(this).prev('textarea').data('value');
+			updateAssetComment(commentId, $(this).parents('.comment-row'));
+		});
+
+		$('#comments-wrapper').on('blur','.comment-row textarea',function (e) {
+			$(this).parents('.comment-row').find('.comment-body p').text(commentText);
+		});
+
+		//broadcast the state to the iframe
+		eventBroadCaster.broadcastEvent('showPublicAsset',currentAssetId);
+
+
+	});
+
+</script>
+
+</body>
+</html>

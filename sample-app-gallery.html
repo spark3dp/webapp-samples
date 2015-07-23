@@ -22,6 +22,7 @@
 
 	<script type="text/javascript" charset="utf-8" src="plugins/fullStory-integration.js"></script>
 
+
 </head>
 
 <body>
@@ -31,7 +32,7 @@
 		<div class="container sample-app-container" id="container">
 			<div class="sample-app-header clearfix">
 				<!-- Navigation links at the top right of the screen -->
-				<h5 class="sample-title">Spark Drive Sample App</h5>
+				<h5 class="sample-title">Spark Gallery Sample App</h5>
 			</div>
 			<div style="text-align: center;">
 				<ul class="nav nav-tabs sample-top-menu" role="tablist">
@@ -40,28 +41,24 @@
 							<img class="user-avatar" src="" style="display: none"/>
 						</div>
 						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
-
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
-					<li id="myAssetsId">
-						<a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
-
+					<li id="listAssetsId">
+						<a class="menu-item pull-left" data-state="listAssets" role="tab">List Assets</a>
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
-					<li id="createAssetId">
-						<a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
-
+					<li id="resultId">
+						<a class="menu-item pull-left" data-state="result" role="tab">Results</a>
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
-					<li id="manageFilesId">
-						<a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
-
+					<li id="singleAssetId">
+						<a class="menu-item pull-left" data-state="singleAsset" role="tab">Single Asset</a>
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					</li>
@@ -69,69 +66,13 @@
 			</div>
 
 			<div class="mainIframe-container">
-				<div id="breadcrumbs-section">
-					<div id="breadcrumbs">
-						<div class="bread-crumb" id="home">
-							<a onclick="changeState('myAssets')">
-								<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
-							</a>
-						</div>
-
-						<div class="bread-crumb hidden" id="asset">
-							<p class="bread-crumb-tail"></p>
-							<a onclick="showMyAssetFiles()">
-								<span class="bread-crumb-inner"></span>
-							</a>
-						</div>
-						<div class="bread-crumb hidden" id="file-type">
-							<p class="bread-crumb-tail"></p>
-							<a disabled>
-						<span class="bread-crumb-inner">
-							<i class="spark_icon si-asset-file-icon"></i>
-							<b></b>
-						</span>
-							</a>
-						</div>
-
-					</div>
-					<div id="action-button">
-						<div id="create-asset">
-							<a onclick="changeState('createAsset')" class="spark_btn primary">
-								<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
-							</a>
-						</div>
-						<div id="create-file" class="dropdown actions">
-							<a class="spark_btn primary" onclick="openUploadFileMenu(this)" id="dropdownMenu1"
-							   data-toggle="dropdown"
-							   aria-expanded="true">
-								<i class="spark_icon si-add-item" data-toggle="dropdown" aria-expanded="true"></i>Add
-								File
-							</a>
-							<i class="spark_icon si-dropdown-open"></i>
-
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-								<li role="presentation">
-									<a role="menuitem" onclick="goToUploadFilePage('source')">SOURCE FILE</a>
-									<i class="spark_icon si-help with_hover"></i>
-									<i class="stooltip"><span>Asset sources</span></i>
-								</li>
-								<li role="presentation">
-									<a role="menuitem" onclick="goToUploadFilePage('thumb')">THUMBNAIL FILE</a>
-									<i class="spark_icon si-help with_hover"></i>
-									<i class="stooltip"><span>Asset thumbnails</span></i>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
 				<iframe name="mainIframe"
 				        id="mainIframe"
 				        width="680px"
 				        height="523px"
 				        frameborder="0"
 				        scrolling="no"
-				        src="examples/drive/show-my-assets/index.html"></iframe>
+				        src="examples/drive/show-public-assets/options.html"></iframe>
 			</div>
 
 			<div class="footer"></div>
@@ -168,15 +109,26 @@
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" charset="utf-8"
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/bower_components/promise-polyfill/Promise.min.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
 
 <!-- spark sdk -->
-<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
 
 <!-- your config file and initialization -->
 <script type="text/javascript" charset="utf-8" src="assets/scripts/config.js?version=v0.1.0"></script>
 <script type="text/javascript" charset="utf-8" src="assets/scripts/init.js?version=v0.1.0"></script>
+
+<!-- OR use the minified version
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+-->
 
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
@@ -191,9 +143,7 @@
 <script>
 
 	var isLoggedIn = false, //Do we have access token
-			currentAssetId = 0, //the asset id we are referring to
-			currentFileId ////the file id we are referring to
-			;
+			currentAssetId = 0;
 
 	//functions
 
@@ -203,73 +153,6 @@
 	 */
 	function changeState(state) {
 		statePlugin.changeState(state);
-	}
-
-	/**
-	 * Show breadcrumb
-	 */
-	function showBreadcramb(breadcrumb) {
-		$('#breadcrumbs > div').removeClass('dark');
-		$('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
-
-	}
-
-	function hideBreadcrumbs(breadcrumbs) {
-		for (var i in breadcrumbs) {
-			$('#' + breadcrumbs[i]).addClass('hidden');
-		}
-	}
-
-	/**
-	 * Show asset breadcrumb
-	 */
-	function showAssetBreadcrumb(assetId) {
-		showBreadcramb('asset');
-		$('#asset').find('.bread-crumb-inner').text('Asset ID: ' + assetId);
-
-		//hide the create asset button
-		$('#create-asset').hide();
-
-		//show the create file button
-		$('#create-file').show();
-	}
-
-	function showAssetFilesBreadcrumb(fileType) {
-		showBreadcramb('file-type');
-		$('#file-type').find('.bread-crumb-inner > b').text(fileType);
-	}
-
-	/**
-	 * Load show my assets files page
-	 * Shows my assets file groups
-	 */
-	function showMyAssetFiles() {
-		$('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
-		hideBreadcrumbs(['file-type']);
-		showAssetBreadcrumb(currentAssetId)
-
-	}
-
-	function openUploadFileMenu(elem) {
-		$(elem).next('i').click();
-	}
-
-	function goToUploadFilePage(page) {
-		var uploadPage = page === 'source' ? 'upload-source-file' : 'upload-thumbnail-file';
-
-		uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
-
-		$('#mainIframe').attr('src', uploadPage);
-	}
-
-	/**
-	 * set manage asset as enabled
-	 */
-
-	function showManageFileStep() {
-		$('#createAssetId').addClass('verified disabled').removeClass('selected');
-		$('#manageFilesId').addClass('verified selected').removeClass('disabled');
-		$('#myAssetsId').removeClass('selected').addClass('verified');
 	}
 
 
@@ -284,7 +167,6 @@
 			isLoggedIn = true;
 			statePlugin.changeState('loggedIn');
 			$('#user').show();
-			hideBreadcrumbs(['home', 'asset', 'file-type']);
 			$('#loginId').addClass('verified');
 		} else {
 			$('#appModal').modal('show');
@@ -292,7 +174,6 @@
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			$('.user-avatar').hide();
-			$('#breadcrumbs-section').hide();
 		}
 
 		$(".sample-top-menu").on('click', '.menu-item', function (e) {
@@ -308,7 +189,6 @@
 	});
 
 	var loggedOutCallback = function () {
-		$('#breadcrumbs-section').hide();
 		$('#user').hide();
 		$('.menu-item[data-state=loggedIn]').data('state', 'login');
 		$('.sample-top-menu > li').removeClass('verified');
@@ -322,64 +202,59 @@
 			src: 'plugins/login/login.html',
 			selectedTab: "#loginId",
 			enabledTabs: [],
-			disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
+			disabledTabs: ['#loginId', '#listAssetsId', '#resultId','#singleAssetId'],
 			callbackFunc: loggedOutCallback
 		},
 
 		loggedIn: {
 			src: 'plugins/login/login.html',
 			selectedTab: "#loginId",
-			enabledTabs: ['#loginId', '#myAssetsId'],
-			disabledTabs: ['#createAssetId', '#manageFilesId'],
+			enabledTabs: ['#loginId', '#listAssetsId'],
+			disabledTabs: ['#resultId','#singleAssetId'],
 			callbackFunc: function () {
-				$('#breadcrumbs-section').hide();
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
 				$('#requestLog').show();
 				$('#mainIframe').attr('height', '523px');
 			}
 		},
-		myAssets: {
-			src: 'examples/drive/show-my-assets/index.html',
-			selectedTab: "#myAssetsId",
-			enabledTabs: ['#myAssetsId', '#loginId'],
-			disabledTabs: ['#manageFilesId', '#createAssetId'],
+		listAssets: {
+			src: 'examples/drive/show-public-assets/options.html',
+			selectedTab: "#listAssetsId",
+			enabledTabs: ['#loginId', '#listAssetsId'],
+			disabledTabs: ['#resultId','#singleAssetId'],
 			callbackFunc: function () {
-				$('#breadcrumbs-section').css('display', 'inline-block');
-				$('#breadcrumbs-section div#action-button div').hide();
-				showBreadcramb('home');
 				$('#mainIframe').attr('height', '462px');
 				$('#loginId').addClass('verified');
 			}
 		},
 
-		createAsset: {
-			src: 'examples/drive/create-asset/index.html',
-			selectedTab: "#createAssetId",
-			enabledTabs: ['#loginId', '#myAssetsId', '#createAssetId'],
-			disabledTabs: ['#manageFilesId'],
+		result: {
+			src: 'examples/drive/show-public-assets/index.html',
+			selectedTab: "#resultId",
+			enabledTabs: ['#loginId', '#listAssetsId', '#resultId'],
+			disabledTabs: ['#singleAssetId'],
 			callbackFunc: function () {
-				$('#breadcrumbs-section div#action-button div').hide();
 				$('#loginId').addClass('verified');
-				$('#myAssetsId').addClass('verified');
+				$('#listAssetsId').addClass('verified');
+				$('#mainIframe').attr('height', '462px');
+
+			}
+		},
+		singleAsset: {
+			src: 'examples/drive/show-assets/index.html',
+			selectedTab: "#singleAssetId",
+			enabledTabs: ['#loginId', '#listAssetsId', '#resultId','#singleAssetId'],
+			disabledTabs: [],
+			callbackFunc: function () {
+				$('#loginId').addClass('verified');
+				$('#listAssetsId').addClass('verified');
+				$('#resultId').addClass('verified');
 				$('#mainIframe').attr('height', '462px');
 
 			}
 		},
 
-		manageFiles: {
-			src: 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId,
-			selectedTab: "#manageFilesId",
-			enabledTabs: ['#loginId', '#myAssetsId', '#manageFilesId'],
-			disabledTabs: ['#createAssetId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section div#action-button div').hide();
-				$('#loginId').addClass('verified');
-				$('#myAssetsId').addClass('verified');
-				$('#createAssetId').addClass('verified');
-				$('#mainIframe').attr('height', '462px');
-			}
-		}
 	};
 
 
@@ -390,7 +265,7 @@
 
 		redirectUserToDefaultPage: function (optionalParams) {
 			if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
-				changeState('myAssets');
+				changeState('listAssets');
 				isLoggedIn = true;
 			} else {
 				$('#mainIframe').attr('height', '523px');
@@ -403,7 +278,7 @@
 			}
 
 			$('#requestLog').show();
-			$('#loginId').addClass('verified');
+			//$('#loginId').addClass('verified');
 
 		},
 		redirectUserToLoginPage: function () {
@@ -414,51 +289,22 @@
 		showLoginPageOnly: function () {
 			loggedOutCallback();
 		},
-		myAssetsEvent: function () {
-			$('#breadcrumbs-section div#action-button #create-file').hide();
-			$('#breadcrumbs-section div#action-button #create-asset').show();
-			showBreadcramb('home');
-			hideBreadcrumbs(['asset', 'file-type']);
+		setAssetsOptions: function(){
+			$('#mainIframe').attr('height', '560px');
+		},
+		showPublicAssets: function (conditions) {
+			states.result.src = 'examples/drive/show-public-assets/index.html?' + common.jsonToParams(conditions);
+			$('#mainIframe').attr('height', '535px');
+			$('#listAssetsId').removeClass('selected').addClass('verified');
+			$('#resultId').removeClass('disabled').addClass('selected');
+		},
+		showPublicAsset: function(assetId){
+			states.singleAsset.src = 'examples/drive/show-asset/index.html?assetId=' + assetId;
+			console.log(states);
 			$('#mainIframe').attr('height', '462px');
-		},
+			$('#resultId').removeClass('selected').addClass('verified');
+			$('#singleAssetId').removeClass('disabled').addClass('selected').addClass('verified');
 
-		showSpecificAssetEvent: function (optionalParams) {
-			currentAssetId = optionalParams.assetId;
-
-			if (!currentAssetId) {
-				changeState('myAssets');
-			} else {
-				showBreadcramb('home');
-				showAssetBreadcrumb(currentAssetId);
-				hideBreadcrumbs(['file-type']);
-				showManageFileStep();
-				$('#mainIframe').attr('height', '462px');
-				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
-			}
-
-		},
-		createAssetEvent: function () {
-			$('#breadcrumbs-section div#action-button #create-asset').hide();
-			showBreadcramb('home');
-			$('#mainIframe').attr('height', '462px');
-		},
-		showAssetFilesEvent: function (optionalParams) {
-			currentAssetId = optionalParams.assetId;
-
-			if (!currentAssetId) {
-				changeState('myAssets');
-			} else {
-				$('#breadcrumbs-section div#action-button #create-file').hide();
-				showBreadcramb('home');
-				$('#mainIframe').attr('height', '462px');
-				showAssetBreadcrumb(currentAssetId);
-				showAssetFilesBreadcrumb(optionalParams.fileType);
-				showManageFileStep();
-				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
-			}
-		},
-		shrinkIframe: function () {
-			$('#mainIframe').attr('height', '462px');
 		}
 	};
 
@@ -471,13 +317,10 @@
 	broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
 	broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
 	broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
-	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
-	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
-	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
-	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
-	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
-	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
-	broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
+	broadcastMapper['showPublicAssets.setAssetsOptions'] = broadCastsCallbacks.setAssetsOptions;
+	broadcastMapper['showPublicAssets.index'] = broadCastsCallbacks.showPublicAssets;
+	broadcastMapper['showPublicAsset'] = broadCastsCallbacks.showPublicAsset;
+
 
 
 	//Entertain the masses

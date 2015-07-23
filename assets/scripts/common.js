@@ -77,7 +77,37 @@ var common = function ($) {
 			} else {
 				return input.substring(0, desiredLength) + (!hidePoints ? '...' : '');
 			}
+		},
+
+		/**
+		 * Return date in the format mm-dd-yyyy
+		 * @param {Date} myDate - The Date object
+		 * @returns {string} - Formatted date
+		 */
+		formatDate: function(myDate){
+			var yyyy = myDate.getFullYear().toString();
+			var mm = (myDate.getMonth()+1).toString(); // getMonth() is zero-based
+			var dd  = myDate.getDate().toString();
+			return (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + '-' + yyyy;
+		},
+		formatDateHuman: function(myDateString){
+			var myDate = new Date(myDateString);
+			var formatter = new Intl.DateTimeFormat("en", { month: "short" }),
+				day = myDate.getDate().toString(),
+				month = formatter.format(myDate),
+			 	yyyy = myDate.getFullYear().toString();
+
+			return month + ' ' + day + ', ' + yyyy;
+		},
+		jsonToParams: function (jsonObj) {
+			var str = '';
+			for (var key in jsonObj) {
+				str += key + '=' + jsonObj[key] + '&';
+			}
+
+			return str;
 		}
+
 	}
 
 	return commonObj;
