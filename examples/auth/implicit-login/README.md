@@ -11,7 +11,7 @@ This sample code demonstrates Spark's _Implicit Login_: App and user authenticat
 * Include the SDK library in your HTML page, just before closing the body section (`</body>`).
 
 ```HTML
-<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
 ```
 
 
@@ -100,7 +100,7 @@ If no redirectUri is entered, the access token is retured to the page that loade
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <!-- include the SPARK JS SDK -->
-<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk-0.1.0.min.js"></script>
+<script type="text/javascript" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
 <script>
 
 	// Initialize Spark client
