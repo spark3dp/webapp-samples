@@ -347,6 +347,7 @@
 
 		if (urlParams.q) {
 			conditions.q = urlParams.q;
+			conditions.wildcard_search = true;
 		}
 		if (urlParams.limit) {
 			conditions.limit = parseInt(urlParams.limit);
@@ -379,6 +380,7 @@
 		if (urlParams.thumbnail_size) {
 			imageSize = urlParams.thumbnail_size;
 		}
+
 
 		//Get my assets and append to table in DOM
 		loadAssets().then(function (response) {
