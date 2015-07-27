@@ -84,7 +84,7 @@
 			name:"PepperHolesWithInconsistentlyOriented",
 			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
 			size:"0.2MB",
-			fileId:17729449,
+			fileId:"http://static.spark.autodesk.com/Public/Beta/17742740.stl",
 			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
 		},
 		{
@@ -112,13 +112,23 @@
 
 			var tr = $('<tr class="in-table"></tr>');
 			tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>'+'<img src="' +item.pic+ '"></img><br/>' + item.name + '</td>'));
-			tr.append($('<td>' + item.description + '</td>'));
+
+
+			var problemsArr = item.description.split(",");
+			var descriptionElem = "";
+			$.each(problemsArr, function (index, item) {
+				descriptionElem += "<span>" + item + "</span><br/>";
+			});
+
+			tr.append($('<td>' + descriptionElem + '</td>'));
+
+
 			tr.append($('<td>' + item.size + '</td>'));
 
 
 			$(tr).on('click', function(e){
 
-				window.location.href = "../upload.html?fileId=" + item.fileId + "&isQuick="+isQuick;
+				window.location.href = "../upload.html?fileUrl=" + item.fileId + "&isQuick="+isQuick;
 			});
 
 			$('#assetsTbody').append(tr);
