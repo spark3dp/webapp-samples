@@ -66,6 +66,9 @@
 			overflow-y: scroll;
 			height: 435px;
 		}
+		.container{
+			margin-top: 20px;
+		}
 
 	</style>
 
@@ -77,12 +80,14 @@
 	<div class="spinner"></div>
 
 	<div class="hidden" id="assets">
+		<!--
 		<div class="modal-header">
 			<div class="layouts">
 				<a href="gallery-view.html"><i class="spark_icon si-mosaic-layout"></i></a>
 				<i class="spark_icon si-list-layout-active"></i>
 			</div>
-		</div>
+		</div>-->
+
 		<div class="assets-container" id="assets-container">
 			<table class="table">
 				<thead>
@@ -91,7 +96,6 @@
 					<th>Submitted<br/><span>date_submitted</span></th>
 					<th>Modified<br/><span>date_modified</span></th>
 					<th>Status<br/><span>status</span></th>
-					<th></th>
 				</tr>
 				</thead>
 				<tbody id="assetsTbody">
@@ -214,6 +218,8 @@
 			if (response.count) {
 				$('#assets').removeClass('hidden');
 
+				var isQuick = ADSKSpark.Helpers.extractParamsFromURL()['isQuick'];
+
 				$.each(response.assets, function (index, item) {
 					var tr = $('<tr class="in-table"></tr>')
 					var nameTd = $('<td><i class="spark_icon si-asset-icon"></i>' + item.asset_name + '</td>');
@@ -222,6 +228,7 @@
 					tr.append($('<td>' + item.date_modified + '</td>'));
 					tr.append($('<td>' + (item.is_gallery_asset ? 'Published' : 'Private') + '</td>'));
 
+					/**
 					var actionsElem = '<div class="dropdown actions">' +
 							'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
 							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
@@ -230,12 +237,12 @@
 							'</ul></div>';
 
 
-					tr.append($('<td>' + actionsElem + '</td>'));
+					tr.append($('<td>' + actionsElem + '</td>'));*/
 					$('#assetsTbody').append(tr);
 
 					//click on tr row takes us to the files html (except the last actions td)
 					tr.find('td:not(:last)').on('click', function () {
-						location.href = '../show-asset-sources/?assetId=' + item.asset_id;
+						location.href = '../show-asset-sources/?assetId=' + item.asset_id + "&isQuick="+isQuick;
 					});
 
 				});

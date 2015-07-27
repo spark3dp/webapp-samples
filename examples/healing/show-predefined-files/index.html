@@ -84,52 +84,49 @@
 			name:"PepperHolesWithInconsistentlyOriented",
 			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
 			size:"0.2MB",
-			fileId:17729449
+			fileId:17729449,
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
 		},
 		{
 			name:"001_a5multiple",
 			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
 			size:"0.5MB",
-			fileId:17729499
+			fileId:17729499,
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
 		},
 		{
 			name:"elephantLittle_elephant",
 			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
 			size:"0.3MB",
-			fileId:17734456
+			fileId:17734456,
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
 		}
 	];
 	/**
 	 * Fetch the asset and it's metadata and set data in the DOM
 	 */
 	function setupAssetFiles(){
-		$('.spinner').hide();
-		$('#assets-files').removeClass('hidden');
+		var isQuick = ADSKSpark.Helpers.extractParamsFromURL()['isQuick'];
+
 		$.each(predefinedAssets, function (index, item) {
 
 			var tr = $('<tr class="in-table"></tr>');
-			tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.name + '</td>'));
+			tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>'+'<img src="' +item.pic+ '"></img><br/>' + item.name + '</td>'));
 			tr.append($('<td>' + item.description + '</td>'));
 			tr.append($('<td>' + item.size + '</td>'));
 
-			/**
-			var actionsElem = '<div class="dropdown actions">' +
-					'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-					'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-					'<li role="presentation"><a role="menuitem" onclick="deleteSourceFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'tr\'))"">DELETE</a></li>' +
-					'</ul></div>';
-
-
-			tr.append($('<td>' + actionsElem + '</td>'));
-			 */
 
 			$(tr).on('click', function(e){
 
-				window.location.href = "../upload.html?fileId=" + item.fileId;
+				window.location.href = "../upload.html?fileId=" + item.fileId + "&isQuick="+isQuick;
 			});
 
 			$('#assetsTbody').append(tr);
 		});
+		$('.spinner').hide();
+
+		$('#assets-files').removeClass('hidden');
+
 
 		/**
 		ADSKSpark.Assets.getAsset(currentAssetId).then(function(asset){

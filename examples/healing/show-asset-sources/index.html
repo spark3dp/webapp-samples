@@ -78,7 +78,6 @@
 				<tr>
 					<th>Name<br/><span>file_name</span></th>
 					<th>ID<br/><span>file_id</span></th>
-					<th></th>
 				</tr>
 				</thead>
 				<tbody id="filesTbody">
@@ -168,71 +167,44 @@
 			$('#assetsTbody').empty();
 			var sources = response.sources;
 
-			if (sources.length && sources[0].file_name !== 'nopicture.gif') {
+			var tr = $('<tr class="in-table"></tr>');
+			tr.append($('<td>...</td><td></td>'));
+
+			var isQuick = ADSKSpark.Helpers.extractParamsFromURL()['isQuick'];
+
+
+			$(tr).on('click', function(e){
+
+				window.location.href = "../show-my-assets/index.html"+ "?isQuick="+isQuick;
+			});
+
+			$('#filesTbody').append(tr);
+
+
+
 				$('#files').removeClass('hidden');
 				$.each(sources, function (index, item) {
-
-					var tr = $('<tr class="in-table"></tr>');
-					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
-					tr.append($('<td>' + item.file_id + '</td>'));
-
-					var actionsElem = '<div class="dropdown actions">' +
-							'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-							'<li role="presentation"><a role="menuitem" onclick="deleteSourceFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'tr\'))"">DELETE</a></li>' +
-							'</ul></div>';
+					if(item.file_name !== 'nopicture.gif') {
+						var tr = $('<tr class="in-table"></tr>');
+						tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
+						tr.append($('<td>' + item.file_id + '</td>'));
 
 
-					tr.append($('<td>' + actionsElem + '</td>'));
+						$(tr).on('click', function (e) {
 
-					$(tr).on('click', function(e){
+							window.location.href = "../upload.html?fileId=" + item.file_id + "&isQuick="+isQuick;
+						});
 
-						window.location.href = "../upload.html?fileId=" + item.file_id;
-					});
-
-					$('#filesTbody').append(tr);
+						$('#filesTbody').append(tr);
+					}
 				});
-			} else {
-				$('#empty-files').removeClass('hidden');
-				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
 
-				//broadcast the state to the iframe - intended only for the storage UI
-				eventBroadCaster.broadcastEvent('emptyAssets');	
-			}
 		});
 
 	}
 
 
-	/**
-	 * Deletes a thumbnail in an asset
-	 */
-	function deleteSourceFromAsset(assetId, fileId, assetElem) {
 
-		$('#myModal').modal('show');
-
-		//cancel events
-		$('.cancel').off();
-		$('.cancel').on('click', function () {
-			$('#myModal').modal('hide');
-		})
-
-		//delete events
-		$('.delete').off();
-		$('.delete').on('click', function () {
-			ADSKSpark.Assets.deleteAssetSources(assetId, fileId).then(function () {
-				$('#myModal').modal('hide');
-				assetElem.remove();
-
-				//make sure aseets still left
-				if (!$('.in-table td').length) {
-					location.reload();
-				}
-			});
-		});
-
-
-	}
 
 	/**
 	 * Run when DOM is ready.
