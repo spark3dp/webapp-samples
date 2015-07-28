@@ -447,7 +447,7 @@ jQuery(function ($) {
 
 	var exportAndDownload = function(newMeshId){
 
-		ADSKSpark.MeshAPI.exportMesh(newMeshId,"obj").then(function (payloadExport) {
+		ADSKSpark.MeshAPI.exportMesh(newMeshId,"stl_ascii").then(function (payloadExport) {
 			console.log(payloadExport);
 			var fileId = payloadExport.file_id;
 			$("#downloadMesh span").text("Download");
