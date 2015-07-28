@@ -219,6 +219,8 @@
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
@@ -262,7 +264,7 @@
 			$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
 			$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 			$('#file-upload-text').hide();
-			upload();
+			upload(fileData);
 		}else{
 			$('#file-upload-error').show();
 			setTimeout(function(){
@@ -286,22 +288,13 @@
 		);
 	};
 
-	function upload() {
+	function upload(fileData,fileUrl) {
 		//nice UI
 		$('.spinner-with-text').show();
 		$('.spinner').show();
 		$("#spinner-text").text("Loading...");
 
 		$('#uploadFile').hide();
-		//$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
-
-		//e.preventDefault();
-
-		//var sourceFile = {
-		//	file: fileData
-		//};
-
-
 
 
 		var uploadCallback = function(result){
@@ -312,7 +305,22 @@
 			importMesh(upload.file_id, upload.name,isQuick);
 		};
 
-		ADSKSpark.MeshAPI.uploadFile(fileData).then(function(result) {
+		var uploadPromise;
+
+		if(fileData){
+			uploadPromise = ADSKSpark.MeshAPI.uploadFile(fileData);
+		}
+		else{
+			var body = {
+				fileUrl:fileUrl,
+				fileName:"model.stl"
+			};
+
+			uploadPromise = ADSKSpark.Files.uploadFile(body);
+		}
+
+		debugger;
+		uploadPromise.then(function(result) {
 
 			uploadCallback(result)
 
@@ -401,6 +409,8 @@
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
 			var fileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+			var fileUrl = urlParams['fileUrl'] ? urlParams['fileUrl'] : 0;
+
 			var isQuick = (urlParams['isQuick'] == "true");
 
 			if(fileId!=0){
@@ -411,14 +421,25 @@
 
 				$("#spinner-text").text("Importing...");
 
+				debugger;
 				importMesh(fileId,"",isQuick);
+			}
+			else if(fileUrl!=0){
+				$('.spinner-with-text').show();
+				$('.spinner').show();
+
+				$('#uploadFile').hide();
+
+				$("#spinner-text").text("Uploading...");
+
+				upload(undefined,fileUrl)
 			}
 			else{
 				$('#uploadFile').show();
 
 			}
 				setFileUploadUI();
-				//setUpUploadFileFlow();
+
 				common.setUIFunctionality();
 
 		}
