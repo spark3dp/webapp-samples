@@ -12,14 +12,13 @@ These applications demonstrate Spark's cloud based 3D model storage, mesh prepar
 
 ### Quick Start
 Copy the file "assets/scripts/config.example.js" to "assets/scripts/config.js" and supply these details:
-  # **APP_KEY** - paste the app key from step 4 in the previous section
-  # **REDIRECT_URI** - The redirect uri the Spark Auth flow will redirect your users after they will complete the login process.
-  This repository is provided with a login callback html file that makes this task easy.
-  The file is located in "plugins/login/login-callback.html" and you should set your REDIRECT_URI to http://example.com/your-app/plugins/login/login-callback.html
-  (assumed the home page of your app is http://example.com/your-app)
+
+* **APP_KEY** - paste the app key from step 4 in the previous section
+* **REDIRECT_URI** - The redirect uri the Spark Auth flow will redirect your users after they will complete the login process. This repository is provided with a login callback html file that makes this task easy. The file is located in "plugins/login/login-callback.html" and you should set your REDIRECT_URI to http://example.com/your-app/plugins/login/login-callback.html (assumed the home page of your app is http://example.com/your-app)
 
 ### The contents of this repository
 This repository demonstrates sample usages of Spark APIs through these samples:
+
 1. 3D Models Healing Utility For Printing (healing-utility.html) - Assists in improving 3D printing success rates and minimize printing time with our extensive range of API print-preparation tools. Heal, fix and optimize your model for different materials, textures and file output types.
 2. 3D Models Printing Sample Application (sample-app-print.html) - Shows how to integrate an app with local and network 3D printers, desktop FDM printers and professional grade additive manufacturing systems.
 3. 3D Models Cloud Storage Application (sample-app-storage.html) - Uses Spark's cloud services to easily store 3D models and to create collaborative shared 3D creations.
