@@ -30,17 +30,30 @@
 		}
 
 		#dropzone {
+			/**
 			display: none;
 			height: 200px;
+			width:200px;
 			text-align: center;
 			border: 2px dashed #e5e5e5;
 			border-radius: 4px;
+			*/
 		}
 
 		#dropzone h4{
 			font-size: 16px;
 		}
 
+		.file-section{
+			display: inline-table;
+			height: 200px;
+			width:200px;
+			text-align: center;
+			border: 2px #e5e5e5;
+			border-style: solid;
+			border-radius: 4px;
+
+		}
 		#file-upload-result,#file-upload-error{
 			display: none;
 			height: 50px;
@@ -55,7 +68,7 @@
 			opacity: 0.3;
 		}
 
-		#upload-icon {
+		.file-icon {
 			margin-top: 26px;
 			margin-bottom: 5px;
 		}
@@ -101,12 +114,22 @@
 			display: none;
 		}
 
+		.file-section h4{
+			color:#333333;
+			font-size:16px;
+			font-weight: 600;
+		}
+		.form-footer{
+			margin-top: 150px;
+		}
+
 	</style>
 
 </head>
 
 <body>
 <div class="container">
+	<form id="file-form" novalidate="">
 
 	<div class="spinner-with-text">
 		<div id="spinner-text"></div>
@@ -118,12 +141,12 @@
 		<span>We apologise but there seems to be temporary problem with the service.</span>
 	</div>
 
-	<div id="uploadFile">
+	<div id="uploadFile" style="display: none;">
 		<div class="modal-header healing-header">
 			Upload your 3D model and this tool will find and heal flaws that affect 3D printing.<br/>
 			Supports OBJ and STL 3D objects.
 		</div>
-		<div class="modal-body" id="upload-wrapper">
+		<div class="" id="upload-wrapper">
 			<div id="file-upload-error">
 				<div class="notification-bar">
 					<i class="spark_icon"></i> File size exceeds the allowed value
@@ -140,18 +163,34 @@
 				</p>
 			</div>
 
-			<div id="dropzone" class="post-upload">
-				<div id="upload-icon" class="spark_icon si-upload-icon"></div>
-				<h4 id="file-name" class="post-upload">Upload OBJ/STL File</h4>
+			<div class="col-md-12">
+					<div id="dropzone" class="post-upload file-section col-md-4">
+						<div class="spark_icon si-upload-icon file-icon"></div>
+						<h4 id="file-name" class="post-upload">Upload OBJ/STL File</h4>
 
-				<div id="file-upload-text">
-					<span>Drop a file</span> or <a id="browse-file">Browse</a>
-					<p>Maximum file size of <b></b></p>
-				</div>
+						<div id="file-upload-text">
+							<span>Drop a file</span> or <span id="browse-file">browse</span>
+							<p>Maximum file size of <b></b></p>
+						</div>
+					</div>
+
+
+
+					<a onclick="window.location.href='show-my-assets/index.html?isQuick=' + $('#isQuick').is(':checked')" class="file-section col-md-4">
+						<div class="spark_icon si-drive-files file-icon"></div> <br/>
+						<h4>Import From Drive</h4> <br/>
+
+					</a>
+
+
+					<a onclick="window.location.href='show-predefined-files/index.html?isQuick=' + $('#isQuick').is(':checked')" class="file-section col-md-4">
+						<div  class="spark_icon si-premede-files file-icon"></div> <br/>
+						<h4>Premade Broken Files</h4>
+
+					</a>
+
 			</div>
 
-
-			<form id="file-form" novalidate="">
 				<section class="form_field post-upload" id="file-input-section">
 					<input type="file" id="file-input" accept=".stl,.obj" placeholder="file data" class="field hidden-upload" style="display: none" required>
 				</section>
@@ -166,9 +205,9 @@
 
 
 
-			</form>
 		</div>
 	</div>
+	</form>
 
 </div>
 <!-- /container -->
@@ -180,6 +219,8 @@
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
 
 <!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
@@ -223,7 +264,7 @@
 			$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
 			$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 			$('#file-upload-text').hide();
-			upload();
+			upload(fileData);
 		}else{
 			$('#file-upload-error').show();
 			setTimeout(function(){
@@ -232,39 +273,56 @@
 		}
 	}
 
-	function upload() {
+
+	function importMesh(fileId, name,isQuick){
+		ADSKSpark.MeshAPI.importMesh(fileId, name, true, null, undefined).then(
+
+				function(mesh) {
+					var meshId = mesh.id;
+					window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
+
+				},function(error){
+					console.log(error);
+					$("#messageError").show();
+				}
+		);
+	};
+
+	function upload(fileData,fileUrl) {
 		//nice UI
 		$('.spinner-with-text').show();
 		$('.spinner').show();
 		$("#spinner-text").text("Loading...");
 
 		$('#uploadFile').hide();
-		//$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
-
-		//e.preventDefault();
-
-		//var sourceFile = {
-		//	file: fileData
-		//};
 
 
-		ADSKSpark.MeshAPI.uploadFile(fileData).then(function(result) {
+		var uploadCallback = function(result){
 			var upload = result.files[0];
 			var isQuick = $("#isQuick").is(':checked');
-
 			$("#spinner-text").text("Importing...");
 
+			importMesh(upload.file_id, upload.name,isQuick);
+		};
 
-			ADSKSpark.MeshAPI.importMesh(upload.file_id, upload.name, true, null, undefined).then(
+		var uploadPromise;
 
-					function(mesh) {
-						var meshId = mesh.id;
-						window.location.href="repair.html?meshId=" + meshId + "&isQuick="+isQuick;
+		if(fileData){
+			uploadPromise = ADSKSpark.MeshAPI.uploadFile(fileData);
+		}
+		else{
+			var body = {
+				fileUrl:fileUrl,
+				fileName:"model.stl"
+			};
 
-					},function(error){
-						console.log(error);
-						$("#messageError").show();
-					});
+			uploadPromise = ADSKSpark.Files.uploadFile(body);
+		}
+
+		debugger;
+		uploadPromise.then(function(result) {
+
+			uploadCallback(result)
 
 		},function(error){
 			console.log(error);
@@ -350,12 +408,39 @@
 		} else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+			var fileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+			var fileUrl = urlParams['fileUrl'] ? urlParams['fileUrl'] : 0;
 
+			var isQuick = (urlParams['isQuick'] == "true");
 
+			if(fileId!=0){
+				$('.spinner-with-text').show();
+				$('.spinner').show();
+
+				$('#uploadFile').hide();
+
+				$("#spinner-text").text("Importing...");
+
+				debugger;
+				importMesh(fileId,"",isQuick);
+			}
+			else if(fileUrl!=0){
+				$('.spinner-with-text').show();
+				$('.spinner').show();
+
+				$('#uploadFile').hide();
+
+				$("#spinner-text").text("Uploading...");
+
+				upload(undefined,fileUrl)
+			}
+			else{
+				$('#uploadFile').show();
+
+			}
 				setFileUploadUI();
-				//setUpUploadFileFlow();
-				common.setUIFunctionality();
 
+				common.setUIFunctionality();
 
 		}
 

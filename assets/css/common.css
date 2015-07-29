@@ -593,8 +593,20 @@ i.stooltip span {
 
 .si-upload-icon{
     background-position: -16px -82px;
-    height: 42px;
+    height: 44px;
     width:48px;
+}
+
+.si-premede-files{
+    background-position: -256px -299px;
+    height: 44px;
+    width: 33px;
+}
+
+.si-drive-files{
+    background-position: -11px -360px;
+    height: 44px;
+    width: 47px;
 }
 
 .si-status-ok{
