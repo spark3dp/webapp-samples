@@ -26,7 +26,7 @@ jQuery(function ($) {
 		else {
 			$("body").append(div);
 		}
-		$('#auth-iframe-wrapper iframe').attr('src', ADSKSpark.Client.getLoginRedirectUrl(true,true));
+		$('#auth-iframe-wrapper iframe').attr('src', ADSKSpark.Client.getLoginRedirectUrl(true,false));
 		$('.logged-in-container').hide();
 	}
 });
