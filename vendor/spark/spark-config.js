@@ -1,5 +1,7 @@
 var spark = {};
 
+var IS_PROD = IS_PROD || false;
+
 //Various Spark constants
 spark.const = function () {
 	'use strict';
@@ -9,7 +11,7 @@ spark.const = function () {
 		apiHostProduction = 'api.spark.autodesk.com/api/v1';
 
 	return {
-		API_SERVER: ENVIRONMENT === 'production' ? apiHostProduction : apiHostSandbox,
+		API_SERVER: IS_PROD ? apiHostProduction : apiHostSandbox,
 		API_PROTOCOL: 'https', //The protocol of the server
 		EXPORT_TASK_TYPE: 'export',
 		ERROR_TASK_STATUS: 'error',
