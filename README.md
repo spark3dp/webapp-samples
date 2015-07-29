@@ -7,12 +7,12 @@ These applications demonstrate Spark's cloud based 3D model storage, mesh prepar
 1. Clone the software repository (copy its files) to a folder on your web server. 
 2. If you have not already done so, define an app on the Spark Developers portal at https://spark.autodesk.com/developers/myApps.
 3. In the API Keys tab of the app registration, enter the fully qualified URL of the sample's home page (do not use a relative path).
-4. Copy the application key for later use.
+4. Copy the app key for later use.
 5. Setup your app with your app key - see info in the "Quick Start" section.
 
 ### Quick Start
 Copy the file "assets/scripts/config.example.js" to "assets/scripts/config.js" and supply these details:
-  # **APP_KEY** - paste the application key from step 4 in the previous section
+  # **APP_KEY** - paste the app key from step 4 in the previous section
   # **REDIRECT_URI** - The redirect uri the Spark Auth flow will redirect your users after they will complete the login process.
   This repository is provided with a login callback html file that makes this task easy.
   The file is located in "plugins/login/login-callback.html" and you should set your REDIRECT_URI to http://example.com/your-app/plugins/login/login-callback.html
