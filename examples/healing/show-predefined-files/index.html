@@ -14,7 +14,85 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
+	.in-table img{
+		height:120px;
+		width: 120px;
+	}
+	.table td {
+		/**padding: 10px!important;*/
+		text-align: left;
+	}
 
+	#assetsTbody {
+		font: 10pt normal Arial, sans-serif;
+		height: auto;
+		margin: 80px auto 0 auto;
+		text-align: center;
+		width: 660px;
+	}
+
+	.premade-box {
+		cursor: pointer;
+		height: 120px;
+		float: left;
+
+		position: relative;
+		overflow: hidden;
+		width: 120px;
+		-webkit-box-shadow: 1px 1px 1px 1px #ccc;
+		-moz-box-shadow: 1px 1px 1px 1px #ccc;
+/**
+		border: 5px solid #fff;
+		margin: 5px;
+		box-shadow: 1px 1px 1px 1px #ccc;
+*/
+	}
+
+	 .premade-box img {
+		position: absolute;
+		left: 0;
+		-webkit-transition: all 300ms ease-out;
+		-moz-transition: all 300ms ease-out;
+		-o-transition: all 300ms ease-out;
+		-ms-transition: all 300ms ease-out;
+		transition: all 300ms ease-out;
+	}
+
+	.simple-caption {
+		background-color: rgba(255, 255, 255, 0.8);
+		position: absolute;
+		color: #333;
+		z-index: 100;
+		-webkit-transition: all 300ms ease-out;
+		-moz-transition: all 300ms ease-out;
+		-o-transition: all 300ms ease-out;
+		-ms-transition: all 300ms ease-out;
+		transition: all 300ms ease-out;
+		left: 0;
+
+
+		height: 50px;
+		width: 120px;
+		display: block;
+		bottom: -30px;
+		/**line-height: 25pt;*/
+		text-align: center;
+		font-size: 14px;
+
+
+	}
+
+	/**
+	.box:hover .simple-caption {
+		-moz-transform: translateY(-100%);
+		-o-transform: translateY(-100%);
+		-webkit-transform: translateY(-100%);
+		transform: translateY(-100%);
+	}*/
+
+	td div.description{
+		margin-top:20px;
+	}
 	</style>
 
 </head>
@@ -81,25 +159,25 @@
 
 	var predefinedAssets = [
 		{
-			name:"PepperHolesWithInconsistentlyOriented",
-			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
-			size:"0.2MB",
-			fileId:"http://static.spark.autodesk.com/Public/Beta/17742740.stl",
-			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
+			name:"Bear_to_fix.stl",
+			description:"3 Holes, 1 Duplicate Triangles, 1 Inconsistently Oriented Triangles",
+			size:"19KB",
+			fileId:"http://static.spark.autodesk.com/Public/Beta/17743501.stl",
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/Not_available_icon.jpg5e80beeb-36b2-11e5-bdff-22000b538c89Medium.jpg"
 		},
 		{
-			name:"001_a5multiple",
-			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
-			size:"0.5MB",
-			fileId:"http://static.spark.autodesk.com/Public/Beta/17729499.stl",
-			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
+			name:"Pepper.stl",
+			description:"3 Holes, 1 Inconsistently Oriented Triangles",
+			size:"2.4MB",
+			fileId:"http://static.spark.autodesk.com/Public/Beta/17729449.stl",
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/Not_available_icon.jpg5e80beeb-36b2-11e5-bdff-22000b538c89Medium.jpg"
 		},
 		{
-			name:"elephantLittle_elephant",
+			name:"elephant.stl",
 			description:"10 Holes, 100 Duplicate Triangles, 50 non-manifold vertices",
 			size:"0.3MB",
 			fileId:"http://static.spark.autodesk.com/Public/Beta/17734456.stl",
-			pic:"https://static.spark.autodesk.com/Beta/2015/07/16__16_58_35/dinosaur.png0521ec90-3139-11e5-bdff-22000b538c89Small.jpg"
+			pic:"https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/Not_available_icon.jpg5e80beeb-36b2-11e5-bdff-22000b538c89Medium.jpg"
 		}
 	];
 	/**
@@ -111,7 +189,9 @@
 		$.each(predefinedAssets, function (index, item) {
 
 			var tr = $('<tr class="in-table"></tr>');
-			tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>'+'<img src="' +item.pic+ '"></img><br/>' + item.name + '</td>'));
+			tr.append($('<td><div class="premade-box">'+'<img src="' +item.pic+ '"></img>'+
+					'<span class="caption simple-caption"><p>'+item.name+'</p></span>' +
+					+'</div></td>'));
 
 
 			var problemsArr = item.description.split(",");
@@ -120,10 +200,10 @@
 				descriptionElem += "<span>" + item + "</span><br/>";
 			});
 
-			tr.append($('<td>' + descriptionElem + '</td>'));
+			tr.append($('<td><div class="description">' + descriptionElem + '</div></td>'));
 
 
-			tr.append($('<td>' + item.size + '</td>'));
+			tr.append($('<td><div class="description">' + item.size + '</div></td>'));
 
 
 			$(tr).on('click', function(e){

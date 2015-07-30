@@ -102,8 +102,10 @@
 		}
 
 		.healing-header{
-			padding-bottom: 53px;
+			padding-bottom: 46px;
 			border-bottom: 0px;
+			text-align: center;
+			padding-top: 45px;
 		}
 
 		#dropzone {
@@ -143,8 +145,7 @@
 
 	<div id="uploadFile" style="display: none;">
 		<div class="modal-header healing-header">
-			Upload your 3D model and this tool will find and heal flaws that affect 3D printing.<br/>
-			Supports OBJ and STL 3D objects.
+			Select a 3D model to repair.
 		</div>
 		<div class="" id="upload-wrapper">
 			<div id="file-upload-error">
@@ -404,7 +405,7 @@
 
 		//First let's see if we have a valid access token
 		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../../plugins/login/login.html';
+			location.href = '../../plugins/login/login.html';
 		} else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
