@@ -184,7 +184,7 @@
 
 				$('#files').removeClass('hidden');
 				$.each(sources, function (index, item) {
-					if(item.file_name !== 'nopicture.gif') {
+					if(item.file_name !== 'nopicture.gif' && item.file_type.indexOf("STL")>-1) {
 						var tr = $('<tr class="in-table"></tr>');
 						tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
 						tr.append($('<td>' + item.file_id + '</td>'));
