@@ -603,6 +603,11 @@ i.stooltip span {
     width:48px;
 }
 
+.si-popup-icon{
+    background-position: -250px -177px;
+    height: 20px;
+    width: 26px;
+}
 
 .si-premede-files{
     background-position: -256px -299px;
