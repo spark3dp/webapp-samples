@@ -597,6 +597,13 @@ i.stooltip span {
     width:48px;
 }
 
+.si-premade-upload-icon{
+    background-position: -249px -238px;
+    height: 44px;
+    width:48px;
+}
+
+
 .si-premede-files{
     background-position: -256px -299px;
     height: 44px;
