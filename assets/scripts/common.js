@@ -1,6 +1,13 @@
 var common = function ($) {
 	'use strict';
 
+
+	var shortMonth = function(month){
+		var shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+		return shortMonths[month];
+	}
+
 	var commonObj = {
 
 		/**
@@ -92,9 +99,8 @@ var common = function ($) {
 		},
 		formatDateHuman: function(myDateString){
 			var myDate = new Date(myDateString);
-			var formatter = new Intl.DateTimeFormat("en", { month: "short" }),
-				day = myDate.getDate().toString(),
-				month = formatter.format(myDate),
+			var day = myDate.getDate().toString(),
+				month = shortMonth(myDate.getMonth()),
 			 	yyyy = myDate.getFullYear().toString();
 
 			return month + ' ' + day + ', ' + yyyy;
