@@ -34,7 +34,7 @@
 	    }
 
         //Draw Three.js viewer
-        var mesh;
+        var meshes = [];
 
         var container = document.createElement( 'div' );
         $('.logged-in-container').append( container );
@@ -62,25 +62,30 @@
 
         //After the .BLT decoder has converted the .BLT file into an bufferGeometry object
         var callBackRender = function (geometries) {
-            //var material = new THREE.MeshDepthMaterial();
+
 	        var material = new THREE.MeshLambertMaterial();
-	        mesh = new THREE.Mesh( geometries[0], material );
-            //scene.add( mesh );
 
-
-	        if(lastObj!=undefined){
-		        scene.remove( lastObj );
+	        if(meshes){
+		        for(var i=0;i<meshes.length;i++){
+			        scene.remove(meshes[i] );
+		        }
 	        }
 
-	        lastObj = mesh;
-	        scene.add( mesh );
-	        //render();
+	        meshes=[];
+	        for(var i=0;i<geometries.length;i++){
+		        var mesh = new THREE.Mesh( geometries[i], material );
+		        meshes.push(mesh);
+		        scene.add(mesh);
+
+	        }
+
         };
 
 
 
 	    var loadingFile;
 
+	    // LOADING - FILE
 	    ADSKSpark.Files.downloadFile(17747882).
 			    then(function (buffer){
 				    //Download the .BLT file
@@ -88,9 +93,10 @@
 			    });
 
 
+	    // FIRST - FILE
 	    ADSKSpark.Files.downloadFile(17747813).
 			    then(function (buffer){
-				    //Download the .BLT file
+
 				    var loader = new THREE.BLTLoader();
 
 				    loader.load(buffer.arraybuffer.buffer, callBackRender);
@@ -115,7 +121,7 @@
             //Package it for Drive API upload 
             var fileData = {
                 file: modelFile
-            }
+            };
 
             ADSKSpark.Files.uploadFile(fileData)
             .then(function (result){
@@ -136,10 +142,13 @@
         var animate = function() {
             requestAnimationFrame( animate );
 
-            if(mesh){
+            if(meshes){
                 // mesh.rotation.x += 0.005;
-                mesh.rotation.y += 0.005;
-	            mesh.rotation.x -= 0.005;
+	            for(var i=0;i<meshes.length;i++){
+		            meshes[i].rotation.y += 0.005;
+		            meshes[i].rotation.x -= 0.005;
+	            }
+
 
             }
 
