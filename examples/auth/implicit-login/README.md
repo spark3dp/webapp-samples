@@ -4,7 +4,7 @@
 This sample code demonstrates Spark's _Implicit Login_: App and user authentication based on the OAuth2 protocol.
 
 ### Prerequisites
-* A registered app on the <a href="https://spark.autodesk.com/developers/" target="_blank">Spark Developers' Portal</a>. For more information see the <a href="https://spark.autodesk.com/developers/reference/introduction/tutorials/register-an-app" target="_blank">tutorial</a>.
+* A registered app on the [Spark Developers Portal](https://spark.autodesk.com/developers). For more information see the [tutorial](https://spark.autodesk.com/developers/reference/introduction/tutorials/register-an-app).
 
 
 ### Installation
