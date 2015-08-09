@@ -230,7 +230,8 @@
 		$('#assets-gallery').append(box);
 		box.append(view);
 
-		view.prepend('<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/>');
+		view.prepend('<a title="' + item.asset_name + '" href="../show-asset/index.html?assetId=' + item.asset_id + '">' +
+		'<img class="img" src="' + imgUrlThumb + '" alt="' + item.asset_name + '"/></a>');
 		box.append(text);
 	}
 
