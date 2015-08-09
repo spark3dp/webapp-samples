@@ -454,7 +454,11 @@
 				}
 
 				//update comments count
-				$('#social-comments .count').text(parseInt($('#social-comments .count').text()) - 1);
+				var commentsCount = parseInt($('#social-comments .count').text());
+
+				if (commentsCount > 0) {
+					$('#social-comments .count').text(commentsCount - 1);
+				}
 			});
 		});
 
