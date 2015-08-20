@@ -17,12 +17,12 @@ Copy the file "assets/scripts/config.example.js" to "assets/scripts/config.js" a
 * **REDIRECT_URI** - The redirect uri the Spark Auth flow will redirect your users after they will complete the login process. This repository is provided with a login callback html file that makes this task easy. The file is located in "plugins/login/login-callback.html" and you should set your REDIRECT_URI to http://example.com/your-app/plugins/login/login-callback.html (assumed the home page of your app is http://example.com/your-app)
 
 ### The contents of this repository
-This repository demonstrates sample usages of Spark APIs through these samples:
+This repository demonstrates use of Spark APIs in these samples:
 
-1. 3D Models Healing Utility For Printing (healing-utility.html) - Assists in improving 3D printing success rates and minimize printing time with our extensive range of API print-preparation tools. Heal, fix and optimize your model for different materials, textures and file output types.
-2. 3D Models Printing Sample Application (sample-app-print.html) - Shows how to integrate an app with local and network 3D printers, desktop FDM printers and professional grade additive manufacturing systems.
-3. 3D Models Cloud Storage Application (sample-app-storage.html) - Uses Spark's cloud services to easily store 3D models and to create collaborative shared 3D creations.
-4. Public 3D Models Social Application (sample-app-gallery.html) - Demonstrates an online gallery, exhibits app-users' 3D image and digital creations and add social network functions, such as comments and likes.
+1. 3D Model Healing Utility For Printing (healing-utility.html) - Improve 3D printing success rates and minimize printing time with our extensive range of API print-preparation tools. Heal, fix and optimize your model for different materials, textures and file output types.
+2. 3D Model Printing Sample Application (sample-app-print.html) - Integrate an app with local and network 3D printers, desktop FDM printers and professional grade additive manufacturing systems.
+3. 3D Model Cloud Storage Application (sample-app-storage.html) - Use Spark's cloud services to easily store 3D models and to create collaborative shared 3D creations.
+4. 3D Model Social Application (sample-app-gallery.html) - Create an online gallery, exhibit app-users' 3D images and digital creations and add social network functions, such as comments and likes.
 
 ### Using the SDK
 The samples provided in this repository utilize Spark's JavaScript SDK that is provided through [this link](https://code.spark.autodesk.com/autodesk-spark-sdk.min.js).
