@@ -104,6 +104,7 @@
 <script type="text/javascript" charset="utf-8" src="plugins/dom-animator.min.js"></script>
 
 
+
 <script>
 
 var isLoggedIn = false, //Do we have access token
@@ -128,6 +129,12 @@ function goToUploadFilePage(page) {
 	uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
 
 	$('#mainIframe').attr('src', uploadPage);
+}
+
+
+function showGetQuotesStep() {
+	$('#uploadId').addClass('verified disabled').removeClass('selected');
+	$('#getQuotesId').addClass('verified selected').removeClass('disabled');
 }
 
 
@@ -250,43 +257,21 @@ var broadCastsCallbacks = {
 	showLoginPageOnly: function () {
 		loggedOutCallback();
 	},
-	myAssetsEvent: function () {
+	upload: function () {
 		$('#mainIframe').attr('height', '462px');
 	},
 
-	showSpecificAssetEvent: function (optionalParams) {
-		currentAssetId = optionalParams.assetId;
+	getQuotes: function (optionalParams) {
+		currentFileId = optionalParams.fileId;
 
-		if (!currentAssetId) {
-			changeState('myAssets');
+		if (!currentFileId) {
+			changeState('upload');
 		} else {
-			showBreadcramb('home');
-			showAssetBreadcrumb(currentAssetId);
-			hideBreadcrumbs(['file-type']);
-			showManageFileStep();
+			showGetQuotesStep();
 			$('#mainIframe').attr('height', '462px');
-			states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
+			states.getQuotes.src = 'examples/service-bureaus/getQuotes.html?fileId=' + currentFileId;
 		}
 
-	},
-	createAssetEvent: function () {
-		$('#mainIframe').attr('height', '462px');
-	},
-	showAssetFilesEvent: function (optionalParams) {
-		currentAssetId = optionalParams.assetId;
-
-		if (!currentAssetId) {
-			changeState('myAssets');
-		} else {
-			$('#mainIframe').attr('height', '462px');
-			showAssetBreadcrumb(currentAssetId);
-			showAssetFilesBreadcrumb(optionalParams.fileType);
-			showManageFileStep();
-			states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
-		}
-	},
-	shrinkIframe: function () {
-		$('#mainIframe').attr('height', '462px');
 	}
 };
 
@@ -299,13 +284,8 @@ var broadcastMapper = [];
 broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
 broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
 broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
-broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
-broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
-broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
-broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
-broadcastMapper['addFileToAsset'] = broadCastsCallbacks.showAssetFilesEvent;
-broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
-broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
+broadcastMapper['upload'] = broadCastsCallbacks.upload;
+broadcastMapper['getQuotes'] = broadCastsCallbacks.getQuotes;
 
 
 //Entertain the masses
