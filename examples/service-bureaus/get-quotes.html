@@ -45,6 +45,16 @@
 		margin-right: 20px;
 		margin-top: 4px;
 	}
+
+	#quotes-container{
+	    overflow-y: auto;
+        height: 158px;
+	}
+
+
+	.spinner {
+		display: none;
+	}
 </style>
 </head>
 
@@ -71,6 +81,7 @@
 			</section>
 			<div id="canvas-container" class="pull-right"></div>
 			<div class="spacer clearfix"></div>
+			<div class="spinner"></div>
 			<section class="form_field">
 				<div id="quotes-container"></div>
 			</section>
@@ -178,18 +189,23 @@
 		$("#materials-select").on("change", function(e){
 
 			var materialId = $('#materials-select option:selected').val();
+			if(materialId != "") {
+				$("#quotes-container").empty();
+				$(".spinner").show();
 
-			var quotes = getQuotes(materialId, currentFileId);
+				var quotes = getQuotes(materialId, currentFileId);
 
-			if(quotes != null) {
-				for (var i in quotes) {
-					if (quotes[i].success) {
-						var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
-						$("<div class='quote'><img src='"+ logoUrl +"'/><a class='spark_btn primary pull-right'>Print</a><span>$" + quotes[i].price + "</span></div>").appendTo("#quotes-container");
+				$(".spinner").hide();
+
+				if (quotes != null) {
+					for (var i in quotes) {
+						if (quotes[i].success) {
+							var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
+							$("<div class='quote'><img src='" + logoUrl + "'/><a class='spark_btn primary pull-right'>Print</a><span>$" + quotes[i].price + "</span></div>").appendTo("#quotes-container");
+						}
 					}
 				}
 			}
-
 		});
 	});
 
