@@ -15,8 +15,6 @@
 	#materials-select{
 		height: 44px;
 		width:200px;
-		background-color: #EA5426;
-		color: white;
 	}
 
 	canvas{
@@ -118,8 +116,15 @@
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
-
+<!--<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>-->
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/service-bureaus/ServiceBureaus.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
@@ -294,6 +299,11 @@
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
 			currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+
+			ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+				console.info('getFileDetails file response:', response);
+				//var fileName = response.file_name;
+			});
 
 			if (!currentFileId) {
 				location.href = '../service-bureaus/upload.html';

@@ -23,7 +23,7 @@
 			width: 122px;
 			left: 315px;
 			position: absolute;
-			top: 140px;
+			top: 174px;
 			cursor: pointer;
 			opacity: 0.0;
 		}
@@ -32,8 +32,9 @@
 			display: none;
 			height: 365px;
 			text-align: center;
-			border: 2px dashed #e5e5e5;
+			border: 3px dashed #e5e5e5;
 			border-radius: 4px;
+			font-size: 15px;;
 		}
 
 		#dropzone h4{
@@ -50,12 +51,12 @@
 		}
 
 		#dropzone.drag-active {
-			border: 2px dashed #000000;
-			opacity: 0.3;
+			border: 3px dashed #eb5528;
+			opacity: 1;
 		}
 
 		#upload-icon {
-			margin-top: 26px;
+			margin-top: 70px;
 			margin-bottom: 5px;
 		}
 
@@ -87,6 +88,15 @@
 		}
 		#file-upload-text p{
 			display: none;
+		}
+
+		#browse-file{
+			margin-left: 5px;
+			text-decoration: underline;
+		}
+
+		.modal-header{
+			border:none;
 		}
 	</style>
 
@@ -121,7 +131,7 @@
 					<div id="upload-icon" class="spark_icon si-upload-icon"></div>
 					<h4 id="file-name" class="post-upload">Upload File</h4>
 					<div id="file-upload-text">
-						<div style="margin-bottom: 20px;"><span>Drop a file</span> or <a style="margin-left: 10px;" class="btn spark_btn empty" id="browse-file">Browse</a></div>
+						<div><span>Drop a file</span> or <a id="browse-file">Browse</a></div>
 						<p>Maximum file size of <b></b></p>
 					</div>
 				</div>
@@ -143,7 +153,15 @@
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- spark sdk -->
-<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
+	<!--<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>-->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/service-bureaus/ServiceBureaus.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
@@ -203,7 +221,8 @@
 			e.preventDefault();
 
 			var sourceFile = {
-				file: fileData
+				file: fileData,
+				public:true
 			};
 
 			//This is the important part - upload the file to spark drive
