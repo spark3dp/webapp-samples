@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show My Assets - list view</title>
+	<title>Spark Sample Application - Upload</title>
 	<meta charset="utf-8">
 
 	<!-- Bootstrap core CSS -->
@@ -153,15 +153,7 @@
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- spark sdk -->
-	<!--<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>-->
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
-	<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/service-bureaus/ServiceBureaus.js"></script>
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
@@ -311,8 +303,6 @@
 			setFileUploadUI();
 			setUpUploadFileFlow();
 			common.setUIFunctionality();
-
-			location.href = "../service-bureaus/get-quotes.html?fileId=17792976";
 
 		} else {//user needs to login
 			location.href = '../../../plugins/login/login.html';

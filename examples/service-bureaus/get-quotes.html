@@ -130,15 +130,7 @@
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- spark sdk -->
-<!--<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>-->
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/config/Constants.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Helpers.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/utilities/Request.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/Client.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Members.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Assets.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/drive/Files.js"></script>
-<script type="text/javascript" charset="utf-8" src="../../vendor/spark-js-sdk/sdk/src/service-bureaus/ServiceBureaus.js"></script>
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
 
 <!-- common scripts -->
 <script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
@@ -164,19 +156,9 @@
 			 serviceBureaus = response;
 		 }
 		 });
-		//return JSON.parse('[{"id":"59fe3fa2-05f0-4d13-a0f1-981fe840d8e0","name":"i.materialise","logoUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/59fe3fa2-05f0-4d13-a0f1-981fe840d8e0/logourl/imaterialise_logo.png","websiteUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/59fe3fa2-05f0-4d13-a0f1-981fe840d8e0/websiteurl"},{"id":"60cc25c8-a922-4102-a640-af534051a71e","name":"shapeways","logoUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/60cc25c8-a922-4102-a640-af534051a71e/logourl/shapeways_logo.png","websiteUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/60cc25c8-a922-4102-a640-af534051a71e/websiteurl"},{"id":"c04e968b-146b-4856-aea8-3cc1a137970c","name":"sculpteo","logoUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/c04e968b-146b-4856-aea8-3cc1a137970c/logourl/sculpteo_logo.png","websiteUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/c04e968b-146b-4856-aea8-3cc1a137970c/websiteurl"},{"id":"ea0036eb-43da-4495-ae1b-3fff63e92db7","name":"3dhubs","logoUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/ea0036eb-43da-4495-ae1b-3fff63e92db7/logourl/3dhubs_logo.png","websiteUrl":"https://sandbox.spark.autodesk.com/api/v1/servicebureaus/ea0036eb-43da-4495-ae1b-3fff63e92db7/websiteurl"}]');
 	}
 
 	var getSparkMaterials = function(){
-
-
-		/*ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			console.info('upload file response:', response);
-			if (response.length > 0) {
-				console.log(response);
-			}
-		});*/
-
 
 		ADSKSpark.ServiceBureaus.getSparkMaterials().then(function (response) {
 			console.info('getSparkMaterials response:', response);
@@ -190,8 +172,6 @@
 
 			}
 		});
-		//return JSON.parse('[{"id": "03C61213-4EEA-4352-A6F3-FD1E1461F137","name": "Gold"},{"id": "49108D1B-0AFC-4417-ABB0-538FC6CA7F6F","name": "Rhodium"},{"id": "6759E5F8-A896-4695-BB11-5B9D604A9E06","name": "Alumide"},{"id": "8C64A3EE-9D41-4925-9EF4-81A359B5D0E6","name": "Polyamide"},{"id": "929D4AB5-1178-4639-9F2E-F3AA3ECD196E","name": "Sandstone"},{"id": "95C93D92-7C95-44F4-888A-C1A06EA20A29","name": "Resin"},{"id": "A8585DB8-294E-4FF3-A5EF-7E66734E5789","name": "Steel"},{"id": "F7CB79CD-B857-486C-82FE-BE737A4810B5","name": "Ceramics"},{"id": "FC565E34-8144-4209-B110-0F4745AC07C6","name": "Aluminum"}]');
-
 	}
 
 	var getQuotes = function(selectedMaterialId, fileId) {
@@ -223,24 +203,13 @@
 				$("<div class='no-results'>No results found</div>").appendTo("#quotes-container");
 			}
 		 });
-
-         /*var response = JSON.parse('{"success":true,"quotes":[{"success":true,"service_bureau_id":"59fe3fa2-05f0-4d13-a0f1-981fe840d8e0","material_id":"6759E5F8-A896-4695-BB11-5B9D604A9E06","file_id":"17377619","price":"16.82"},{"success":true,"service_bureau_id":"60cc25c8-a922-4102-a640-af534051a71e","material_id":"6759E5F8-A896-4695-BB11-5B9D604A9E06","file_id":"17377619","price":"12.47"},{"success":false,"service_bureau_id":"c04e968b-146b-4856-aea8-3cc1a137970c","material_id":"6759E5F8-A896-4695-BB11-5B9D604A9E06","file_id":"17377619","error":{"code":"17","message":"Quick quote is not available for this service bureau. Try calling the accurateQuote API."}},{"success":false,"service_bureau_id":"ea0036eb-43da-4495-ae1b-3fff63e92db7","material_id":"6759E5F8-A896-4695-BB11-5B9D604A9E06","file_id":"17377619","error":{"code":"16","message":"This material is not supported by the service bureau."}}]}');
-
-		if(response.success){
-			 return response.quotes;
-		 }
-		else{
-			 return null;
-		 }*/
-
 	}
 
 	var getCartUrl = function(serviceBureauId, currentFileId){
 
-		//ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			//console.info('getFileDetails file response:', response);
-		    //var fileName = response.file_name;
-		    var fileName = "file.stl";
+		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+			console.info('getFileDetails file response:', response);
+		    var fileName = response.file_name;
 
 			var data = JSON.stringify({ 'models' : [ {'file_id' : currentFileId, 'file_name' : fileName, 'quantity':1} ] });
 
@@ -252,23 +221,12 @@
 					parent.window.open(url);
 				}
 			});
-		//});
-
-
-
-
-
+		});
 	}
 
 	var initialize = function(){
     	getServiceBureaus();
 		getSparkMaterials();
-
-		/*ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			console.info('getFileDetails file response:', response);
-			var fileName = response.file_name;
-			$("#file_name").val(fileName);
-		});*/
 	}
 
 	var getServiceBureauLogoUrlById = function(id){
