@@ -209,7 +209,7 @@
 
 		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
 			console.info('getFileDetails file response:', response);
-		    var fileName = response.file_name;
+		    var fileName = response.name;
 
 			var data = JSON.stringify({ 'models' : [ {'file_id' : currentFileId, 'file_name' : fileName, 'quantity':1} ] });
 
