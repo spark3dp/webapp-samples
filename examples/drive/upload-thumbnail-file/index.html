@@ -211,7 +211,7 @@
 		$('.thumb-img').remove();
 
 		fileData = file;
-		$('#file-name').html('<p class="uploaded-filename">Your file is waiting for upload...</p>');
+		$('#file-name').html('<p class="uploaded-filename">Click the upload button</p>');
 		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 
 		// Only process image files.
@@ -397,7 +397,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'thumbnails', assetId: currentAssetId});
+		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
 	});
 
 </script>

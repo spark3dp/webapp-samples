@@ -159,7 +159,9 @@
 			$('#user').show();
 			$('#loginId').addClass('verified');
 		} else {
-			$('#appModal').modal('show');
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
 			$('.menu-item[data-state=loggedIn]').data('state', 'login');
 			isLoggedIn = false;
 			statePlugin.changeState('login');

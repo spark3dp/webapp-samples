@@ -201,6 +201,7 @@
 <!--<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>-->
 
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
@@ -238,7 +239,9 @@
 			});
 		}
 		else{
-			$('#appModal').modal('show');
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			//$('#mainIframe').attr('height', '523px');

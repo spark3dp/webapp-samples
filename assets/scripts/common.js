@@ -112,6 +112,56 @@ var common = function ($) {
 			}
 
 			return str;
+		},
+		/**
+		 * @description - Transform parameter strings to array of params
+		 * @param {String} prmstr - The GET query string
+		 * @returns {Object} - Associative array of parameters
+		 */
+		transformToAssocArray: function (prmstr) {
+			var params = {};
+
+			if (prmstr) {
+				var prmarr = prmstr.split('&');
+				for (var i = 0; i < prmarr.length; i++) {
+					var tmparr = prmarr[i].split('=');
+					params[tmparr[0]] = tmparr[1];
+				}
+			}
+
+			return params;
+		},
+
+		/**
+		 * @description - Extract params from URL
+		 * @param {String} prmstr - The GET query string
+		 * @returns {Object} - URL parameters
+		 */
+		extractParamsFromURL: function (prmstr) {
+			prmstr = prmstr || window.location.search.substr(1) || window.location.hash.substr(1);
+
+			return prmstr ? this.transformToAssocArray(prmstr) : {};
+		},
+
+		/**
+		 * Run some stuff as soon as everyting loads
+		 */
+		runOnLoad: function(){
+
+			//open the sample in a new window
+			$('.sample-app-header').find('.si-popup-icon').on('click', function(e){
+				e.preventDefault();
+				var w = $('#container').width() + 30,
+					h = 700,
+					left = (screen.width / 2) - (w / 2),
+				 	top = (screen.height / 3) - (h / 3);
+				window.open(window.location.href + '?popup=true', '_blank', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=1, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+			});
+
+			//remove open in new window button inside an opened window
+			if (this.extractParamsFromURL().popup){
+				$('.sample-app-header').find('.si-popup-icon').remove();
+			}
 		}
 
 	}
@@ -120,6 +170,8 @@ var common = function ($) {
 
 }(jQuery);
 
+//run some basic stuff
+common.runOnLoad();
 
 //file size to human readable
 Object.defineProperty(Number.prototype,'fileSize',{value:function(a,b,c,d){

@@ -11,7 +11,9 @@
 	<link href="../../../assets/css/common.css" rel="stylesheet">
 
 	<style>
-
+		.in-table .spark_btn.small{
+			margin-top: -4px;
+		}
 	</style>
 
 </head>
@@ -27,16 +29,19 @@
 			<tr>
 				<th>Reference<br/><span></span></th>
 				<th>Contains<br/><span></span></th>
+				<th></th>
 			</tr>
 			</thead>
 			<tbody id="assetsTbody">
 			<tr class="in-table thumbnails">
 				<td><i class="spark_icon si-asset-folder-icon"></i>Thumbnail files</td>
 				<td id="thumbnail-count">Empty</td>
+				<td><a href="#" class="spark_btn small">Add File</a></td>
 			</tr>
 			<tr class="in-table sources">
 				<td><i class="spark_icon si-asset-folder-icon"></i>Source files</td>
 				<td id="sources-count">Empty</td>
+				<td><a href="#" class="spark_btn small">Add File</a></td>
 			</tr>
 			</tbody>
 		</table>
@@ -96,9 +101,26 @@
 			location.href = '../show-asset-thumbnails/?assetId=' + currentAssetId;
 		});
 
+		$('tr.thumbnails').find('a.spark_btn').on('click', function(e){
+			e.stopPropagation();
+			location.href = '../upload-thumbnail-file/?assetId=' + currentAssetId;
+		});
+
 		$('tr.sources').on('click', function(){
 			location.href = '../show-asset-sources/?assetId=' + currentAssetId;
 		});
+
+		$('tr.sources').find('a.spark_btn').on('click', function(e){
+			e.stopPropagation();
+			location.href = '../upload-source-file/?assetId=' + currentAssetId;
+		});
+
+		$('tr').find('a.spark_btn').hover(function(){
+			$(this).addClass('primary');
+		},function(){
+			$(this).removeClass('primary');
+		});
+
 	}
 
 

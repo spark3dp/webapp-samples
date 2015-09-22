@@ -3,6 +3,7 @@ body {
     font-size: 14px;
     font-weight: 400;
     color: #333333;
+    overflow-x:hidden;
 }
 
 h1, h2, h3 {
@@ -970,7 +971,7 @@ i.stooltip span {
     height: 300px;
     margin: auto;
     position: absolute;
-    top:40px;
+    top:150px;
     left:0;
     right:0;
 }
@@ -1128,7 +1129,7 @@ li.disabled .not-verified-icon{
 
 #breadcrumbs-section #action-button #create-file i.si-add-item{
     left:20px;
-    top:11px;
+    top:14px;
 }
 
 #breadcrumbs-section #action-button #create-file i.stooltip span{
