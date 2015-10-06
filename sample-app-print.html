@@ -280,6 +280,8 @@
 <script type="text/javascript" charset="utf-8"
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>
 
@@ -317,7 +319,9 @@
 			});
 		}
 		else{
-			$('#appModal').modal('show');
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			//$('#mainIframe').attr('height', '523px');

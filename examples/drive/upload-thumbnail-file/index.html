@@ -49,12 +49,12 @@
 		}
 
 
-		#file-upload-result,#file-upload-error {
+		#file-upload-result,#file-upload-error,#file-upload-error-size,#file-upload-error-type {
 			display: none;
 			height: 50px;
 			text-align: center;
 		}
-		#file-upload-error{
+		#file-upload-error,#file-upload-error-size,#file-upload-error-type{
 			height:30px;
 		}
 
@@ -124,7 +124,17 @@
 		<div class="modal-body" id="upload-wrapper">
 			<div id="file-upload-error">
 				<div class="notification-bar">
+					<i class="spark_icon"></i> The provided file is not valid for upload
+				</div>
+			</div>
+			<div id="file-upload-error-size">
+				<div class="notification-bar">
 					<i class="spark_icon"></i> File size exceeds the allowed value
+				</div>
+			</div>
+			<div id="file-upload-error-type">
+				<div class="notification-bar">
+					<i class="spark_icon"></i> File type can be only one of the following: jpg, png, gif
 				</div>
 			</div>
 			<div id="file-upload-result">
@@ -153,7 +163,7 @@
 
 			<form id="file-form" novalidate="">
 				<section class="form_field post-upload" id="file-input-section">
-					<input type="file" id="file-input" placeholder="file data" class="field hidden-upload" required>
+					<input type="file" id="file-input" class="field hidden-upload" accept="image/gif, image/jpeg, image/png" required>
 				</section>
 
 				<div class="form-footer">
@@ -197,10 +207,10 @@
 	ajaxCallListenerFromIframe();
 
 	var currentAssetId, //the asset id we are referring to
-			fileData //the file data
-			;
+			fileData; //the file data
 
-	var allowedFileUploadSize = 1000 * 1000; //1MB
+	var isFileValid = false,
+	    allowedFileUploadSize = 1000 * 1000; //1MB
 
 	/**
 	 * What happens when user selects file
@@ -211,7 +221,7 @@
 		$('.thumb-img').remove();
 
 		fileData = file;
-		$('#file-name').html('<p class="uploaded-filename">Your file is waiting for upload...</p>');
+		$('#file-name').html('<p class="uploaded-filename">Click the upload button</p>');
 		$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 
 		// Only process image files.
@@ -234,10 +244,11 @@
 
 						//adjust height
 						$('#dropzone-inner').height('220px');
+						isFileValid = true;
 					}else{
-						$('#file-upload-error').show();
+						$('#file-upload-error-size').show();
 						setTimeout(function(){
-							$('#file-upload-error').hide();
+							$('#file-upload-error-size').hide();
 						},3000);
 					}
 
@@ -246,7 +257,11 @@
 
 			// Read in the image file as a data URL.
 			reader.readAsDataURL(file);
-
+		}else{
+			$('#file-upload-error-type').show();
+			setTimeout(function(){
+				$('#file-upload-error-type').hide();
+			},3000);
 		}
 
 
@@ -337,33 +352,38 @@
 
 		//catch the form submit
 		$('#file-form').on('submit', function (e) {
-
-			//nice UI
-			$('.spinner').show();
-			$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
-
 			e.preventDefault();
+			if (isFileValid) {
+				//nice UI
+				$('.spinner').show();
+				$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
 
-			var sourceFile = {
-				file: fileData
-			};
+				var sourceFile = {
+					file: fileData
+				};
 
-			if ($('#c1:checked').length) {
-				sourceFile.public = true;
+				if ($('#c1:checked').length) {
+					sourceFile.public = true;
+				}
+
+				//This is the important part - upload the file to spark drive
+				ADSKSpark.Files.uploadFile(sourceFile).then(function (response) {
+					console.info('upload file response:', response);
+
+					var fileId = response.files[0].file_id,
+							fileName = response.files[0].name;
+
+					console.info('fileId:', fileId, ' | ', 'fileName:', fileName);
+
+					applyUIcallback(fileId, fileName, response.files);
+
+				});
+			}else{
+				$('#file-upload-error').show();
+				setTimeout(function(){
+					$('#file-upload-error').hide();
+				},3000);
 			}
-
-			//This is the important part - upload the file to spark drive
-			ADSKSpark.Files.uploadFile(sourceFile).then(function (response) {
-				console.info('upload file response:', response);
-
-				var fileId = response.files[0].file_id,
-						fileName = response.files[0].name;
-
-				console.info('fileId:', fileId, ' | ', 'fileName:', fileName);
-
-				applyUIcallback(fileId, fileName, response.files);
-
-			});
 
 
 		});
@@ -397,7 +417,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'thumbnails', assetId: currentAssetId});
+		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
 	});
 
 </script>

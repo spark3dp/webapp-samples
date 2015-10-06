@@ -186,8 +186,10 @@ var ajaxCallLogger = function(){
 		startIframeListener: function () {
 			var iframeLoggerListener = function(event) {
 				if (event.origin === window.location.origin) {
-					if(event.data!=undefined && event.data.type=="ajaxLogger")
-					log(event.data.data);
+					if(event.data!=undefined && event.data.type=="ajaxLogger" && event.data.data.req.URL.indexOf(urlToHide) > -1){
+						log(event.data.data);
+					}
+
 				}
 			};
 

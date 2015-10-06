@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - Show My Assets - list view</title>
+	<meta charset="utf-8">
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+<style>
+
+	#materials-select{
+		height: 44px;
+		width:200px;
+	}
+
+	canvas{
+		width:300px !important;
+		height: 200px !important;
+	}
+
+	.quote{
+		background-color: #f9f8f8;
+		border-radius: 6px;
+		padding: 10px;
+		margin-bottom: 10px;
+		min-height: 65px;
+	}
+
+	.quote span{
+		float:right;
+		margin-top: 13px;
+		margin-right: 20px;
+		font-size:18px;
+	}
+	.quote img{
+		margin-left: 20px;
+	}
+	.quote a{
+		margin-right: 20px;
+		margin-top: 4px;
+
+
+	}
+
+
+	.quote .spinner{
+		display: none;
+		border-top-color: white;
+		margin-right: 96px;
+	}
+
+	.quote-btn-container{
+		float: right;
+		position: relative;
+		display: inline;
+	}
+
+	#quotes-container{
+	    overflow-y: auto;
+		height: 285px;
+	}
+
+	#quotes-container .empty-quotes{
+		color: silver;
+		font-size: 20px;
+		text-align: center;
+		margin-top: 88px;
+	}
+
+
+	.quotes-spinner .spinner {
+		display: none;
+		margin-top: 200px;
+	}
+
+	.no-results{
+		text-align: center;
+		margin-top: 54px;
+		font-size: 24px;
+		color: silver;
+	}
+
+	.si-help
+	{
+		height: 17px;
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+	<div class="modal-header">
+		<h4 class="modal-title">GET QUOTES</h4>
+	</div>
+
+	<div class="modal-body">
+		<form id="get-quotes-form" class="sample-app-form" novalidate="">
+			<section class="form_field pull-left">
+				<label for="materials-select">
+					Select a material <span class="field-label">&nbsp;/&nbsp;material_id</span><i class="required"></i>
+					<i class="spark_icon si-help with_hover"></i>
+					<i class="stooltip"><span style="display: none;">Select a material from the list.</span></i>
+				</label>
+				<select class="form-control" id="materials-select" required="required">
+					<option value="">Please select...</option>
+				</select>
+				<div class="field_error hidden">
+					<span>Required</span>
+				</div>
+			</section>
+			<div class="spacer clearfix"></div>
+			<div class="quotes-spinner"><div class="spinner"></div></div>
+			<section class="form_field">
+				<div id="quotes-container">
+					<div class="empty-quotes">Please select a material</div>
+				</div>
+			</section>
+	    </form>
+	</div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	var currentFileId, serviceBureaus, materials;
+
+	var getServiceBureaus = function(){
+
+		ADSKSpark.ServiceBureaus.getServiceBureaus().then(function (response) {
+		 console.info('get service bureaus response:', response);
+		 if (response.length > 0) {
+			 serviceBureaus = response;
+		 }
+		 });
+	}
+
+	var getSparkMaterials = function(){
+
+		ADSKSpark.ServiceBureaus.getSparkMaterials().then(function (response) {
+			console.info('getSparkMaterials response:', response);
+			if (response.length > 0) {
+				materials = response;
+				for(var i in materials){
+					if(materials[i].name != undefined) {
+						$("<option value='" + materials[i].id + "'>" + materials[i].name + "</option>").appendTo("#materials-select");
+					}
+				}
+
+			}
+		});
+	}
+
+	var getQuotes = function(selectedMaterialId, fileId) {
+
+		$("#quotes-container").empty();
+		$(".quotes-spinner .spinner").show();
+
+		var data = JSON.stringify({ 'items': [ {'material_id': selectedMaterialId,'files': [{"file_id":fileId}]}] });
+
+		ADSKSpark.ServiceBureaus.getQuotes(data).then(function (response) {
+		 console.info('get quotes response:', response);
+
+			$(".quotes-spinner .spinner").hide();
+			 var quotes = response.quotes;
+
+			 var exist = false;
+			 if (quotes != null) {
+				 for (var i in quotes) {
+
+					 if (quotes[i].success) {
+						 exist = true;
+						 var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
+						 $("<div class='quote'><img src='" + logoUrl + "'/><div class='quote-btn-container'><div class='spinner'></div><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Print</a></div><span>$" + quotes[i].price + "</span></div>").appendTo("#quotes-container");
+					 }
+				 }
+			 }
+
+			if(exist == false){
+				$("<div class='no-results'>No results found</div>").appendTo("#quotes-container");
+			}
+		 });
+	}
+
+	var getCartUrl = function(serviceBureauId, currentFileId){
+
+		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+			console.info('getFileDetails file response:', response);
+		    var fileName = response.name;
+
+			var data = JSON.stringify({ 'models' : [ {'file_id' : currentFileId, 'file_name' : fileName, 'quantity':1} ] });
+
+			ADSKSpark.ServiceBureaus.getCartUrl(serviceBureauId, data).then(function (response) {
+				console.info('get cart url response:', response);
+				if(response.urls != undefined && response.urls.length > 0){
+					$(".spinner").hide();
+					var url = response.urls[0].url;
+					parent.window.open(url);
+				}
+			});
+		});
+	}
+
+	var initialize = function(){
+    	getServiceBureaus();
+		getSparkMaterials();
+	}
+
+	var getServiceBureauLogoUrlById = function(id){
+		var logoUrl = "";
+		for(var i in serviceBureaus){
+			if(serviceBureaus[i].id == id){
+				logoUrl = serviceBureaus[i].logoUrl;
+				break;
+			}
+		}
+		return logoUrl;
+	}
+
+
+	$(document).ready(function(){
+		//log http requests
+		ajaxCallListenerFromIframe();
+
+		$("#materials-select").on("change", function(e){
+
+			var materialId = $('#materials-select option:selected').val();
+			if(materialId != "") {
+				getQuotes(materialId, currentFileId);
+			}
+		});
+
+		$('#quotes-container').on('click', 'a.print_btn', function(e) {
+			e.preventDefault();
+			var serviceBureauId = $(this).attr("data-service-bureau-id");
+			if(serviceBureauId != "") {
+				$(this).parents(".quote").find(".spinner").show();
+				getCartUrl(serviceBureauId, currentFileId);
+			}
+		});
+
+	});
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
+			location.href = '../../../plugins/login/login.html';
+		} else {
+			//Assume we provided assetId in URL
+			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+			currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+
+			if (!currentFileId) {
+				location.href = '../service-bureaus/upload.html';
+			} else {
+
+				common.setUIFunctionality();
+				initialize();
+			}
+		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('getQuotes',{fileId:currentFileId});
+	});
+</script>
+</body>
+</html>

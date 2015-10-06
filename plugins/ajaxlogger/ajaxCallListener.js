@@ -55,7 +55,11 @@ var ajaxCallListener = function(callbackPushData) {
 	}
 
 	function onloadReplacement(){
-		requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:tryJsonParse(this.responseText)};
+		var responseText = '';
+		if(this.responseType == '' || this.responseType == 'text'){
+			responseText = tryJsonParse(this.responseText)
+		}
+		requestResponseMap[this.guid].res = {HTTP_CODE:this.status,RESPONSE:responseText};
 		requestResponseMap[this.guid].res.HEADERS = this.getAllResponseHeaders();
 
 		callbackPushData(requestResponseMap[this.guid]);

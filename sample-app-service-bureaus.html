@@ -1,0 +1,306 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - Service Bureaus</title>
+
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="assets/css/common.css" rel="stylesheet">
+
+	<style>
+	</style>
+
+	<script type="text/javascript" charset="utf-8" src="plugins/fullStory-integration.js"></script>
+
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container outer-container">
+		<div class="container sample-app-container" id="container">
+			<div class="sample-app-header clearfix">
+				<!-- Navigation links at the top right of the screen -->
+				<a href="" target="_blank" class="spark_icon pull-right si-popup-icon"  ></a>
+
+				<h5 class="sample-title">Spark Service Bureaus Sample App</h5>
+			</div>
+			<div style="text-align: center;">
+				<ul class="nav nav-tabs sample-top-menu" role="tablist">
+					<li id="loginId">
+						<div id="user" class="pull-left">
+							<img class="user-avatar" src="" style="display: none"/>
+						</div>
+						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="uploadId">
+						<a class="menu-item pull-left" data-state="upload" role="tab">Upload</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="getQuotesId">
+						<a class="menu-item pull-left" data-state="getQuotes" role="tab">Get quotes</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="mainIframe-container">
+				<iframe name="mainIframe"
+				        id="mainIframe"
+				        width="680px"
+				        height="523px"
+				        frameborder="0"
+				        scrolling="no"
+				        src="examples/service-bureaus/upload.html"></iframe>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+
+</div>
+
+<!-- /container -->
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
+
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/scripts/init.js"></script>
+
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallLogger.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="plugins/state/statePlugin.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/broadcaster/broadcastEventListener.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/dom-animator.min.js"></script>
+
+
+
+<script>
+
+var isLoggedIn = false, //Do we have access token
+		currentAssetId = 0, //the asset id we are referring to
+		currentFileId ////the file id we are referring to
+		;
+
+//functions
+
+/**
+ * Change state to 'state'
+ * @param state
+ */
+function changeState(state) {
+	statePlugin.changeState(state);
+}
+
+
+function goToUploadFilePage(page) {
+	var uploadPage = page === 'source' ? 'upload-source-file' : 'upload-thumbnail-file';
+
+	uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
+
+	$('#mainIframe').attr('src', uploadPage);
+}
+
+
+function showGetQuotesStep() {
+	$('#uploadId').addClass('verified disabled').removeClass('selected');
+	$('#getQuotesId').addClass('verified selected').removeClass('disabled');
+}
+
+
+//run onload
+jQuery(document).ready(function ($) {
+	ajaxCallLogger.createLoggerElement(".footer");
+	ajaxCallLogger.startIframeListener();
+	broadcastEventListener.startIframeBroadcastListener();
+
+	if (ADSKSpark.Client.isAccessTokenValid()) {
+		$('.menu-item[data-state=login]').data('state', 'loggedIn');
+		isLoggedIn = true;
+		statePlugin.changeState('loggedIn');
+		$('#user').show();
+		$('#loginId').addClass('verified');
+	} else {
+		if (!common.extractParamsFromURL().popup) {
+			$('#appModal').modal('show');
+		}
+		$('.menu-item[data-state=loggedIn]').data('state', 'login');
+		isLoggedIn = false;
+		statePlugin.changeState('login');
+		$('.user-avatar').hide();
+	}
+
+	$(".sample-top-menu").on('click', '.menu-item', function (e) {
+		e.preventDefault();
+		var state = $(this).data("state");
+		statePlugin.changeState(state);
+		$(this).addClass("selected");
+	});
+
+
+	common.setUIFunctionality();
+
+});
+
+var loggedOutCallback = function () {
+	$('#user').hide();
+	$('.menu-item[data-state=loggedIn]').data('state', 'login');
+	$('.sample-top-menu > li').removeClass('verified');
+	$('#requestLog').hide();
+	$('#mainIframe').attr('height', '523px');
+}
+
+//States of the app
+var states = {
+	login: {
+		src: 'plugins/login/login.html',
+		selectedTab: "#loginId",
+		enabledTabs: [],
+		disabledTabs: ['#loginId', '#uploadId', '#getQuotesId'],
+		callbackFunc: loggedOutCallback
+	},
+
+	loggedIn: {
+		src: 'plugins/login/login.html',
+		selectedTab: "#loginId",
+		enabledTabs: ['#loginId', '#uploadId'],
+		disabledTabs: ['#getQuotesId'],
+		callbackFunc: function () {
+			$('.menu-item[data-state=login]').data('state', 'loggedIn');
+			$('#loginId').addClass('verified');
+			$('#requestLog').show();
+			$('#mainIframe').attr('height', '523px');
+		}
+	},
+	upload: {
+		src: 'examples/service-bureaus/upload.html',
+		selectedTab: "#uploadId",
+		enabledTabs: ['#uploadId', '#loginId'],
+		disabledTabs: ['#getQuotesId'],
+		callbackFunc: function () {
+			$('#mainIframe').attr('height', '462px');
+			$('#loginId').addClass('verified');
+		}
+	},
+
+	getQuotes: {
+		src: 'examples/service-bureaus/get-quotes.html',
+		selectedTab: "#getQuotesId",
+		enabledTabs: ['#loginId', '#uploadId', '#getQuotesId'],
+		disabledTabs: [],
+		callbackFunc: function () {
+			$('#loginId').addClass('verified');
+			$('#uploadId').addClass('verified');
+			$('#mainIframe').attr('height', '462px');
+
+		}
+	}
+};
+
+
+/**
+ * Events that are called from the iframe
+ */
+var broadCastsCallbacks = {
+
+	redirectUserToDefaultPage: function (optionalParams) {
+		if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+			changeState('upload');
+			isLoggedIn = true;
+		} else {
+			$('#mainIframe').attr('height', '523px');
+		}
+		if (optionalParams.member) {
+			$('#user span').text(optionalParams.member.name);
+			if (optionalParams.member.profile.avatar_path) {
+				$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(optionalParams.member.profile.avatar_path)).show();
+			}
+		}
+
+		$('#requestLog').show();
+		$('#loginId').addClass('verified');
+
+	},
+	redirectUserToLoginPage: function () {
+		isLoggedIn = false;
+		$('#mainIframe').attr('height', '523px');
+		changeState('login');
+	},
+	showLoginPageOnly: function () {
+		loggedOutCallback();
+	},
+	upload: function () {
+		$('#mainIframe').attr('height', '462px');
+	},
+
+	getQuotes: function (optionalParams) {
+		currentFileId = optionalParams.fileId;
+
+		if (!currentFileId) {
+			changeState('upload');
+		} else {
+			showGetQuotesStep();
+			$('#mainIframe').attr('height', '462px');
+			states.getQuotes.src = 'examples/service-bureaus/getQuotes.html?fileId=' + currentFileId;
+		}
+
+	}
+};
+
+/**
+ * Map of all the possible broadcased events from the iframe
+ * @type {Array}
+ */
+var broadcastMapper = [];
+
+broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
+broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
+broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
+broadcastMapper['upload'] = broadCastsCallbacks.upload;
+broadcastMapper['getQuotes'] = broadCastsCallbacks.getQuotes;
+
+
+//Entertain the masses
+var domAnimator = new DomAnimator();
+domAnimator.addFrame('S');
+domAnimator.addFrame('S-P');
+domAnimator.addFrame('S-P-A');
+domAnimator.addFrame('S-P-A-R');
+domAnimator.addFrame('S-P-A-R-K');
+domAnimator.animate();
+
+
+</script>
+
+
+</body>
+</html>

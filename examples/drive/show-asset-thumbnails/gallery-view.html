@@ -44,6 +44,10 @@
 			margin: 20px 0;
 		}
 
+		#empty-assets img{
+			padding-bottom: 30px;
+		}
+
 		.img {
 			width: 100%;
 			border-top-left-radius: 4px;
@@ -99,7 +103,6 @@
 		<div class="img">
 			<img src="../../../assets/img/empty_thumbnail_folder_illustration.png" alt="thumbnails illustrations"/>
 		</div>
-		<a class="spark_btn upload-link" href="../upload-thumbnail-file/">Upload your thumbnails</a>
 	</div>
 
 </div>
@@ -233,7 +236,7 @@
 				$('#empty-assets').removeClass('hidden');
 
 				//broadcast the state to the iframe - intended only for the storage UI
-				eventBroadCaster.broadcastEvent('emptyAssets');
+				eventBroadCaster.broadcastEvent('emptyFiles',{fileType:'thumbnails'});
 			}
 		});
 	}
