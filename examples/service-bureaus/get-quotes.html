@@ -60,6 +60,7 @@
 	}
 
 	#quotes-container{
+		display:none;
 	    overflow-y: auto;
 		height: 285px;
 	}
@@ -88,6 +89,10 @@
 	{
 		height: 17px;
 	}
+
+	.materials-container{
+		display:none;
+	}
 </style>
 </head>
 
@@ -100,7 +105,7 @@
 
 	<div class="modal-body">
 		<form id="get-quotes-form" class="sample-app-form" novalidate="">
-			<section class="form_field pull-left">
+			<section class="materials-container form_field pull-left">
 				<label for="materials-select">
 					Select a material <span class="field-label">&nbsp;/&nbsp;material_id</span><i class="required"></i>
 					<i class="spark_icon si-help with_hover"></i>
@@ -159,6 +164,7 @@
 
 	var getSparkMaterials = function(){
 
+		$(".quotes-spinner .spinner").show();
 		ADSKSpark.ServiceBureaus.getSparkMaterials().then(function (response) {
 			console.info('getSparkMaterials response:', response);
 			if (response.length > 0) {
@@ -168,7 +174,9 @@
 						$("<option value='" + materials[i].id + "'>" + materials[i].name + "</option>").appendTo("#materials-select");
 					}
 				}
-
+				$(".quotes-spinner .spinner").hide();
+				$(".materials-container").show();
+				$("#quotes-container").show();
 			}
 		});
 	}
