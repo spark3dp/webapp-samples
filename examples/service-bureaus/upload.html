@@ -12,35 +12,45 @@
 
 	<style>
 
-
 		#upload-wrapper {
 			position: relative;
-
 		}
 
 		#file-input.hidden-upload {
-			height: 44px;
-			width: 122px;
-			left: 315px;
+			height: 25px;
+			width: 50px;
+			left:345px;
 			position: absolute;
-			top: 174px;
+			top: 140px;
 			cursor: pointer;
 			opacity: 0.0;
 		}
 
 		#dropzone {
+			/**
 			display: none;
-			height: 365px;
+			height: 200px;
+			width:200px;
 			text-align: center;
-			border: 3px dashed #e5e5e5;
+			border: 2px dashed #e5e5e5;
 			border-radius: 4px;
-			font-size: 15px;;
+			*/
 		}
 
 		#dropzone h4{
 			font-size: 16px;
 		}
 
+		.file-section{
+			display: inline-table;
+			height: 200px;
+			width:200px;
+			text-align: center;
+			border: 2px #e5e5e5;
+			border-style: solid;
+			border-radius: 4px;
+
+		}
 		#file-upload-result,#file-upload-error{
 			display: none;
 			height: 50px;
@@ -51,18 +61,16 @@
 		}
 
 		#dropzone.drag-active {
-			border: 3px dashed #eb5528;
-			opacity: 1;
+			border: 2px dashed #000000;
+			opacity: 0.3;
 		}
 
-		#upload-icon {
-			margin-top: 70px;
+		.file-icon {
+			margin-top: 26px;
 			margin-bottom: 5px;
 		}
 
-		.spinner {
-			display: none;
-		}
+
 
 		#file-upload-text-res{
 			font-weight: bold;
@@ -90,21 +98,40 @@
 			display: none;
 		}
 
-		#browse-file{
-			margin-left: 5px;
-			text-decoration: underline;
+		.healing-header{
+			padding-bottom: 46px;
+			border-bottom: 0px;
+			text-align: center;
+			padding-top: 45px;
 		}
 
-		.modal-header{
-			border:none;
+		#dropzone {
+			cursor: pointer;
 		}
+
+		#messageError{
+			display: none;
+		}
+
+		.file-section h4{
+			color:#333333;
+			font-size:16px;
+			font-weight: 600;
+		}
+		.form-footer{
+			margin-top: 150px;
+		}
+
+		.file-section:hover{
+			background-color: #f7f7f7;
+		}
+
 	</style>
-
 </head>
 
 <body>
 
-	<div class="container">
+	<!--<div class="container">
 		<div id="manageAsset">
 			<div class="modal-header">
 				<h4 class="modal-title" id="manageTitle">UPLOAD FILE</h4>
@@ -144,7 +171,79 @@
 			</div>
 		</div>
 
+	</div>-->
+
+	<div class="container">
+		<form id="file-form" novalidate="">
+
+			<div class="spinner-with-text">
+				<div id="spinner-text"></div>
+				<div class="spinner"></div>
+			</div>
+
+			<div id="messageError" class="notification-bar fixed">
+				<i class="notification_icon spark_icon si-notification-error"></i>
+				<span>We apologise but there seems to be temporary problem with the service.</span>
+			</div>
+
+			<div id="uploadFile" style="display: none;">
+				<div class="modal-header healing-header">
+					Select a 3D model:
+				</div>
+				<div class="" id="upload-wrapper">
+					<div id="file-upload-error">
+						<div class="notification-bar">
+							<i class="spark_icon"></i> File size exceeds the allowed value
+						</div>
+					</div>
+					<div id="file-upload-result">
+						<div class="notification-bar">
+							<i class="spark_icon si-status-ok"></i> File successfully uploaded
+						</div>
+						<div id="file-upload-text-res"></div>
+						<p>file ID: <span id="file-id"></span>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span>The ID of the file</span></i>
+						</p>
+					</div>
+
+					<div class="col-md-12">
+						<div id="dropzone" class="post-upload file-section col-md-4">
+							<div class="spark_icon si-premade-upload-icon file-icon"></div>
+							<h4 id="file-name" class="post-upload">Upload STL File</h4>
+
+							<div id="file-upload-text">
+								<span>Drop a file</span> or <span id="browse-file">browse</span>
+								<p>Maximum file size of <b></b></p>
+							</div>
+						</div>
+
+
+
+						<a onclick="window.location.href='show-my-assets/index.html'" class="file-section col-md-4">
+							<div class="spark_icon si-drive-files file-icon"></div> <br/>
+							<h4>Import From Drive</h4> <br/>
+
+						</a>
+
+
+						<a onclick="window.location.href='show-predefined-files/index.html'" class="file-section col-md-4">
+							<div  class="spark_icon si-pre-made-good-files file-icon"></div> <br/>
+							<h4>Premade Files</h4>
+
+						</a>
+
+					</div>
+
+					<section class="form_field post-upload" id="file-input-section">
+						<input type="file" id="file-input" accept=".stl" placeholder="file data" class="field hidden-upload" style="display: none" required>
+					</section>
+				</div>
+			</div>
+		</form>
+
 	</div>
+
 <!-- /container -->
 
 
@@ -167,7 +266,191 @@
 <script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
 
 
-<script>
+	<script>
+
+		var fileData;
+
+		var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
+
+		/**
+		 * What happens when user selects file
+		 */
+		function handleFileDrop(file) {
+			fileData = file;
+			if (fileData.size <= allowedFileUploadSize) {
+				$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
+				$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+				$('#file-upload-text').hide();
+				upload(fileData);
+			}else{
+				$('#file-upload-error').show();
+				setTimeout(function(){
+					$('#file-upload-error').hide();
+				},3000);
+			}
+		}
+
+
+		function upload(fileData,fileUrl) {
+			//nice UI
+			$('.spinner-with-text').show();
+			$('.spinner').show();
+			$("#spinner-text").text("Loading...");
+
+			$('#uploadFile').hide();
+
+
+			var uploadCallback = function(result){
+				if (result.files && result.files.length > 0) {
+					location.href = '../service-bureaus/get-quotes.html?fileId=' + result.files[0].file_id;
+				}
+			};
+
+			var uploadPromise;
+
+			if(fileData){
+
+				var sourceFile = {
+					file: fileData,
+					public:true
+				};
+
+				//upload the file to spark drive
+				uploadPromise = ADSKSpark.Files.uploadFile(sourceFile);
+			}
+			else{
+				var body = {
+					fileUrl:fileUrl,
+					fileName:"model.stl"
+				};
+
+				uploadPromise = ADSKSpark.Files.uploadFile(body);
+			}
+
+			uploadPromise.then(function(result) {
+
+				uploadCallback(result)
+
+			},function(error){
+				console.log(error);
+				$("#messageError").show();
+			});
+		}
+
+
+		/**
+		 * Provide file upload UI
+		 * Attempt to use HTML5 file APIs to provide a nicer UI for file upload
+		 */
+		function setFileUploadUI() {
+
+			$("#dropzone").on('click', function(){$('#file-input').click();})
+			//set allowed file size
+			var fileSizeHumanReadable = allowedFileUploadSize.fileSize(1);
+			$('#file-upload-text p').show().find('b').text(fileSizeHumanReadable);
+
+			//make sure the upload form button is initially disabled
+			$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
+
+			//handle file select
+			$('#file-input').on('change', function () {
+				handleFileDrop(this.files[0]);
+			});
+
+			// Check for the various File API support.
+			if (window.File && window.FileReader && window.FileList && window.Blob) {
+				// Great success! All the File APIs are supported.
+				//upload();
+				//setup dropzone functionality
+				var $dropzone = $('#dropzone');
+				$dropzone.show();
+
+				$dropzone.on('dragover', function (e) {
+					e.stopPropagation();
+					e.preventDefault();
+					e.originalEvent.dataTransfer.dropEffect = 'copy';
+					$(this).addClass('drag-active');
+				});
+
+				$dropzone.on('dragleave', function (e) {
+					e.stopPropagation();
+					e.preventDefault();
+					$(this).removeClass('drag-active');
+				});
+
+
+				$dropzone.on('drop', function (e) {
+					$(this).removeClass('drag-active');
+					e.stopPropagation();
+					e.preventDefault();
+					var files = e.originalEvent.dataTransfer.files;
+
+					var file = files[0];
+					var fileExtension = file.name.substring(file.name.length-3,file.name.length);
+
+					if(fileExtension != "obj" && fileExtension!="stl"){
+						return;
+					}
+					handleFileDrop(file);
+				});
+
+
+			} else {
+				$('#file-input').removeClass('hidden-upload');
+			}
+		}
+
+
+
+
+		/**
+		 * Run when DOM is ready.
+		 * The spark object already exists in this point
+		 */
+		jQuery(function ($) {
+
+			//First let's see if we have a valid access token
+			if (!ADSKSpark.Client.isAccessTokenValid()) {
+				location.href = '../../plugins/login/login.html';
+			} else {
+				//Assume we provided assetId in URL
+				var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+				var fileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+				var fileUrl = urlParams['fileUrl'] ? urlParams['fileUrl'] : 0;
+
+				if(fileId!=0){
+					$('.spinner-with-text').show();
+					$('.spinner').show();
+
+					$('#uploadFile').hide();
+
+					location.href = '../service-bureaus/get-quotes.html?fileId=' + fileId;
+				}
+				else if(fileUrl!=0){
+					$('.spinner-with-text').show();
+					$('.spinner').show();
+
+					$('#uploadFile').hide();
+
+					$("#spinner-text").text("Uploading...");
+
+					upload(undefined,fileUrl)
+				}
+				else{
+					$('#uploadFile').show();
+
+				}
+				setFileUploadUI();
+
+				common.setUIFunctionality();
+
+			}
+
+
+		});
+	</script>
+
+<!--<script>
 
 	//log http requests
 	ajaxCallListenerFromIframe();
@@ -313,7 +596,7 @@
 
 	});
 
-</script>
+</script>-->
 
 </body>
 </html>

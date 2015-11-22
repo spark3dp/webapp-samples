@@ -305,7 +305,6 @@
 			uploadPromise = ADSKSpark.Files.uploadFile(body);
 		}
 
-		debugger;
 		uploadPromise.then(function(result) {
 
 			uploadCallback(result)
@@ -407,7 +406,6 @@
 
 				$("#spinner-text").text("Importing...");
 
-				debugger;
 				importMesh(fileId,"",isQuick);
 			}
 			else if(fileUrl!=0){
