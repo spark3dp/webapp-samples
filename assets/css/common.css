@@ -616,6 +616,12 @@ i.stooltip span {
     width: 33px;
 }
 
+.si-pre-made-good-files{
+    background-position: -82px -361px;
+    height: 44px;
+    width: 33px;
+}
+
 .si-drive-files{
     background-position: -11px -360px;
     height: 44px;
@@ -1481,8 +1487,6 @@ li.disabled .not-verified-icon{
 #form-fields .nav-tabs > li.active > a{
     color:#555555;
 }
-
-
 
 /* ============================================================ */
 /* BEGIN Light */
