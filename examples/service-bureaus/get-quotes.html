@@ -30,6 +30,14 @@
 		min-height: 65px;
 	}
 
+	.quote .img-wrapper{
+		border-right:1px solid silver;
+		padding-right: 10px;
+		width:230px;
+		height:45px;
+		float:left;
+	}
+
 	.quote span{
 		float:right;
 		margin-top: 13px;
@@ -50,7 +58,7 @@
 	.quote .spinner{
 		display: none;
 		border-top-color: white;
-		margin-right: 96px;
+		margin-right: 106px;
 	}
 
 	.quote-btn-container{
@@ -201,13 +209,16 @@
 					 if (quotes[i].success) {
 						 exist = true;
 						 var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
-						 $("<div class='quote'><img src='" + logoUrl + "'/><div class='quote-btn-container'><div class='spinner'></div><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Print</a></div><span>$" + quotes[i].price + "</span></div>").appendTo("#quotes-container");
+						 $("<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><div class='spinner'></div><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Select</a></div><span>" + quotes[i].price + "$</span><div style='clear:both;'></div></div>").appendTo("#quotes-container");
 					 }
 				 }
 			 }
 
 			if(exist == false){
 				$("<div class='no-results'>No results found</div>").appendTo("#quotes-container");
+			}
+			else{
+				$("<div style='margin-bottom:10px;'>Select a service bureau:</div>").prependTo("#quotes-container");
 			}
 		 });
 	}
