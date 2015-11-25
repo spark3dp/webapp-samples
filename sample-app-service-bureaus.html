@@ -57,7 +57,6 @@
 
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
 					</li>
 				</ul>
 			</div>
@@ -132,8 +131,12 @@ function goToUploadFilePage(page) {
 
 
 function showGetQuotesStep() {
-	$('#uploadId').addClass('verified disabled').removeClass('selected');
-	$('#getQuotesId').addClass('verified selected').removeClass('disabled');
+	$('#uploadId').addClass('verified').removeClass('selected');
+	$('#getQuotesId').addClass('selected').removeClass('disabled');
+}
+
+function verifyGetQuotesStep() {
+	$('#getQuotesId').addClass('verified');
 }
 
 
@@ -273,6 +276,10 @@ var broadCastsCallbacks = {
 			states.getQuotes.src = 'examples/service-bureaus/get-quotes.html?fileId=' + currentFileId;
 		}
 
+	},
+
+	afterGetQuotes: function () {
+		verifyGetQuotesStep();
 	}
 };
 
@@ -287,6 +294,7 @@ broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLo
 broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
 broadcastMapper['upload'] = broadCastsCallbacks.upload;
 broadcastMapper['getQuotes'] = broadCastsCallbacks.getQuotes;
+broadcastMapper['afterGetQuotes'] = broadCastsCallbacks.afterGetQuotes;
 
 
 //Entertain the masses

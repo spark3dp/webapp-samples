@@ -197,7 +197,8 @@
 		var data = JSON.stringify({ 'items': [ {'material_id': selectedMaterialId,'files': [{"file_id":fileId}]}] });
 
 		ADSKSpark.ServiceBureaus.getQuotes(data).then(function (response) {
-		 console.info('get quotes response:', response);
+
+			eventBroadCaster.broadcastEvent('afterGetQuotes');
 
 			$(".quotes-spinner .spinner").hide();
 			 var quotes = response.quotes;
