@@ -237,7 +237,10 @@
 				if(response.urls != undefined && response.urls.length > 0){
 					$(".spinner").hide();
 					var url = response.urls[0].url;
-					parent.window.open(url);
+					var open = parent.window.open(url);
+					if (open == null || typeof(open)=='undefined') {
+						alert("Please turn off the pop-up blocker and try again.");
+					}
 				}
 			});
 		});
