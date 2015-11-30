@@ -24,6 +24,11 @@
 			border-radius: 3px;
 		}
 
+		.upload-process{
+			padding-top: 113px;
+			display:none;
+		}
+
 		.big-text{
 			font-size: 16px;
 		}
@@ -34,7 +39,7 @@
 		}
 
 		#progressbar{
-			margin-top: 113px;
+
 		}
 
 		.ui-progressbar {
@@ -59,7 +64,8 @@
 
 	<div class="modal-body">
 		<div class="upload-process">
-			<div>Please wait while we are submitting your model to the service bureau</div>
+			<div class="big-text">Please wait while we are submitting your model to the service bureau.</div>
+			<br>
 			<div id="progressbar"><div class="progress-label">Loading...</div></div>
 		</div>
 		<div class="redirect-container">
