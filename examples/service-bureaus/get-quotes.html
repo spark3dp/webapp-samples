@@ -34,7 +34,7 @@
 		border-right:1px solid silver;
 		padding-right: 10px;
 		width:230px;
-		height:45px;
+		height:66px;
 		float:left;
 	}
 
@@ -46,6 +46,7 @@
 	}
 	.quote img{
 		margin-left: 20px;
+		margin-top: 10px;
 	}
 	.quote a{
 		margin-right: 20px;
@@ -65,12 +66,12 @@
 		float: right;
 		position: relative;
 		display: inline;
+		text-align:center;
 	}
 
 	#quotes-container{
 		display:none;
-	    overflow-y: auto;
-		height: 285px;
+
 	}
 
 	#quotes-container .empty-quotes{
@@ -78,6 +79,11 @@
 		font-size: 20px;
 		text-align: center;
 		margin-top: 88px;
+	}
+
+	#quotes-container .quotes-wrapper{
+		overflow-y: auto;
+		height: 330px;
 	}
 
 
@@ -100,6 +106,11 @@
 
 	.materials-container{
 		display:none;
+	}
+
+	.request_accurate_quote{
+		display: block;
+		margin-top: 10px;
 	}
 </style>
 </head>
@@ -202,7 +213,7 @@
 
 			$(".quotes-spinner .spinner").hide();
 			 var quotes = response.quotes;
-
+			var html = "";
 			 var exist = false;
 			 if (quotes != null) {
 				 for (var i in quotes) {
@@ -210,7 +221,13 @@
 					 if (quotes[i].success) {
 						 exist = true;
 						 var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
-						 $("<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Select</a></div><span>" + quotes[i].price + "$</span><div style='clear:both;'></div></div>").appendTo("#quotes-container");
+						 html += "<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Select</a><div style='clear:both;'></div><a class='request_accurate_quote' data-service-bureau-id='" + quotes[i].service_bureau_id + "'>Accurate quote</a></div><span>" + quotes[i].price + "$</span><div style='clear:both;'></div></div>";
+					 }
+					 else{
+						 exist = true;
+						 var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
+						 html += "<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><a class='request_accurate_quote' data-service-bureau-id='" + quotes[i].service_bureau_id + "'>Accurate quote</a></div><div style='clear:both;'></div></div>";
+
 					 }
 				 }
 			 }
@@ -219,6 +236,8 @@
 				$("<div class='no-results'>No results found</div>").appendTo("#quotes-container");
 			}
 			else{
+				$("<div class='quotes-wrapper'></div>").appendTo("#quotes-container");
+				$(html).appendTo(".quotes-wrapper");
 				$("<div style='margin-bottom:10px;'>Select a service bureau:</div>").prependTo("#quotes-container");
 			}
 		 });
@@ -261,6 +280,13 @@
 			}
 		});
 
+		$('#quotes-container').on('click', 'a.request_accurate_quote', function(e) {
+			e.preventDefault();
+			var serviceBureauId = $(this).attr("data-service-bureau-id");
+			if(serviceBureauId != "") {
+				//location.href = "../service-bureaus/submit-model.html?fileId=" + currentFileId + "&serviceBureauId=" + serviceBureauId;
+			}
+		});
 	});
 
 	/**

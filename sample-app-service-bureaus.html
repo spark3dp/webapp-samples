@@ -241,7 +241,7 @@ var states = {
 		callbackFunc: function () {
 			$('#loginId').addClass('verified');
 			$('#uploadId').addClass('verified');
-			$('#mainIframe').attr('height', '462px');
+			$('#mainIframe').attr('height', '550px');
 
 		}
 	},
@@ -303,7 +303,7 @@ var broadCastsCallbacks = {
 			changeState('upload');
 		} else {
 			showGetQuotesStep();
-			$('#mainIframe').attr('height', '462px');
+			$('#mainIframe').attr('height', '550px');
 			states.getQuotes.src = 'examples/service-bureaus/get-quotes.html?fileId=' + currentFileId;
 		}
 
