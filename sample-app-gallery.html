@@ -185,7 +185,7 @@
 		$('.menu-item[data-state=loggedIn]').data('state', 'login');
 		$('.sample-top-menu > li').removeClass('verified');
 		$('#requestLog').hide();
-		$('#mainIframe').attr('height', '523px');
+		$('#mainIframe').attr('height', '550px');
 	}
 
 	//States of the app
@@ -207,7 +207,7 @@
 				$('.menu-item[data-state=login]').data('state', 'loggedIn');
 				$('#loginId').addClass('verified');
 				$('#requestLog').show();
-				$('#mainIframe').attr('height', '523px');
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 		listAssets: {
@@ -260,7 +260,7 @@
 				changeState('listAssets');
 				isLoggedIn = true;
 			} else {
-				$('#mainIframe').attr('height', '523px');
+				$('#mainIframe').attr('height', '550px');
 			}
 			if (optionalParams.member) {
 				$('#user span').text(optionalParams.member.name);
@@ -275,7 +275,7 @@
 		},
 		redirectUserToLoginPage: function () {
 			isLoggedIn = false;
-			$('#mainIframe').attr('height', '523px');
+			$('#mainIframe').attr('height', '550px');
 			changeState('login');
 		},
 		showLoginPageOnly: function () {

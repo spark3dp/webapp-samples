@@ -264,7 +264,7 @@
 				$('#uploadId').removeClass("verified");
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
-
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 
@@ -277,7 +277,7 @@
 				$('#uploadId').removeClass("verified");
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
-
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 
@@ -290,6 +290,7 @@
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
 				$('#uploadId').removeClass("verified");
+				$('#mainIframe').attr('height', '523px');
 
 			}
 		},
@@ -297,14 +298,22 @@
 		analyze:{
 			selectedTab:"#analyzeId",
 			enabledTabs:["#loginId", "#uploadId","#analyzeId"],
-			disabledTabs:["#repairId"]
+			disabledTabs:["#repairId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+
+			}
 		},
 
 
 		repair:{
 			selectedTab:"#repairId",
 			enabledTabs:["#loginId", "#uploadId","#analyzeId", "#repairId"],
-			disabledTabs:[]
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+
+			}
 		}
 
 	};
