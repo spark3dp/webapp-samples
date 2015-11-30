@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show My Assets - list view</title>
+	<title>Spark Sample Application - Service Bureaus</title>
 	<meta charset="utf-8">
 
 	<!-- Bootstrap core CSS -->
@@ -210,7 +210,7 @@
 					 if (quotes[i].success) {
 						 exist = true;
 						 var logoUrl = getServiceBureauLogoUrlById(quotes[i].service_bureau_id);
-						 $("<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><div class='spinner'></div><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Select</a></div><span>" + quotes[i].price + "$</span><div style='clear:both;'></div></div>").appendTo("#quotes-container");
+						 $("<div class='quote'><div class='img-wrapper'><img src='" + logoUrl + "'/></div><div class='quote-btn-container'><a data-service-bureau-id='" + quotes[i].service_bureau_id + "' class='print_btn spark_btn primary pull-right'>Select</a></div><span>" + quotes[i].price + "$</span><div style='clear:both;'></div></div>").appendTo("#quotes-container");
 					 }
 				 }
 			 }
@@ -222,28 +222,6 @@
 				$("<div style='margin-bottom:10px;'>Select a service bureau:</div>").prependTo("#quotes-container");
 			}
 		 });
-	}
-
-	var getCartUrl = function(serviceBureauId, currentFileId){
-
-		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			console.info('getFileDetails file response:', response);
-		    var fileName = response.name;
-
-			var data = JSON.stringify({ 'models' : [ {'file_id' : currentFileId, 'file_name' : fileName, 'quantity':1} ] });
-
-			ADSKSpark.ServiceBureaus.getCartUrl(serviceBureauId, data).then(function (response) {
-				console.info('get cart url response:', response);
-				if(response.urls != undefined && response.urls.length > 0){
-					$(".spinner").hide();
-					var url = response.urls[0].url;
-					var open = parent.window.open(url);
-					if (open == null || typeof(open)=='undefined') {
-						alert("Please turn off the pop-up blocker and try again.");
-					}
-				}
-			});
-		});
 	}
 
 	var initialize = function(){
@@ -279,8 +257,7 @@
 			e.preventDefault();
 			var serviceBureauId = $(this).attr("data-service-bureau-id");
 			if(serviceBureauId != "") {
-				$(this).parents(".quote").find(".spinner").show();
-				getCartUrl(serviceBureauId, currentFileId);
+				location.href = "../service-bureaus/submit-model.html?fileId=" + currentFileId + "&serviceBureauId=" + serviceBureauId;
 			}
 		});
 

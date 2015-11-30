@@ -57,6 +57,13 @@
 
 						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
 						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="submitModelId">
+						<a class="menu-item pull-left" data-state="submitModel" role="tab">Submit model</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
 					</li>
 				</ul>
 			</div>
@@ -107,7 +114,8 @@
 
 var isLoggedIn = false, //Do we have access token
 		currentAssetId = 0, //the asset id we are referring to
-		currentFileId ////the file id we are referring to
+		currentFileId, ////the file id we are referring to
+		currentServiceBureauId
 		;
 
 //functions
@@ -135,8 +143,18 @@ function showGetQuotesStep() {
 	$('#getQuotesId').addClass('selected').removeClass('disabled');
 }
 
+function showSubmitModelStep() {
+	$('#uploadId').addClass('verified').removeClass('selected');
+	$('#getQuotesId').addClass('verified').removeClass('selected');
+	$('#submitModelId').addClass('selected').removeClass('disabled');
+}
+
 function verifyGetQuotesStep() {
 	$('#getQuotesId').addClass('verified');
+}
+
+function verifySubmitModelStep() {
+	$('#submitModelId').addClass('verified');
 }
 
 
@@ -188,7 +206,7 @@ var states = {
 		src: 'plugins/login/login.html',
 		selectedTab: "#loginId",
 		enabledTabs: [],
-		disabledTabs: ['#loginId', '#uploadId', '#getQuotesId'],
+		disabledTabs: ['#loginId', '#uploadId', '#getQuotesId', '#submitModelId'],
 		callbackFunc: loggedOutCallback
 	},
 
@@ -196,7 +214,7 @@ var states = {
 		src: 'plugins/login/login.html',
 		selectedTab: "#loginId",
 		enabledTabs: ['#loginId', '#uploadId'],
-		disabledTabs: ['#getQuotesId'],
+		disabledTabs: ['#getQuotesId', '#submitModelId'],
 		callbackFunc: function () {
 			$('.menu-item[data-state=login]').data('state', 'loggedIn');
 			$('#loginId').addClass('verified');
@@ -208,7 +226,7 @@ var states = {
 		src: 'examples/service-bureaus/upload.html',
 		selectedTab: "#uploadId",
 		enabledTabs: ['#uploadId', '#loginId'],
-		disabledTabs: ['#getQuotesId'],
+		disabledTabs: ['#getQuotesId', '#submitModelId'],
 		callbackFunc: function () {
 			$('#mainIframe').attr('height', '462px');
 			$('#loginId').addClass('verified');
@@ -219,12 +237,25 @@ var states = {
 		src: 'examples/service-bureaus/get-quotes.html',
 		selectedTab: "#getQuotesId",
 		enabledTabs: ['#loginId', '#uploadId', '#getQuotesId'],
-		disabledTabs: [],
+		disabledTabs: ['#submitModelId'],
 		callbackFunc: function () {
 			$('#loginId').addClass('verified');
 			$('#uploadId').addClass('verified');
 			$('#mainIframe').attr('height', '462px');
 
+		}
+	},
+
+	submitModel:{
+		src: 'examples/service-bureaus/submit-model.html',
+		selectedTab: "#submitModelId",
+		enabledTabs: ['#loginId', '#uploadId', '#getQuotesId', '#submitModelId'],
+		disabledTabs: [],
+		callbackFunc: function () {
+			$('#loginId').addClass('verified');
+			$('#uploadId').addClass('verified');
+			$('#getQuotesId').addClass('verified');
+			$('#mainIframe').attr('height', '462px');
 		}
 	}
 };
@@ -278,8 +309,26 @@ var broadCastsCallbacks = {
 
 	},
 
+	submitModel: function (optionalParams) {
+		currentFileId = optionalParams.fileId;
+		currentServiceBureauId = optionalParams.serviceBureauId;
+
+		if (!currentFileId || ! currentServiceBureauId) {
+			changeState('upload');
+		} else {
+			showSubmitModelStep();
+			$('#mainIframe').attr('height', '462px');
+			states.submitModel.src = 'examples/service-bureaus/submit-model.html?fileId=' + currentFileId + "&serviceBureauId=" + currentServiceBureauId;
+		}
+
+	},
+
 	afterGetQuotes: function () {
 		verifyGetQuotesStep();
+	},
+
+	afterSubmitModel: function () {
+		verifySubmitModelStep();
 	}
 };
 
@@ -294,8 +343,9 @@ broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLo
 broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
 broadcastMapper['upload'] = broadCastsCallbacks.upload;
 broadcastMapper['getQuotes'] = broadCastsCallbacks.getQuotes;
+broadcastMapper['submitModel'] = broadCastsCallbacks.submitModel;
 broadcastMapper['afterGetQuotes'] = broadCastsCallbacks.afterGetQuotes;
-
+broadcastMapper['afterSubmitModel'] = broadCastsCallbacks.afterSubmitModel;
 
 //Entertain the masses
 var domAnimator = new DomAnimator();
