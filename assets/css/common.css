@@ -3,6 +3,7 @@ body {
     font-size: 14px;
     font-weight: 400;
     color: #333333;
+    overflow-x:hidden;
 }
 
 h1, h2, h3 {
@@ -615,6 +616,12 @@ i.stooltip span {
     width: 33px;
 }
 
+.si-pre-made-good-files{
+    background-position: -82px -361px;
+    height: 44px;
+    width: 33px;
+}
+
 .si-drive-files{
     background-position: -11px -360px;
     height: 44px;
@@ -970,7 +977,7 @@ i.stooltip span {
     height: 300px;
     margin: auto;
     position: absolute;
-    top:40px;
+    top:150px;
     left:0;
     right:0;
 }
@@ -1128,7 +1135,7 @@ li.disabled .not-verified-icon{
 
 #breadcrumbs-section #action-button #create-file i.si-add-item{
     left:20px;
-    top:11px;
+    top:14px;
 }
 
 #breadcrumbs-section #action-button #create-file i.stooltip span{
@@ -1480,8 +1487,6 @@ li.disabled .not-verified-icon{
 #form-fields .nav-tabs > li.active > a{
     color:#555555;
 }
-
-
 
 /* ============================================================ */
 /* BEGIN Light */

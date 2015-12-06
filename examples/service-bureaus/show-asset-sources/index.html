@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show Asset Thumbnails - list view</title>
+	<title>Spark Sample Application - Show Asset Sources</title>
 	<meta charset="utf-8">
 
 	<!-- Bootstrap core CSS -->
@@ -13,7 +13,7 @@
 	<style>
 		.modal-header {
 			position: relative;
-			padding: 10px 20px;
+			padding: 8px 20px;
 		}
 
 		.modal-header .layouts {
@@ -21,7 +21,6 @@
 			right: 0;
 			background-color: #ffffff;
 			padding-left: 10px;
-			top:9px;
 		}
 
 		.modal-header .layouts a {
@@ -43,9 +42,6 @@
 		#empty-files a {
 			margin: 20px 0;
 		}
-		#empty-files img{
-			padding-bottom: 30px;
-		}
 
 		.img {
 			width: 100%;
@@ -55,10 +51,6 @@
 			cursor: pointer;
 			position: absolute;
 			left: -20px;
-		}
-
-		#files{
-			margin-top:-14px;
 		}
 
 		.assets-container{
@@ -77,19 +69,12 @@
 	<div class="spinner"></div>
 
 	<div class="hidden" id="files">
-		<div class="modal-header">
-			<div class="layouts">
-				<a class='gallery-view-link' href="gallery-view.html"><i class="spark_icon si-mosaic-layout"></i></a>
-				<i class="spark_icon si-list-layout-active"></i>
-			</div>
-		</div>
 		<div class="assets-container">
 			<table class="table">
 				<thead>
 				<tr>
-					<th>Name<br/><span>caption</span></th>
+					<th>Name<br/><span>file_name</span></th>
 					<th>ID<br/><span>file_id</span></th>
-					<th></th>
 				</tr>
 				</thead>
 				<tbody id="filesTbody">
@@ -100,13 +85,14 @@
 	</div>
 
 	<div class="hidden" id="empty-files">
-		<p>Thumbnails are uploaded files containing photos of the printed asset<br/>
-			or rendered images of the 3D model.
+		<p>Any uploaded file can be defined as an asset source file,<br/>
+			but they are usually 3D printable files or high-resolution images.
 		</p>
 
 		<div class="img">
-			<img src="../../../assets/img/empty_thumbnail_folder_illustration.png" alt="thumbnails illustrations"/>
+			<img src="../../../assets/img/empty_source_folder_illustration.png" alt="sources illustrations"/>
 		</div>
+		<a class="spark_btn upload-link" href="../upload-source-file/">Upload your source file</a>
 	</div>
 
 </div>
@@ -160,76 +146,49 @@
 	/**
 	 * Retrieve asset sources and set them in a table
 	 */
-	function retrieveAssetThumbnailsAndSetInDOM() {
+	function retrieveAssetSourcesAndSetInDOM() {
 		//Get my assets and append to table in DOM
-		ADSKSpark.Assets.retrieveAssetThumbnails(currentAssetId).then(function (response) {
+		ADSKSpark.Assets.retrieveAssetSources(currentAssetId).then(function (response) {
 			$('.spinner').hide();
-			console.info('response after thumbnails for asset ' + currentAssetId + ':', response);
-			$('#filesTbody').empty();
-			var thumbnails = response.thumbnails;
+			console.info('response after sources for asset ' + currentAssetId + ':', response);
+			$('#assetsTbody').empty();
+			var sources = response.sources;
 
-			if (thumbnails.length) {
-				$('#files').removeClass('hidden');
-				$.each(thumbnails, function (index, item) {
-					var tr = $('<tr></tr>');
-					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + (item.caption.length ? item.caption : '-') +
-					'<span>' + (item.is_primary ? ' <span class="title-label">(primary)</span>' : '') + '</span></td>'));
-					tr.append($('<td>' + item.file_id + '</td>'));
+			var tr = $('<tr class="in-table"></tr>');
+			tr.append($('<td>...</td><td></td>'));
 
-					var actionsElem = '<div class="dropdown actions">' +
-							'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-							'<li role="presentation"><a role="menuitem" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + item.file_id + '">EDIT</a></li>' +
-							'<li role="presentation"><a role="menuitem" onclick="deleteThumbnailsFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'tr\'))"">DELETE</a></li>' +
-							'</ul></div>';
+			$(tr).on('click', function(e){
 
-
-					tr.append($('<td>' + actionsElem + '</td>'));
-
-
-					$('#filesTbody').append(tr);
-
-				});
-			} else {
-				$('#empty-files').removeClass('hidden');
-				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
-				
-				//broadcast the state to the iframe - intended only for the storage UI
-				eventBroadCaster.broadcastEvent('emptyFiles',{fileType:'thumbnails'});
-			}
-		});
-
-	}
-
-	/**
-	 * Deletes a thumbnail in an asset
-	 */
-	function deleteThumbnailsFromAsset(assetId, fileId, assetElem) {
-
-		$('#myModal').modal('show');
-
-		//cancel events
-		$('.cancel').off();
-		$('.cancel').on('click', function () {
-			$('#myModal').modal('hide');
-		})
-
-		//delete events
-		$('.delete').off();
-		$('.delete').on('click', function () {
-			ADSKSpark.Assets.deleteAssetThumbnails(assetId, fileId).then(function () {
-				$('#myModal').modal('hide');
-				assetElem.remove();
-
-				//make sure aseets still left
-				if (!$('.in-table td').length) {
-					location.reload();
-				}
+				window.location.href = "../show-my-assets/index.html";
 			});
+
+			$('#filesTbody').append(tr);
+
+
+
+				$('#files').removeClass('hidden');
+				$.each(sources, function (index, item) {
+					if(item.file_name !== 'nopicture.gif' && item.file_type.indexOf("STL")>-1) {
+						var tr = $('<tr class="in-table"></tr>');
+						tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
+						tr.append($('<td>' + item.file_id + '</td>'));
+
+
+						$(tr).on('click', function (e) {
+
+							window.location.href = "../upload.html?fileId=" + item.file_id;
+						});
+
+						$('#filesTbody').append(tr);
+					}
+				});
+
 		});
 
-
 	}
+
+
+
 
 	/**
 	 * Run when DOM is ready.
@@ -248,15 +207,16 @@
 			if (!currentAssetId) {
 				location.href = '../show-my-assets/';
 			} else {
-				retrieveAssetThumbnailsAndSetInDOM();
+				retrieveAssetSourcesAndSetInDOM();
 
 				//set up the correct link to for the gallery view
 				$('.gallery-view-link').attr('href', 'gallery-view.html?assetId=' + currentAssetId);
 			}
 		}
 
+
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'thumbnails', assetId: currentAssetId});
+		eventBroadCaster.broadcastEvent('showAssetFiles', {fileType: 'sources', assetId: currentAssetId});
 
 	});
 

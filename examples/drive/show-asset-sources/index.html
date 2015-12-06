@@ -42,7 +42,9 @@
 		#empty-files a {
 			margin: 20px 0;
 		}
-
+		#empty-files img{
+			padding-bottom: 30px;
+		}
 		.img {
 			width: 100%;
 		}
@@ -93,7 +95,6 @@
 		<div class="img">
 			<img src="../../../assets/img/empty_source_folder_illustration.png" alt="sources illustrations"/>
 		</div>
-		<a class="spark_btn upload-link" href="../upload-source-file/">Upload your source file</a>
 	</div>
 
 </div>
@@ -180,7 +181,7 @@
 				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
 
 				//broadcast the state to the iframe - intended only for the storage UI
-				eventBroadCaster.broadcastEvent('emptyAssets');	
+				eventBroadCaster.broadcastEvent('emptyFiles',{fileType:'sources'});
 			}
 		});
 
