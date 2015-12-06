@@ -184,7 +184,7 @@
 	function handleFileDrop(file) {
 		fileData = file;
 		if (fileData.size <= allowedFileUploadSize) {
-			$('#file-name').html('<p class="uploaded-filename"><b>' + fileData.name + '</b> is waiting for upload</p>');
+			$('#file-name').html('<p class="uploaded-filename">Click the upload button to upload <b>' + fileData.name + '</b></p>');
 			$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
 			$('#file-upload-text').hide();
 		}else{
@@ -326,7 +326,7 @@
 		}
 
 		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('showAssetFiles',{fileType:'sources',assetId:currentAssetId});
+		eventBroadCaster.broadcastEvent('addFileToAsset',{fileType:'sources',assetId:currentAssetId});
 	});
 
 </script>

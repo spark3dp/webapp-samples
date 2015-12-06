@@ -201,6 +201,7 @@
 <!--<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>-->
 
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/renderjson.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/ajaxlogger/ajaxCallListener.js"></script>
@@ -238,7 +239,9 @@
 			});
 		}
 		else{
-			$('#appModal').modal('show');
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			//$('#mainIframe').attr('height', '523px');
@@ -261,7 +264,7 @@
 				$('#uploadId').removeClass("verified");
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
-
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 
@@ -274,7 +277,7 @@
 				$('#uploadId').removeClass("verified");
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
-
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 
@@ -287,6 +290,7 @@
 				$('#analyzeId').removeClass("verified");
 				$('#repairId').removeClass("verified");
 				$('#uploadId').removeClass("verified");
+				$('#mainIframe').attr('height', '523px');
 
 			}
 		},
@@ -294,14 +298,22 @@
 		analyze:{
 			selectedTab:"#analyzeId",
 			enabledTabs:["#loginId", "#uploadId","#analyzeId"],
-			disabledTabs:["#repairId"]
+			disabledTabs:["#repairId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+
+			}
 		},
 
 
 		repair:{
 			selectedTab:"#repairId",
 			enabledTabs:["#loginId", "#uploadId","#analyzeId", "#repairId"],
-			disabledTabs:[]
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+
+			}
 		}
 
 	};

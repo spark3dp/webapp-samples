@@ -280,6 +280,8 @@
 <script type="text/javascript" charset="utf-8"
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+<script type="text/javascript" charset="utf-8" src="assets/scripts/common.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
 <script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>
 
@@ -317,7 +319,9 @@
 			});
 		}
 		else{
-			$('#appModal').modal('show');
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
 			isLoggedIn = false;
 			statePlugin.changeState('login');
 			//$('#mainIframe').attr('height', '523px');
@@ -360,7 +364,7 @@
 			enabledTabs:[],
 			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
 			callbackFunc: function () {
-				//$('#mainIframe').attr('height', '462px');
+				$('#mainIframe').attr('height', '550px');
 			}
 		},
 
@@ -370,7 +374,7 @@
 			enabledTabs:["#loginId", "#manageId","#registerId"],
 			disabledTabs:["#printId","#statusId"],
 			callbackFunc: function () {
-				//$('#mainIframe').attr('height', '462px');
+				$('#mainIframe').attr('height', '523px');
 			}
 		},
 
@@ -378,7 +382,10 @@
 			"src":"examples/print/register-printer.html",
 			selectedTab:"#manageId",
 			enabledTabs:["#loginId","#manageId","#registerId"],
-			disabledTabs:["#printId","#statusId"]
+			disabledTabs:["#printId","#statusId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
 		},
 
 
@@ -386,14 +393,20 @@
 			"src":"examples/print/create-print-job.html",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
-			disabledTabs:[]
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
 		},
 
 		choose_file:{
 			"src":"examples/print/choose-file.html?assetId=1513630",
 			selectedTab:"#printId",
 			enabledTabs:["#loginId","#manageId","#registerId", "#statusId"],
-			disabledTabs:[]
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
 		},
 
 
@@ -401,7 +414,10 @@
 			"src":"examples/print/printer-status.html",
 			selectedTab:"#statusId",
 			enabledTabs:["#loginId","#manageId","#printId","#registerId","#statusId"],
-			disabledTabs:[]
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
 		}
 
 	};

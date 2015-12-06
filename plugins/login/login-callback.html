@@ -32,6 +32,12 @@
 		console.log('Completed login with token: ' + token);
 
 		if (token) {
+
+			// for Segment analytics
+			if(typeof analytics!='undefined'){
+				analytics.track('Sample App User Signed In',{url:parent.location.href});
+			}
+
 			if (window.opener){
 				window.opener.location.reload(true);
 				//close the login window

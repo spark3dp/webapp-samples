@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Spark Sample Application - Service Bureaus</title>
+	<meta charset="utf-8">
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<!-- Common styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+		.spinner {
+			margin-top: 200px;
+		}
+		.redirect-container{
+			display:none;
+			margin-top: 30px;
+			padding-top: 100px;
+			padding-bottom: 100px;
+			text-align: center;
+			border:1px solid #e5e5e5;
+			border-radius: 3px;
+		}
+
+		.upload-process{
+			padding-top: 113px;
+			display:none;
+		}
+
+		.big-text{
+			font-size: 16px;
+		}
+
+		.small-text{
+			font-size: 11px;
+			color: #706e67;
+		}
+
+		.ui-progressbar .ui-progressbar-value{
+			margin:0;
+		}
+
+		.ui-progressbar {
+			position: relative;
+			background-color: #00CA8B !important;
+		}
+		.progress-label {
+			position: absolute;
+			left: 43%;
+			top: 4px;
+			font-weight: bold;
+		}
+
+		.ui-widget-header{
+			border: 1px solid #aaaaaa;
+			background-color: #00CA8B !important;
+			background-image: none !important;
+
+		}
+	</style>
+</head>
+<body>
+
+
+<div class="container">
+	<div class="modal-header">
+		<h4 class="modal-title">SUBMIT MODEL</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="upload-process">
+			<div class="big-text">Please wait while we are submitting your model to the service bureau.</div>
+			<br>
+			<div id="progressbar"><div class="progress-label">Loading...</div></div>
+		</div>
+		<div class="redirect-container">
+			<div class="big-text">We have transferred your 3D print to the selected service bureau.</div>
+			<br>
+			<a class="spark_btn primary open_new_window_btn">Continue&nbsp;&nbsp;<small>▶</small></a>
+			<br><br>
+			<div class="small-text">You will be leaving the sample app and taken to an external site when you click "Continue"</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- spark sdk -->
+<script type="text/javascript" charset="utf-8" src="//code.spark.autodesk.com/autodesk-spark-sdk.min.js"></script>
+
+<!-- common scripts -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/common.js"></script>
+
+<!-- your config file and initialization -->
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../assets/scripts/init.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+
+<script>
+
+	var currentFileId, serviceBureauId;
+
+	var getCartUrl = function(serviceBureauId, currentFileId){
+		$(".upload-process").show();
+		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+			console.info('getFileDetails file response:', response);
+			var fileName = response.name;
+
+			var data = JSON.stringify({ 'models' : [ {'file_id' : currentFileId, 'file_name' : fileName, 'quantity':1} ] });
+
+			ADSKSpark.ServiceBureaus.getCartUrl(serviceBureauId, data).then(function (response) {
+				console.info('get cart url response:', response);
+				if(response.urls != undefined && response.urls.length > 0){
+					$(".upload-process").hide();
+					var url = response.urls[0].url;
+					$(".open_new_window_btn").attr("data-cart-url", url);
+					$(".redirect-container").show();
+					eventBroadCaster.broadcastEvent('afterSubmitModel');
+				}
+			});
+		});
+	};
+
+
+	var progress =	function() {
+
+		var progressbar = $( "#progressbar" );
+
+		var val = progressbar.progressbar( "value" ) || 0;
+
+		progressbar.progressbar( "value", val + 2 );
+
+		if ( val < 99 ) {
+			setTimeout( progress, 200 );
+		}
+	};
+
+
+	$(document).ready(function(){
+		//log http requests
+		ajaxCallListenerFromIframe();
+
+		$(".open_new_window_btn").click(function(e){
+			e.preventDefault();
+			var url = $(this).attr("data-cart-url");
+			parent.window.open(url);
+		});
+	});
+
+	var initialize = function(){
+		var progressbar = $( "#progressbar" );
+		var progressLabel = $( ".progress-label" );
+
+		progressbar.progressbar({
+			value: false,
+			change: function() {
+				progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+			},
+			complete: function() {
+				progressLabel.text( "Complete!" );
+			}
+		});
+
+		setTimeout( progress, 2000 );
+	}
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (!ADSKSpark.Client.isAccessTokenValid()) {
+			location.href = '../../../plugins/login/login.html';
+		} else {
+			//Assume we provided assetId in URL
+			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+			currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+			serviceBureauId = urlParams['serviceBureauId'] ? urlParams['serviceBureauId'] : 0;
+
+			if (!currentFileId || ! serviceBureauId) {
+				location.href = '../service-bureaus/upload.html';
+			} else {
+				common.setUIFunctionality();
+				initialize();
+				getCartUrl(serviceBureauId, currentFileId);
+			}
+		}
+
+		//broadcast the state to the iframe - intended only for the storage UI
+		eventBroadCaster.broadcastEvent('submitModel',{fileId:currentFileId, serviceBureauId: serviceBureauId});
+	});
+
+</script>
+
+</body>
+</html>
