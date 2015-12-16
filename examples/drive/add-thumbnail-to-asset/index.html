@@ -1,104 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Add Thumbnail to Asset</title>
-	<meta charset="utf-8">
+    <title>Spark Sample Application - Add Thumbnail to Asset</title>
+    <meta charset="utf-8">
 
-	<!-- Bootstrap core CSS -->
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Common styles-->
-	<link href="../../../assets/css/common.css" rel="stylesheet">
+    <!-- Common styles-->
+    <link href="../../../assets/css/common.css" rel="stylesheet">
 
-	<style>
+    <style>
 
-		.fileid-label {
-			color: lightgray;
-			font-size: 14px;
-			line-height: 29px;
-		}
+        .fileid-label {
+            color: lightgray;
+            font-size: 14px;
+            line-height: 29px;
+        }
 
-		.form-body {
-			display: inline-block;
-			width: 100%;
-			margin: 10px 0;
-		}
+        .form-body {
+            display: inline-block;
+            width: 100%;
+            margin: 10px 0;
+        }
 
-		.publish-wrapper .field-label {
-			display: block;
-			margin-left: 40px;
-			margin-top: -5px;
-		}
+        .publish-wrapper .field-label {
+            display: block;
+            margin-left: 40px;
+            margin-top: -5px;
+        }
 
-		#primary-placeholder {
-			color: lightgray;
-			font-size: 14px;
-		}
+        #primary-placeholder {
+            color: lightgray;
+            font-size: 14px;
+        }
 
-	</style>
+    </style>
 
 </head>
 
 <body>
 <div class="container">
-	<div id="manageAsset">
-		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">
-				<i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
-					class="title-label"> <span>&middot;</span> Thumbnail file</span>
+    <div id="manageAsset">
+        <div class="modal-header">
+            <h4 class="modal-title" id="manageTitle">
+                <i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
+                    class="title-label"> <span>&middot;</span> Thumbnail file</span>
 
-				<div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
-			</h4>
-		</div>
-		<div class="modal-body">
-			<form id="asset-form" novalidate="">
-				<div class="form-body">
-					<div class="img" id="img-placeholder">
-					</div>
+                <div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form id="asset-form" novalidate="">
+                <div class="form-body">
+                    <div class="img" id="img-placeholder">
+                    </div>
 
-					<div id="form-fields">
-						<section class="form_field">
-							<label for="thumbnail-caption">
-								Edit caption <span class="field-label">&nbsp;/&nbsp;caption</span>
-								<i class="spark_icon si-help with_hover"></i>
-								<i class="stooltip"><span>Caption for this thumbnail</span></i>
-							</label>
-							<input type="text" id="thumbnail-caption" class="form-control">
+                    <div id="form-fields">
+                        <section class="form_field">
+                            <label for="thumbnail-caption">
+                                Edit caption <span class="field-label">&nbsp;/&nbsp;caption</span>
+                                <i class="spark_icon si-help with_hover"></i>
+                                <i class="stooltip"><span>Caption for this thumbnail</span></i>
+                            </label>
+                            <input type="text" id="thumbnail-caption" class="form-control">
 
-						</section>
-						<section class="form_field">
-							<label for="thumbnail-description">
-								Edit description <span class="field-label">&nbsp;/&nbsp;description</span>
-								<i class="spark_icon si-help with_hover"></i>
-								<i class="stooltip"><span>The description of this thumbnail</span></i>
-							</label>
+                        </section>
+                        <section class="form_field">
+                            <label for="thumbnail-description">
+                                Edit description <span class="field-label">&nbsp;/&nbsp;description</span>
+                                <i class="spark_icon si-help with_hover"></i>
+                                <i class="stooltip"><span>The description of this thumbnail</span></i>
+                            </label>
 							<textarea class="form-control field"
-							          id="thumbnail-description"
-									></textarea>
-						</section>
+                                      id="thumbnail-description"
+                                    ></textarea>
+                        </section>
 
-						<section class="form_field">
-							<div class="publish-wrapper">
-								<input type="checkbox" id="c1">
-								<label for="c1">
-									<span class="chk"></span>
-									Make Primary <span id="primary-placeholder"></span>
-									<br>
-									<span class="field-label">is_primary</span>
-								</label>
-							</div>
-						</section>
-					</div>
-				</div>
-				<div class="form-footer">
-					<div class="submit-wrapper">
-						<a href="../show-my-assets/">Cancel</a>
-						<input class="spark_btn primary" type="submit" value="FINISH">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                        <section class="form_field">
+                            <div class="publish-wrapper">
+                                <input type="checkbox" id="c1">
+                                <label for="c1">
+                                    <span class="chk"></span>
+                                    Make Primary <span id="primary-placeholder"></span>
+                                    <br>
+                                    <span class="field-label">is_primary</span>
+                                </label>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <div class="submit-wrapper">
+                        <a href="../show-my-assets/">Cancel</a>
+                        <input class="spark_btn primary" type="submit" value="FINISH">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
 <!-- /container -->
@@ -121,151 +121,150 @@
 
 <script>
 
-	//log http requests
-	ajaxCallListenerFromIframe();
+    //log http requests
+    ajaxCallListenerFromIframe();
 
-	var currentAssetId, //the asset id we are referring to
-			currentFileId //the file id we are referring to
-			;
+    var currentAssetId, //the asset id we are referring to
+            currentFileId //the file id we are referring to
+            ;
 
-	/**
-	 * Cretes a new thumbnail in asset
-	 */
-	function createAssetThumbnail() {
+    /**
+     * Cretes a new thumbnail in asset
+     */
+    function createAssetThumbnail() {
 
-		var thumbnail = {
-			id: currentFileId,
-			caption: $('#thumbnail-caption').val(),
-			description: $('#thumbnail-description').val(),
-		}
+        var thumbnail = {
+            id: currentFileId,
+            caption: $('#thumbnail-caption').val(),
+            description: $('#thumbnail-description').val(),
+        }
 
-		if ($('#c1:checked').length) {
-			thumbnail.is_primary = true;
-		}
+        if ($('#c1:checked').length) {
+            thumbnail.is_primary = true;
+        }
 
-		//nice UI
-		$('.spinner').show();
-		$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
-
-
-		ADSKSpark.Assets.createAssetThumbnails(currentAssetId, [thumbnail]).then(function (response) {
-			if (response) {
-				console.info('response from add thumbnail to file:', response);
-				location.href = '../show-asset-thumbnails/gallery-view.html?assetId=' + currentAssetId;
-			}else{
-				console.log('Some unexpected error occured, try again');
-				$('.spinner').hide();
-				$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-			}
-		});
+        //nice UI
+        $('.spinner').show();
+        $('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
 
 
-
-	}
-
-
-	/**
-	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
-	 */
-	function getAssetDataAndSetDataIntoForm() {
-
-		//get the asset
-		ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
-			if (response) {
-				console.info('response from getAsset:', response);
-				//get the primary thumbnail
-				if (response.thumbnails.length) {
-					for (var i in response.thumbnails) {
-						//edit mode
-						if (response.thumbnails[i].file_id == currentFileId) {
-							$('#thumbnail-caption').val(response.thumbnails[i].caption);
-							$('#thumbnail-description').val(response.thumbnails[i].description);
-							if (response.thumbnails[i].is_primary) {
-								$('#c1').attr('checked', 'checked');
-								break;
-							}else{
-								$('#c1').removeAttr('checked');
-							}
-
-						}
-
-						//search for primary if the current one wasn't primary (in edit mode)
-						if (response.thumbnails[i].is_primary) {
-							ADSKSpark.Files.getFileDetails(response.thumbnails[i].file_id).then(function (fileResponse) {
-								//set the image
-								$('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name, 20) + ')');
-							});
-						}
-					}
-				}
-			} else {
-				console.log('The requested asset is not available');
-			}
-		});
-		$('#fileid-placeholder').text(currentFileId);
-
-		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			if (response) {
-				console.info('response from getFileDetails:', response);
-				$('#filename-placeholder').text(common.maxLength(response.name, 30));
-				if (response.public_url.length) {
-
-					//apply bootstrap classes to align the form
-					$('#img-placeholder').addClass('col-xs-5');
-					$('#form-fields').addClass('col-xs-7');
-
-					var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
-					$('#img-placeholder').append(img);
-				}
-			} else {
-				console.log('The requested file is not available');
-			}
-		});
-	}
-
-	/**
-	 * Run when DOM is ready.
-	 * The spark object already exists in this point
-	 */
-	jQuery(function ($) {
-
-		//First let's see if we have a valid access token
-		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../../plugins/login/login.html';
-		} else {
-
-			//Assume we provided assetId and fileId in URL
-			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
-			currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
-
-			if (!currentAssetId || !currentFileId) {
-				location.href = '../show-my-assets/';
-			} else {
-				getAssetDataAndSetDataIntoForm();
-
-				//fix silly browser bug that remembers the previous disabled state
-				$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-			}
+        ADSKSpark.Assets.createAssetThumbnails(currentAssetId, [thumbnail]).then(function (response) {
+            if (response) {
+                console.info('response from add thumbnail to file:', response);
+                location.href = '../show-asset-thumbnails/gallery-view.html?assetId=' + currentAssetId;
+            } else {
+                console.log('Some unexpected error occured, try again');
+                $('.spinner').hide();
+                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+            }
+        });
 
 
-			//Set listener to form submit
-			$('#asset-form').on('submit', function (e) {
-				e.preventDefault();
-				createAssetThumbnail();
-			});
-
-			common.setUIFunctionality();
-
-			//set up correct links
-			$('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
-		}
-
-		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
+    }
 
 
-	});
+    /**
+     * Retrieves the asset and the thumbnail and sets the retreived data inside the form
+     */
+    function getAssetDataAndSetDataIntoForm() {
+
+        //get the asset
+        ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
+            if (response) {
+                console.info('response from getAsset:', response);
+                //get the primary thumbnail
+                if (response.thumbnails.length) {
+                    for (var i in response.thumbnails) {
+                        //edit mode
+                        if (response.thumbnails[i].file_id == currentFileId) {
+                            $('#thumbnail-caption').val(response.thumbnails[i].caption);
+                            $('#thumbnail-description').val(response.thumbnails[i].description);
+                            if (response.thumbnails[i].is_primary) {
+                                $('#c1').attr('checked', 'checked');
+                                break;
+                            } else {
+                                $('#c1').removeAttr('checked');
+                            }
+
+                        }
+
+                        //search for primary if the current one wasn't primary (in edit mode)
+                        if (response.thumbnails[i].is_primary) {
+                            ADSKSpark.Files.getFileDetails(response.thumbnails[i].file_id).then(function (fileResponse) {
+                                //set the image
+                                $('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name, 20) + ')');
+                            });
+                        }
+                    }
+                }
+            } else {
+                console.log('The requested asset is not available');
+            }
+        });
+        $('#fileid-placeholder').text(currentFileId);
+
+        ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+            if (response) {
+                console.info('response from getFileDetails:', response);
+                $('#filename-placeholder').text(common.maxLength(response.name, 30));
+                if (response.public_url.length) {
+
+                    //apply bootstrap classes to align the form
+                    $('#img-placeholder').addClass('col-xs-5');
+                    $('#form-fields').addClass('col-xs-7');
+
+                    var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
+                    $('#img-placeholder').append(img);
+                }
+            } else {
+                console.log('The requested file is not available');
+            }
+        });
+    }
+
+    /**
+     * Run when DOM is ready.
+     * The spark object already exists in this point
+     */
+    jQuery(function ($) {
+
+        //First let's see if we have a valid access token
+        if (!ADSKSpark.Client.isAccessTokenValid()) {
+            location.href = '../../../plugins/login/login.html';
+        } else {
+
+            //Assume we provided assetId and fileId in URL
+            var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+            currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+            currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+
+            if (!currentAssetId || !currentFileId) {
+                location.href = '../show-my-assets/';
+            } else {
+                getAssetDataAndSetDataIntoForm();
+
+                //fix silly browser bug that remembers the previous disabled state
+                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+            }
+
+
+            //Set listener to form submit
+            $('#asset-form').on('submit', function (e) {
+                e.preventDefault();
+                createAssetThumbnail();
+            });
+
+            common.setUIFunctionality();
+
+            //set up correct links
+            $('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
+        }
+
+        //broadcast the state to the iframe - intended only for the storage UI
+        eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'thumbnails', assetId: currentAssetId});
+
+
+    });
 
 </script>
 

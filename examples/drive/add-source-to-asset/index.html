@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Add Source to Asset</title>
-	<meta charset="utf-8">
+    <title>Spark Sample Application - Add Source to Asset</title>
+    <meta charset="utf-8">
 
-	<!-- Bootstrap core CSS -->
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Common styles -->
-	<link href="../../../assets/css/common.css" rel="stylesheet">
+    <!-- Common styles -->
+    <link href="../../../assets/css/common.css" rel="stylesheet">
 
-	<style>
+    <style>
 
-		.fileid-label{
-			color: lightgray;
-			font-size: 14px;
-			line-height: 29px;
-		}
+        .fileid-label {
+            color: lightgray;
+            font-size: 14px;
+            line-height: 29px;
+        }
 
-	</style>
+    </style>
 
 </head>
 
 <body>
 <div class="container">
-	<div id="manageAsset">
-		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">
-				<i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
-					class="title-label"> <span>&middot;</span> Source file</span>
+    <div id="manageAsset">
+        <div class="modal-header">
+            <h4 class="modal-title" id="manageTitle">
+                <i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
+                    class="title-label"> <span>&middot;</span> Source file</span>
 
-				<div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
-			</h4>
-		</div>
-		<div class="modal-body">
-			<div class="spinner"></div>
-			<form id="asset-form" novalidate="">
-				<div class="form-footer" style="border: 0">
-					<div class="submit-wrapper">
-						<a href="../show-my-assets/">Cancel</a>
-						<input class="spark_btn primary" type="submit" value="FINISH">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                <div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="spinner"></div>
+            <form id="asset-form" novalidate="">
+                <div class="form-footer" style="border: 0">
+                    <div class="submit-wrapper">
+                        <a href="../show-my-assets/">Cancel</a>
+                        <input class="spark_btn primary" type="submit" value="FINISH">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
 <!-- /container -->
@@ -73,95 +73,95 @@
 
 <script>
 
-	//log http requests
-	ajaxCallListenerFromIframe();
+    //log http requests
+    ajaxCallListenerFromIframe();
 
-	var currentAssetId, //the asset id we are referring to
-			currentFileId //the file id we are referring to
-			;
+    var currentAssetId, //the asset id we are referring to
+            currentFileId //the file id we are referring to
+            ;
 
-	var maxFileSize = 15 * 1024 * 1024; //15MB
+    var maxFileSize = 15 * 1024 * 1024; //15MB
 
 
-	//threejs global vars
-	var container, camera, cameraTarget, scene, renderer,controls, mesh,
-			light,backlight,material,SCREEN_WIDTH,SCREEN_HEIGHT,MAX_DEPTH,
-			userInteraction;
+    //threejs global vars
+    var container, camera, cameraTarget, scene, renderer, controls, mesh,
+            light, backlight, material, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DEPTH,
+            userInteraction;
 
-	/**
-	 * Cretes a new source in asset
-	 */
-	function createAssetSource() {
+    /**
+     * Cretes a new source in asset
+     */
+    function createAssetSource() {
 
-		//nice UI
-		$('.spinner').show();
-		$('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
+        //nice UI
+        $('.spinner').show();
+        $('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
 
-		ADSKSpark.Assets.createAssetSources(currentAssetId,currentFileId).then(function(response){
+        ADSKSpark.Assets.createAssetSources(currentAssetId, currentFileId).then(function (response) {
 
-			if (response) {
-				console.info('response from add source to file:', response);
-				location.href = '../show-asset-sources/?assetId=' + currentAssetId;
-			}else{
-				console.log('Some unexpected error occured, try again');
-				$('.spinner').hide();
-				$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-			}
-		});
+            if (response) {
+                console.info('response from add source to file:', response);
+                location.href = '../show-asset-sources/?assetId=' + currentAssetId;
+            } else {
+                console.log('Some unexpected error occured, try again');
+                $('.spinner').hide();
+                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+            }
+        });
 
-	}
+    }
 
-    function getFileType(fileTypeString){
-        if (fileTypeString.indexOf('.stl') > 0){
+    function getFileType(fileTypeString) {
+        if (fileTypeString.indexOf('.stl') > 0) {
             return 'stl';
         }
 
-        if (fileTypeString.indexOf('.obj') > 0){
+        if (fileTypeString.indexOf('.obj') > 0) {
             return 'obj';
         }
 
         return false;
     }
 
-	/**
-	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
-	 */
-	function getAssetDataAndSetDataIntoForm() {
+    /**
+     * Retrieves the asset and the thumbnail and sets the retreived data inside the form
+     */
+    function getAssetDataAndSetDataIntoForm() {
 
-		$('#fileid-placeholder').text(currentFileId);
+        $('#fileid-placeholder').text(currentFileId);
 
-		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
-			if (response) {
+        ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
+            if (response) {
 
                 var fileType = getFileType(response.file_type);
 
-				//Show only relatively small files
-				if (fileType && response.size < maxFileSize){
-					init();
-					ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
-						if (response) {
-							loadObject(response.download_url, fileType);
+                //Show only relatively small files
+                if (fileType && response.size < maxFileSize) {
+                    init();
+                    ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
+                        if (response) {
+                            loadObject(response.download_url, fileType);
 
-						} else {
-							console.log('The requested file is not available');
-						}
-					});
-				}else{
+                        } else {
+                            console.log('The requested file is not available');
+                        }
+                    });
+                } else {
 
                     var message = fileType ? 'This file is to large to display' : 'The viewer only supports stl and obj formats';
                     $('.modal-body').prepend('<p>' + message + '</p>');
                     $('.spinner').hide();
                 }
-				$('#filename-placeholder').text(response.name);
-			} else {
-				console.log('The requested file is not available');
-			}
-		});
-	}
+                $('#filename-placeholder').text(response.name);
+            } else {
+                console.log('The requested file is not available');
+            }
+        });
+    }
 
 
-    function loadObject(src, type){
-		var loader;
+    function loadObject(src, type) {
+        var loader;
 
         switch (type) {
             case 'stl':
@@ -175,155 +175,154 @@
                 return;
         }
 
-		loader.load(src, function ( geometry ) {
+        loader.load(src, function (geometry) {
             var geom = (type === 'stl') ? geometry : geometry.children[0].geometry;
-			var material = new THREE.MeshPhongMaterial({color: 0xAAAAAA, specular: 0x111111, shininess: 200});
+            var material = new THREE.MeshPhongMaterial({color: 0xAAAAAA, specular: 0x111111, shininess: 200});
             geom.center();
-			mesh = new THREE.Mesh(geom, material);
+            mesh = new THREE.Mesh(geom, material);
 
-			scene.add(mesh);
-			$('.spinner').hide();
-			controls.autoRotate = true;
-		});
+            scene.add(mesh);
+            $('.spinner').hide();
+            controls.autoRotate = true;
+        });
     }
 
-	function init() {
-		// SCENE BASIC SETUP
+    function init() {
+        // SCENE BASIC SETUP
 
-		SCREEN_WIDTH = 622;
-		SCREEN_HEIGHT = 300;
-		MAX_DEPTH = 100;
+        SCREEN_WIDTH = 622;
+        SCREEN_HEIGHT = 300;
+        MAX_DEPTH = 100;
 
-		scene = new THREE.Scene();
-		scene.fog = new THREE.Fog(0xb5b5b5, 500, 3000);
+        scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0xb5b5b5, 500, 3000);
 
-		renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-		renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-		renderer.setClearColor(0xffffff);
-		renderer.setPixelRatio(window.devicePixelRatio);
-		renderer.shadowMap.enabled = true;
-		renderer.shadowMap.soft = true;
-		renderer.shadowMap.type = THREE.PCFShadowMap;
+        renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+        renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        renderer.setClearColor(0xffffff);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.soft = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
 
-		// APPEND RENDERER
-		$('.modal-body').prepend(renderer.domElement);
+        // APPEND RENDERER
+        $('.modal-body').prepend(renderer.domElement);
 
-		// CAMERA & CONTROLS
-		var VIEW_ANGLE = 45;
-		var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-		var NEAR = 0.2;
-		var FAR = 2000;
-		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+        // CAMERA & CONTROLS
+        var VIEW_ANGLE = 45;
+        var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+        var NEAR = 0.2;
+        var FAR = 2000;
+        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 
-		camera.position.set(-100, 20, 10);
+        camera.position.set(-100, 20, 10);
 
-		controls = new THREE.OrbitControls(camera, renderer.domElement);
-		controls.maxDistance = 1600;
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.maxDistance = 1600;
 
-		// LIGHTS
-		var ambient = new THREE.AmbientLight(0x444444);
-		scene.add(ambient);
+        // LIGHTS
+        var ambient = new THREE.AmbientLight(0x444444);
+        scene.add(ambient);
 
-		light = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2, 1);
-		light.position.set(100, 1000, 1000);
-		light.target.position.set(0, 0, 0);
-		light.castShadow = true;
-		light.shadowCameraNear = 1200;
-		light.shadowCameraFar = 2500;
-		light.shadowCameraFov = 1;
-		light.shadowMapWidth = 2048;
-		light.shadowMapHeight = 2048;
-		light.shadowBias = 0.0001;
-		light.shadowDarkness = 0.2;
-		light.shadowMapWidth = 1024;
-		light.shadowMapHeight = 1024;
+        light = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2, 1);
+        light.position.set(100, 1000, 1000);
+        light.target.position.set(0, 0, 0);
+        light.castShadow = true;
+        light.shadowCameraNear = 1200;
+        light.shadowCameraFar = 2500;
+        light.shadowCameraFov = 1;
+        light.shadowMapWidth = 2048;
+        light.shadowMapHeight = 2048;
+        light.shadowBias = 0.0001;
+        light.shadowDarkness = 0.2;
+        light.shadowMapWidth = 1024;
+        light.shadowMapHeight = 1024;
 
-		scene.add(light);
+        scene.add(light);
 
 
-		backlight = new THREE.SpotLight(0xffff00, 1, 0, Math.PI / 2, 1);
-		backlight.position.set(0, 50, -800);
-		backlight.target.position.set(0, 0, 0);
-		backlight.castShadow = true;
-		backlight.shadowCameraNear = 1200;
-		backlight.shadowCameraFar = 2500;
-		backlight.shadowCameraFov = 1;
-		backlight.shadowMapWidth = 2048;
-		backlight.shadowMapHeight = 2048;
-		backlight.shadowBias = 0.0001;
-		backlight.shadowDarkness = 0.2;
-		backlight.shadowMapWidth = 1024;
-		backlight.shadowMapHeight = 1024;
+        backlight = new THREE.SpotLight(0xffff00, 1, 0, Math.PI / 2, 1);
+        backlight.position.set(0, 50, -800);
+        backlight.target.position.set(0, 0, 0);
+        backlight.castShadow = true;
+        backlight.shadowCameraNear = 1200;
+        backlight.shadowCameraFar = 2500;
+        backlight.shadowCameraFov = 1;
+        backlight.shadowMapWidth = 2048;
+        backlight.shadowMapHeight = 2048;
+        backlight.shadowBias = 0.0001;
+        backlight.shadowDarkness = 0.2;
+        backlight.shadowMapWidth = 1024;
+        backlight.shadowMapHeight = 1024;
 
-		scene.add(backlight);
+        scene.add(backlight);
 
-		var size = 200;
-		var step = 10;
+        var size = 200;
+        var step = 10;
 
-		var gridHelper = new THREE.GridHelper( size, step );
-		gridHelper.setColors( 0xaaaaaa, 0xe0e0e0 );
-		scene.add( gridHelper );
+        var gridHelper = new THREE.GridHelper(size, step);
+        gridHelper.setColors(0xaaaaaa, 0xe0e0e0);
+        scene.add(gridHelper);
 
         //render everything
         render();
     }
 
-	var rotation = 0;
-	// RENDER LOOP
-	var render = function () {
-		requestAnimationFrame(render);
-		controls.update();
-		renderer.render(scene, camera);
-	};
+    var rotation = 0;
+    // RENDER LOOP
+    var render = function () {
+        requestAnimationFrame(render);
+        controls.update();
+        renderer.render(scene, camera);
+    };
 
-	jQuery('.modal-body').on('click','canvas', function(){
-		controls.autoRotate = false;
-	});
-
-
-
-	/**
-	 * Run when DOM is ready.
-	 * The spark object already exists in this point
-	 */
-	jQuery(function ($) {
-
-		//First let's see if we have a valid access token
-		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../../plugins/login/login.html';
-		} else {
-
-			//Assume we provided assetId and fileId in URL
-			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
-			currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
-
-			if (!currentAssetId || !currentFileId) {
-				location.href = '../show-my-assets/';
-			} else {
-				getAssetDataAndSetDataIntoForm();
-
-				//fix silly browser bug that remembers the previous disabled state
-				$('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-			}
+    jQuery('.modal-body').on('click', 'canvas', function () {
+        controls.autoRotate = false;
+    });
 
 
-			//Set listener to form submit
-			$('#asset-form').on('submit', function (e) {
-				e.preventDefault();
-				createAssetSource();
-			});
+    /**
+     * Run when DOM is ready.
+     * The spark object already exists in this point
+     */
+    jQuery(function ($) {
 
-			common.setUIFunctionality();
+        //First let's see if we have a valid access token
+        if (!ADSKSpark.Client.isAccessTokenValid()) {
+            location.href = '../../../plugins/login/login.html';
+        } else {
 
-			//set up correct links
-			$('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
-		}
+            //Assume we provided assetId and fileId in URL
+            var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+            currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+            currentFileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
 
-		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('addFileToAsset',{fileType:'sources',assetId:currentAssetId});
+            if (!currentAssetId || !currentFileId) {
+                location.href = '../show-my-assets/';
+            } else {
+                getAssetDataAndSetDataIntoForm();
 
-	});
+                //fix silly browser bug that remembers the previous disabled state
+                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
+            }
+
+
+            //Set listener to form submit
+            $('#asset-form').on('submit', function (e) {
+                e.preventDefault();
+                createAssetSource();
+            });
+
+            common.setUIFunctionality();
+
+            //set up correct links
+            $('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
+        }
+
+        //broadcast the state to the iframe - intended only for the storage UI
+        eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'sources', assetId: currentAssetId});
+
+    });
 
 </script>
 
