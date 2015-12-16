@@ -240,7 +240,6 @@
 
         scene.add(light);
 
-
         backlight = new THREE.SpotLight(0xffff00, 1, 0, Math.PI / 2, 1);
         backlight.position.set(0, 50, -800);
         backlight.target.position.set(0, 0, 0);
@@ -268,7 +267,6 @@
         render();
     }
 
-    var rotation = 0;
     // RENDER LOOP
     var render = function () {
         requestAnimationFrame(render);
@@ -276,6 +274,7 @@
         renderer.render(scene, camera);
     };
 
+    //stop autorotating when user clicks on canvas
     jQuery('.modal-body').on('click', 'canvas', function () {
         controls.autoRotate = false;
     });
