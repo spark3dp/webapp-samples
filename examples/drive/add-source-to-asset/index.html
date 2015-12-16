@@ -68,6 +68,7 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
 
 <script type="text/javascript" src="../../../plugins/threejs/STLLoader.js"></script>
+<script type="text/javascript" src="../../../plugins/threejs/OBJLoader.js"></script>
 <script type="text/javascript" src="../../../plugins/threejs/orbitControls.js"></script>
 
 <script>
@@ -78,6 +79,14 @@
 	var currentAssetId, //the asset id we are referring to
 			currentFileId //the file id we are referring to
 			;
+
+	var maxFileSize = 15 * 1024 * 1024; //15MB
+
+
+	//threejs global vars
+	var container, camera, cameraTarget, scene, renderer,controls, mesh,
+			light,backlight,material,SCREEN_WIDTH,SCREEN_HEIGHT,MAX_DEPTH,
+			userInteraction;
 
 	/**
 	 * Cretes a new source in asset
@@ -102,6 +111,17 @@
 
 	}
 
+    function getFileType(fileTypeString){
+        if (fileTypeString.indexOf('.stl') > 0){
+            return 'stl';
+        }
+
+        if (fileTypeString.indexOf('.obj') > 0){
+            return 'obj';
+        }
+
+        return false;
+    }
 
 	/**
 	 * Retrieves the asset and the thumbnail and sets the retreived data inside the form
@@ -112,57 +132,58 @@
 
 		ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
 			if (response) {
+
+                var fileType = getFileType(response.file_type);
+
+				//Show only relatively small files
+				if (fileType && response.size < maxFileSize){
+					init();
+					ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
+						if (response) {
+							loadObject(response.download_url, fileType);
+
+						} else {
+							console.log('The requested file is not available');
+						}
+					});
+				}else{
+
+                    var message = fileType ? 'This file is to large to display' : 'The viewer only supports stl and obj formats';
+                    $('.modal-body').prepend('<p>' + message + '</p>');
+                    $('.spinner').hide();
+                }
 				$('#filename-placeholder').text(response.name);
-			} else {
-				console.log('The requested file is not available');
-			}
-		});
-
-		ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
-			if (response) {
-                loadSTL(response.download_url);
-
 			} else {
 				console.log('The requested file is not available');
 			}
 		});
 	}
 
-	var container, camera, cameraTarget, scene, renderer,controls, mesh,
-			light,backlight,material,SCREEN_WIDTH,SCREEN_HEIGHT,MAX_DEPTH;
 
+    function loadObject(src, type){
+		var loader;
 
-	init();
-	//animate();
+        switch (type) {
+            case 'stl':
+                loader = new THREE.STLLoader();
+                break;
+            case 'obj':
+                loader = new THREE.OBJLoader();
+                break;
+            default:
+                alert('This file type is currently not supported!');
+                return;
+        }
 
-
-    function loadSTL(src){
-		var loader = new THREE.STLLoader();
 		loader.load(src, function ( geometry ) {
+            var geom = (type === 'stl') ? geometry : geometry.children[0].geometry;
 			var material = new THREE.MeshPhongMaterial({color: 0xAAAAAA, specular: 0x111111, shininess: 200});
-			geometry.center();
-			mesh = new THREE.Mesh(geometry, material);
-
-			var bbox = new THREE.BoundingBoxHelper( mesh, 0xff0000 );
-			bbox.update();
-			var scaleX = SCREEN_WIDTH / bbox.scale.x;
-			var scaleY = SCREEN_HEIGHT / bbox.scale.y;
-			var scaleZ = MAX_DEPTH / bbox.scale.z;
-			var minScale = Math.min(scaleX, scaleY, scaleZ);
-
-			if (minScale < 1) {
-				mesh.scale.x *= minScale;
-				mesh.scale.y *= minScale;
-				mesh.scale.z *= minScale;
-			}
-
-			bbox.update();
-
-			mesh.castShadow = true;
-			mesh.receiveShadow = true;
+            geom.center();
+			mesh = new THREE.Mesh(geom, material);
 
 			scene.add(mesh);
 			$('.spinner').hide();
+			controls.autoRotate = true;
 		});
     }
 
@@ -198,7 +219,6 @@
 
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
 		controls.maxDistance = 1600;
-
 
 		// LIGHTS
 		var ambient = new THREE.AmbientLight(0x444444);
@@ -237,31 +257,28 @@
 
 		scene.add(backlight);
 
-        window.addEventListener( 'resize', onWindowResize, false );
+		var size = 200;
+		var step = 10;
 
-    }
+		var gridHelper = new THREE.GridHelper( size, step );
+		gridHelper.setColors( 0xaaaaaa, 0xe0e0e0 );
+		scene.add( gridHelper );
 
-    function onWindowResize() {
-        camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
-        camera.updateProjectionMatrix();
-        renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+        //render everything
+        render();
     }
 
 	var rotation = 0;
 	// RENDER LOOP
 	var render = function () {
 		requestAnimationFrame(render);
-
-		if (mesh) {
-			rotation += 0.005;
-
-			camera.position.y = Math.sin(rotation) * 50;
-			camera.position.z = Math.cos(rotation) * 50;
-			camera.lookAt( scene.position ); // the origin
-		}
 		controls.update();
 		renderer.render(scene, camera);
 	};
+
+	jQuery('.modal-body').on('click','canvas', function(){
+		controls.autoRotate = false;
+	});
 
 
 
@@ -305,9 +322,6 @@
 
 		//broadcast the state to the iframe - intended only for the storage UI
 		eventBroadCaster.broadcastEvent('addFileToAsset',{fileType:'sources',assetId:currentAssetId});
-
-		//draw the STL
-		render();
 
 	});
 
