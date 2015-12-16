@@ -140,7 +140,7 @@
                     init();
                     ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
                         if (response) {
-                            loadObject(response.download_url, fileType);
+                            loadObject(response.download_url_secure, fileType);
 
                         } else {
                             console.log('The requested file is not available');
