@@ -102,7 +102,6 @@
 </div>
 <!-- /container -->
 
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -162,7 +161,7 @@
                 $('#files').removeClass('hidden');
                 $.each(sources, function (index, item) {
 
-                    var tr = $('<tr></tr>');
+                    var tr = $('<tr class="in-table"></tr>');
                     tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
                     tr.append($('<td>' + item.file_id + '</td>'));
 
@@ -177,6 +176,11 @@
 
 
                     $('#filesTbody').append(tr);
+
+                    //click on tr row takes us to the files html (except the last actions td)
+                    tr.find('td:not(:last)').on('click', function () {
+                        location.href = 'viewer.html?assetId=' + currentAssetId + '&fileId=' + item.file_id;
+                    });
                 });
             } else {
                 $('#empty-files').removeClass('hidden');

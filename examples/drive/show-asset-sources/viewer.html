@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Spark Sample Application - Add Source to Asset</title>
+    <title>Spark Sample Application - 3D viewer</title>
     <meta charset="utf-8">
 
     <!-- Bootstrap core CSS -->
@@ -35,14 +35,6 @@
         </div>
         <div class="modal-body">
             <div class="spinner"></div>
-            <form id="asset-form" novalidate="">
-                <div class="form-footer" style="border: 0">
-                    <div class="submit-wrapper">
-                        <a href="../show-my-assets/">Cancel</a>
-                        <input class="spark_btn primary" type="submit" value="FINISH">
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -84,29 +76,6 @@
     var maxFileSize = 15 * 1024 * 1024; //15MB
 
 
-    /**
-     * Cretes a new source in asset
-     */
-    function createAssetSource() {
-
-        //nice UI
-        $('.spinner').show();
-        $('.submit-wrapper .spark_btn.primary').attr('disabled', 'disabled');
-
-        ADSKSpark.Assets.createAssetSources(currentAssetId, currentFileId).then(function (response) {
-
-            if (response) {
-                console.info('response from add source to file:', response);
-                location.href = '../show-asset-sources/?assetId=' + currentAssetId;
-            } else {
-                console.log('Some unexpected error occured, try again');
-                $('.spinner').hide();
-                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
-            }
-        });
-
-    }
-
     function getFileType(fileTypeString) {
         if (fileTypeString.indexOf('.stl') > 0) {
             return 'stl';
@@ -139,7 +108,6 @@
                             Viewer.loadObject(response.download_url_secure, fileType, function(){
                                 $('.spinner').hide();
                             });
-
 
                         } else {
                             console.log('The requested file is not available');
@@ -182,28 +150,17 @@
 
             if (!currentAssetId || !currentFileId) {
                 location.href = '../show-my-assets/';
+            } else if (currentAssetId && !currentFileId) {
+                location.href = '../show-asset-sources/?assetId=' + currentAssetId;
             } else {
                 getAssetDataAndSetDataIntoForm();
-
-                //fix silly browser bug that remembers the previous disabled state
-                $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
             }
 
-
-            //Set listener to form submit
-            $('#asset-form').on('submit', function (e) {
-                e.preventDefault();
-                createAssetSource();
-            });
-
             common.setUIFunctionality();
-
-            //set up correct links
-            $('.submit-wrapper a').attr('href', '../show-my-assets/files.html?assetId=' + currentAssetId);
         }
 
         //broadcast the state to the iframe - intended only for the storage UI
-        eventBroadCaster.broadcastEvent('addFileToAsset', {fileType: 'sources', assetId: currentAssetId});
+        eventBroadCaster.broadcastEvent('showSourceFile', {assetId: currentAssetId, fileId: currentFileId});
 
     });
 
