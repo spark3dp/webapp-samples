@@ -2,8 +2,7 @@
     'use strict';
 
     //threejs global vars
-    var camera, scene, renderer, controls, mesh,
-        light, backlight, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DEPTH;
+    var camera, scene, renderer, controls, mesh, light, backlight;
 
     // RENDER LOOP
     var render = function () {
@@ -14,18 +13,17 @@
 
      function Viewer(){
         return {
-            init: function (elem, screenDim) {
+            init: function (elem, dimensions) {
                 // SCENE BASIC SETUP
-
-                SCREEN_WIDTH = 622;
-                SCREEN_HEIGHT = 300;
-                MAX_DEPTH = 100;
+                //
+                //SCREEN_WIDTH = 622;
+                //SCREEN_HEIGHT = 300;
 
                 scene = new THREE.Scene();
                 scene.fog = new THREE.Fog(0xb5b5b5, 500, 3000);
 
                 renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-                renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+                renderer.setSize(dimensions.width, dimensions.height);
                 renderer.setClearColor(0xffffff);
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.shadowMap.enabled = true;
@@ -37,7 +35,7 @@
 
                 // CAMERA & CONTROLS
                 var VIEW_ANGLE = 45;
-                var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+                var ASPECT = dimensions.width / dimensions.height;
                 var NEAR = 0.2;
                 var FAR = 2000;
                 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
