@@ -11,6 +11,19 @@
         renderer.render(scene, camera);
     };
 
+
+    /**
+     * Check for webgl support
+     * @returns {*}
+     */
+    var webglSupport = function(){
+        try{
+            var canvas = document.createElement( 'canvas' );
+            return !! window.WebGLRenderingContext && (
+                canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+        }catch( e ) { return false; }
+    };
+
      function Viewer(){
         return {
             init: function (elem, dimensions) {
@@ -127,6 +140,24 @@
 
     }
 
-    window.Viewer = Viewer();
+    function noWebGLFallback(){
+        var userNotified = false,
+            errMsg = 'Your browser doesn\'t support WebGL';
+        return{
+            __noSuchMethod__: function(){
+                if (!userNotified) {
+                    console.warn(errMsg);
+                    userNotified = true;
+                    for (var i = 0; i < arguments[1].length; i++) {
+                        if (typeof arguments[1][i] == 'function'){
+                            arguments[1][i](errMsg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    window.Viewer = webglSupport() ? Viewer() : noWebGLFallback();
 
 })();

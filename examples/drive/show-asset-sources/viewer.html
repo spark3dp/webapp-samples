@@ -104,7 +104,10 @@
                 if (fileType && response.size < maxFileSize) {
 
                     var dimensions = {width: 622, height: 400};
-                    Viewer.init($('.modal-body'),dimensions);
+                    Viewer.init($('.modal-body'),dimensions,function(msg){
+                        $('.modal-body').prepend('<p>' + msg + '</p>');
+                        $('.spinner').hide();
+                    });
                     ADSKSpark.Files.downloadFileByURL(currentFileId).then(function (response) {
                         if (response) {
                             Viewer.loadObject(response.download_url_secure, fileType, function(){
