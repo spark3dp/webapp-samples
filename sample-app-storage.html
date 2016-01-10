@@ -85,6 +85,15 @@
                         </div>
                         <div class="bread-crumb hidden" id="file-type">
                             <p class="bread-crumb-tail"></p>
+                            <a disabled onclick="showAssetSources()">
+								<span class="bread-crumb-inner">
+									<i class="spark_icon si-asset-file-icon"></i>
+									<b></b>
+								</span>
+                            </a>
+                        </div>
+                        <div class="bread-crumb hidden" id="file-type-last">
+                            <p class="bread-crumb-tail"></p>
                             <a disabled>
 								<span class="bread-crumb-inner">
 									<i class="spark_icon si-asset-file-icon"></i>
@@ -178,7 +187,6 @@
             currentAssetId = 0, //the asset id we are referring to
             currentFileId,///the file id we are referring to
             filesPage;
-    ;
 
     //functions
 
@@ -221,15 +229,25 @@
         $('#file-type').find('.bread-crumb-inner > b').text(fileType);
     }
 
+    function showThirdCrumb(text){
+        showBreadcramb('file-type-last');
+        $('#file-type-last').find('.bread-crumb-inner > b').text(text);
+    }
+
     /**
      * Load show my assets files page
      * Shows my assets file groups
      */
     function showMyAssetFiles() {
         $('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
-        hideBreadcrumbs(['file-type']);
+        hideBreadcrumbs(['file-type','file-type-last']);
         showAssetBreadcrumb(currentAssetId)
+    }
 
+    function showAssetSources(){
+        $('#mainIframe').attr('src', 'examples/drive/show-asset-sources/?assetId=' + currentAssetId);
+        hideBreadcrumbs(['file-type-last']);
+        showAssetFilesBreadcrumb('sources')
     }
 
     function goToUploadFilePage() {
@@ -268,7 +286,7 @@
             isLoggedIn = true;
             statePlugin.changeState('loggedIn');
             $('#user').show();
-            hideBreadcrumbs(['home', 'asset', 'file-type']);
+            hideBreadcrumbs(['home', 'asset', 'file-type','file-type-last']);
             $('#loginId').addClass('verified');
         } else {
             if (!common.extractParamsFromURL().popup) {
@@ -404,7 +422,7 @@
             $('#breadcrumbs-section div#action-button #create-file').hide();
             $('#breadcrumbs-section div#action-button #create-asset').show();
             showBreadcramb('home');
-            hideBreadcrumbs(['asset', 'file-type']);
+            hideBreadcrumbs(['asset', 'file-type','file-type-last']);
             $('#mainIframe').attr('height', '462px');
         },
 
@@ -416,10 +434,11 @@
             } else {
                 showBreadcramb('home');
                 showAssetBreadcrumb(currentAssetId);
-                hideBreadcrumbs(['file-type']);
+                hideBreadcrumbs(['file-type','file-type-last']);
                 showManageFileStep();
                 $('#mainIframe').attr('height', '462px');
                 states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
+                $('#file-type').find('a').attr('disabled','disabled');
             }
 
         },
@@ -456,7 +475,8 @@
             showAddFileButton(optionalParams.fileType);
         },
         showSourceFile: function (optionalParams) {
-            showAssetFilesBreadcrumb('File ID: ' + optionalParams.fileId);
+            $('#file-type').find('a').removeAttr('disabled');
+            showThirdCrumb('File ID: ' + optionalParams.fileId);
         }
     };
 

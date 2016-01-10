@@ -191,6 +191,7 @@
             $('#file-name').html('<p class="uploaded-filename">Click the upload button to upload <b>' + fileData.name + '</b></p>');
             $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
             $('#file-upload-text').hide();
+            $('#file-form').trigger('submit');
         } else {
             $('#file-upload-error').show();
             setTimeout(function () {
@@ -282,13 +283,14 @@
                 console.info('upload file response:', response);
                 if (response.files && response.files.length > 0) {
 
-                    var continueBtn = '<a class="spark_btn primary" href="../add-source-to-asset/?assetId=' + currentAssetId + '&fileId=' + response.files[0].file_id + '">CONTINUE</a>';
+//                    var continueBtn = '<a class="spark_btn primary" href="../add-source-to-asset/?assetId=' + currentAssetId + '&fileId=' + response.files[0].file_id + '">CONTINUE</a>';
 
-                    $('.spinner').hide();
-                    $('.post-upload').remove();
-                    $('#file-upload-result').show().find('#file-id').text(response.files[0].file_id);
-                    $('#file-upload-text-res').text('File Name: ' + response.files[0].name);
-                    $('.submit-wrapper').append(continueBtn);
+//                    $('.spinner').hide();
+//                    $('.post-upload').remove();
+//                    $('#file-upload-result').show().find('#file-id').text(response.files[0].file_id);
+//                    $('#file-upload-text-res').text('File Name: ' + response.files[0].name);
+//                    $('.submit-wrapper').append(continueBtn);
+                    location.href = '../add-source-to-asset/?assetId=' + currentAssetId + '&fileId=' + response.files[0].file_id;
                 } else {
                     $('#file-upload-text').show();
                     $('.spinner').hide();

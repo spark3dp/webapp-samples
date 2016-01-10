@@ -1113,6 +1113,10 @@ li.disabled .not-verified-icon {
     float: right;
 }
 
+#breadcrumbs-section #action-button #create-file{
+    margin-top:-2px;
+}
+
 #breadcrumbs-section #action-button #create-file > a {
     padding: 0 40px;
 }

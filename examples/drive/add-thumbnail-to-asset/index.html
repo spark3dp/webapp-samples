@@ -137,7 +137,7 @@
             id: currentFileId,
             caption: $('#thumbnail-caption').val(),
             description: $('#thumbnail-description').val(),
-        }
+        };
 
         if ($('#c1:checked').length) {
             thumbnail.is_primary = true;
@@ -158,6 +158,29 @@
                 $('.submit-wrapper .spark_btn.primary').removeAttr('disabled');
             }
         });
+    }
+
+
+    /**
+     * Array buffer to img source
+     */
+    function arrayBuffer2imageSrc(arraybuffer,imgName) {
+        var imgFileParts = imgName.split('.');
+        var imgExtension = imgFileParts.slice(-1,imgFileParts.length);
+
+        if (typeof Blob !== 'undefined') {
+            var blob = new Blob([arraybuffer], {'type': 'image/' + imgExtension.pop()});
+            //Chrome/Safari
+            if (typeof webkitURL !== 'undefined') {
+                return webkitURL.createObjectURL(blob);
+
+                //everyone else who supports File API
+            } else if (typeof URL !== 'undefined') {
+                return URL.createObjectURL(blob);
+            }
+        }
+
+        return false;
 
 
     }
@@ -192,7 +215,7 @@
                         if (response.thumbnails[i].is_primary) {
                             ADSKSpark.Files.getFileDetails(response.thumbnails[i].file_id).then(function (fileResponse) {
                                 //set the image
-                                $('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name, 20) + ')');
+                                $('#primary-placeholder').text('(current: ' + common.maxLength(fileResponse.name, 40) + ')');
                             });
                         }
                     }
@@ -203,18 +226,29 @@
         });
         $('#fileid-placeholder').text(currentFileId);
 
+
+        var setUpUIWithImage = function(imgSrc,imgName){
+            //apply bootstrap classes to align the form
+            $('#img-placeholder').addClass('col-xs-5');
+            $('#form-fields').addClass('col-xs-7');
+
+            var img = $('<img src="' + imgSrc + '" alt="' + imgName + '">');
+            $('#img-placeholder').append(img);
+        };
+
         ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
             if (response) {
                 console.info('response from getFileDetails:', response);
                 $('#filename-placeholder').text(common.maxLength(response.name, 30));
                 if (response.public_url.length) {
-
-                    //apply bootstrap classes to align the form
-                    $('#img-placeholder').addClass('col-xs-5');
-                    $('#form-fields').addClass('col-xs-7');
-
-                    var img = $('<img src="' + ADSKSpark.Helpers.changeHttpToHttps(response.public_url) + '" alt="' + response.name + '">');
-                    $('#img-placeholder').append(img);
+                    setUpUIWithImage(ADSKSpark.Helpers.changeHttpToHttps(response.public_url),response.name);
+                }else{
+                    ADSKSpark.Files.downloadFile(currentFileId).then(function (downloadFileResponse) {
+                        var imgSrc = arrayBuffer2imageSrc(downloadFileResponse.arraybuffer,response.name);
+                        if (imgSrc) {
+                            setUpUIWithImage(imgSrc,response.name)
+                        }
+                    });
                 }
             } else {
                 console.log('The requested file is not available');

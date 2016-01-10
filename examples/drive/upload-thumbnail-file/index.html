@@ -165,7 +165,7 @@
             <form id="file-form" novalidate="">
                 <section class="form_field post-upload" id="file-input-section">
                     <input type="file" id="file-input" class="field hidden-upload"
-                           accept="image/gif, image/jpeg, image/png" required>
+                           accept="image/gif, image/jpg, image/jpeg, image/png" required>
                 </section>
 
                 <div class="form-footer">
@@ -247,6 +247,7 @@
                         //adjust height
                         $('#dropzone-inner').height('220px');
                         isFileValid = true;
+                        $('#file-form').trigger('submit');
                     } else {
                         $('#file-upload-error-size').show();
                         setTimeout(function () {
@@ -331,13 +332,14 @@
     function applyUIcallback(fileId, fileName, filesArray) {
         if (filesArray && filesArray.length > 0) {
 
-            var continueBtn = '<a class="spark_btn primary" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + fileId + '">CONTINUE</a>';
+//            var continueBtn = '<a class="spark_btn primary" href="../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + fileId + '">CONTINUE</a>';
 
-            $('.spinner').hide();
-            $('.post-upload').remove();
-            $('#file-upload-result').show().find('#file-id').text(fileId);
-            $('#file-upload-text-res').text('File Name: ' + fileName);
-            $('.submit-wrapper').append(continueBtn);
+//            $('.spinner').hide();
+//            $('.post-upload').remove();
+//            $('#file-upload-result').show().find('#file-id').text(fileId);
+//            $('#file-upload-text-res').text('File Name: ' + fileName);
+//            $('.submit-wrapper').append(continueBtn);
+            location.href = '../add-thumbnail-to-asset/?assetId=' + currentAssetId + '&fileId=' + fileId;
         } else {
             $('#file-upload-text').show();
             $('.spinner').hide();
