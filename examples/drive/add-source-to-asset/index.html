@@ -17,11 +17,6 @@
             font-size: 14px;
             line-height: 29px;
         }
-
-        #fileid-placeholder{
-            font-weight: bold;
-        }
-
     </style>
 
 </head>
@@ -31,10 +26,10 @@
     <div id="manageAsset">
         <div class="modal-header">
             <h4 class="modal-title" id="manageTitle">
-                <i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
+                <i class="spark_icon si-asset-file-icon"></i><span>File ID:</span> <span id="filename-placeholder"></span><span
                     class="title-label"> <span>&middot;</span> Source file</span>
 
-                <div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
+                <div class="fileid-label pull-right"><span id="fileid-placeholder"></span></div>
             </h4>
         </div>
         <div class="modal-body">
@@ -128,7 +123,7 @@
      */
     function getAssetDataAndSetDataIntoForm() {
 
-        $('#fileid-placeholder').text(currentFileId);
+        $('#filename-placeholder').text(currentFileId);
 
         ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
             if (response) {
@@ -156,7 +151,7 @@
                     $('.modal-body').prepend('<p>' + message + '</p>');
                     $('.spinner').hide();
                 }
-                $('#filename-placeholder').text(response.name);
+                $('#fileid-placeholder').text(common.maxLength(response.name, 40));
             } else {
                 console.log('The requested file is not available');
             }

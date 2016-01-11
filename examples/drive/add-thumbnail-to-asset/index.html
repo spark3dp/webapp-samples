@@ -44,10 +44,10 @@
     <div id="manageAsset">
         <div class="modal-header">
             <h4 class="modal-title" id="manageTitle">
-                <i class="spark_icon si-asset-file-icon"></i><span id="filename-placeholder"></span><span
+                <i class="spark_icon si-asset-file-icon"></i><span>File ID:</span>&nbsp;<span id="filename-placeholder"></span><span
                     class="title-label"> <span>&middot;</span> Thumbnail file</span>
 
-                <div class="fileid-label pull-right"><b>File ID:</b> <span id="fileid-placeholder"></span></div>
+                <div class="fileid-label pull-right"><span id="fileid-placeholder"></span></div>
             </h4>
         </div>
         <div class="modal-body">
@@ -224,7 +224,7 @@
                 console.log('The requested asset is not available');
             }
         });
-        $('#fileid-placeholder').text(currentFileId);
+        $('#filename-placeholder').text(currentFileId);
 
 
         var setUpUIWithImage = function(imgSrc,imgName){
@@ -239,7 +239,7 @@
         ADSKSpark.Files.getFileDetails(currentFileId).then(function (response) {
             if (response) {
                 console.info('response from getFileDetails:', response);
-                $('#filename-placeholder').text(common.maxLength(response.name, 30));
+                $('#fileid-placeholder').text(common.maxLength(response.name, 40));
                 if (response.public_url.length) {
                     setUpUIWithImage(ADSKSpark.Helpers.changeHttpToHttps(response.public_url),response.name);
                 }else{
