@@ -1,151 +1,159 @@
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-	<title>Spark Sample Application - My Drive</title>
+    <title>Spark Sample Application - My Drive</title>
 
 
-	<!-- Bootstrap core CSS -->
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Common styles -->
-	<link href="assets/css/common.css" rel="stylesheet">
+    <!-- Common styles -->
+    <link href="assets/css/common.css" rel="stylesheet">
 
-	<style>
-	</style>
+    <style>
+    </style>
 
-	<script type="text/javascript" charset="utf-8" src="plugins/fullStory-integration.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/fullStory-integration.js"></script>
 
 </head>
 
 <body>
 
 <div class="logged-in-container">
-	<div class="container outer-container">
-		<div class="container sample-app-container" id="container">
-			<div class="sample-app-header clearfix">
-				<!-- Navigation links at the top right of the screen -->
-				<a href="" target="_blank" class="spark_icon pull-right si-popup-icon"  ></a>
+    <div class="container outer-container">
+        <div class="container sample-app-container" id="container">
+            <div class="sample-app-header clearfix">
+                <!-- Navigation links at the top right of the screen -->
+                <a href="" target="_blank" class="spark_icon pull-right si-popup-icon"></a>
 
-				<h5 class="sample-title">Spark Drive Sample App</h5>
-			</div>
-			<div style="text-align: center;">
-				<ul class="nav nav-tabs sample-top-menu" role="tablist">
-					<li id="loginId">
-						<div id="user" class="pull-left">
-							<img class="user-avatar" src="" style="display: none"/>
-						</div>
-						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+                <h5 class="sample-title">Spark Drive Sample App</h5>
+            </div>
+            <div style="text-align: center;">
+                <ul class="nav nav-tabs sample-top-menu" role="tablist">
+                    <li id="loginId">
+                        <div id="user" class="pull-left">
+                            <img class="user-avatar" src="" style="display: none"/>
+                        </div>
+                        <a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
-					</li>
-					<li id="myAssetsId">
-						<a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
+                        <div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-right-arrow"></div>
+                    </li>
+                    <li id="myAssetsId">
+                        <a class="menu-item pull-left" data-state="myAssets" role="tab">My Assets</a>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
-					</li>
-					<li id="createAssetId">
-						<a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
+                        <div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-right-arrow"></div>
+                    </li>
+                    <li id="createAssetId">
+                        <a class="menu-item pull-left" data-state="createAsset" role="tab">Create Asset</a>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-right-arrow"></div>
-					</li>
-					<li id="manageFilesId">
-						<a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
+                        <div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-right-arrow"></div>
+                    </li>
+                    <li id="manageFilesId">
+                        <a class="menu-item pull-left" data-state="manageFiles" role="tab">Manage Files</a>
 
-						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
-						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
-					</li>
-				</ul>
-			</div>
+                        <div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+                        <div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+                    </li>
+                </ul>
+            </div>
 
-			<div class="mainIframe-container">
-				<div id="breadcrumbs-section">
-					<div id="breadcrumbs">
-						<div class="bread-crumb" id="home">
-							<a onclick="changeState('myAssets')">
-								<span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
-							</a>
-						</div>
+            <div class="mainIframe-container">
+                <div id="breadcrumbs-section">
+                    <div id="breadcrumbs">
+                        <div class="bread-crumb" id="home">
+                            <a onclick="changeState('myAssets')">
+                                <span class="bread-crumb-inner"><i class="spark_icon si-home"></i></span>
+                            </a>
+                        </div>
 
-						<div class="bread-crumb hidden" id="asset">
-							<p class="bread-crumb-tail"></p>
-							<a onclick="showMyAssetFiles()">
-								<span class="bread-crumb-inner"></span>
-							</a>
-						</div>
-						<div class="bread-crumb hidden" id="file-type">
-							<p class="bread-crumb-tail"></p>
-							<a disabled>
+                        <div class="bread-crumb hidden" id="asset">
+                            <p class="bread-crumb-tail"></p>
+                            <a onclick="showMyAssetFiles()">
+                                <span class="bread-crumb-inner"></span>
+                            </a>
+                        </div>
+                        <div class="bread-crumb hidden" id="file-type">
+                            <p class="bread-crumb-tail"></p>
+                            <a disabled onclick="showAssetSources()">
 								<span class="bread-crumb-inner">
 									<i class="spark_icon si-asset-file-icon"></i>
 									<b></b>
 								</span>
-							</a>
-						</div>
+                            </a>
+                        </div>
+                        <div class="bread-crumb hidden" id="file-type-last">
+                            <p class="bread-crumb-tail"></p>
+                            <a disabled>
+								<span class="bread-crumb-inner">
+									<i class="spark_icon si-asset-file-icon"></i>
+									<b></b>
+								</span>
+                            </a>
+                        </div>
 
-					</div>
-					<div id="action-button">
-						<div id="create-asset">
-							<a onclick="changeState('createAsset')" class="spark_btn primary">
-								<i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
-							</a>
-						</div>
-						<div id="create-file" class="dropdown actions">
-							<a onclick="goToUploadFilePage()" class="spark_btn primary">
-								<i class="spark_icon si-add-item"></i>ADD FILE
-							</a>
-						</div>
-					</div>
-				</div>
+                    </div>
+                    <div id="action-button">
+                        <div id="create-asset">
+                            <a onclick="changeState('createAsset')" class="spark_btn primary">
+                                <i class="spark_icon si-asset-icon-transparent"></i>CREATE ASSET
+                            </a>
+                        </div>
+                        <div id="create-file" class="dropdown actions">
+                            <a onclick="goToUploadFilePage()" class="spark_btn primary">
+                                <i class="spark_icon si-add-item"></i>ADD FILE
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-				<iframe name="mainIframe"
-				        id="mainIframe"
-				        width="680px"
-				        height="523px"
-				        frameborder="0"
-				        scrolling="no"
-				        src="examples/drive/show-my-assets/index.html"></iframe>
-			</div>
+                <iframe name="mainIframe"
+                        id="mainIframe"
+                        width="680px"
+                        height="523px"
+                        frameborder="0"
+                        scrolling="no"
+                        src="examples/drive/show-my-assets/index.html"></iframe>
+            </div>
 
-			<div class="footer"></div>
-		</div>
-	</div>
+            <div class="footer"></div>
+        </div>
+    </div>
 
 </div>
 
 <!-- /container -->
 
 
-
 <!-- Modal -->
 <div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-						aria-hidden="true">&times;</span></button>
-				<h2>Spark Sample App</h2>
-			</div>
-			<div class="modal-body">
-				This is an open source Drive API demo sample app.
-			</div>
-			<div class="modal-footer">
-				<a class="spark_btn primary large" type="button" onclick="$('#appModal').modal('hide')">LOG IN TO THE SAMPLE</a>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h2>Spark Sample App</h2>
+            </div>
+            <div class="modal-body">
+                This is an open source Drive API demo sample app.
+            </div>
+            <div class="modal-footer">
+                <a class="spark_btn primary large" type="button" onclick="$('#appModal').modal('hide')">LOG IN TO THE
+                    SAMPLE</a>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 
 <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -175,317 +183,331 @@
 
 <script>
 
-	var isLoggedIn = false, //Do we have access token
-			currentAssetId = 0, //the asset id we are referring to
-			currentFileId,///the file id we are referring to
-			filesPage;
-			;
+    var isLoggedIn = false, //Do we have access token
+            currentAssetId = 0, //the asset id we are referring to
+            currentFileId,///the file id we are referring to
+            filesPage;
 
-	//functions
+    //functions
 
-	/**
-	 * Change state to 'state'
-	 * @param state
-	 */
-	function changeState(state) {
-		statePlugin.changeState(state);
-	}
+    /**
+     * Change state to 'state'
+     * @param state
+     */
+    function changeState(state) {
+        statePlugin.changeState(state);
+    }
 
-	/**
-	 * Show breadcrumb
-	 */
-	function showBreadcramb(breadcrumb) {
-		$('#breadcrumbs > div').removeClass('dark');
-		$('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
+    /**
+     * Show breadcrumb
+     */
+    function showBreadcramb(breadcrumb) {
+        $('#breadcrumbs > div').removeClass('dark');
+        $('#breadcrumbs #' + breadcrumb).removeClass('hidden').addClass('dark');
 
-	}
+    }
 
-	function hideBreadcrumbs(breadcrumbs) {
-		for (var i in breadcrumbs) {
-			$('#' + breadcrumbs[i]).addClass('hidden');
-		}
-	}
+    function hideBreadcrumbs(breadcrumbs) {
+        for (var i in breadcrumbs) {
+            $('#' + breadcrumbs[i]).addClass('hidden');
+        }
+    }
 
-	/**
-	 * Show asset breadcrumb
-	 */
-	function showAssetBreadcrumb(assetId) {
-		showBreadcramb('asset');
-		$('#asset').find('.bread-crumb-inner').text('Asset ID: ' + assetId);
+    /**
+     * Show asset breadcrumb
+     */
+    function showAssetBreadcrumb(assetId) {
+        showBreadcramb('asset');
+        $('#asset').find('.bread-crumb-inner').text('Asset ID: ' + assetId);
 
-		//hide the create asset button
-		$('#create-asset').hide();
-	}
+        //hide the create asset button
+        $('#create-asset').hide();
+    }
 
-	function showAssetFilesBreadcrumb(fileType) {
-		showBreadcramb('file-type');
-		$('#file-type').find('.bread-crumb-inner > b').text(fileType);
-	}
+    function showAssetFilesBreadcrumb(fileType) {
+        showBreadcramb('file-type');
+        $('#file-type').find('.bread-crumb-inner > b').text(fileType);
+    }
 
-	/**
-	 * Load show my assets files page
-	 * Shows my assets file groups
-	 */
-	function showMyAssetFiles() {
-		$('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
-		hideBreadcrumbs(['file-type']);
-		showAssetBreadcrumb(currentAssetId)
+    function showThirdCrumb(text){
+        showBreadcramb('file-type-last');
+        $('#file-type-last').find('.bread-crumb-inner > b').text(text);
+    }
 
-	}
+    /**
+     * Load show my assets files page
+     * Shows my assets file groups
+     */
+    function showMyAssetFiles() {
+        $('#mainIframe').attr('src', 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId);
+        hideBreadcrumbs(['file-type','file-type-last']);
+        showAssetBreadcrumb(currentAssetId)
+    }
 
-	function goToUploadFilePage() {
-		var uploadPage = filesPage === 'sources' ? 'upload-source-file' : 'upload-thumbnail-file';
+    function showAssetSources(){
+        $('#mainIframe').attr('src', 'examples/drive/show-asset-sources/?assetId=' + currentAssetId);
+        hideBreadcrumbs(['file-type-last']);
+        showAssetFilesBreadcrumb('sources')
+    }
 
-		uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
+    function goToUploadFilePage() {
+        var uploadPage = filesPage === 'sources' ? 'upload-source-file' : 'upload-thumbnail-file';
 
-		$('#mainIframe').attr('src', uploadPage);
-	}
-	/**
-	 * set manage asset as enabled
-	 */
-	function showManageFileStep() {
-		$('#createAssetId').addClass('verified disabled').removeClass('selected');
-		$('#manageFilesId').addClass('verified selected').removeClass('disabled');
-		$('#myAssetsId').removeClass('selected').addClass('verified');
-	}
+        uploadPage = 'examples/drive/' + uploadPage + '/?assetId=' + currentAssetId;
 
-	/**
-	 * show the create file button
-	 */
-	function showAddFileButton(fileType){
-		$('#create-file').show();
-		filesPage = fileType;
-	}
+        $('#mainIframe').attr('src', uploadPage);
+    }
+    /**
+     * set manage asset as enabled
+     */
+    function showManageFileStep() {
+        $('#createAssetId').addClass('verified disabled').removeClass('selected');
+        $('#manageFilesId').addClass('verified selected').removeClass('disabled');
+        $('#myAssetsId').removeClass('selected').addClass('verified');
+    }
 
-
-	//run onload
-	jQuery(document).ready(function ($) {
-		ajaxCallLogger.createLoggerElement(".footer");
-		ajaxCallLogger.startIframeListener();
-		broadcastEventListener.startIframeBroadcastListener();
-
-		if (ADSKSpark.Client.isAccessTokenValid()) {
-			$('.menu-item[data-state=login]').data('state', 'loggedIn');
-			isLoggedIn = true;
-			statePlugin.changeState('loggedIn');
-			$('#user').show();
-			hideBreadcrumbs(['home', 'asset', 'file-type']);
-			$('#loginId').addClass('verified');
-		} else {
-			if (!common.extractParamsFromURL().popup) {
-				$('#appModal').modal('show');
-			}
-			$('.menu-item[data-state=loggedIn]').data('state', 'login');
-			isLoggedIn = false;
-			statePlugin.changeState('login');
-			$('.user-avatar').hide();
-			$('#breadcrumbs-section').hide();
-		}
-
-		$(".sample-top-menu").on('click', '.menu-item', function (e) {
-			e.preventDefault();
-			var state = $(this).data("state");
-			statePlugin.changeState(state);
-			$(this).addClass("selected");
-		});
+    /**
+     * show the create file button
+     */
+    function showAddFileButton(fileType) {
+        $('#create-file').show();
+        filesPage = fileType;
+    }
 
 
-		common.setUIFunctionality();
+    //run onload
+    jQuery(document).ready(function ($) {
+        ajaxCallLogger.createLoggerElement(".footer");
+        ajaxCallLogger.startIframeListener();
+        broadcastEventListener.startIframeBroadcastListener();
 
-	});
+        if (ADSKSpark.Client.isAccessTokenValid()) {
+            $('.menu-item[data-state=login]').data('state', 'loggedIn');
+            isLoggedIn = true;
+            statePlugin.changeState('loggedIn');
+            $('#user').show();
+            hideBreadcrumbs(['home', 'asset', 'file-type','file-type-last']);
+            $('#loginId').addClass('verified');
+        } else {
+            if (!common.extractParamsFromURL().popup) {
+                $('#appModal').modal('show');
+            }
+            $('.menu-item[data-state=loggedIn]').data('state', 'login');
+            isLoggedIn = false;
+            statePlugin.changeState('login');
+            $('.user-avatar').hide();
+            $('#breadcrumbs-section').hide();
+        }
 
-	var loggedOutCallback = function () {
-		$('#breadcrumbs-section').hide();
-		$('#user').hide();
-		$('.menu-item[data-state=loggedIn]').data('state', 'login');
-		$('.sample-top-menu > li').removeClass('verified');
-		$('#requestLog').hide();
-		$('#mainIframe').attr('height', '550px');
-	}
-
-	//States of the app
-	var states = {
-		login: {
-			src: 'plugins/login/login.html',
-			selectedTab: "#loginId",
-			enabledTabs: [],
-			disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
-			callbackFunc: loggedOutCallback
-		},
-
-		loggedIn: {
-			src: 'plugins/login/login.html',
-			selectedTab: "#loginId",
-			enabledTabs: ['#loginId', '#myAssetsId'],
-			disabledTabs: ['#createAssetId', '#manageFilesId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section').hide();
-				$('.menu-item[data-state=login]').data('state', 'loggedIn');
-				$('#loginId').addClass('verified');
-				$('#requestLog').show();
-				$('#mainIframe').attr('height', '550px');
-			}
-		},
-		myAssets: {
-			src: 'examples/drive/show-my-assets/index.html',
-			selectedTab: "#myAssetsId",
-			enabledTabs: ['#myAssetsId', '#loginId'],
-			disabledTabs: ['#manageFilesId', '#createAssetId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section').css('display', 'inline-block');
-				$('#breadcrumbs-section div#action-button div').hide();
-				showBreadcramb('home');
-				$('#mainIframe').attr('height', '462px');
-				$('#loginId').addClass('verified');
-			}
-		},
-
-		createAsset: {
-			src: 'examples/drive/create-asset/index.html',
-			selectedTab: "#createAssetId",
-			enabledTabs: ['#loginId', '#myAssetsId', '#createAssetId'],
-			disabledTabs: ['#manageFilesId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section div#action-button div').hide();
-				$('#loginId').addClass('verified');
-				$('#myAssetsId').addClass('verified');
-				$('#mainIframe').attr('height', '462px');
-
-			}
-		},
-
-		manageFiles: {
-			src: 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId,
-			selectedTab: "#manageFilesId",
-			enabledTabs: ['#loginId', '#myAssetsId', '#manageFilesId'],
-			disabledTabs: ['#createAssetId'],
-			callbackFunc: function () {
-				$('#breadcrumbs-section div#action-button div').hide();
-				$('#loginId').addClass('verified');
-				$('#myAssetsId').addClass('verified');
-				$('#createAssetId').addClass('verified');
-				$('#mainIframe').attr('height', '462px');
-			}
-		}
-	};
+        $(".sample-top-menu").on('click', '.menu-item', function (e) {
+            e.preventDefault();
+            var state = $(this).data("state");
+            statePlugin.changeState(state);
+            $(this).addClass("selected");
+        });
 
 
-	/**
-	 * Events that are called from the iframe
-	 */
-	var broadCastsCallbacks = {
+        common.setUIFunctionality();
 
-		redirectUserToDefaultPage: function (optionalParams) {
-			if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
-				changeState('myAssets');
-				isLoggedIn = true;
-			} else {
-				$('#mainIframe').attr('height', '550px');
-			}
-			if (optionalParams.member) {
-				$('#user span').text(optionalParams.member.name);
-				if (optionalParams.member.profile.avatar_path) {
-					$('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(optionalParams.member.profile.avatar_path)).show();
-				}
-			}
+    });
 
-			$('#requestLog').show();
-			$('#loginId').addClass('verified');
+    var loggedOutCallback = function () {
+        $('#breadcrumbs-section').hide();
+        $('#user').hide();
+        $('.menu-item[data-state=loggedIn]').data('state', 'login');
+        $('.sample-top-menu > li').removeClass('verified');
+        $('#requestLog').hide();
+        $('#mainIframe').attr('height', '550px');
+    }
 
-		},
-		redirectUserToLoginPage: function () {
-			isLoggedIn = false;
-			$('#mainIframe').attr('height', '550px');
-			changeState('login');
-		},
-		showLoginPageOnly: function () {
-			loggedOutCallback();
-		},
-		myAssetsEvent: function () {
-			$('#breadcrumbs-section div#action-button #create-file').hide();
-			$('#breadcrumbs-section div#action-button #create-asset').show();
-			showBreadcramb('home');
-			hideBreadcrumbs(['asset', 'file-type']);
-			$('#mainIframe').attr('height', '462px');
-		},
+    //States of the app
+    var states = {
+        login: {
+            src: 'plugins/login/login.html',
+            selectedTab: "#loginId",
+            enabledTabs: [],
+            disabledTabs: ['#loginId', '#myAssetsId', '#createAssetId', '#manageFilesId'],
+            callbackFunc: loggedOutCallback
+        },
 
-		showSpecificAssetEvent: function (optionalParams) {
-			currentAssetId = optionalParams.assetId;
-			$('#create-file').hide();
-			if (!currentAssetId) {
-				changeState('myAssets');
-			} else {
-				showBreadcramb('home');
-				showAssetBreadcrumb(currentAssetId);
-				hideBreadcrumbs(['file-type']);
-				showManageFileStep();
-				$('#mainIframe').attr('height', '462px');
-				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
-			}
+        loggedIn: {
+            src: 'plugins/login/login.html',
+            selectedTab: "#loginId",
+            enabledTabs: ['#loginId', '#myAssetsId'],
+            disabledTabs: ['#createAssetId', '#manageFilesId'],
+            callbackFunc: function () {
+                $('#breadcrumbs-section').hide();
+                $('.menu-item[data-state=login]').data('state', 'loggedIn');
+                $('#loginId').addClass('verified');
+                $('#requestLog').show();
+                $('#mainIframe').attr('height', '550px');
+            }
+        },
+        myAssets: {
+            src: 'examples/drive/show-my-assets/index.html',
+            selectedTab: "#myAssetsId",
+            enabledTabs: ['#myAssetsId', '#loginId'],
+            disabledTabs: ['#manageFilesId', '#createAssetId'],
+            callbackFunc: function () {
+                $('#breadcrumbs-section').css('display', 'inline-block');
+                $('#breadcrumbs-section div#action-button div').hide();
+                showBreadcramb('home');
+                $('#mainIframe').attr('height', '462px');
+                $('#loginId').addClass('verified');
+            }
+        },
 
-		},
-		createAssetEvent: function () {
-			$('#breadcrumbs-section div#action-button #create-asset').hide();
-			showBreadcramb('home');
-			$('#mainIframe').attr('height', '462px');
-		},
-		showAssetFilesEvent: function (optionalParams) {
-			currentAssetId = optionalParams.assetId;
+        createAsset: {
+            src: 'examples/drive/create-asset/index.html',
+            selectedTab: "#createAssetId",
+            enabledTabs: ['#loginId', '#myAssetsId', '#createAssetId'],
+            disabledTabs: ['#manageFilesId'],
+            callbackFunc: function () {
+                $('#breadcrumbs-section div#action-button div').hide();
+                $('#loginId').addClass('verified');
+                $('#myAssetsId').addClass('verified');
+                $('#mainIframe').attr('height', '462px');
 
-			if (!currentAssetId) {
-				changeState('myAssets');
-			} else {
-				$('#breadcrumbs-section div#action-button #create-file').hide();
-				showBreadcramb('home');
-				$('#mainIframe').attr('height', '462px');
-				showAssetBreadcrumb(currentAssetId);
-				showAssetFilesBreadcrumb(optionalParams.fileType);
-				showManageFileStep();
-				showAddFileButton(optionalParams.fileType);
-				states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
-			}
-		},
-		addFileToAssetEvent: function(optionalParams){
-			broadCastsCallbacks.showAssetFilesEvent(optionalParams);
-			$('#create-file').hide();
-		},
-		shrinkIframe: function () {
-			$('#mainIframe').attr('height', '462px');
-		},
-		emptyFilesEvent: function(optionalParams){
-			broadCastsCallbacks.shrinkIframe();
-			showAddFileButton(optionalParams.fileType);
+            }
+        },
 
-		}
-	};
-
-	/**
-	 * Map of all the possible broadcased events from the iframe
-	 * @type {Array}
-	 */
-	var broadcastMapper = [];
-
-	broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
-	broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
-	broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
-	broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
-	broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
-	broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
-	broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
-	broadcastMapper['addFileToAsset'] = broadCastsCallbacks.addFileToAssetEvent;
-	broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
-	broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
-	broadcastMapper['emptyFiles'] = broadCastsCallbacks.emptyFilesEvent;
+        manageFiles: {
+            src: 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId,
+            selectedTab: "#manageFilesId",
+            enabledTabs: ['#loginId', '#myAssetsId', '#manageFilesId'],
+            disabledTabs: ['#createAssetId'],
+            callbackFunc: function () {
+                $('#breadcrumbs-section div#action-button div').hide();
+                $('#loginId').addClass('verified');
+                $('#myAssetsId').addClass('verified');
+                $('#createAssetId').addClass('verified');
+                $('#mainIframe').attr('height', '462px');
+            }
+        }
+    };
 
 
-	//Entertain the masses
-	var domAnimator = new DomAnimator();
-	domAnimator.addFrame('S');
-	domAnimator.addFrame('S-P');
-	domAnimator.addFrame('S-P-A');
-	domAnimator.addFrame('S-P-A-R');
-	domAnimator.addFrame('S-P-A-R-K');
-	domAnimator.animate();
+    /**
+     * Events that are called from the iframe
+     */
+    var broadCastsCallbacks = {
+
+        redirectUserToDefaultPage: function (optionalParams) {
+            if (!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+                changeState('myAssets');
+                isLoggedIn = true;
+            } else {
+                $('#mainIframe').attr('height', '550px');
+            }
+            if (optionalParams.member) {
+                $('#user span').text(optionalParams.member.name);
+                if (optionalParams.member.profile.avatar_path) {
+                    $('#user img').attr('src', ADSKSpark.Helpers.changeHttpToHttps(optionalParams.member.profile.avatar_path)).show();
+                }
+            }
+
+            $('#requestLog').show();
+            $('#loginId').addClass('verified');
+
+        },
+        redirectUserToLoginPage: function () {
+            isLoggedIn = false;
+            $('#mainIframe').attr('height', '550px');
+            changeState('login');
+        },
+        showLoginPageOnly: function () {
+            loggedOutCallback();
+        },
+        myAssetsEvent: function () {
+            $('#breadcrumbs-section div#action-button #create-file').hide();
+            $('#breadcrumbs-section div#action-button #create-asset').show();
+            showBreadcramb('home');
+            hideBreadcrumbs(['asset', 'file-type','file-type-last']);
+            $('#mainIframe').attr('height', '462px');
+        },
+
+        showSpecificAssetEvent: function (optionalParams) {
+            currentAssetId = optionalParams.assetId;
+            $('#create-file').hide();
+            if (!currentAssetId) {
+                changeState('myAssets');
+            } else {
+                showBreadcramb('home');
+                showAssetBreadcrumb(currentAssetId);
+                hideBreadcrumbs(['file-type','file-type-last']);
+                showManageFileStep();
+                $('#mainIframe').attr('height', '462px');
+                states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
+                $('#file-type').find('a').attr('disabled','disabled');
+            }
+
+        },
+        createAssetEvent: function () {
+            $('#breadcrumbs-section div#action-button #create-asset').hide();
+            showBreadcramb('home');
+            $('#mainIframe').attr('height', '462px');
+        },
+        showAssetFilesEvent: function (optionalParams) {
+            currentAssetId = optionalParams.assetId;
+
+            if (!currentAssetId) {
+                changeState('myAssets');
+            } else {
+                $('#breadcrumbs-section div#action-button #create-file').hide();
+                showBreadcramb('home');
+                $('#mainIframe').attr('height', '462px');
+                showAssetBreadcrumb(currentAssetId);
+                showAssetFilesBreadcrumb(optionalParams.fileType);
+                showManageFileStep();
+                showAddFileButton(optionalParams.fileType);
+                states.manageFiles.src = 'examples/drive/show-my-assets/files.html?assetId=' + currentAssetId;
+            }
+        },
+        addFileToAssetEvent: function (optionalParams) {
+            broadCastsCallbacks.showAssetFilesEvent(optionalParams);
+            $('#create-file').hide();
+        },
+        shrinkIframe: function () {
+            $('#mainIframe').attr('height', '462px');
+        },
+        emptyFilesEvent: function (optionalParams) {
+            broadCastsCallbacks.shrinkIframe();
+            showAddFileButton(optionalParams.fileType);
+        },
+        showSourceFile: function (optionalParams) {
+            $('#file-type').find('a').removeAttr('disabled');
+            showThirdCrumb('File ID: ' + optionalParams.fileId);
+        }
+    };
+
+    /**
+     * Map of all the possible broadcased events from the iframe
+     * @type {Array}
+     */
+    var broadcastMapper = [];
+
+    broadcastMapper['manageIframe.loggedIn'] = broadCastsCallbacks.redirectUserToDefaultPage;
+    broadcastMapper['manageIframe.loggedOut'] = broadCastsCallbacks.redirectUserToLoginPage;
+    broadcastMapper['manageIframe.loggedOutNoRefresh'] = broadCastsCallbacks.showLoginPageOnly;
+    broadcastMapper['showMyAssets.index'] = broadCastsCallbacks.myAssetsEvent;
+    broadcastMapper['showMyAssets.files'] = broadCastsCallbacks.showSpecificAssetEvent;
+    broadcastMapper['createAsset'] = broadCastsCallbacks.createAssetEvent;
+    broadcastMapper['showAssetFiles'] = broadCastsCallbacks.showAssetFilesEvent;
+    broadcastMapper['showSourceFile'] = broadCastsCallbacks.showSourceFile;
+    broadcastMapper['addFileToAsset'] = broadCastsCallbacks.addFileToAssetEvent;
+    broadcastMapper['updateAsset'] = broadCastsCallbacks.showSpecificAssetEvent;
+    broadcastMapper['emptyAssets'] = broadCastsCallbacks.shrinkIframe;
+    broadcastMapper['emptyFiles'] = broadCastsCallbacks.emptyFilesEvent;
+
+
+    //Entertain the masses
+    var domAnimator = new DomAnimator();
+    domAnimator.addFrame('S');
+    domAnimator.addFrame('S-P');
+    domAnimator.addFrame('S-P-A');
+    domAnimator.addFrame('S-P-A-R');
+    domAnimator.addFrame('S-P-A-R-K');
+    domAnimator.animate();
 
 
 </script>

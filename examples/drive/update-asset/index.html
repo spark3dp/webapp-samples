@@ -1,91 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Update Asset</title>
-	<meta charset="utf-8">
+    <title>Spark Sample Application - Update Asset</title>
+    <meta charset="utf-8">
 
-	<!-- Bootstrap core CSS -->
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Common styles -->
-	<link href="../../../assets/css/common.css" rel="stylesheet">
+    <!-- Common styles -->
+    <link href="../../../assets/css/common.css" rel="stylesheet">
 
-	<style>
-		.notification-bar{
-			position: relative;
-			margin-bottom: 10px;
-			margin-top: -15px;
-			display: none;
-		}
-	</style>
+    <style>
+        .notification-bar {
+            position: relative;
+            margin-bottom: 10px;
+            margin-top: -15px;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
 <div class="container">
-	<div id="manageAsset">
-		<div class="modal-header">
-			<h4 class="modal-title" id="manageTitle">UPDATE AN ASSET</h4>
-		</div>
-		<div class="modal-body">
-			<div class="notification-bar">
-				<i class="spark_icon si-status-ok"></i> Asset was updated successfully
-			</div>
-			<form id="asset-form" novalidate="">
-				<section class="form_field">
-					<label for="manage-assets-title">
-						Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
-						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span>The name of the asset</span></i>
-					</label>
-					<input type="text" required id="manage-assets-title" class="form-control">
+    <div id="manageAsset">
+        <div class="modal-header">
+            <h4 class="modal-title" id="manageTitle">UPDATE AN ASSET</h4>
+        </div>
+        <div class="modal-body">
+            <div class="notification-bar">
+                <i class="spark_icon si-status-ok"></i> Asset was updated successfully
+            </div>
+            <form id="asset-form" novalidate="">
+                <section class="form_field">
+                    <label for="manage-assets-title">
+                        Add name <span class="field-label">&nbsp;/&nbsp;asset_name</span><i class="required"></i>
+                        <i class="spark_icon si-help with_hover"></i>
+                        <i class="stooltip"><span>The name of the asset</span></i>
+                    </label>
+                    <input type="text" required id="manage-assets-title" class="form-control">
 
-					<div class="field_error hidden">
-						<span>Required</span>
-					</div>
-				</section>
-				<section class="form_field">
-					<label for="manage-assets-description">
-						Add description <span class="field-label">&nbsp;/&nbsp;description</span><i class="required"></i>
-						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span>The description of the asset</span></i>
-					</label>
+                    <div class="field_error hidden">
+                        <span>Required</span>
+                    </div>
+                </section>
+                <section class="form_field">
+                    <label for="manage-assets-description">
+                        Add description <span class="field-label">&nbsp;/&nbsp;description</span><i
+                            class="required"></i>
+                        <i class="spark_icon si-help with_hover"></i>
+                        <i class="stooltip"><span>The description of the asset</span></i>
+                    </label>
 					<textarea class="form-control field"
-					          id="manage-assets-description"
-					          required
-							></textarea>
+                              id="manage-assets-description"
+                              required
+                            ></textarea>
 
-					<div class="field_error hidden">
-						<span>Required</span>
-					</div>
+                    <div class="field_error hidden">
+                        <span>Required</span>
+                    </div>
 
-				</section>
+                </section>
 
-				<section class="form_field">
-					<label for="manage-assets-tags">
-						Add tags <span class="field-label">&nbsp;/&nbsp;tags</span><i class="required"></i>
-						<i class="spark_icon si-help with_hover"></i>
-						<i class="stooltip"><span>Tags that describe the asset</span></i>
-					</label>
-					<input type="text" required id="manage-assets-tags" class="form-control">
+                <section class="form_field">
+                    <label for="manage-assets-tags">
+                        Add tags <span class="field-label">&nbsp;/&nbsp;tags</span><i class="required"></i>
+                        <i class="spark_icon si-help with_hover"></i>
+                        <i class="stooltip"><span>Tags that describe the asset</span></i>
+                    </label>
+                    <input type="text" required id="manage-assets-tags" class="form-control">
 
-					<div class="field_error hidden">
-						<span>Required</span>
-					</div>
-				</section>
+                    <div class="field_error hidden">
+                        <span>Required</span>
+                    </div>
+                </section>
 
-				<div class="form-footer">
-					<div class="publish-wrapper">
-						<input type="checkbox" id="c1">
-						<label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
-					</div>
-					<div class="submit-wrapper">
-						<a href="../show-my-assets/">Cancel</a>
-						<input class="spark_btn primary" type="submit" value="UPDATE">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                <div class="form-footer">
+                    <div class="publish-wrapper">
+                        <input type="checkbox" id="c1">
+                        <label for="c1"><span class="chk"></span>Publish asset to Spark gallery?</label>
+                    </div>
+                    <div class="submit-wrapper">
+                        <a href="../show-my-assets/">Cancel</a>
+                        <input class="spark_btn primary" type="submit" value="UPDATE">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
 <!-- /container -->
@@ -108,102 +109,102 @@
 
 <script>
 
-	//log http requests
-	ajaxCallListenerFromIframe();
+    //log http requests
+    ajaxCallListenerFromIframe();
 
-	//the asset id we are referring to
-	var currentAssetId;
+    //the asset id we are referring to
+    var currentAssetId;
 
-	/**
-	 * Updates a new asset
-	 */
-	function updateAsset() {
+    /**
+     * Updates a new asset
+     */
+    function updateAsset() {
 
-		var assetTitle = $('#manage-assets-title'),
-				assetDescription = $('#manage-assets-description'),
-				assetTags = $('#manage-assets-tags');
-
-
-		if (common.validateInput(assetTitle) && common.validateInput(assetDescription) && common.validateInput(assetTags)) {
-			var asset = {
-				title: assetTitle.val(),
-				description: assetDescription.val(),
-				tags: assetTags.val()
-			};
-
-			asset.publish = !!$('#c1:checked').length;
-
-			asset.assetId = currentAssetId;
-			ADSKSpark.Assets.updateAsset(asset).then(function (response) {
-				console.info('update asset response:', response);
-				$('.notification-bar').show();
-				setTimeout(function(){
-					$('.notification-bar').hide();
-				},3000);
-
-				$('.submit-wrapper a').text('Back to my assets');
-
-			});
-		}
-	}
+        var assetTitle = $('#manage-assets-title'),
+                assetDescription = $('#manage-assets-description'),
+                assetTags = $('#manage-assets-tags');
 
 
-	/**
-	 * Calls get asset and sets the retreived data inside the form
-	 */
-	function getAssetAndSetDataIntoForm() {
+        if (common.validateInput(assetTitle) && common.validateInput(assetDescription) && common.validateInput(assetTags)) {
+            var asset = {
+                title: assetTitle.val(),
+                description: assetDescription.val(),
+                tags: assetTags.val()
+            };
 
-		ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
-			if (response) {
-				$("#manage-assets-title").val(response.asset_name);
-				$("#manage-assets-description").text(response.description);
-				var tags = response.keywords.replace(/ /g, ",");
-				tags = (tags != "undefined") ? tags : "";
-				$("#manage-assets-tags").val(tags);
-				if (response.is_gallery_asset) {
-					$('#c1').attr('checked', 'checked');
-				}else{
-					$('#c1').removeAttr('checked');
-				}
-			}
-		});
-	}
+            asset.publish = !!$('#c1:checked').length;
 
-	/**
-	 * Run when DOM is ready.
-	 * The spark object already exists in this point
-	 */
-	jQuery(function ($) {
+            asset.assetId = currentAssetId;
+            ADSKSpark.Assets.updateAsset(asset).then(function (response) {
+                console.info('update asset response:', response);
+                $('.notification-bar').show();
+                setTimeout(function () {
+                    $('.notification-bar').hide();
+                }, 3000);
 
-		//First let's see if we have a valid access token
-		if (!ADSKSpark.Client.isAccessTokenValid()) {
-			location.href = '../../../plugins/login/login.html';
-		} else {
+                $('.submit-wrapper a').text('Back to my assets');
 
-			//Assume we provided assetId in URL
-			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
-
-			if (!currentAssetId) {
-				location.href = '../show-my-assets/';
-			} else {
-				getAssetAndSetDataIntoForm();
-			}
+            });
+        }
+    }
 
 
-			//Set listener to form submit
-			$('#asset-form').on('submit', function (e) {
-				e.preventDefault();
-				updateAsset();
-			});
+    /**
+     * Calls get asset and sets the retreived data inside the form
+     */
+    function getAssetAndSetDataIntoForm() {
 
-			common.setUIFunctionality();
-		}
+        ADSKSpark.Assets.getAsset(currentAssetId).then(function (response) {
+            if (response) {
+                $("#manage-assets-title").val(response.asset_name);
+                $("#manage-assets-description").text(response.description);
+                var tags = response.keywords.replace(/ /g, ",");
+                tags = (tags != "undefined") ? tags : "";
+                $("#manage-assets-tags").val(tags);
+                if (response.is_gallery_asset) {
+                    $('#c1').attr('checked', 'checked');
+                } else {
+                    $('#c1').removeAttr('checked');
+                }
+            }
+        });
+    }
 
-		//broadcast the state to the iframe - intended only for the storage UI
-		eventBroadCaster.broadcastEvent('updateAsset',{assetId:currentAssetId});
+    /**
+     * Run when DOM is ready.
+     * The spark object already exists in this point
+     */
+    jQuery(function ($) {
 
-	});
+        //First let's see if we have a valid access token
+        if (!ADSKSpark.Client.isAccessTokenValid()) {
+            location.href = '../../../plugins/login/login.html';
+        } else {
+
+            //Assume we provided assetId in URL
+            var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
+            currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
+
+            if (!currentAssetId) {
+                location.href = '../show-my-assets/';
+            } else {
+                getAssetAndSetDataIntoForm();
+            }
+
+
+            //Set listener to form submit
+            $('#asset-form').on('submit', function (e) {
+                e.preventDefault();
+                updateAsset();
+            });
+
+            common.setUIFunctionality();
+        }
+
+        //broadcast the state to the iframe - intended only for the storage UI
+        eventBroadCaster.broadcastEvent('updateAsset', {assetId: currentAssetId});
+
+    });
 
 </script>
 
