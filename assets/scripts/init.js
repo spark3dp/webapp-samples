@@ -1,10 +1,10 @@
 //Init the Spark Client - you may supply your personal config through the assets/scripts/config.js file
 var APP_KEY = APP_KEY || '',
 	REDIRECT_URI = REDIRECT_URI || '',
-	IS_PROD = IS_PROD || false;
+	IS_PRODUCTION_ENVIRONMENT = IS_PRODUCTION_ENVIRONMENT || false;
 
 var options = {
-	isProduction: IS_PROD,
+	isProduction: IS_PRODUCTION_ENVIRONMENT,
 	redirectUri: REDIRECT_URI
 };
 

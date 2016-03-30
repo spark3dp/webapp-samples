@@ -123,27 +123,47 @@
 	 */
 	function retrieveAssetSourcesAndSetInDOM(){
 		//Get my assets and append to table in DOM
-		ADSKSpark.Assets.retrieveAssetSources(currentAssetId).then(function (response) {
-			$('.spinner').hide();
-			console.info('response after sources for asset ' + currentAssetId + ':',response);
-			$('#assetsTbody').empty();
-			var sources = response.sources;
+		var response = {
+			"sources": [
+				{
+					"md5sum": "74b5d57fbdaf8512699c8a3f4e30d665",
+					"size": 24070,
+					"file_id": 17846422,
+					"file_type": "OTH",
+					"_link": "/files/download?file_ids=17846422&asset_id=1513630",
+					"file_name": "cube.gcode"
+				},
+				{
+					"md5sum": "74b5d57fbdaf8512699c8a3f4e30d665",
+					"size": 24070,
+					"file_id": 17854153,
+					"file_type": "OTH",
+					"_link": "/files/download?file_ids=17854153&asset_id=1513630",
+					"file_name": "square.gcode"
+				}
+			]
+		};
 
-			if (sources.length && sources[0].file_name !== 'nopicture.gif') {
-				$('#files').removeClass('hidden');
-				$.each(sources, function (index, item) {
+		$('.spinner').hide();
+		
+		$('#assetsTbody').empty();
+		var sources = response.sources;
 
-					var tr = $('<tr class="in-table" data-fileid="' + item.file_id + '"></tr>');
-					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
-					tr.append($('<td>' + item.file_id + '</td>'));
+		if (sources.length && sources[0].file_name !== 'nopicture.gif') {
+			$('#files').removeClass('hidden');
+			$.each(sources, function (index, item) {
+
+				var tr = $('<tr class="in-table" data-fileid="' + item.file_id + '"></tr>');
+				tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
+				tr.append($('<td>' + item.file_id + '</td>'));
 
 
-					$('#filesTbody').append(tr);
-				});
-			} else {
-				$('#empty-files').removeClass('hidden');
-			}
-		});
+				$('#filesTbody').append(tr);
+			});
+		} else {
+			$('#empty-files').removeClass('hidden');
+		}
+
 
 	}
 
@@ -159,13 +179,9 @@
 		}else {
 			//Assume we provided assetId in URL
 			var urlParams = ADSKSpark.Helpers.extractParamsFromURL();
-			currentAssetId = urlParams['assetId'] ? urlParams['assetId'] : 0;
 
-			if (!currentAssetId) {
-				location.href = '/choose-asset.html';
-			} else {
-				retrieveAssetSourcesAndSetInDOM();
-			}
+			retrieveAssetSourcesAndSetInDOM();
+
 		}
 
 		$("#filesTbody").on('click', '.in-table', function(e){

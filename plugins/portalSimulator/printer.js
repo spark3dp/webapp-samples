@@ -60,7 +60,7 @@ var Printer= (function() {
 		//set up url if local mode
 		var local=getQueryVariable('mode');
 
-		if(IS_PROD){
+		if(IS_PRODUCTION_ENVIRONMENT){
 			log("Setting url's to prod mode");
 			BASE_URL=BASE_URL_PROD;
 			FAYE_URL=FAYE_URL_PROD;
