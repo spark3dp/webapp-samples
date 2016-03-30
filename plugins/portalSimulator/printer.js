@@ -21,8 +21,8 @@ var Printer= (function() {
 	var BASE_URL="http://printer-sandbox.spark.autodesk.com/api/v1";
 	var FAYE_URL="http://printer-sandbox.spark.autodesk.com/faye";
 
-	var BASE_URL_PROD="http://printer.spark.autodesk.com/api/v1";
-	var FAYE_URL_PROD="http://printer.spark.autodesk.com/faye";
+	var BASE_URL_PROD="https://printer.spark.autodesk.com/api/v1";
+	var FAYE_URL_PROD="https://printer.spark.autodesk.com/faye";
 
 	var BASE_URL_LOCAL="http://localhost:8080/api/v1";
 	var FAYE_URL_LOCAL="http://localhost:8080/faye";
