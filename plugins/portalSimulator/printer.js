@@ -18,14 +18,14 @@ var Printer= (function() {
 	//var BASE_URL="https://api-alpha.spark.autodesk.com/api/v1";
 	//var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
 
+	var BASE_URL="http://printer-sandbox.spark.autodesk.com/api/v1";
+	var FAYE_URL="http://printer-sandbox.spark.autodesk.com/faye";
 
-	var BASE_URL="https://printer-sandbox.spark.autodesk.com/api/v1";
-	var FAYE_URL="https://printer-sandbox.spark.autodesk.com/faye";
+	var BASE_URL_PROD="http://printer.spark.autodesk.com/api/v1";
+	var FAYE_URL_PROD="http://printer.spark.autodesk.com/faye";
 
 	var BASE_URL_LOCAL="http://localhost:8080/api/v1";
-	var FAYE_URL_LOCAL="http://localhost:8080/faye"
-
-
+	var FAYE_URL_LOCAL="http://localhost:8080/faye";
 
 	var BASE_URL_ALPHA="http://alpha.spark.autodesk.com/api/v1";
 	var FAYE_URL_ALPHA="http://alpha.spark.autodesk.com/faye";
@@ -45,7 +45,7 @@ var Printer= (function() {
 
 	//track the total and current layers and current print command
 	var totalLayers;
-	var currentLayer
+	var currentLayer;
 	var currentPrintCommand=null;
 	var currentPrinterStatus=STATUS_READY;
 	var currentJobStatus="";
@@ -59,7 +59,13 @@ var Printer= (function() {
 		log("initializing printer...");
 		//set up url if local mode
 		var local=getQueryVariable('mode');
-		if(local!=false&&local.toUpperCase()==='LOCAL'){
+
+		if(IS_PROD){
+			log("Setting url's to prod mode");
+			BASE_URL=BASE_URL_PROD;
+			FAYE_URL=FAYE_URL_PROD;
+		}
+		else if(local!=false&&local.toUpperCase()==='LOCAL'){
 			log("Setting url's to local mode");
 			BASE_URL=BASE_URL_LOCAL;
 			FAYE_URL=FAYE_URL_LOCAL;
@@ -201,7 +207,6 @@ var Printer= (function() {
 
 	//clear the token and registration state in the printer
 	var resetToken = function(){
-
 		log("resetting token...");
 		var token=getNewToken();
 		if(token==null){
